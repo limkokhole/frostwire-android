@@ -352,25 +352,6 @@ public final class UIUtils {
     }
 
     /**
-     * This method sets up the visibility of the support frostwire control (@see {@link DonationsView})
-     * depending on remote configuration parameters and local configuration preferences.
-     * @param supportFrostWireView
-     */
-    public static void supportFrostWire(View supportFrostWireView) {
-        //remote kill switch
-        if (!ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD)) {
-            supportFrostWireView.setVisibility(View.GONE);
-            Log.v(TAG, "Hiding support, above threshold.");
-        } else if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE)) {
-            supportFrostWireView.setVisibility(View.VISIBLE);
-
-            if (supportFrostWireView.getLayoutParams() != null) {
-                supportFrostWireView.getLayoutParams().width = LayoutParams.MATCH_PARENT;
-            }
-        }
-    }
-
-    /**
      * Android devices with SDK below target=11 do not support textView.setAlpha().
      * This is a work around. 
      * @param v - the text view
