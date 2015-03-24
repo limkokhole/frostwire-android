@@ -251,15 +251,20 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
     public boolean onPrepareOptionsMenu(final Menu menu) {
         // Theme the add to home screen icon
         mResources.setAddToHomeScreenIcon(menu);
-        // Set the shuffle all title to "play all" if a playlist.
-        final MenuItem shuffle = menu.findItem(R.id.menu_shuffle);
-        String title = null;
-        if (isFavorites() || isLastAdded() || isPlaylist()) {
-            title = getString(R.string.menu_play_all);
+
+        if (isEmptyPlaylist()) {
+            menu.removeItem(R.id.menu_shuffle);
         } else {
-            title = getString(R.string.menu_shuffle);
+            // Set the shuffle all title to "play all" if a playlist.
+            final MenuItem shuffle = menu.findItem(R.id.menu_shuffle);
+            String title = null;
+            if(isFavorites() || isLastAdded() || isPlaylist()) {
+                title = getString(R.string.menu_play_all);
+            } else {
+                title = getString(R.string.menu_shuffle);
+            }
+            shuffle.setTitle(title);
         }
-        shuffle.setTitle(title);
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -658,6 +663,27 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
      */
     private final boolean isPlaylist() {
         return mType.equals(MediaStore.Audio.Playlists.CONTENT_TYPE);
+    }
+
+    /**
+     * @return True if the MIME type is one of the playlist types and the playlist is empty, false
+     *         otherwise.
+     */
+    private final boolean isEmptyPlaylist() {
+
+        long[] list = null;
+        if(isPlaylist()) {
+            final long id = mArguments.getLong(Config.ID);
+            list = MusicUtils.getSongListForPlaylist(this, id);
+        } else if(isLastAdded()) {
+            list = MusicUtils.getSongListForLastAdded(this);
+        } else if(isFavorites()) {
+            list = MusicUtils.getSongListForFavorites(this);
+        }
+        if(list != null && list.length == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
