@@ -483,9 +483,6 @@
 <string name="http_download_status_save_dir_error">儲存目錄不存在或無法創建</string>
 <string name="n_files_shared">%d 個檔案已經分享到在相同 Wi-Fi 網絡上的 FrostWire 裝置。</string>
 <string name="install_bitcoin_wallet">安裝比特幣錢包 (Bitcoin Wallet)</string>
-<string name="http_download_status_save_dir_error">儲存目錄不存在或無法創建</string>
-<string name="n_files_shared">%d 個檔案已經分享到在相同 Wi-Fi 網絡上的 FrostWire 裝置。</string>
-<string name="install_bitcoin_wallet">安裝比特幣錢包 (Bitcoin Wallet)</string>
 <string name="device_storage">裝置容量</string>
 <string name="use_yify_summary">Yify 基於磁力，僅適用於 Wi-Fi</string>
 <string name="use_archiveorg">使用 Archive.org</string>
