@@ -670,20 +670,16 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
      *         otherwise.
      */
     private final boolean isEmptyPlaylist() {
-
         long[] list = null;
-        if(isPlaylist()) {
+        if (isPlaylist()) {
             final long id = mArguments.getLong(Config.ID);
             list = MusicUtils.getSongListForPlaylist(this, id);
-        } else if(isLastAdded()) {
+        } else if (isLastAdded()) {
             list = MusicUtils.getSongListForLastAdded(this);
-        } else if(isFavorites()) {
+        } else if (isFavorites()) {
             list = MusicUtils.getSongListForFavorites(this);
         }
-        if(list != null && list.length == 0) {
-            return true;
-        }
-        return false;
+        return list != null && list.length == 0;
     }
 
     /**
