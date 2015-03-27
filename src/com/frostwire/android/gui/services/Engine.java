@@ -25,15 +25,15 @@ import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
 import android.os.IBinder;
 import android.telephony.TelephonyManager;
+import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.CoreRuntimeException;
 import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.services.EngineService.EngineServiceBinder;
-import com.frostwire.jlibtorrent.Sha1Hash;
-import com.frostwire.jlibtorrent.swig.sha1_bloom_filter;
 import com.frostwire.logging.Logger;
-import org.apache.commons.io.FileUtils;
+import com.frostwire.util.BloomFilter;
 
-import java.io.File;
+import java.io.*;
+import java.util.BitSet;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -46,7 +46,7 @@ public final class Engine implements IEngineService {
     private EngineService service;
     private ServiceConnection connection;
     private EngineBroadcastReceiver receiver;
-    private sha1_bloom_filter notifiedDownloads;
+    private BloomFilter<String> notifiedDownloads;
     private final File notifiedDat;
 
     private static Engine instance;
@@ -84,7 +84,8 @@ public final class Engine implements IEngineService {
      * new 20 bytes of the new hash.
      */
     private void loadNotifiedDownloads() {
-        notifiedDownloads = new sha1_bloom_filter();
+        notifiedDownloads = new BloomFilter<String>(Constants.NOTIFIED_BLOOM_FILTER_BITSET_SIZE,
+                                                    Constants.NOTIFIED_BLOOM_FILTER_EXPECTED_ELEMENTS);
 
         if (!notifiedDat.exists()) {
             try {
@@ -95,13 +96,27 @@ public final class Engine implements IEngineService {
             }
         } else {
             try {
-                final String s = FileUtils.readFileToString(notifiedDat);
-                if (s.length() > 0) {
-                    LOG.info("Loading notifiedDownloads bloom filter from: ["+s+"]");
-                    notifiedDownloads.from_string(s);
-                }
+                ObjectInputStream ois = new ObjectInputStream(new FileInputStream(notifiedDat));
+                int numberOfElements = ois.readInt();
+                BitSet bs = (BitSet) ois.readObject();
+                ois.close();
+                notifiedDownloads = new BloomFilter<String>(
+                        Constants.NOTIFIED_BLOOM_FILTER_BITSET_SIZE,
+                        Constants.NOTIFIED_BLOOM_FILTER_EXPECTED_ELEMENTS,
+                        numberOfElements,
+                        bs);
+                LOG.info("Loaded bloom filter from notified.dat sucessfully ("+numberOfElements+" elements)");
             } catch (Throwable e) {
                 LOG.error("Error reading notified.dat", e);
+
+                // reset the file in case we changed the format or something was borked.
+                // worst case we'll have a new bloom filter.
+                notifiedDat.delete();
+                try {
+                    notifiedDat.createNewFile();
+                } catch (IOException e1) {
+                    LOG.error(e1.getMessage(), e1);
+                }
             }
         }
     }
@@ -165,9 +180,8 @@ public final class Engine implements IEngineService {
 
     private boolean updateNotifiedTorrentDownloads(String optionalInfoHash) {
         boolean result = false;
-        optionalInfoHash = optionalInfoHash.toLowerCase();
-        Sha1Hash sha1 = new Sha1Hash(optionalInfoHash);
-        if (notifiedDownloads.find(sha1.getSwig())) {
+        optionalInfoHash = optionalInfoHash.toLowerCase().trim();
+        if (notifiedDownloads.contains(optionalInfoHash)) {
             LOG.info("Skipping notification on " + optionalInfoHash);
         } else {
             result = addNewNotifiedInfoHash(optionalInfoHash);
@@ -178,26 +192,26 @@ public final class Engine implements IEngineService {
     private boolean addNewNotifiedInfoHash(String infoHash) {
         boolean result = false;
         if (notifiedDownloads != null && infoHash != null && infoHash.length() == 40) {
-            final Sha1Hash sha1 = new Sha1Hash(infoHash);
-
-            synchronized (notifiedDat) {
-                try {
-                    // Another partial download might have just finished writing
-                    // this info hash while I was waiting for the file lock.
-                    if (!notifiedDownloads.find(sha1.getSwig())) {
-                        notifiedDownloads.set(sha1.getSwig());
-                        LOG.info("Writing bloom filter to file: [" + notifiedDownloads.to_string() + "]");
-
-                        FileUtils.writeStringToFile(notifiedDat, notifiedDownloads.to_string());
-                        result = true;
+            infoHash = infoHash.toLowerCase().trim();
+            try {
+                // Another partial download might have just finished writing
+                // this info hash while I was waiting for the file lock.
+                if (!notifiedDownloads.contains(infoHash)) {
+                    notifiedDownloads.add(infoHash);
+                    synchronized (notifiedDat) {
+                        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(notifiedDat));
+                        oos.writeInt(notifiedDownloads.count());
+                        oos.writeObject(notifiedDownloads.getBitSet());
+                        oos.flush();
+                        oos.close();
                     }
-                } catch (Throwable e) {
-                    LOG.error("Could not update infohash on notified.dat", e);
-                    result = false;
+                    result = true;
                 }
+            } catch (Throwable e) {
+                LOG.error("Could not update infohash on notified.dat", e);
+                result = false;
             }
         }
-
         return result;
     }
 

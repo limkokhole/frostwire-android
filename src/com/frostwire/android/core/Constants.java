@@ -161,8 +161,6 @@ public final class Constants {
 
     public static final int MAX_NUM_DOWNLOAD_CHECKED = 5;
 
-    public static final int MAX_INDEXED_TORRENT_SUB_FILES = 4000;
-
     public static final int MAX_PEER_HTTP_DOWNLOAD_RETRIES = 3;
 
     public static final int DEVICE_MAJOR_TYPE_DESKTOP = CommonConstants.DEVICE_MAJOR_TYPE_DESKTOP;
@@ -171,4 +169,7 @@ public final class Constants {
 
     public static final String BITCOIN_DONATION_URI = "bitcoin:19NzEEocAWydbkm3xEEVu43Ho2JFEYf5Vr?amount=0.0104";
     public static final String MOBILE_CORE_DEVHASH = "6OJUVFECLGYH3JKYZB41VLQA4JXW5";
+
+    public static final int NOTIFIED_BLOOM_FILTER_BITSET_SIZE = 320000; //40 kilobytes
+    public static final int NOTIFIED_BLOOM_FILTER_EXPECTED_ELEMENTS = 10000;
 }
