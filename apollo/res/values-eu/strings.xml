@@ -113,7 +113,7 @@
   <string name="settings_download_artist_images_title">Falta diren artisten argazkiak lortu</string>
   <string name="settings_open_source_licenses">Software askearen lizentziak</string>
   <string name="settings_version_title">Bertsioa</string>
-  <string name="now_listening_to"><xliff:g id="title">%1$s</xliff:g> de <xliff:g id="artist">%2$s</xliff:g> #Entzuten #Apollo</string>
+  <string name="now_listening_to"><xliff:g id="title">%1$s</xliff:g> de <xliff:g id="artist">%2$s</xliff:g> #Entzuten #FrostWire</string>
   <string name="share_track_using">Abestia honela elkarbanatu:</string>
   <string name="color_picker_title">Kolore eskema</string>
   <string name="current_color">Oraingoa</string>

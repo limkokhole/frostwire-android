@@ -140,7 +140,7 @@
     <string name="settings_version_title">Version number</string>
 
     <!-- Share Intent -->
-    <string name="now_listening_to">#NowPlaying <xliff:g id="title">%1$s</xliff:g> by <xliff:g id="artist">%2$s</xliff:g> #Apollo</string>
+    <string name="now_listening_to">#NowPlaying <xliff:g id="title">%1$s</xliff:g> by <xliff:g id="artist">%2$s</xliff:g> #FrostWire</string>
     <string name="share_track_using">Share track using:</string>
 
     <!-- ColorPicker -->

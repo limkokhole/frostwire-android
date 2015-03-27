@@ -20,6 +20,7 @@ import android.media.AudioManager;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.*;
+import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Albums;
 import android.provider.MediaStore.Audio.Artists;
 import android.provider.MediaStore.Audio.Playlists;
@@ -875,6 +876,7 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
         shareIntent.setAction(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
         shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + MusicUtils.getCurrentAudioId()));
         startActivity(Intent.createChooser(shareIntent, getString(R.string.share_track_using)));
     }
 

@@ -113,7 +113,7 @@
   <string name="settings_download_artist_images_title">Преузми слике аутора које недостају</string>
   <string name="settings_open_source_licenses">Open Source лиценце</string>
   <string name="settings_version_title">Број верзије</string>
-  <string name="now_listening_to">#Тренутно се слуша <xliff:g id="title">%1$s</xliff:g> од <xliff:g id="artist">%2$s</xliff:g> #Apollo</string>
+  <string name="now_listening_to">#Тренутно се слуша <xliff:g id="title">%1$s</xliff:g> од <xliff:g id="artist">%2$s</xliff:g> #FrostWire</string>
   <string name="share_track_using">Дели песму путем:</string>
   <string name="color_picker_title">Боје</string>
   <string name="current_color">Тренутна</string>
