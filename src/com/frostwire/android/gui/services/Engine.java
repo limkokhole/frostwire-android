@@ -29,16 +29,11 @@ import com.frostwire.android.core.CoreRuntimeException;
 import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.services.EngineService.EngineServiceBinder;
 import com.frostwire.jlibtorrent.Sha1Hash;
+import com.frostwire.jlibtorrent.swig.sha1_bloom_filter;
 import com.frostwire.logging.Logger;
-import com.frostwire.util.ByteUtils;
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FileUtils;
 
-import java.io.*;
-import java.nio.ByteBuffer;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
+import java.io.File;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -51,7 +46,7 @@ public final class Engine implements IEngineService {
     private EngineService service;
     private ServiceConnection connection;
     private EngineBroadcastReceiver receiver;
-    private Map<String,byte[]> notifiedDownloads;
+    private sha1_bloom_filter notifiedDownloads;
     private final File notifiedDat;
 
     private static Engine instance;
@@ -89,7 +84,7 @@ public final class Engine implements IEngineService {
      * new 20 bytes of the new hash.
      */
     private void loadNotifiedDownloads() {
-        notifiedDownloads = new HashMap<String, byte[]>();
+        notifiedDownloads = new sha1_bloom_filter();
 
         if (!notifiedDat.exists()) {
             try {
@@ -100,15 +95,11 @@ public final class Engine implements IEngineService {
             }
         } else {
             try {
-                FileInputStream fis = new FileInputStream(notifiedDat);
-                while (fis.available() > 0) {
-                    //each entry on the file is a fixed sha1 hash.
-                    byte[] buffer = new byte[20];
-                    fis.read(buffer,0,20);
-                    notifiedDownloads.put(ByteUtils.encodeHex(buffer).toLowerCase(),buffer);
+                final String s = FileUtils.readFileToString(notifiedDat);
+                if (s.length() > 0) {
+                    LOG.info("Loading notifiedDownloads bloom filter from: ["+s+"]");
+                    notifiedDownloads.from_string(s);
                 }
-
-                IOUtils.closeQuietly(fis);
             } catch (Throwable e) {
                 LOG.error("Error reading notified.dat", e);
             }
@@ -175,35 +166,33 @@ public final class Engine implements IEngineService {
     private boolean updateNotifiedTorrentDownloads(String optionalInfoHash) {
         boolean result = false;
         optionalInfoHash = optionalInfoHash.toLowerCase();
-        if (notifiedDownloads.containsKey(optionalInfoHash)) {
+        Sha1Hash sha1 = new Sha1Hash(optionalInfoHash);
+        if (notifiedDownloads.find(sha1.getSwig())) {
             LOG.info("Skipping notification on " + optionalInfoHash);
         } else {
-            result = appendNewNotifiedInfoHash(optionalInfoHash);
+            result = addNewNotifiedInfoHash(optionalInfoHash);
         }
         return result;
     }
 
-    private boolean appendNewNotifiedInfoHash(String infoHash) {
+    private boolean addNewNotifiedInfoHash(String infoHash) {
         boolean result = false;
         if (notifiedDownloads != null && infoHash != null && infoHash.length() == 40) {
-            byte[] infoHashBytes = ByteUtils.decodeHex(infoHash);
+            final Sha1Hash sha1 = new Sha1Hash(infoHash);
 
             synchronized (notifiedDat) {
                 try {
                     // Another partial download might have just finished writing
                     // this info hash while I was waiting for the file lock.
-                    if (!notifiedDownloads.containsKey(infoHash)) {
-                        RandomAccessFile raf = new RandomAccessFile(notifiedDat, "rw");
-                        raf.seek(notifiedDat.length());
-                        raf.write(infoHashBytes, 0, 20);
-                        raf.close();
+                    if (!notifiedDownloads.find(sha1.getSwig())) {
+                        notifiedDownloads.set(sha1.getSwig());
+                        LOG.info("Writing bloom filter to file: [" + notifiedDownloads.to_string() + "]");
 
-                        // only if we can write to disk, we'll update the map.
-                        notifiedDownloads.put(infoHash, infoHashBytes);
+                        FileUtils.writeStringToFile(notifiedDat, notifiedDownloads.to_string());
                         result = true;
                     }
                 } catch (Throwable e) {
-                    LOG.error("Could not append infohash to notified.dat", e);
+                    LOG.error("Could not update infohash on notified.dat", e);
                     result = false;
                 }
             }
