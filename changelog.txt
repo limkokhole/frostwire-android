@@ -1,6 +1,9 @@
-FrostWire 1.5.0 - MARCH/24/2015
+FrostWire 1.5.0 - MARCH/27/2015
  - Upgraded frostwire-jlibtorrent to the latest code from libtorrent.
+ - Users can now donate to torrent creators, both Fiat and Bitcoin when available.
+ - Fixes annoying bug where user would be notified for old finished downloads.
  - Fixes bug where songs that were deleted were not being cleared from playlists.
+ - Fixes bug where it would show "Play All" menu action on empty playlists.
  - Fixes bug where sharing on WiFi from certain 3rd-party file explorers wouldn't work.
  - Fixes bug where file descriptors fetched by content:// uris wouldn't have a disk path available.
  - Fixes 2 crashes on music player.
