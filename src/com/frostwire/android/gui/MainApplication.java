@@ -25,6 +25,7 @@ import android.telephony.TelephonyManager;
 import android.view.ViewConfiguration;
 import com.andrew.apollo.cache.ImageCache;
 import com.frostwire.android.core.ConfigurationManager;
+import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.CoreRuntimeException;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.services.Engine;
@@ -32,6 +33,7 @@ import com.frostwire.android.util.HttpResponseCache;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.bittorrent.BTContext;
 import com.frostwire.bittorrent.BTEngine;
+import com.frostwire.jlibtorrent.DHT;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.CrawlPagedWebSearchPerformer;
 import com.frostwire.util.DirectoryUtils;
@@ -127,6 +129,16 @@ public class MainApplication extends Application {
                 0,0,"0.0.0.0",false,false);
         BTEngine.ctx.optimizeMemory = true;
         BTEngine.getInstance().start();
+
+        boolean enable_dht = ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_DHT);
+        DHT dht = new DHT(BTEngine.getInstance().getSession());
+        if (!enable_dht) {
+            dht.stop();
+        } else {
+            // just make sure it's started otherwise.
+            // (we could be coming back from a crash on an unstable state)
+            dht.start();
+        }
     }
 
     private void cleanTemp() {

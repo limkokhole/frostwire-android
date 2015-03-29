@@ -99,6 +99,7 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_KAT, true);
 
         defaultValues.put(Constants.PREF_KEY_NETWORK_USE_RANDOM_LISTENING_PORT, true);
+        defaultValues.put(Constants.PREF_KEY_NETWORK_ENABLE_DHT, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING, false);
         defaultValues.put(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_MAX_CONCURRENT_UPLOADS, 3);

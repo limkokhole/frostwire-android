@@ -39,6 +39,9 @@ import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.preference.SimpleActionPreference;
 import com.frostwire.android.gui.views.preference.StoragePreference;
+import com.frostwire.bittorrent.BTEngine;
+import com.frostwire.jlibtorrent.DHT;
+import com.frostwire.jlibtorrent.Session;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
@@ -235,6 +238,30 @@ public class PreferencesActivity extends PreferenceActivity {
                         PeerManager.instance().stop();
                     }
                     return true;
+                }
+            });
+        }
+    }
+
+    private void setupEnableDHTOption() {
+        final SwitchPreference preferenceEnableDHT = (SwitchPreference) findPreference(Constants.PREF_KEY_NETWORK_ENABLE_DHT);
+        if (preferenceEnableDHT != null) {
+            preferenceEnableDHT.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    boolean dhtExpectedValue = (Boolean) newValue;
+                    final BTEngine btEngine = BTEngine.getInstance();
+                    final Session session = btEngine.getSession();
+                    boolean dhtCurrentStatus = session.isDHTRunning();
+                    DHT dht = new DHT(session);
+
+                    if (dhtCurrentStatus && !dhtExpectedValue) {
+                        dht.stop();
+                    }  else if (!dhtCurrentStatus && dhtExpectedValue) {
+                        dht.start();
+                    }
+
+                    return false;
                 }
             });
         }
