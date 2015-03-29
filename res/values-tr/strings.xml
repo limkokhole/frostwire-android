@@ -400,8 +400,8 @@
     <string name="paused">Durdu</string>
     <string name="use_youtube">YouTube.com\'u kullanın</string>
     <string name="use_soundcloud">Soundcloud.com\'u kullanın</string>
-    <string name="upnp_discovery">Wi-Fi Paylaşımı</string>
-    <string name="upnp_discovery_summary">Yerel Wireless ağındaki paylaşımcılarla dosyalarınızı paylaşın.</string>
+    <string name="enable_wifi_sharing">Wi-Fi Paylaşımı</string>
+    <string name="enable_wifi_sharing_summary">Yerel Wireless ağındaki paylaşımcılarla dosyalarınızı paylaşın.</string>
     <string name="youtube_download_status_verifying">Doğrulanıyor</string>
     <string name="donation_thanks">FrostWire\'ı desteklediğiniz için teşekkür ederiz</string>
     <string name="torrent_scheme_download_not_supported">İndirme desteklenmiyor</string>

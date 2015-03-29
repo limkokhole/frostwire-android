@@ -14,7 +14,8 @@
  * GNU General Public License.
  *
  * Junto com o programa, você deve ter recebido uma cópia de GNU General Public License. Caso contrário, veja o link<http://www.gnu.org/licenses/>.
- */
+ */
+
 -->
 
 <resources>
@@ -401,8 +402,8 @@
     <string name="paused">"Pausado"</string>
     <string name="use_youtube">"Usar YouTube.com"</string>
     <string name="use_soundcloud">"Usar Soundcloud.com"</string>
-    <string name="upnp_discovery">"Compartilhamento Wi-Fi"</string>
-    <string name="upnp_discovery_summary">"Compartilhe arquivos com colegas na rede Wi-Fi local".</string>
+    <string name="enable_wifi_sharing">"Compartilhamento Wi-Fi"</string>
+    <string name="enable_wifi_sharing_summary">"Compartilhe arquivos com colegas na rede Wi-Fi local".</string>
     <string name="youtube_download_status_verifying">"Verificando"</string>
     <string name="donation_thanks">"Muito obrigado por apoiar o FrostWire"</string>
     <string name="torrent_scheme_download_not_supported">"O download não é suportado"</string>

@@ -402,8 +402,8 @@
     <string name="paused">Pausado</string>
     <string name="use_youtube">Usar YouTube.com</string>
     <string name="use_soundcloud">Usar Soundcloud.com</string>
-    <string name="upnp_discovery">Comparte en Wi-Fi</string>
-    <string name="upnp_discovery_summary">Comparte archivos con otros usuarios en la misma red Wi-Fi.</string>
+    <string name="enable_wifi_sharing">Comparte en Wi-Fi</string>
+    <string name="enable_wifi_sharing_summary">Comparte archivos con otros usuarios en la misma red Wi-Fi.</string>
     <string name="youtube_download_status_verifying">Verificando</string>
     <string name="donation_thanks">Muchas gracias por apoyar FrostWire</string>
     <string name="torrent_scheme_download_not_supported">Descarga no suportada</string>

@@ -499,7 +499,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private Fragment getWifiSharingFragment() {
-        return Engine.instance().isStarted() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP) ? peers : peersDisabled;
+        return Engine.instance().isStarted() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING) ? peers : peersDisabled;
     }
 
     private void showLastBackDialog() {

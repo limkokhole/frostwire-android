@@ -329,7 +329,7 @@
     <string name="add_transfer_label">Zaljepite magnet poveznicu ili torrent URL</string>
     <string name="multicast_discovery_summary">Spojite se na lokalne Wi-Fi preuzimatelje preko multicasta (preporučeno)</string>
     <string name="summary_files_shared">Dijelim %s datoteka lokalno</string>
-    <string name="upnp_discovery_summary">Dijeli datoteke sa preuzimateljima na lokalnoj Wi-Fi mreži.</string>
+    <string name="enable_wifi_sharing_summary">Dijeli datoteke sa preuzimateljima na lokalnoj Wi-Fi mreži.</string>
     <string name="long_press_for_batch_actions">Dodirnite bilo koji naslov datoteke za batch akcije</string>
     <string name="transfer_status_demuxing">Demuxam</string>
     <string name="hint_transfers">Koristite "menu" za skup akcija</string>
@@ -378,7 +378,7 @@
     <string name="use_youtube">Koristi YouTube.com</string>
     <string name="torrent_max_uploads">Maksimalni broj slanja</string>
     <string name="show_new_transfer_dialog">Pokaži dijalog novog prijenosa</string>
-    <string name="upnp_discovery">Wi-Fi dijeljenje</string>
+    <string name="enable_wifi_sharing">Wi-Fi dijeljenje</string>
     <string name="transfers_context_menu_pause_stop_all_transfers">Pauziraj/zaustavi sve prijenose</string>
     <string name="sharing_num_files">Dijelim %1$s datoteka tipa %2$s</string>
     <string name="wifi_sharing">Wi-Fi dijeljenje</string>

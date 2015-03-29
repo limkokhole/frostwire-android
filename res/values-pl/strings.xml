@@ -400,8 +400,8 @@
     <string name="paused">Wstrzymano</string>
     <string name="use_youtube">Używaj YouTube.com</string>
     <string name="use_soundcloud">Używaj Soundcloud.com</string>
-    <string name="upnp_discovery">Udostępnianie przez Wi-Fi</string>
-    <string name="upnp_discovery_summary">Udostępnij pliki dla innych użytkowników FrostWire w lokalnej sieci Wi-Fi.</string>
+    <string name="enable_wifi_sharing">Udostępnianie przez Wi-Fi</string>
+    <string name="enable_wifi_sharing_summary">Udostępnij pliki dla innych użytkowników FrostWire w lokalnej sieci Wi-Fi.</string>
     <string name="youtube_download_status_verifying">Weryfikowanie</string>
     <string name="donation_thanks">Dziękujemy bardzo za Wspomaganie FrostWire</string>
     <string name="torrent_scheme_download_not_supported">Pobranie nie jest wspomagane</string>

@@ -102,9 +102,9 @@
         android:title="@string/wifi_sharing_settings"
         android:persistent="false" >
         <SwitchPreference
-                android:key="froswire.prefs.network.use_upnp"
-                android:summary="@string/upnp_discovery_summary"
-                android:title="@string/upnp_discovery" />
+                android:key="froswire.prefs.network.enable_wifi_sharing"
+                android:summary="@string/enable_wifi_sharing_summary"
+                android:title="@string/enable_wifi_sharing" />
 
         <CheckBoxPreference
                 android:key="frostwire.prefs.transfer.share_finished_downloads"

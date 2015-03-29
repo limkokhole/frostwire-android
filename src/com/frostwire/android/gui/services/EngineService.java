@@ -45,7 +45,6 @@ import com.frostwire.android.util.ImageLoader;
 import com.frostwire.bittorrent.BTEngine;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.ThreadPool;
-import com.ironsource.mobilcore.MobileCore;
 
 /**
  * @author gubatron
@@ -173,7 +172,7 @@ public class EngineService extends Service implements IEngineService {
 
         PeerManager.instance().clear();
 
-        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP)) {
+        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING)) {
             PeerManager.instance().start();
         }
 

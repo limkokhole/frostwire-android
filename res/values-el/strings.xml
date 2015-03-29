@@ -408,8 +408,8 @@
     <string name="paused">Παύση</string>
     <string name="use_youtube">Χρήση YouTube.com</string>
     <string name="use_soundcloud">Χρήση Soundcloud.com</string>
-    <string name="upnp_discovery">Ασύρματο Μοίρασμα</string>
-    <string name="upnp_discovery_summary">Μοιράσου αρχεία με άτομα στο ίδιο ασύρματο δίκτυο.</string>
+    <string name="enable_wifi_sharing">Ασύρματο Μοίρασμα</string>
+    <string name="enable_wifi_sharing_summary">Μοιράσου αρχεία με άτομα στο ίδιο ασύρματο δίκτυο.</string>
     <string name="youtube_download_status_verifying">Επιβεβαίωση</string>
     <string name="donation_thanks">Ευχαριστούμε θερμά που υποστηρίζεις το FrostWire</string>
     <string name="torrent_scheme_download_not_supported">Το κατέβασμα δεν υποστηρίζεται</string>

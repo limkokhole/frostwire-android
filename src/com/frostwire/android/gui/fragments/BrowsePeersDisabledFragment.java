@@ -100,7 +100,7 @@ public class BrowsePeersDisabledFragment extends Fragment implements MainFragmen
             AsyncTask<Void, Void, Void> enableWifiTask = new AsyncTask<Void, Void, Void>() {
                 @Override
                 protected Void doInBackground(Void... params) {
-                    ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP, true);
+                    ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING, true);
                     PeerManager.instance().start();
                     return null;
                 }

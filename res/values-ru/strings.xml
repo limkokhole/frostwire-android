@@ -401,8 +401,8 @@
     <string name="paused">На паузе</string>
     <string name="use_youtube">Использовать YouTube</string>
     <string name="use_soundcloud">Использовать Soundcloud</string>
-    <string name="upnp_discovery">Раздавать по Wi-Fi</string>
-    <string name="upnp_discovery_summary">Раздавать файлы для пиров в локальной сети Wi-Fi.</string>
+    <string name="enable_wifi_sharing">Раздавать по Wi-Fi</string>
+    <string name="enable_wifi_sharing_summary">Раздавать файлы для пиров в локальной сети Wi-Fi.</string>
     <string name="youtube_download_status_verifying">Проверка</string>
     <string name="donation_thanks">Большое спасибо за поддержку FrostWire</string>
     <string name="torrent_scheme_download_not_supported">Загрузка не поддерживается</string>

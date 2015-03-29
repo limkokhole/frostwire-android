@@ -400,8 +400,8 @@
     <string name="paused">مؤقوف مؤقتاً</string>
     <string name="use_youtube"> YouTube.com استخدم</string>
     <string name="use_soundcloud">Soundcloud.com استخدم</string>
-    <string name="upnp_discovery">Wi-Fi مشاركة</string>
-    <string name="upnp_discovery_summary">.شارك الملفات مع الأقران عبر شبكة الواي فاي المحلية</string>
+    <string name="enable_wifi_sharing">Wi-Fi مشاركة</string>
+    <string name="enable_wifi_sharing_summary">.شارك الملفات مع الأقران عبر شبكة الواي فاي المحلية</string>
     <string name="youtube_download_status_verifying">جاري التحقق</string>
     <string name="donation_thanks">.شكرا جزيلاً لدعمك فروست واير</string>
     <string name="torrent_scheme_download_not_supported">هذا التنزيل غير مدعوم</string>

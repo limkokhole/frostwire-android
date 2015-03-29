@@ -33,7 +33,7 @@ import com.sun.net.httpserver.HttpHandler;
 public abstract class AbstractHandler implements HttpHandler {
 
     protected void assertUPnPActive() throws IOException {
-        if (!Engine.instance().isStarted() || !ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP)) {
+        if (!Engine.instance().isStarted() || !ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING)) {
             throw new IOException("UPnP deactivated");
         }
     }

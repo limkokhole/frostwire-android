@@ -408,8 +408,8 @@
     <string name="paused">一時停止</string>
     <string name="use_youtube">YouTube.comを使用する</string>
     <string name="use_soundcloud">Soundcloud.comを使用する</string>
-    <string name="upnp_discovery">Wi-Fi共有</string>
-    <string name="upnp_discovery_summary">ローカルのWi-Fiネットワーク上で仲間でファイル共有します。</string>
+    <string name="enable_wifi_sharing">Wi-Fi共有</string>
+    <string name="enable_wifi_sharing_summary">ローカルのWi-Fiネットワーク上で仲間でファイル共有します。</string>
     <string name="youtube_download_status_verifying">ベリファイ中</string>
     <string name="donation_thanks">FrostWireのご支援ありがとうございます</string>
     <string name="torrent_scheme_download_not_supported">ダウンロードはサポートされていません</string>

@@ -70,7 +70,7 @@ public class BrowsePeersFragment extends AbstractFragment implements TimerObserv
 
         setRetainInstance(true);
 
-        if (Engine.instance().isStarted() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP)) {
+        if (Engine.instance().isStarted() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING)) {
             PeerManager.instance().start();
         }
 
@@ -135,7 +135,7 @@ public class BrowsePeersFragment extends AbstractFragment implements TimerObserv
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_NETWORK_USE_UPNP, false);
+                ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING, false);
                 PeerManager.instance().stop();
                 return null;
             }

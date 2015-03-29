@@ -384,7 +384,7 @@
 <string name="drawer_open">打開導覽面板</string>
 <string name="use_torlock">使用 TorLock</string>
 <string name="use_monova">使用 Monova</string>
-<string name="upnp_discovery_summary">和本地 Wi-Fi 網絡上的 Peer（用戶節點）共享檔案。</string>
+<string name="enable_wifi_sharing_summary">和本地 Wi-Fi 網絡上的 Peer（用戶節點）共享檔案。</string>
 <string name="delete_this_track">刪除此曲目</string>
 <string name="five_dollars">$5 美元</string>
 <string name="transfer_status_demuxing">多路抽取中</string>
@@ -422,7 +422,7 @@
 <string name="http_download_status_uncompressing">解壓縮</string>
 <string name="use_youtube">使用 YouTube.com</string>
 <string name="transfers_select_completed">完成</string>
-<string name="upnp_discovery">Wi-Fi 共享</string>
+<string name="enable_wifi_sharing">Wi-Fi 共享</string>
 <string name="transfers_context_menu_pause_stop_all_transfers">暫停/停止全部傳輸</string>
 <string name="use_kat_summary">KAT 基於磁力，僅適用於 Wi-Fi</string>
 <string name="sharing_num_files">分享類型 %2$s 的 %1$s 個檔案</string>

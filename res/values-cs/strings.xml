@@ -400,8 +400,8 @@
     <string name="paused">Paused</string>
     <string name="use_youtube">Use YouTube.com</string>
     <string name="use_soundcloud">Use Soundcloud.com</string>
-    <string name="upnp_discovery">Wi-Fi Sharing</string>
-    <string name="upnp_discovery_summary">Share files with peers on the local Wi-Fi network.</string>
+    <string name="enable_wifi_sharing">Wi-Fi Sharing</string>
+    <string name="enable_wifi_sharing_summary">Share files with peers on the local Wi-Fi network.</string>
     <string name="youtube_download_status_verifying">Verifying</string>
     <string name="donation_thanks">Thank you so much for Supporting FrostWire</string>
     <string name="torrent_scheme_download_not_supported">Download not supported</string>

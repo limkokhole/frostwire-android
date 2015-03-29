@@ -53,7 +53,7 @@ public final class Constants {
     public static final String PREF_KEY_CORE_UUID = "frostwire.prefs.core.uuid";
     public static final String PREF_KEY_CORE_LAST_SEEN_VERSION = "frostwire.prefs.core.last_seen_version";
 
-    public static final String PREF_KEY_NETWORK_USE_UPNP = "froswire.prefs.network.use_upnp";
+    public static final String PREF_KEY_NETWORK_ENABLE_WIFI_SHARING = "froswire.prefs.network.enable_wifi_sharing";
     public static final String PREF_KEY_NETWORK_USE_MOBILE_DATA = "frostwire.prefs.network.use_mobile_data";
     public static final String PREF_KEY_NETWORK_USE_RANDOM_LISTENING_PORT = "frostwire.prefs.network.use_random_listening_port";
     public static final String PREF_KEY_NETWORK_MAX_CONCURRENT_UPLOADS = "frostwire.prefs.network.max_concurrent_uploads";
