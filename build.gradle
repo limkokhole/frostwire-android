@@ -105,17 +105,13 @@ android {
         release {
             signingConfig signingConfigs.release
         }
-
-        debug {
-            ndk {
-                abiFilters 'armeabi'
-            }
-        }
     }
 
     splits {
         abi {
             enable true
+            reset()
+            include 'armeabi-v7a'
             universalApk false
         }
     }
