@@ -41,7 +41,7 @@ public class SendFiatTipAction extends MenuAction {
     final WeakReference<PaymentOptions> poRef;
 
     public SendFiatTipAction(Context context, PaymentOptions po) {
-        super(context, R.drawable.contextmenu_icon_play, R.string.send_tip_donation);
+        super(context, R.drawable.contextmenu_icon_donation_fiat, R.string.send_tip_donation);
         poRef = new WeakReference<PaymentOptions>(po);
     }
 

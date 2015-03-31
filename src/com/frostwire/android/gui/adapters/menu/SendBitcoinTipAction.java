@@ -41,7 +41,7 @@ public class SendBitcoinTipAction extends MenuAction {
     final WeakReference<PaymentOptions> poRef;
 
     public SendBitcoinTipAction(Context context, PaymentOptions po) {
-        super(context, R.drawable.contextmenu_icon_share, R.string.send_bitcoin_tip);
+        super(context, R.drawable.contextmenu_icon_donation_bitcoin, R.string.send_bitcoin_tip);
         poRef = new WeakReference<PaymentOptions>(po);
     }
 
