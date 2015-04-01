@@ -410,4 +410,5 @@ public final class UIUtils {
         activity.finish();
         activity.overridePendingTransition(0, 0);
     }
+
 }

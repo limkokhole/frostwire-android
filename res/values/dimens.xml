@@ -27,4 +27,6 @@
 
     <!-- Promotions -->
     <dimen name="promo_download_button_width">130dp</dimen>
+
+    <dimen name="view_transfer_list_item_title_left_drawable">20dp</dimen>
 </resources>

@@ -22,6 +22,9 @@ import java.io.File;
 import java.lang.ref.WeakReference;
 import java.util.*;
 
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ScaleDrawable;
 import com.frostwire.android.gui.adapters.menu.*;
 import com.frostwire.bittorrent.PaymentOptions;
 import com.frostwire.transfers.TransferItem;
@@ -449,6 +452,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
         title.setText(download.getDisplayName());
         progress.setProgress(download.getProgress());
+        title.setCompoundDrawables(null, null, null, null);
 
         status.setText(TRANSFER_STATE_STRING_MAP.get(download.getStatus()));
 
@@ -458,9 +462,14 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         buttonAction.setTag(download);
         buttonAction.setOnClickListener(viewOnClickListener);
 
-
         if (download.hasPaymentOptions()) {
-            //TODO: Display tipping/icon.
+            final PaymentOptions paymentOptions = download.getPaymentOptions();
+            final Resources r = context.get().getResources();
+            Drawable tipDrawable = (paymentOptions.bitcoin != null) ? r.getDrawable(R.drawable.contextmenu_icon_donation_bitcoin) : r.getDrawable(R.drawable.contextmenu_icon_donation_fiat);
+            final int iconHeightInPixels = r.getDimensionPixelSize(R.dimen.view_transfer_list_item_title_left_drawable);
+            tipDrawable.setBounds(0, 0, iconHeightInPixels, iconHeightInPixels);
+
+            title.setCompoundDrawables(tipDrawable, null, null, null);
         }
     }
 

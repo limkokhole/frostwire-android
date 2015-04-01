@@ -112,7 +112,7 @@ public final class UIBittorrentDownload implements BittorrentDownload {
     }
 
     public boolean hasPaymentOptions() {
-        return this.dl.getPaymentOptions() != null;
+        return this.dl.getPaymentOptions() != null && !this.dl.getPaymentOptions().isEmpty();
     }
 
     public PaymentOptions getPaymentOptions() {
