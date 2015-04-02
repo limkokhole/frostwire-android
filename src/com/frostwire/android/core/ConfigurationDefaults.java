@@ -65,7 +65,6 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG, true);
         defaultValues.put(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE, Constants.IS_FREE_DISTRIBUTION);
         defaultValues.put(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD, true);
-        defaultValues.put(Constants.PREF_KEY_GUI_SHOW_TV_MENU_ITEM, true);
         defaultValues.put(Constants.PREF_KEY_GUI_INITIALIZE_OFFERCAST_LOCKSCREEN,true);
         defaultValues.put(Constants.PREF_KEY_GUI_INITIALIZE_APPIA, true);
         defaultValues.put(Constants.PREF_KEY_GUI_USE_APPIA_SEARCH, true);

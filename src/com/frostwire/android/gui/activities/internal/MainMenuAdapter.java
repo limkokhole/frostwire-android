@@ -69,19 +69,6 @@ public final class MainMenuAdapter extends AbstractAdapter<MenuItem> {
         Menu menu = new MenuBuilder(context);
         menuInflater.inflate(R.menu.main, menu);
 
-        ConfigurationManager config = ConfigurationManager.instance();
-        if (!config.getBoolean(Constants.PREF_KEY_GUI_SHOW_TV_MENU_ITEM) || Constants.IS_AMAZON_DISTRIBUTION) {
-            menu.removeItem(R.id.menu_launch_tv);
-        }
-
-        if (!config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) || !config.getBoolean(Constants.PREF_KEY_GUI_INITIALIZE_APPIA) || OSUtils.isAmazonDistribution()) { //!config.getBoolean(Constants.PREF_KEY_GUI_SHOW_FREE_APPS_MENU_ITEM)) {
-            menu.removeItem(R.id.menu_free_apps);
-        }
-
-        if (!OfferUtils.isfreeAppsEnabled()) {
-            menu.removeItem(R.id.menu_free_apps);
-        }
-
         for (int i = 0; i < menu.size(); i++) {
             add(menu.getItem(i));
         }
@@ -99,10 +86,6 @@ public final class MainMenuAdapter extends AbstractAdapter<MenuItem> {
                 return R.drawable.menu_icon_transfers_over;
             case R.id.menu_main_peers:
                 return R.drawable.menu_icon_peers_over;
-            case R.id.menu_free_apps:
-                return R.drawable.menu_icon_free_apps_over;
-            case R.id.menu_launch_tv:
-                return R.drawable.menu_icon_tv;
             case R.id.menu_main_preferences:
                 return R.drawable.menu_icon_preferences_over;
             case R.id.menu_main_shutdown:

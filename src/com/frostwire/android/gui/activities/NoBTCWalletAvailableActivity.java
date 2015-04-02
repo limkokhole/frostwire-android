@@ -49,10 +49,8 @@ public class NoBTCWalletAvailableActivity extends AbstractActivity {
         @Override
         public void onClick(View v) {
             final String androidAppId="com.mycelium.wallet";
-            //TODO: Put this back when Mycelium comes to the Android App Store.
-            //final String androidAppStoreUrl = (Constants.IS_AMAZON_DISTRIBUTION ? "http://www.amazon.com/gp/mas/dl/android=" : "market://details?id=") + androidAppId;
             final String walletWebPage = "https://mycelium.com/bitcoinwallet";
-            final String androidAppStoreUrl = (Constants.IS_AMAZON_DISTRIBUTION ? walletWebPage : "market://details?id="+androidAppId);
+            final String androidAppStoreUrl = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "market://details?id="+androidAppId : walletWebPage;
             
             final Intent intent = new Intent(Intent.ACTION_VIEW,Uri.parse(androidAppStoreUrl));
             final NoBTCWalletAvailableActivity activity = activityReference.get();

@@ -591,10 +591,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 try {
                     if (id == R.id.menu_main_preferences) {
                         controller.showPreferences();
-                    } else if (id == R.id.menu_launch_tv) {
-                        controller.launchFrostWireTV();
-                    } else if (id == R.id.menu_free_apps) {
-                        controller.showFreeApps(MainActivity.this);
                     } else if (id == R.id.menu_main_shutdown) {
                         showShutdownDialog();
                     } else if (id == R.id.menu_main_my_music) {

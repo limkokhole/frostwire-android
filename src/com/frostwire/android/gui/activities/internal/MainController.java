@@ -81,25 +81,6 @@ public final class MainController {
         activity.startActivity(i);
     }
 
-    /**
-     * Will try to launch the app, if it cannot find the launch intent, it'll take the user to the Android market.
-     */
-    public void launchFrostWireTV() {
-        Intent intent = null;
-        try {
-            intent = activity.getApplicationContext().getPackageManager().getLaunchIntentForPackage("com.frostwire.android.tv");
-
-            //on the nexus it wasn't throwing the NameNotFoundException, it was just returning null
-            if (intent == null) {
-                throw new NullPointerException();
-            }
-        } catch (Throwable t) {
-            intent = new Intent();
-            intent.setData(Uri.parse("market://details?id=com.frostwire.android.tv"));
-        }
-        activity.startActivity(intent);
-    }
-
     public void showFreeApps(Context context) {
         OfferUtils.onFreeAppsClick(context);
     }

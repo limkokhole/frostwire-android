@@ -39,6 +39,10 @@ public final class OSUtils {
         }
         return osName;
     }
+
+    public static boolean isGooglePlayDistribution() {
+        return Constants.IS_GOOGLE_PLAY_DISTRIBUTION;
+    }
     
     public static String getOSVersionString() {
         return Build.VERSION.CODENAME + "_" + Build.VERSION.INCREMENTAL + "_" + Build.VERSION.RELEASE + "_" + Build.VERSION.SDK_INT;
@@ -46,10 +50,6 @@ public final class OSUtils {
     
     public static String getOSNameAndVersionString() {
         return OSUtils.getOSName()+"-v"+OSUtils.getOSVersionString();
-    }
-
-    public static boolean isAmazonDistribution() {
-        return Constants.IS_AMAZON_DISTRIBUTION;
     }
 
     public static boolean isScreenOrientationPortrait(Context context) {

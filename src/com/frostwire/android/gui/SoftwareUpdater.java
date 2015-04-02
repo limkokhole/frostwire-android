@@ -314,11 +314,10 @@ public final class SoftwareUpdater {
             }
         }
 
-        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_SHOW_TV_MENU_ITEM, update.config.tv);
-        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_INITIALIZE_OFFERCAST_LOCKSCREEN, update.config.offercastLockScreen);
-        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_INITIALIZE_APPIA, update.config.appia);
-        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_APPIA_SEARCH, update.config.appiaSearch);
-        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_APPIA_INTERSTITIAL, update.config.appiaInterstitial);
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+            SearchEngine ytSE = SearchEngine.forName("YouTube");
+            ytSE.setActive(false);
+        }
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, update.config.mobileCore);
 
@@ -371,10 +370,6 @@ public final class SoftwareUpdater {
     private static class Config {
         public int supportThreshold = 100;
         public Map<String, Boolean> activeSearchEngines;
-        public boolean tv = true;
-        public boolean appia = true;
-        public boolean appiaSearch = true;
-        public boolean appiaInterstitial = true;
         public boolean offercastLockScreen = true;
         public boolean mobileCore = true;
         // ux stats

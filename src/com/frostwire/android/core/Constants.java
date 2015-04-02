@@ -38,11 +38,11 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = "177";
+    public static final String FROSTWIRE_BUILD = "178";
 
-    public static final boolean IS_AMAZON_DISTRIBUTION = false;
-    
-    public static final boolean IS_FREE_DISTRIBUTION = !IS_AMAZON_DISTRIBUTION;
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // No YT search, Google Play oriented advertising.
+
+    public static final boolean IS_FREE_DISTRIBUTION = true;
 
     /**
      * 65280 - Default LAN bound port
@@ -100,7 +100,6 @@ public final class Constants {
     public static final String PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG = "frostwire.prefs.gui.show_new_transfer_dialog";
     public static final String PREF_KEY_GUI_SUPPORT_FROSTWIRE = "frostwire.prefs.gui.support_frostwire";
     public static final String PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD = "frostwire.prefs.gui.support_frostwire_threshold";
-    public static final String PREF_KEY_GUI_SHOW_TV_MENU_ITEM = "frostwire.prefs.gui.show_tv_menu_item";
     public static final String PREF_KEY_GUI_INITIALIZE_OFFERCAST_LOCKSCREEN = "frostwire.prefs.gui.initialize_offercast_lockscreen";
     public static final String PREF_KEY_GUI_INITIALIZE_APPIA = "frostwire.prefs.gui.initialize_appia";
     public static final String PREF_KEY_GUI_USE_APPIA_SEARCH = "frostwire.prefs.gui.use_appia_search";

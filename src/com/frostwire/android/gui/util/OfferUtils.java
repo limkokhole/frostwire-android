@@ -42,40 +42,18 @@ public class OfferUtils {
         boolean isFreeAppsEnabled = false;
         try {
             config = ConfigurationManager.instance();
-            isFreeAppsEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_INITIALIZE_APPIA)) && !OSUtils.isAmazonDistribution();
+            isFreeAppsEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
         } catch (Throwable t) {
         }
         return isFreeAppsEnabled;
     }
     
-    public static boolean isAppiaSearchEnabled() {
-        ConfigurationManager config = null;
-        boolean isAppiaSearchEnabled = false;
-        try {
-            config = ConfigurationManager.instance();
-            isAppiaSearchEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_APPIA_SEARCH)) && !OSUtils.isAmazonDistribution();
-        } catch (Throwable t) {
-        }
-        return isAppiaSearchEnabled;
-    }
-
-    public static boolean isRevMobEnabled() {
-        ConfigurationManager config = null;
-        boolean isRevMobEnabled = false;
-        try {
-            config = ConfigurationManager.instance();
-            isRevMobEnabled = config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && !OSUtils.isAmazonDistribution();
-        } catch (Throwable t) {
-        }
-        return isRevMobEnabled;
-    }
-
     public static boolean isMobileCoreEnabled() {
         ConfigurationManager config = null;
         boolean isMobileCoreEnabled = false;
         try {
             config = ConfigurationManager.instance();
-            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && !OSUtils.isAmazonDistribution();
+            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
         }  catch (Throwable e) {
             e.printStackTrace();
         }
