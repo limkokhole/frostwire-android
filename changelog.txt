@@ -1,9 +1,10 @@
-FrostWire 1.5.0 - MARCH/29/2015
+FrostWire 1.5.0 - APRIL/01/2015
  - Upgraded frostwire-jlibtorrent to the latest code from libtorrent.
  - Users can now donate to torrent creators, both Fiat and Bitcoin when available.
  - New Bittorrent setting to enable/disable DHT connectivity.
  - Fixes annoying bug where user would be notified for old finished downloads.
  - Fixes bug where songs that were deleted were not being cleared from playlists.
+ - Fixes bug where removing last song from Favorites playlist would not clear.
  - Fixes bug where it would show "Play All" menu action on empty playlists.
  - Fixes bug where sharing on WiFi from certain 3rd-party file explorers wouldn't work.
  - Fixes bug where file descriptors fetched by content:// uris wouldn't have a disk path available.
