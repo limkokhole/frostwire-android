@@ -260,8 +260,7 @@ public class FavoriteFragment extends Fragment implements LoaderCallbacks<List<S
                     MusicUtils.setRingtone(getActivity(), mSelectedId);
                     return true;
                 case FragmentMenuItems.REMOVE_FROM_FAVORITES:
-                    FavoritesStore.getInstance(getActivity()).removeItem(mSelectedId);
-                    getLoaderManager().restartLoader(LOADER, null, this);
+                    onRemoveFromFavorites();
                     return true;
                 case FragmentMenuItems.DELETE:
                     DeleteDialog.newInstance(mSong.mSongName, new long[] {
@@ -305,6 +304,9 @@ public class FavoriteFragment extends Fragment implements LoaderCallbacks<List<S
     public void onLoadFinished(final Loader<List<Song>> loader, final List<Song> data) {
         // Check for any errors
         if (data.isEmpty()) {
+            mAdapter.unload();
+            mAdapter.notifyDataSetChanged();
+
             // Set the empty text
             final TextView empty = (TextView)mRootView.findViewById(R.id.empty);
             empty.setText(getString(R.string.empty_favorite));
@@ -330,6 +332,13 @@ public class FavoriteFragment extends Fragment implements LoaderCallbacks<List<S
     public void onLoaderReset(final Loader<List<Song>> loader) {
         // Clear the data in the adapter
         mAdapter.unload();
+    }
+
+    private void onRemoveFromFavorites() {
+        mAdapter.remove(mSong);
+        mAdapter.notifyDataSetChanged();
+        FavoritesStore.getInstance(getActivity()).removeItem(mSelectedId);
+        getLoaderManager().restartLoader(LOADER, null, this);
     }
 
 }
