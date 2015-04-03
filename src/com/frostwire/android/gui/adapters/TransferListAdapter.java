@@ -460,6 +460,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
 
         buttonAction.setTag(download);
+
         buttonAction.setOnClickListener(viewOnClickListener);
 
         if (download.hasPaymentOptions()) {
@@ -632,32 +633,28 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private boolean showTransferItemMenu(View v) {
+        try {
+            MenuAdapter adapter = getMenuAdapter(v);
+            if (adapter != null) {
+                trackDialog(new MenuBuilder(adapter).show());
+                return true;
+            }
+        } catch (Throwable e) {
+            Log.e(TAG, "Failed to create the menu", e);
+        }
+        return false;
+    }
+
     private final class ViewOnClickListener implements OnClickListener {
         public void onClick(View v) {
-            try {
-                MenuAdapter adapter = getMenuAdapter(v);
-                if (adapter != null) {
-                    trackDialog(new MenuBuilder(adapter).show());
-                    return;
-                }
-            } catch (Throwable e) {
-                Log.e(TAG, "Failed to create the menu", e);
-            }
+            showTransferItemMenu(v);
         }
     }
 
     private final class ViewOnLongClickListener implements OnLongClickListener {
         public boolean onLongClick(View v) {
-            try {
-                MenuAdapter adapter = getMenuAdapter(v);
-                if (adapter != null) {
-                    trackDialog(new MenuBuilder(adapter).show());
-                    return true;
-                }
-            } catch (Throwable e) {
-                Log.e(TAG, "Failed to create the menu");
-            }
-            return false;
+            return showTransferItemMenu(v);
         }
     }
 
