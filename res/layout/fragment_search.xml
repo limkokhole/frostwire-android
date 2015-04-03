@@ -19,6 +19,7 @@
  */
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:frostwire="http://schemas.android.com/apk/res/com.frostwire.android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical" >
@@ -43,6 +44,17 @@
         android:layout_height="4dip"
         android:indeterminate="true"
         android:progress="25" />
+
+    <com.frostwire.android.gui.views.RichNotification
+            android:id="@+id/fragment_search_no_youtube_notification"
+            frostwire:rich_notification_icon="@drawable/question_mark"
+            frostwire:rich_notification_title="@string/seeing_less_results"
+            frostwire:rich_notification_title_underlined="true"
+            frostwire:rich_notification_description="@null"
+            android:layout_width="match_parent"
+            android:layout_height="64sp"
+            android:visibility="gone"
+            />
 
     <FrameLayout
         android:id="@+id/fragment_search_framelayout"

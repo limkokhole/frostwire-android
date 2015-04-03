@@ -524,4 +524,5 @@
     <string name="issue_with_tip_donation_uri">Hay algo malo con la dirección web de la propina.</string>
     <string name="enable_dht">Habilitar DHT</string>
     <string name="send_tip_donation">Dar Propina</string>
+    <string name="seeing_less_results">¿Ves menos resultados?</string>
 </resources>

@@ -98,6 +98,12 @@ public class RichNotification extends LinearLayout {
 	
 	private TextView updateTextViewText(int textViewId, CharSequence text, OnClickListener onClickNotificationListener) {
 		TextView textView = (TextView) findViewById(textViewId);
+
+		if (textView != null && (text == null || text.length() == 0)) {
+			textView.setVisibility(View.GONE);
+			return textView;
+		}
+
 		if (textView != null && text != null) {
 			textView.setText(text);
 		}
@@ -113,6 +119,8 @@ public class RichNotification extends LinearLayout {
 	public void setOnClickListener(OnClickListener listener) {
 		clickListener = listener;
 	}
+
+	public OnClickListener getOnClickListener() { return clickListener; }
 	
 	public boolean wasDismissed() {
 		return wasDismissed.contains(this.getId());

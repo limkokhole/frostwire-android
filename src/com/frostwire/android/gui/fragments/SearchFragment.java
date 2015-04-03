@@ -314,6 +314,22 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             }
         }
         searchProgress.setProgressEnabled(!LocalSearchEngine.instance().isSearchFinished());
+
+        final RichNotification no_youtube_notification = findView(view, R.id.fragment_search_no_youtube_notification);
+        if (no_youtube_notification != null) {
+            if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+                if (no_youtube_notification.getOnClickListener() == null) {
+                    no_youtube_notification.setOnClickListener(new OnYouTubeNotificationClickListener(this));
+                }
+                if (LocalSearchEngine.instance().isSearchStopped()) {
+                    no_youtube_notification.setVisibility(View.GONE);
+                } else if (!no_youtube_notification.wasDismissed()) {
+                    no_youtube_notification.setVisibility(View.VISIBLE);
+                }
+            } else {
+                no_youtube_notification.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void switchView(View v, int id) {
@@ -463,6 +479,18 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             this.fsr.numPictures = 0;
             this.fsr.numTorrents = 0;
             this.fsr.numVideo = 0;
+        }
+    }
+
+    private static final class OnYouTubeNotificationClickListener extends ClickAdapter<SearchFragment> {
+
+        public OnYouTubeNotificationClickListener(SearchFragment owner) {
+            super(owner);
+        }
+
+        @Override
+        public void onClick(SearchFragment parent, View v) {
+             UIUtils.openURL(parent.getActivity(), "http://support.frostwire.com/hc/en-us/articles/204095909");
         }
     }
 }

@@ -115,6 +115,10 @@ public final class SoftwareUpdater {
             @Override
             protected Boolean doInBackground(Void... params) {
                 try {
+                    if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+                        return false;
+                    }
+
                     byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL).fetch();
                     update = JsonUtils.toObject(new String(jsonBytes), Update.class);
 
@@ -143,6 +147,11 @@ public final class SoftwareUpdater {
                             }
                             // didn't download it? go get it now
                             else {
+                                File apkDirectory = SystemPaths.getSaveDirectory(Constants.FILE_TYPE_APPLICATIONS);
+                                if (!apkDirectory.exists()) {
+                                    apkDirectory.mkdirs();
+                                }
+
                                 new HttpFetcher(update.u).save(SystemPaths.getUpdateApk());
 
                                 if (downloadedLatestFrostWire(update.md5)) {
@@ -165,6 +174,12 @@ public final class SoftwareUpdater {
             protected void onPostExecute(Boolean result) {
                 if (result && !isCancelled()) {
                     notifyUpdate(context);
+                }
+
+                // even if we're offline, we need to disable this for the Google Play Distro.
+                if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+                    SearchEngine ytSE = SearchEngine.forName("YouTube");
+                    ytSE.setActive(false);
                 }
 
                 //nav menu always needs to be updated after we read the config.
@@ -312,11 +327,6 @@ public final class SoftwareUpdater {
                     LOG.warn("Can't find any search engine by the name of: '" + name + "'");
                 }
             }
-        }
-
-        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
-            SearchEngine ytSE = SearchEngine.forName("YouTube");
-            ytSE.setActive(false);
         }
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, update.config.mobileCore);

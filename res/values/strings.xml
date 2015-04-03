@@ -517,4 +517,5 @@
     <string name="issue_with_tip_donation_uri">There\'s something wrong with the Tip/Donation web address</string>
     <string name="enable_dht">Enable DHT</string>
     <string name="enable_dht_summary">Use the Distributed Hash Table to announce/search torrent peers</string>
+    <string name="seeing_less_results">Seeing less results?</string>
 </resources>
