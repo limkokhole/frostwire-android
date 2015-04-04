@@ -1,6 +1,7 @@
 FrostWire 1.5.0 - APRIL/03/2015
  - Upgraded frostwire-jlibtorrent to the latest code from libtorrent.
  - Users can now donate to torrent creators, both Fiat and Bitcoin when available.
+ - TPB, BTJunkie, KAT, Monova searches fixed.
  - New Bittorrent setting to enable/disable DHT connectivity.
  - YouTube search disabled for Google Play distribution.
  - Fixes annoying bug where user would be notified for old finished downloads.
