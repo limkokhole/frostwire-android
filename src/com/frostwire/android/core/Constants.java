@@ -40,7 +40,7 @@ public final class Constants {
      * needing to pass the Android app context to obtain the PackageManager instance.  */
     public static final String FROSTWIRE_BUILD = "178";
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // No YT search, Google Play oriented advertising.
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // No YT search, Google Play oriented advertising.
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
