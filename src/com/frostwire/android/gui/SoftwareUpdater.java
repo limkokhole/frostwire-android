@@ -40,10 +40,7 @@ import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXStats;
 import com.frostwire.uxstats.UXStatsConf;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.HashSet;
@@ -115,10 +112,6 @@ public final class SoftwareUpdater {
             @Override
             protected Boolean doInBackground(Void... params) {
                 try {
-                    if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
-                        return false;
-                    }
-
                     byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL).fetch();
                     update = JsonUtils.toObject(new String(jsonBytes), Update.class);
 
@@ -135,33 +128,8 @@ public final class SoftwareUpdater {
 
                     updateConfiguration(update);
 
-                    if (oldVersion) {
-                        if (update.a == null) {
-                            update.a = UPDATE_ACTION_OTA; // make it the old behavior
-                        }
-
-                        if (update.a.equals(UPDATE_ACTION_OTA)) {
-                            // did we download the newest already?
-                            if (downloadedLatestFrostWire(update.md5)) {
-                                return true;
-                            }
-                            // didn't download it? go get it now
-                            else {
-                                File apkDirectory = SystemPaths.getSaveDirectory(Constants.FILE_TYPE_APPLICATIONS);
-                                if (!apkDirectory.exists()) {
-                                    apkDirectory.mkdirs();
-                                }
-
-                                new HttpFetcher(update.u).save(SystemPaths.getUpdateApk());
-
-                                if (downloadedLatestFrostWire(update.md5)) {
-                                    return true;
-                                }
-                            }
-                        } else if (update.a.equals(UPDATE_ACTION_MARKET)) {
-                            return update.m != null;
-                        }
-                    }
+                    boolean notifyUpdate = handleOTAUpdate();
+                    return notifyUpdate;
 
                 } catch (Throwable e) {
                     Log.e(TAG, "Failed to check/retrieve/update the update information", e);
@@ -188,6 +156,41 @@ public final class SoftwareUpdater {
         };
 
         updateTask.execute();
+    }
+
+    private boolean handleOTAUpdate() throws IOException {
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+            return false;
+        }
+
+        if (oldVersion) {
+            if (update.a == null) {
+                update.a = UPDATE_ACTION_OTA; // make it the old behavior
+            }
+
+            if (update.a.equals(UPDATE_ACTION_OTA)) {
+                // did we download the newest already?
+                if (downloadedLatestFrostWire(update.md5)) {
+                    return true;
+                }
+                // didn't download it? go get it now
+                else {
+                    File apkDirectory = SystemPaths.getSaveDirectory(Constants.FILE_TYPE_APPLICATIONS);
+                    if (!apkDirectory.exists()) {
+                        apkDirectory.mkdirs();
+                    }
+
+                    new HttpFetcher(update.u).save(SystemPaths.getUpdateApk());
+
+                    if (downloadedLatestFrostWire(update.md5)) {
+                        return true;
+                    }
+                }
+            } else if (update.a.equals(UPDATE_ACTION_MARKET)) {
+                return update.m != null;
+            }
+        }
+        return false;
     }
 
     public void addConfigurationUpdateListener(ConfigurationUpdateListener listener) {
@@ -314,6 +317,7 @@ public final class SoftwareUpdater {
         if (update.config == null) {
             return;
         }
+
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD, ByteUtils.randomInt(0, 100) < update.config.supportThreshold);
 
