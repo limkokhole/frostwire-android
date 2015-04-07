@@ -1,3 +1,7 @@
+FrostWire 1.5.1 - APRIL/07/2015
+ - Removed all notifications explaining why no more YouTube search results on Basic version.
+ - Updated about screen to denote what FrostWire distribution is installed.
+
 FrostWire 1.5.0 - APRIL/03/2015
  - Upgraded frostwire-jlibtorrent to the latest code from libtorrent.
  - Users can now donate to torrent creators, both Fiat and Bitcoin when available.
