@@ -45,17 +45,6 @@
         android:indeterminate="true"
         android:progress="25" />
 
-    <com.frostwire.android.gui.views.RichNotification
-            android:id="@+id/fragment_search_no_youtube_notification"
-            frostwire:rich_notification_icon="@drawable/question_mark"
-            frostwire:rich_notification_title="@string/why_no_youtube_results"
-            frostwire:rich_notification_title_underlined="true"
-            frostwire:rich_notification_description="@null"
-            android:layout_width="match_parent"
-            android:layout_height="64sp"
-            android:visibility="gone"
-            />
-
     <FrameLayout
         android:id="@+id/fragment_search_framelayout"
         android:layout_width="match_parent"

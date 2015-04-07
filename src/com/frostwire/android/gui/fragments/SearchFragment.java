@@ -315,21 +315,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         searchProgress.setProgressEnabled(!LocalSearchEngine.instance().isSearchFinished());
 
-        final RichNotification no_youtube_notification = findView(view, R.id.fragment_search_no_youtube_notification);
-        if (no_youtube_notification != null) {
-            if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
-                if (no_youtube_notification.getOnClickListener() == null) {
-                    no_youtube_notification.setOnClickListener(new OnYouTubeNotificationClickListener(this));
-                }
-                if (LocalSearchEngine.instance().isSearchStopped()) {
-                    no_youtube_notification.setVisibility(View.GONE);
-                } else if (!no_youtube_notification.wasDismissed()) {
-                    no_youtube_notification.setVisibility(View.VISIBLE);
-                }
-            } else {
-                no_youtube_notification.setVisibility(View.GONE);
-            }
-        }
     }
 
     private void switchView(View v, int id) {
