@@ -114,6 +114,7 @@ public final class Engine implements IEngineService {
                 notifiedDat.delete();
                 try {
                     notifiedDat.createNewFile();
+                    LOG.info("Created new notified.dat file.");
                 } catch (IOException e1) {
                     LOG.error(e1.getMessage(), e1);
                 }

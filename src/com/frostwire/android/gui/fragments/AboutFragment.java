@@ -20,6 +20,7 @@ package com.frostwire.android.gui.fragments;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.util.UIUtils;
+import com.frostwire.android.gui.views.ClickAdapter;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -55,14 +57,18 @@ public class AboutFragment extends Fragment implements MainFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_about, container, false);
 
-        TextView title = (TextView) view.findViewById(R.id.fragment_about_title);
-        title.setText("FrostWire v" + Constants.FROSTWIRE_VERSION_STRING + " build " + Constants.FROSTWIRE_BUILD);
+        final TextView title = (TextView) view.findViewById(R.id.fragment_about_title);
+        final String basicOrPlus = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "Basic" : "Plus";
+        title.setText("FrostWire " + basicOrPlus + " v" + Constants.FROSTWIRE_VERSION_STRING);
 
-        TextView content = (TextView) view.findViewById(R.id.fragment_about_content);
+        final TextView buildNumber = (TextView) view.findViewById(R.id.fragment_about_build_number);
+        buildNumber.setText("\nbuild " + Constants.FROSTWIRE_BUILD);
+
+        final TextView content = (TextView) view.findViewById(R.id.fragment_about_content);
         content.setText(Html.fromHtml(getAboutText()));
         content.setMovementMethod(LinkMovementMethod.getInstance());
 
-        Button helpTranslateButton = (Button) view.findViewById(R.id.fragment_about_help_translate_frostwire_button);
+        final Button helpTranslateButton = (Button) view.findViewById(R.id.fragment_about_help_translate_frostwire_button);
         helpTranslateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

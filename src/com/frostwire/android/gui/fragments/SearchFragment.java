@@ -466,16 +466,4 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             this.fsr.numVideo = 0;
         }
     }
-
-    private static final class OnYouTubeNotificationClickListener extends ClickAdapter<SearchFragment> {
-
-        public OnYouTubeNotificationClickListener(SearchFragment owner) {
-            super(owner);
-        }
-
-        @Override
-        public void onClick(SearchFragment parent, View v) {
-             UIUtils.openURL(parent.getActivity(), "http://support.frostwire.com/hc/en-us/articles/204095909");
-        }
-    }
 }
