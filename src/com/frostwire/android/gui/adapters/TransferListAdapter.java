@@ -469,7 +469,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
             Drawable tipDrawable = (paymentOptions.bitcoin != null) ? r.getDrawable(R.drawable.contextmenu_icon_donation_bitcoin) : r.getDrawable(R.drawable.contextmenu_icon_donation_fiat);
             final int iconHeightInPixels = r.getDimensionPixelSize(R.dimen.view_transfer_list_item_title_left_drawable);
             tipDrawable.setBounds(0, 0, iconHeightInPixels, iconHeightInPixels);
-
             title.setCompoundDrawables(tipDrawable, null, null, null);
         }
     }
@@ -487,6 +486,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         seeds.setText("");
         peers.setText("");
         title.setText(download.getDisplayName());
+        title.setCompoundDrawables(null, null, null, null);
         progress.setProgress(download.getProgress());
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
@@ -509,6 +509,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         seeds.setText("");
         peers.setText("");
         title.setText(upload.getDisplayName());
+        title.setCompoundDrawables(null, null, null, null);
         progress.setProgress(upload.getProgress());
         status.setText(getStatusFromResId(upload.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(upload.getUploadSpeed()) + "/s");
@@ -531,6 +532,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         seeds.setText("");
         peers.setText("");
         title.setText(download.getDisplayName());
+        title.setCompoundDrawables(null, null, null, null);
         progress.setProgress(download.getProgress());
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
@@ -570,6 +572,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         seeds.setText("");
         peers.setText("");
         title.setText(download.getDisplayName());
+        title.setCompoundDrawables(null, null, null, null);
         progress.setProgress(download.getProgress());
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
@@ -592,6 +595,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         seeds.setText("");
         peers.setText("");
         title.setText(download.getDisplayName());
+        title.setCompoundDrawables(null, null, null, null);
         progress.setProgress(download.getProgress());
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
