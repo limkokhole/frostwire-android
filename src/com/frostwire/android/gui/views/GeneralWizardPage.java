@@ -27,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.RelativeLayout;
 
+import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -108,6 +109,10 @@ public class GeneralWizardPage extends RelativeLayout implements WizardPageView 
                 validate();
             }
         });
+
+        final TextView welcome_to_frostwire = (TextView) findViewById(R.id.view_general_wizard_page_welcome_to_frostwire);
+        final String basicOrPlus = getContext().getString(Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? R.string.basic : R.string.plus);
+        welcome_to_frostwire.setText(getContext().getString(R.string.welcome_to_frostwire, basicOrPlus));
     }
 
     protected void onComplete(boolean complete) {
