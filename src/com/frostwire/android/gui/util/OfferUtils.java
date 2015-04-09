@@ -22,11 +22,20 @@ import android.app.Activity;
 import android.content.Context;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
+import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.logging.Logger;
+import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import com.inmobi.monetization.IMErrorCode;
+import com.inmobi.monetization.IMInterstitial;
+import com.inmobi.monetization.IMInterstitialListener;
 import com.ironsource.mobilcore.CallbackResponse;
 import com.ironsource.mobilcore.MobileCore;
+
+import java.lang.ref.WeakReference;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 public class OfferUtils {
 
@@ -34,7 +43,8 @@ public class OfferUtils {
     public static boolean MOBILE_CORE_NATIVE_ADS_READY = false;
 
     /**
-     * True if user has enabled support for frostwire, Appia is enabled and it's not an Amazon distribution build. 
+     * True if user has enabled support for frostwire, Appia is enabled and it's not an Amazon distribution build.
+     *
      * @return
      */
     public static boolean isfreeAppsEnabled() {
@@ -47,14 +57,14 @@ public class OfferUtils {
         }
         return isFreeAppsEnabled;
     }
-    
+
     public static boolean isMobileCoreEnabled() {
         ConfigurationManager config = null;
         boolean isMobileCoreEnabled = false;
         try {
             config = ConfigurationManager.instance();
             isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
-        }  catch (Throwable e) {
+        } catch (Throwable e) {
             e.printStackTrace();
         }
         return isMobileCoreEnabled;
@@ -77,8 +87,7 @@ public class OfferUtils {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
-        }
-        else {
+        } else {
             if (callbackResponse != null) {
                 callbackResponse.onConfirmation(null);
             }
@@ -96,5 +105,109 @@ public class OfferUtils {
                 t.printStackTrace();
             }
         }
+    }
+
+    public static boolean isInMobiEnabled() {
+        if (true) {
+            return true;
+        }
+        ConfigurationManager config = null;
+        boolean isInMobiEnabled = false;
+        try {
+            config = ConfigurationManager.instance();
+            isInMobiEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_INMOBI)) && OSUtils.isGooglePlayDistribution();
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        return isInMobiEnabled;
+    }
+
+    public static void showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
+        if (imInterstitial == null || !inmobiStarted || !isInMobiEnabled()) {
+            return;
+        }
+
+        if (imListener != null) {
+            //we tell the listener what to do when this interstitial will get dismissed.
+            imListener.shutdownAfterDismiss = shutdownAfterDismiss;
+            imListener.finishAfterDismiss = finishAfterDismiss;
+        }
+
+        if (imInterstitial.getState().equals(IMInterstitial.State.READY)) {
+            try {
+                imInterstitial.show();
+            } catch (Throwable e) {
+                LOG.error("InMobi Interstitial failed on .show()!", e);
+            }
+
+        }
+    }
+
+    public static class InMobiListener implements IMInterstitialListener {
+
+        private IMInterstitial inmobiInterstitial;
+        private WeakReference<Activity> activityRef;
+        public boolean shutdownAfterDismiss = false;
+        public boolean finishAfterDismiss = false;
+
+        public InMobiListener(Activity hostActivity, IMInterstitial interstitial) {
+            activityRef = new WeakReference<Activity>(hostActivity);
+            inmobiInterstitial = interstitial;
+            inmobiInterstitial.setIMInterstitialListener(this);
+        }
+
+        @Override
+        public void onDismissInterstitialScreen(IMInterstitial imInterstitial) {
+            if (inmobiInterstitial == null) {
+                return;
+            }
+
+            Activity callerActivity = Ref.alive(activityRef) ? activityRef.get() : null;
+
+            if (shutdownAfterDismiss) {
+                // Finish through MainActivity caller
+                if (callerActivity != null && callerActivity instanceof MainActivity) {
+                    MainActivity mainActivity = (MainActivity) callerActivity;
+                    mainActivity.shutdown();
+                }
+            }
+
+            if (finishAfterDismiss) {
+                try {
+                    if (callerActivity != null) {
+                        callerActivity.finish();
+                    }
+                } catch (Throwable e) {
+                    // meh, activity was a goner already, shutdown was true most likely.
+                }
+            }
+        }
+
+        @Override
+        public void onInterstitialFailed(IMInterstitial imInterstitial, IMErrorCode imErrorCode) {
+            try {
+                TimeUnit.MINUTES.sleep(1);
+
+                if (Ref.alive(activityRef)) {
+                    Activity activity = activityRef.get();
+                    if (activity instanceof MainActivity) {
+                        MainActivity mainActivity = (MainActivity) activity;
+                        mainActivity.loadNewInmobiInterstitial();
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        @Override
+        public void onInterstitialLoaded(IMInterstitial imInterstitial) {}
+        @Override
+        public void onShowInterstitialScreen(IMInterstitial imInterstitial) {}
+        @Override
+        public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {}
+        @Override
+        public void onLeaveApplication(IMInterstitial imInterstitial) {}
     }
 }

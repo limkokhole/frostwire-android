@@ -100,11 +100,8 @@ public final class Constants {
     public static final String PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG = "frostwire.prefs.gui.show_new_transfer_dialog";
     public static final String PREF_KEY_GUI_SUPPORT_FROSTWIRE = "frostwire.prefs.gui.support_frostwire";
     public static final String PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD = "frostwire.prefs.gui.support_frostwire_threshold";
-    public static final String PREF_KEY_GUI_INITIALIZE_OFFERCAST_LOCKSCREEN = "frostwire.prefs.gui.initialize_offercast_lockscreen";
-    public static final String PREF_KEY_GUI_INITIALIZE_APPIA = "frostwire.prefs.gui.initialize_appia";
-    public static final String PREF_KEY_GUI_USE_APPIA_SEARCH = "frostwire.prefs.gui.use_appia_search";
-    public static final String PREF_KEY_GUI_USE_APPIA_INTERSTITIAL = "frostwire.prefs.gui.use_appia_interstitial";
     public static final String PREF_KEY_GUI_USE_MOBILE_CORE = "frostwire.prefs.gui.use_mobile_core";
+    public static final String PREF_KEY_GUI_USE_INMOBI = "frostwire.prefs.gui.use_inmobi";
 
     public static final String PREF_KEY_TORRENT_MAX_DOWNLOAD_SPEED = "frostwire.prefs.torrent.max_download_speed";
     public static final String PREF_KEY_TORRENT_MAX_UPLOAD_SPEED = "frostwire.prefs.torrent.max_upload_speed";
@@ -169,6 +166,7 @@ public final class Constants {
 
     public static final String BITCOIN_DONATION_URI = "bitcoin:19NzEEocAWydbkm3xEEVu43Ho2JFEYf5Vr?amount=0.0104";
     public static final String MOBILE_CORE_DEVHASH = "6OJUVFECLGYH3JKYZB41VLQA4JXW5";
+    public static final String INMOBI_INTERSTITIAL_PROPERTY_ID = "c1e6be702d614523b725af8b86f99e8f";
 
     public static final int NOTIFIED_BLOOM_FILTER_BITSET_SIZE = 320000; //40 kilobytes
     public static final int NOTIFIED_BLOOM_FILTER_EXPECTED_ELEMENTS = 10000;

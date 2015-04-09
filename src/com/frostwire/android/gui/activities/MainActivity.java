@@ -63,13 +63,19 @@ import com.frostwire.util.Ref;
 import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import com.inmobi.commons.InMobi;
+import com.inmobi.monetization.IMErrorCode;
+import com.inmobi.monetization.IMInterstitial;
+import com.inmobi.monetization.IMInterstitialListener;
 import com.ironsource.mobilcore.AdUnitEventListener;
 import com.ironsource.mobilcore.CallbackResponse;
 import com.ironsource.mobilcore.MobileCore;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.Map;
 import java.util.Stack;
+import java.util.concurrent.TimeUnit;
 
 import static com.andrew.apollo.utils.MusicUtils.mService;
 
@@ -86,8 +92,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
     private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
     private static final String DUR_TOKEN_KEY = "dur_token";
-    private static final String APPIA_STARTED_KEY = "appia_started";
     private static final String MOBILE_CORE_STARTED_KEY = "mobile_core_started";
+    private static final String INMOBI_STARTED = "inmobi_started";
 
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
@@ -115,12 +121,15 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     // not sure about this variable, quick solution for now
     private String durToken;
 
-    private boolean appiaStarted = false;
     private boolean mobileCoreStarted = false;
+    private boolean inmobiStarted = false;
 
     private TimerSubscription playerSubscription;
     
     private BroadcastReceiver mainBroadcastReceiver;
+
+    private IMInterstitial inmobiInterstitial = null;
+    private OfferUtils.InMobiListener inmobiListener = null;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -176,15 +185,27 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         setupMenuItems();
     }
 
+    public void loadNewInmobiInterstitial() {
+        inmobiInterstitial = new IMInterstitial(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+
+        // in case it fails loading, it will try again every minute once.
+        inmobiListener = new OfferUtils.InMobiListener(this, inmobiInterstitial);
+        inmobiInterstitial.loadInterstitial();
+    }
+
+    public void shutdown() {
+        stopMobileCoreServices();
+        finish();
+        Engine.instance().shutdown();
+    }
+
     private boolean isShutdown(Intent intent) {
         if (intent == null) {
             return false;
         }
 
         if (intent.getBooleanExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), false)) {
-            stopMobileCoreServices();
-            finish();
-            Engine.instance().shutdown();
+            shutdown();
             return true;
         }
 
@@ -236,8 +257,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         if (savedInstanceState != null) {
             durToken = savedInstanceState.getString(DUR_TOKEN_KEY);
-            appiaStarted = savedInstanceState.getBoolean(APPIA_STARTED_KEY);
             mobileCoreStarted = savedInstanceState.getBoolean(MOBILE_CORE_STARTED_KEY);
+            inmobiStarted = savedInstanceState.getBoolean(INMOBI_STARTED);
         }
 
         playerSubscription = TimerService.subscribe((TimerObserver) findView(R.id.activity_main_player_notifier), 1);
@@ -346,6 +367,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         // MC needs to be created in UI thread to properly set handlers
         // otherwise we get a runtime exception and worker thread dies.
         initializeMobileCore();
+        initializeInMobi();
     }
 
     @Override
@@ -412,6 +434,25 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
+    private void initializeInMobi() {
+        if (OfferUtils.isInMobiEnabled()) {
+            return;
+        }
+
+        if (!inmobiStarted) {
+            try {
+                InMobi.initialize(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+            } catch (Throwable t) {
+                t.printStackTrace();
+                inmobiStarted = false;
+            }
+        }
+
+        // everytime, we refresh the next interstitial, reusing
+        // old ads "may result in unpredictable behaviour" -inmobi docs.
+        loadNewInmobiInterstitial();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -419,8 +460,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         saveFragmentsStack(outState);
 
         outState.putString(DUR_TOKEN_KEY, durToken);
-        outState.putBoolean(APPIA_STARTED_KEY, appiaStarted);
         outState.putBoolean(MOBILE_CORE_STARTED_KEY, mobileCoreStarted);
+        outState.putBoolean(INMOBI_STARTED, inmobiStarted);
     }
 
     private ServiceToken mToken;
@@ -531,16 +572,20 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 finish();
             }
         });
+
+        OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, false, true);
     }
 
     private void onShutdownDialogButtonPositive() {
         OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
             @Override
             public void onConfirmation(TYPE type) {
-                controller.shutdown();
+                shutdown();
             }
         });
 
+        // (I've set the dimiss to false, because the shutdown() routine already does a finish()
+        OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, true, false);
     }
 
     private void syncSlideMenu() {
