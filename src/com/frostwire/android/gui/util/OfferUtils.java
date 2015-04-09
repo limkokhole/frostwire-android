@@ -143,7 +143,7 @@ public class OfferUtils {
     }
 
     public static class InMobiListener implements IMInterstitialListener {
-
+        private Logger LOG = Logger.getLogger(IMInterstitialListener.class);
         private WeakReference<Activity> activityRef;
         public boolean shutdownAfterDismiss = false;
         public boolean finishAfterDismiss = false;
@@ -154,6 +154,7 @@ public class OfferUtils {
 
         @Override
         public void onDismissInterstitialScreen(IMInterstitial imInterstitial) {
+            LOG.info("onDismissInterstitialScreen");
             Activity callerActivity = Ref.alive(activityRef) ? activityRef.get() : null;
 
             if (shutdownAfterDismiss) {
@@ -177,6 +178,9 @@ public class OfferUtils {
 
         @Override
         public void onInterstitialFailed(IMInterstitial imInterstitial, IMErrorCode imErrorCode) {
+            LOG.info("onInterstitialFailed");
+            LOG.error(imErrorCode.name());
+            LOG.error(imErrorCode.toString());
             try {
                 TimeUnit.MINUTES.sleep(1);
 
@@ -194,12 +198,12 @@ public class OfferUtils {
         }
 
         @Override
-        public void onInterstitialLoaded(IMInterstitial imInterstitial) {}
+        public void onInterstitialLoaded(IMInterstitial imInterstitial) {LOG.info("onInterstitialLoaded");}
         @Override
-        public void onShowInterstitialScreen(IMInterstitial imInterstitial) {}
+        public void onShowInterstitialScreen(IMInterstitial imInterstitial) {LOG.info("onShowInterstitial");}
         @Override
-        public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {}
+        public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {LOG.info("onInterstitialInteraction");}
         @Override
-        public void onLeaveApplication(IMInterstitial imInterstitial) {}
+        public void onLeaveApplication(IMInterstitial imInterstitial) {LOG.info("onLeaveApplication");}
     }
 }

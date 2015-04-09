@@ -64,18 +64,14 @@ import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import com.inmobi.commons.InMobi;
-import com.inmobi.monetization.IMErrorCode;
 import com.inmobi.monetization.IMInterstitial;
-import com.inmobi.monetization.IMInterstitialListener;
 import com.ironsource.mobilcore.AdUnitEventListener;
 import com.ironsource.mobilcore.CallbackResponse;
 import com.ironsource.mobilcore.MobileCore;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
-import java.util.Map;
 import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 import static com.andrew.apollo.utils.MusicUtils.mService;
 
@@ -189,12 +185,18 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (!inmobiStarted) {
             return; //not ready
         }
-        inmobiInterstitial = new IMInterstitial(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
 
-        // in case it fails loading, it will try again every minute once.
-        inmobiListener = new OfferUtils.InMobiListener(this);
-        inmobiInterstitial.setIMInterstitialListener(inmobiListener);
-        inmobiInterstitial.loadInterstitial();
+        final MainActivity mainActivity = this;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                inmobiInterstitial = new IMInterstitial(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                // in case it fails loading, it will try again every minute once.
+                inmobiListener = new OfferUtils.InMobiListener(mainActivity);
+                inmobiInterstitial.setIMInterstitialListener(inmobiListener);
+                inmobiInterstitial.loadInterstitial();
+            }
+        });
     }
 
     public void shutdown() {
@@ -444,18 +446,29 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
 
         if (!inmobiStarted) {
-            try {
-                InMobi.initialize(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                inmobiStarted = true;
-            } catch (Throwable t) {
-                t.printStackTrace();
-                inmobiStarted = false;
-            }
+            final MainActivity mainActivity = this;
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        // this initialize call is very expensive, this is why we should be in voked in a thread.
+                        LOG.info("InMobi.initialize()...");
+                        InMobi.initialize(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                        LOG.info("InMobi.initialized.");
+                        inmobiStarted = true;
+                        LOG.info("Load InmobiInterstitial.");
+                        loadNewInmobiInterstitial();
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        inmobiStarted = false;
+                    }
+                }
+            }.start();
+        } else {
+            // everytime, we refresh the next interstitial, reusing
+            // old ads "may result in unpredictable behaviour" -inmobi docs.
+            //loadNewInmobiInterstitial();
         }
-
-        // everytime, we refresh the next interstitial, reusing
-        // old ads "may result in unpredictable behaviour" -inmobi docs.
-        loadNewInmobiInterstitial();
     }
 
     @Override
