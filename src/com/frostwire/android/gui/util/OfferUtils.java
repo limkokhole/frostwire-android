@@ -145,23 +145,16 @@ public class OfferUtils {
 
     public static class InMobiListener implements IMInterstitialListener {
 
-        private IMInterstitial inmobiInterstitial;
         private WeakReference<Activity> activityRef;
         public boolean shutdownAfterDismiss = false;
         public boolean finishAfterDismiss = false;
 
-        public InMobiListener(Activity hostActivity, IMInterstitial interstitial) {
+        public InMobiListener(Activity hostActivity) {
             activityRef = new WeakReference<Activity>(hostActivity);
-            inmobiInterstitial = interstitial;
-            inmobiInterstitial.setIMInterstitialListener(this);
         }
 
         @Override
         public void onDismissInterstitialScreen(IMInterstitial imInterstitial) {
-            if (inmobiInterstitial == null) {
-                return;
-            }
-
             Activity callerActivity = Ref.alive(activityRef) ? activityRef.get() : null;
 
             if (shutdownAfterDismiss) {

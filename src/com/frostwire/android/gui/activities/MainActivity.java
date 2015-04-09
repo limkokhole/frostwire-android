@@ -189,7 +189,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         inmobiInterstitial = new IMInterstitial(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
 
         // in case it fails loading, it will try again every minute once.
-        inmobiListener = new OfferUtils.InMobiListener(this, inmobiInterstitial);
+        inmobiListener = new OfferUtils.InMobiListener(this);
+        inmobiInterstitial.setIMInterstitialListener(inmobiListener);
         inmobiInterstitial.loadInterstitial();
     }
 
