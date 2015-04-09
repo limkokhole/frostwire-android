@@ -274,6 +274,23 @@
 		</receiver>
 		<!-- end of mobile core -->
 
+		<!-- InMobi -->
+		<activity android:name="com.inmobi.androidsdk.IMBrowserActivity"
+				  android:configChanges="keyboardHidden|orientation|keyboard|smallestScreenSize|screenSize"
+				  android:theme="@android:style/Theme.Translucent.NoTitleBar"
+				  android:hardwareAccelerated="true" />
+
+		<receiver
+				android:name="com.inmobi.commons.analytics.androidsdk.IMAdTrackerReceiver"
+				android:enabled="true"
+				android:exported="true" >
+			<intent-filter>
+				<action android:name="com.android.vending.INSTALL_REFERRER" />                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />                <action android:name="com.inmobi.share.id" />
+			</intent-filter>
+		</receiver>
+
+		<!-- end of InMobi -->
+
 		<!-- providers -->
 		<provider android:name="com.frostwire.android.core.providers.DocumentsProvider"
 			android:authorities="com.frostwire.android.core.providers.Documents" android:exported="true" />

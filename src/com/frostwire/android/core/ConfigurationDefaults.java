@@ -65,11 +65,8 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG, true);
         defaultValues.put(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE, Constants.IS_FREE_DISTRIBUTION);
         defaultValues.put(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD, true);
-        defaultValues.put(Constants.PREF_KEY_GUI_INITIALIZE_OFFERCAST_LOCKSCREEN,true);
-        defaultValues.put(Constants.PREF_KEY_GUI_INITIALIZE_APPIA, true);
-        defaultValues.put(Constants.PREF_KEY_GUI_USE_APPIA_SEARCH, true);
-        defaultValues.put(Constants.PREF_KEY_GUI_USE_APPIA_INTERSTITIAL, true);
         defaultValues.put(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, true);
+        defaultValues.put(Constants.PREF_KEY_GUI_USE_INMOBI, true);
 
         defaultValues.put(Constants.PREF_KEY_SEARCH_COUNT_DOWNLOAD_FOR_TORRENT_DEEP_SCAN, 20);
         defaultValues.put(Constants.PREF_KEY_SEARCH_COUNT_ROUNDS_FOR_TORRENT_DEEP_SCAN, 10);
