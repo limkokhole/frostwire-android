@@ -186,6 +186,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void loadNewInmobiInterstitial() {
+        if (!inmobiStarted) {
+            return; //not ready
+        }
         inmobiInterstitial = new IMInterstitial(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
 
         // in case it fails loading, it will try again every minute once.
@@ -436,13 +439,14 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private void initializeInMobi() {
-        if (OfferUtils.isInMobiEnabled()) {
+        if (!OfferUtils.isInMobiEnabled()) {
             return;
         }
 
         if (!inmobiStarted) {
             try {
                 InMobi.initialize(this, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                inmobiStarted = true;
             } catch (Throwable t) {
                 t.printStackTrace();
                 inmobiStarted = false;

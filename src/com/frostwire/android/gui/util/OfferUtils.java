@@ -94,7 +94,6 @@ public class OfferUtils {
         }
     }
 
-
     public static void onFreeAppsClick(Context context) {
         if (isfreeAppsEnabled() && isMobileCoreEnabled() && MobileCore.isDirectToMarketReady()) {
             try {
