@@ -63,7 +63,11 @@ public class OfferUtils {
         boolean isMobileCoreEnabled = false;
         try {
             config = ConfigurationManager.instance();
+<<<<<<< HEAD
             isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE));
+=======
+            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
+>>>>>>> f9b6a3139d41f1c7d931f0cfe49b86105a82f053
         } catch (Throwable e) {
             e.printStackTrace();
         }
