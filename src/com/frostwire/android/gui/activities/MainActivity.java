@@ -584,15 +584,27 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private void onLastDialogButtonPositive() {
-        OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
+        boolean mobileCoreShown = false;
+        boolean inMobiShown = false;
+        boolean interstitialShown = false;
+
+        mobileCoreShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
             @Override
             public void onConfirmation(CallbackResponse.TYPE type) {
-                LOG.info("showInterstitial() -> CallbackResponse::onConfirmation(" + type + ")");
-                finish();
+            LOG.info("showInterstitial() -> CallbackResponse::onConfirmation(" + type + ")");
+            finish();
             }
         });
 
-        OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, false, true);
+        if (!mobileCoreShown) {
+            inMobiShown = OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, false, true);
+        }
+
+        interstitialShown = mobileCoreShown || inMobiShown;
+
+        if (interstitialShown) {
+            finish();
+        }
     }
 
     private void onShutdownDialogButtonPositive() {

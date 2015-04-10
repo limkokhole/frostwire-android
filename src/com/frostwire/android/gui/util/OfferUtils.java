@@ -63,11 +63,7 @@ public class OfferUtils {
         boolean isMobileCoreEnabled = false;
         try {
             config = ConfigurationManager.instance();
-<<<<<<< HEAD
             isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE));
-=======
-            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
->>>>>>> f9b6a3139d41f1c7d931f0cfe49b86105a82f053
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -82,19 +78,19 @@ public class OfferUtils {
      * @param mobileCoreStarted
      * @param callbackResponse
      */
-    public static void showMobileCoreInterstitial(Activity callerActivity, boolean mobileCoreStarted, CallbackResponse callbackResponse) {
+    public static boolean showMobileCoreInterstitial(Activity callerActivity, boolean mobileCoreStarted, CallbackResponse callbackResponse) {
 
         if (isMobileCoreEnabled() && mobileCoreStarted && MobileCore.isInterstitialReady()) {
             try {
                 MobileCore.showInterstitial(callerActivity, callbackResponse);
                 UXStats.instance().log(UXAction.MISC_INTERSTITIAL_SHOW);
+                return true;
             } catch (Throwable e) {
                 e.printStackTrace();
+                return false;
             }
         } else {
-            if (callbackResponse != null) {
-                callbackResponse.onConfirmation(null);
-            }
+            return false;
         }
     }
 
@@ -125,9 +121,9 @@ public class OfferUtils {
         return isInMobiEnabled;
     }
 
-    public static void showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
-        if (imInterstitial == null || !inmobiStarted || !isInMobiEnabled()) {
-            return;
+    public static boolean showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
+        if (!inmobiStarted || !isInMobiEnabled() || imInterstitial == null) {
+            return false;
         }
 
         if (imListener != null) {
@@ -139,11 +135,13 @@ public class OfferUtils {
         if (imInterstitial.getState().equals(IMInterstitial.State.READY)) {
             try {
                 imInterstitial.show();
+                return true;
             } catch (Throwable e) {
                 LOG.error("InMobi Interstitial failed on .show()!", e);
+                return false;
             }
-
         }
+        return false;
     }
 
     public static class InMobiListener implements IMInterstitialListener {
