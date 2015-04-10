@@ -63,7 +63,7 @@ public class OfferUtils {
         boolean isMobileCoreEnabled = false;
         try {
             config = ConfigurationManager.instance();
-            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
+            isMobileCoreEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE));
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -114,7 +114,7 @@ public class OfferUtils {
         boolean isInMobiEnabled = false;
         try {
             config = ConfigurationManager.instance();
-            isInMobiEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_INMOBI)) && OSUtils.isGooglePlayDistribution();
+            isInMobiEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_INMOBI));
         } catch (Throwable e) {
             e.printStackTrace();
         }

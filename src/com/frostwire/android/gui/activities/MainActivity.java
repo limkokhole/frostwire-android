@@ -453,6 +453,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     try {
                         // this initialize call is very expensive, this is why we should be in voked in a thread.
                         LOG.info("InMobi.initialize()...");
+                        InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
                         InMobi.initialize(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
                         LOG.info("InMobi.initialized.");
                         inmobiStarted = true;
