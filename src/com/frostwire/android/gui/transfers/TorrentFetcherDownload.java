@@ -214,7 +214,7 @@ public class TorrentFetcherDownload implements BittorrentDownload {
         FileStorage fs = ti.getFiles();
         for (int i = 0; i < selection.length; i++) {
             String filePath = fs.getFilePath(i);
-            if (path.endsWith(filePath)) {
+            if (path.endsWith(filePath) || filePath.endsWith(path)) {
                 selection[i] = true;
             }
         }
