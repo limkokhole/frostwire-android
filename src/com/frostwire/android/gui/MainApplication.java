@@ -69,7 +69,7 @@ public class MainApplication extends Application {
 
             ImageLoader.getInstance(this);
             CrawlPagedWebSearchPerformer.setCache(new DiskCrawlCache(this));
-            CrawlPagedWebSearchPerformer.setMagnetDownloader(new LibTorrentMagnetDownloader());
+            CrawlPagedWebSearchPerformer.setMagnetDownloader(null); // this effectively turn off magnet downloads
 
             LocalSearchEngine.create(getDeviceId());//getAndroidId());
 
