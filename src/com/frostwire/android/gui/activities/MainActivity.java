@@ -583,7 +583,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
-    private void onLastDialogButtonPositive() {
+    private void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
         boolean mobileCoreShown = false;
         boolean inMobiShown = false;
         boolean interstitialShown = false;
@@ -591,32 +591,43 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         mobileCoreShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
             @Override
             public void onConfirmation(CallbackResponse.TYPE type) {
-            LOG.info("showInterstitial() -> CallbackResponse::onConfirmation(" + type + ")");
-            finish();
+                if (dismissAfterwards) {
+                    finish();
+                }
+                if (shutdownAfterwards) {
+                    shutdown();
+                }
             }
         });
 
         if (!mobileCoreShown) {
-            inMobiShown = OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, false, true);
+            inMobiShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
+                    inmobiInterstitial,
+                    inmobiListener,
+                    shutdownAfterwards,
+                    dismissAfterwards);
         }
 
         interstitialShown = mobileCoreShown || inMobiShown;
 
-        if (interstitialShown) {
-            finish();
+        // If interstitial's callbacks were not invoked because ads weren't displayed
+        // then we're responsible for finish()'ing the activity or shutting down the app.
+        if (!interstitialShown) {
+            if (dismissAfterwards) {
+                finish();
+            }
+            if (shutdownAfterwards) {
+                shutdown();
+            }
         }
     }
 
-    private void onShutdownDialogButtonPositive() {
-        OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
-            @Override
-            public void onConfirmation(TYPE type) {
-                shutdown();
-            }
-        });
+    private void onLastDialogButtonPositive() {
+        showInterstitial(false, true);
+    }
 
-        // (I've set the dimiss to false, because the shutdown() routine already does a finish()
-        OfferUtils.showInMobiInterstitial(inmobiStarted, inmobiInterstitial, inmobiListener, true, false);
+    private void onShutdownDialogButtonPositive() {
+        showInterstitial(true, false);
     }
 
     private void syncSlideMenu() {

@@ -107,9 +107,6 @@ public class OfferUtils {
     }
 
     public static boolean isInMobiEnabled() {
-        if (true) {
-            return true;
-        }
         ConfigurationManager config = null;
         boolean isInMobiEnabled = false;
         try {
@@ -156,7 +153,6 @@ public class OfferUtils {
 
         @Override
         public void onDismissInterstitialScreen(IMInterstitial imInterstitial) {
-            LOG.info("onDismissInterstitialScreen");
             Activity callerActivity = Ref.alive(activityRef) ? activityRef.get() : null;
 
             if (shutdownAfterDismiss) {
@@ -180,7 +176,6 @@ public class OfferUtils {
 
         @Override
         public void onInterstitialFailed(IMInterstitial imInterstitial, IMErrorCode imErrorCode) {
-            LOG.info("onInterstitialFailed");
             LOG.error(imErrorCode.name());
             LOG.error(imErrorCode.toString());
             try {
@@ -200,12 +195,12 @@ public class OfferUtils {
         }
 
         @Override
-        public void onInterstitialLoaded(IMInterstitial imInterstitial) {LOG.info("onInterstitialLoaded");}
+        public void onInterstitialLoaded(IMInterstitial imInterstitial) {}
         @Override
-        public void onShowInterstitialScreen(IMInterstitial imInterstitial) {LOG.info("onShowInterstitial");}
+        public void onShowInterstitialScreen(IMInterstitial imInterstitial) {}
         @Override
-        public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {LOG.info("onInterstitialInteraction");}
+        public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {}
         @Override
-        public void onLeaveApplication(IMInterstitial imInterstitial) {LOG.info("onLeaveApplication");}
+        public void onLeaveApplication(IMInterstitial imInterstitial) {}
     }
 }

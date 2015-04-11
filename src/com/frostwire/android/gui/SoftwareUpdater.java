@@ -334,6 +334,7 @@ public final class SoftwareUpdater {
         }
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, update.config.mobileCore);
+        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_INMOBI, update.config.inmobi);
 
         if (update.config.uxEnabled && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_UXSTATS_ENABLED)) {
             String url = "http://ux.frostwire.com/aux";
@@ -384,8 +385,8 @@ public final class SoftwareUpdater {
     private static class Config {
         public int supportThreshold = 100;
         public Map<String, Boolean> activeSearchEngines;
-        public boolean offercastLockScreen = true;
-        public boolean mobileCore = true;
+        public boolean mobileCore = false;
+        public boolean inmobi = false;
         // ux stats
         public boolean uxEnabled = false;
         public int uxPeriod = 3600;
