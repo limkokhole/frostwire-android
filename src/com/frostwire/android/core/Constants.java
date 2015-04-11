@@ -148,9 +148,9 @@ public final class Constants {
     public static final String MIME_TYPE_ANDROID_PACKAGE_ARCHIVE = CommonConstants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE;
 
     /**
-     * URL where FrostWIre checks for software updates
+     * URL where FrostWire checks for software updates
      */
-    public static final String SERVER_UPDATE_URL = "http://update.frostwire.com/android";
+    public static final String SERVER_UPDATE_URL = "http://update1.frostwire.com/android";
 
     public static final String SERVER_PROMOTIONS_URL = "http://update.frostwire.com/o.php";
 
