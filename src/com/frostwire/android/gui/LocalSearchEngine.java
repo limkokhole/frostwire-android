@@ -33,6 +33,8 @@ import android.text.Html;
 
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
+import com.frostwire.search.kat2.KATCrawledSearchResult;
+import com.frostwire.search.kat2.KATSearchResult;
 import com.frostwire.util.StringUtils;
 import com.frostwire.search.CrawlPagedWebSearchPerformer;
 import com.frostwire.search.CrawledSearchResult;
@@ -56,6 +58,8 @@ public final class LocalSearchEngine {
 
     // filter constants
     private final int MIN_SEEDS_TORRENT_RESULT;
+
+    private static final int KAT_MIN_SEEDS_TORRENT_RESULT = 2;
 
     private SearchManagerListener listener;
 
@@ -82,7 +86,8 @@ public final class LocalSearchEngine {
     private LocalSearchEngine(String androidId) {
         this.manager = new SearchManagerImpl();
         this.manager.registerListener(new ManagerListener());
-        this.MIN_SEEDS_TORRENT_RESULT = ConfigurationManager.instance().getInt(Constants.PREF_KEY_SEARCH_MIN_SEEDS_FOR_TORRENT_RESULT);
+        // TODO: review the logic behind putting this in a preference
+        this.MIN_SEEDS_TORRENT_RESULT = 10;//ConfigurationManager.instance().getInt(Constants.PREF_KEY_SEARCH_MIN_SEEDS_FOR_TORRENT_RESULT);
         this.androidId = androidId;
     }
     
@@ -167,7 +172,15 @@ public final class LocalSearchEngine {
                         if (age > 31536000000l) {
                             continue;
                         }
-                    } else if (((TorrentSearchResult) sr).getSeeds() < MIN_SEEDS_TORRENT_RESULT) {
+                    } else if (sr instanceof KATSearchResult) {
+                        if (((KATSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
+                            continue;
+                        }
+                    } else if (sr instanceof KATCrawledSearchResult) {
+                        if (((KATCrawledSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
+                            continue;
+                        }
+                    }else if (((TorrentSearchResult) sr).getSeeds() < MIN_SEEDS_TORRENT_RESULT) {
                         continue;
                     }
                 }
@@ -178,6 +191,8 @@ public final class LocalSearchEngine {
                         if (!((YouTubeCrawledSearchResult) sr).getFilename().endsWith(".flv")) {
                             list.add(sr);
                         }
+                    } else if (sr instanceof KATCrawledSearchResult) {
+                        list.add(sr);
                     } else if (filter(new LinkedList<String>(currentSearchTokens), sr)) {
                         list.add(sr);
                     }
