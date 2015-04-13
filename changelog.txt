@@ -3,6 +3,7 @@ FrostWire 1.5.2 - APRIL/13/2015
  - Reduced used of DHT network for search.
  - Faster torrent download start time.
  - Fixes download error on some Archive.org search results.
+ - When no search results are found, search suggestions are calculated from search keywords.
 
 FrostWire 1.5.1 - APRIL/07/2015
  - Removed all notifications explaining why no more YouTube search results on Basic version.
