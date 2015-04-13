@@ -18,34 +18,18 @@
 
 package com.frostwire.android.gui;
 
-import java.text.Normalizer;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
 import android.text.Html;
-
-import com.frostwire.android.core.ConfigurationManager;
-import com.frostwire.android.core.Constants;
+import com.frostwire.search.*;
+import com.frostwire.search.extratorrent2.ExtratorrentCrawledSearchResult;
+import com.frostwire.search.extratorrent2.ExtratorrentSearchResult;
 import com.frostwire.search.kat2.KATCrawledSearchResult;
 import com.frostwire.search.kat2.KATSearchResult;
-import com.frostwire.util.StringUtils;
-import com.frostwire.search.CrawlPagedWebSearchPerformer;
-import com.frostwire.search.CrawledSearchResult;
-import com.frostwire.search.FileSearchResult;
-import com.frostwire.search.SearchManager;
-import com.frostwire.search.SearchManagerImpl;
-import com.frostwire.search.SearchManagerListener;
-import com.frostwire.search.SearchPerformer;
-import com.frostwire.search.SearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
+import com.frostwire.util.StringUtils;
+
+import java.text.Normalizer;
+import java.util.*;
 
 /**
  * @author gubatron
@@ -172,15 +156,17 @@ public final class LocalSearchEngine {
                         if (age > 31536000000l) {
                             continue;
                         }
-                    } else if (sr instanceof KATSearchResult) {
-                        if (((KATSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
+                    } else if (sr instanceof KATSearchResult || sr instanceof ExtratorrentSearchResult) {
+                        // TODO: Search architecture hack, gotta abstract these guys.
+                        if (((TorrentSearchResult)sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
                             continue;
                         }
-                    } else if (sr instanceof KATCrawledSearchResult) {
-                        if (((KATCrawledSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
+                    } else if (sr instanceof KATCrawledSearchResult || sr instanceof ExtratorrentCrawledSearchResult) {
+                        // TODO: Search architecture hack, gotta abstract these guys.
+                        if (((TorrentSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
                             continue;
                         }
-                    }else if (((TorrentSearchResult) sr).getSeeds() < MIN_SEEDS_TORRENT_RESULT) {
+                    } else if (((TorrentSearchResult) sr).getSeeds() < MIN_SEEDS_TORRENT_RESULT) {
                         continue;
                     }
                 }
@@ -191,7 +177,8 @@ public final class LocalSearchEngine {
                         if (!((YouTubeCrawledSearchResult) sr).getFilename().endsWith(".flv")) {
                             list.add(sr);
                         }
-                    } else if (sr instanceof KATCrawledSearchResult) {
+                    } else if (sr instanceof KATCrawledSearchResult || sr instanceof ExtratorrentCrawledSearchResult) {
+                        // TODO: Search architecture hack, gotta abstract these guys.
                         list.add(sr);
                     } else if (filter(new LinkedList<String>(currentSearchTokens), sr)) {
                         list.add(sr);
