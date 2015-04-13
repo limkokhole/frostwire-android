@@ -25,6 +25,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -56,14 +57,13 @@ import com.frostwire.logging.Logger;
 import com.frostwire.search.*;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
-import com.frostwire.util.HttpClient;
-import com.frostwire.util.HttpClientFactory;
-import com.frostwire.util.JsonUtils;
-import com.frostwire.util.Ref;
+import com.frostwire.util.*;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -249,6 +249,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                         @Override
                         public void run() {
                             searchProgress.setProgressEnabled(false);
+                            setupRetrySuggestions(adapter.getFileType());
                             deepSearchProgress.setVisibility(View.GONE);
                         }
                     });
@@ -313,8 +314,39 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 deepSearchProgress.setVisibility(View.GONE);
             }
         }
-        searchProgress.setProgressEnabled(!LocalSearchEngine.instance().isSearchFinished());
 
+        boolean searchFinished = LocalSearchEngine.instance().isSearchFinished();
+        searchProgress.setProgressEnabled(!searchFinished);
+        if (searchFinished && adapter != null) { //this NPE check will go away once we bye bye fragments... Google...
+            setupRetrySuggestions(adapter.getFileType());
+        }
+    }
+
+    private void setupRetrySuggestions(final int fileType) {
+        searchProgress.setupRetrySuggestions(buildSuggestions(), new SearchProgressView.OnRetryListener() {
+            public void onRetry(SearchProgressView v, String keywords) {
+                searchInput.setText(keywords);
+                performSearch(keywords, fileType);
+            }
+        });
+    }
+
+    private String[] buildSuggestions() {
+        final String searchText = searchInput.getText().trim();
+        if (searchText.isEmpty()) {
+            return new String[0];
+        }
+        final String[] split = StringUtils.removeDoubleSpaces(searchText).split(" ");
+
+        if (split.length == 1) {
+            return new String[0];
+        }
+
+        final String[] suggestions = new String[Math.min(split.length-1,4)];
+        for (int i=0; i < suggestions.length ; i++) {
+            suggestions[i] = TextUtils.join(" ", Arrays.copyOfRange(split, 0, suggestions.length-i));
+        }
+        return suggestions;
     }
 
     private void switchView(View v, int id) {

@@ -420,7 +420,7 @@
     <string name="deleted_crawl_cache">Deleted crawl cache</string>
     <string name="clear_search_cache">Clear search cache</string>
     <string name="clear_search_cache_summary">Clear search cache entries</string>
-    <string name="no_results_feedback">Try less keywords.\n\nNo results were found.\n\nCheck your internet connection or\ntry different search terms.</string>
+    <string name="no_results_feedback">No results were found.\n\nCheck your internet connection or\ntry different search terms.</string>
     <string name="donate">Donate</string>
     <string name="one_dollar">$1</string>
     <string name="five_dollars">$5</string>
@@ -520,4 +520,5 @@
     <string name="dummy_build">[build number]</string>
     <string name="basic">Basic</string>
     <string name="plus">Plus</string>
+    <string name="try_other_keywords">Try other keywords</string>
 </resources>

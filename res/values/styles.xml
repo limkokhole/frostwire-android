@@ -281,6 +281,14 @@
         <item name="android:textColor">@color/basic_blue</item>
     </style>
 
+    <style name="SearchProgressViewRetryLink">
+        <item name="android:singleLine">true</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/basic_blue</item>
+        <item name="android:clickable">true</item>
+        <item name="android:layout_marginBottom">10dp</item>
+    </style>
+
     <style name="MediaPlayerHeaderTitle">
         <item name="android:singleLine">true</item>
         <item name="android:textColor">@android:color/white</item>
