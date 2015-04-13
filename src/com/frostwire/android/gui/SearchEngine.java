@@ -27,7 +27,7 @@ import com.frostwire.search.archiveorg.ArchiveorgSearchPerformer;
 import com.frostwire.search.bitsnoop.BitSnoopSearchPerformer;
 import com.frostwire.search.btjunkie.BtjunkieSearchPerformer;
 import com.frostwire.search.domainalias.DomainAliasManager;
-import com.frostwire.search.extratorrent.ExtratorrentSearchPerformer;
+import com.frostwire.search.extratorrent2.ExtratorrentSearchPerformer;
 import com.frostwire.search.eztv.EztvSearchPerformer;
 import com.frostwire.search.frostclick.FrostClickSearchPerformer;
 import com.frostwire.search.frostclick.UserAgent;

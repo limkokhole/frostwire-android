@@ -19,13 +19,13 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.frostwire.android.R;
 import com.frostwire.android.gui.util.OfferUtils;
 
@@ -42,6 +42,8 @@ public class SearchProgressView extends LinearLayout {
     private Button buttonCancel;
     private Button buttonFreeApps;
     private TextView textNoResults;
+    private TextView textTryOtherKeywords;
+    private TextView[] retryTextViews;
 
     private boolean progressEnabled;
 
@@ -73,6 +75,22 @@ public class SearchProgressView extends LinearLayout {
         buttonCancel.setOnClickListener(l);
     }
 
+    public void setupRetrySuggestions(String[] keywords, OnRetryListener retryListener) {
+        int i = 0;
+        for (; i < Math.min(keywords.length,retryTextViews.length); i++) {
+            TextView tv = retryTextViews[i];
+            tv.setText(keywords[i]);
+            tv.setVisibility(View.VISIBLE);
+            tv.setOnClickListener(new OnRetryAdapter(this,retryListener));
+        }
+        for (; i < retryTextViews.length; i++) {
+            TextView tv = retryTextViews[i];
+            tv.setText("");
+            tv.setVisibility(View.GONE);
+            tv.setOnClickListener(null);
+        }
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -87,8 +105,30 @@ public class SearchProgressView extends LinearLayout {
         buttonCancel = (Button) findViewById(R.id.view_search_progress_button_cancel);
         buttonFreeApps = (Button) findViewById(R.id.view_search_progress_button_free_apps);
         textNoResults = (TextView) findViewById(R.id.view_search_progress_text_no_results_feedback);
+        textTryOtherKeywords = (TextView) findViewById(R.id.view_search_progress_try_other_keywords);
 
+        initRetryTextViews();
         initButtonFreeApps();
+    }
+
+    private void initRetryTextViews() {
+        retryTextViews = new TextView[] {
+                (TextView) findViewById(R.id.view_search_progress_retry_textview_1),
+                (TextView) findViewById(R.id.view_search_progress_retry_textview_2),
+                (TextView) findViewById(R.id.view_search_progress_retry_textview_3),
+                (TextView) findViewById(R.id.view_search_progress_retry_textview_4),
+        };
+
+        hideRetryViews();
+    }
+
+    private void hideRetryViews() {
+        textTryOtherKeywords.setVisibility(View.GONE);
+
+        for (TextView tv : retryTextViews) {
+            tv.setVisibility(View.GONE);
+            tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
     }
 
     private void initButtonFreeApps() {
@@ -101,12 +141,14 @@ public class SearchProgressView extends LinearLayout {
         buttonCancel.setText(android.R.string.cancel);
         textNoResults.setVisibility(View.GONE);
         buttonFreeApps.setVisibility(View.GONE);
+        hideRetryViews();
     }
 
     private void stopProgress() {
         progressbar.setVisibility(View.GONE);
         buttonCancel.setText(R.string.retry_search);
         textNoResults.setVisibility(View.VISIBLE);
+        textTryOtherKeywords.setVisibility(View.VISIBLE);
         buttonFreeApps.setVisibility(OfferUtils.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
     }
 
@@ -119,6 +161,28 @@ public class SearchProgressView extends LinearLayout {
         @Override
         public void onClick(View owner, View v) {
             OfferUtils.onFreeAppsClick(v.getContext());
+        }
+    }
+
+    public interface OnRetryListener {
+        public void onRetry(SearchProgressView v, String keywords);
+    }
+
+    private static final class OnRetryAdapter extends ClickAdapter<SearchProgressView> {
+
+        private final OnRetryListener retryListener;
+
+        public OnRetryAdapter(SearchProgressView owner, OnRetryListener retryListener) {
+            super(owner);
+            this.retryListener = retryListener;
+        }
+
+        @Override
+        public void onClick(SearchProgressView owner, View v) {
+            TextView tv = (TextView) v;
+            if (retryListener != null) {
+                retryListener.onRetry(owner,tv.getText().toString());
+            }
         }
     }
 }

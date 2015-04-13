@@ -18,6 +18,7 @@
 
 package com.frostwire.android.gui.transfers;
 
+import com.frostwire.search.extratorrent2.ExtratorrentCrawledSearchResult;
 import com.frostwire.search.kat2.KATCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
@@ -65,8 +66,13 @@ class TorrentSearchResultInfo implements TorrentDownloadInfo {
         if (sr instanceof TorrentCrawledSearchResult) {
             return ((TorrentCrawledSearchResult) sr).getFilePath();
         } else if (sr instanceof KATCrawledSearchResult) {
+            // TODO: Search architecture hack, gotta abstract these guys.
             return ((KATCrawledSearchResult) sr).getFilePath();
-        } else {
+        } else if (sr instanceof ExtratorrentCrawledSearchResult) {
+            // TODO: Search architecture hack, gotta abstract these guys.
+            return ((ExtratorrentCrawledSearchResult) sr).getFilePath();
+        }
+        else {
             return null;
         }
     }

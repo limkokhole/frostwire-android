@@ -520,4 +520,5 @@
     <string name="dummy_build">[build number]</string>
     <string name="basic">Basic</string>
     <string name="plus">Plus</string>
+    <string name="try_other_keywords">Try other keywords</string>
 </resources>
