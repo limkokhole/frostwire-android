@@ -83,7 +83,7 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_MININOVA, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_VERTOR, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_YOUTUBE, true);
-        defaultValues.put(Constants.PREF_KEY_SEARCH_USE_SOUNDCLOUD, true);
+        defaultValues.put(Constants.PREF_KEY_SEARCH_USE_SOUNDCLOUD, false);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_ARCHIVEORG, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_FROSTCLICK, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_BITSNOOP, true);
