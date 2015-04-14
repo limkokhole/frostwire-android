@@ -20,8 +20,8 @@ package com.frostwire.android.gui;
 
 import android.text.Html;
 import com.frostwire.search.*;
-import com.frostwire.search.extratorrent2.ExtratorrentCrawledSearchResult;
-import com.frostwire.search.extratorrent2.ExtratorrentSearchResult;
+import com.frostwire.search.extratorrent.ExtratorrentCrawledSearchResult;
+import com.frostwire.search.extratorrent.ExtratorrentSearchResult;
 import com.frostwire.search.kat2.KATCrawledSearchResult;
 import com.frostwire.search.kat2.KATSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
