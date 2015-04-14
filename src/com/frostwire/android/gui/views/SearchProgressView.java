@@ -32,7 +32,6 @@ import com.frostwire.android.gui.util.OfferUtils;
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public class SearchProgressView extends LinearLayout {
 
@@ -76,18 +75,22 @@ public class SearchProgressView extends LinearLayout {
     }
 
     public void setupRetrySuggestions(String[] keywords, OnRetryListener retryListener) {
-        int i = 0;
-        for (; i < Math.min(keywords.length,retryTextViews.length); i++) {
-            TextView tv = retryTextViews[i];
-            tv.setText(keywords[i]);
-            tv.setVisibility(View.VISIBLE);
-            tv.setOnClickListener(new OnRetryAdapter(this,retryListener));
-        }
-        for (; i < retryTextViews.length; i++) {
-            TextView tv = retryTextViews[i];
-            tv.setText("");
-            tv.setVisibility(View.GONE);
-            tv.setOnClickListener(null);
+        try {
+            int i = 0;
+            for (; i < Math.min(keywords.length, retryTextViews.length); i++) {
+                TextView tv = retryTextViews[i];
+                tv.setText(keywords[i]);
+                tv.setVisibility(View.VISIBLE);
+                tv.setOnClickListener(new OnRetryAdapter(this, retryListener));
+            }
+            for (; i < retryTextViews.length; i++) {
+                TextView tv = retryTextViews[i];
+                tv.setText("");
+                tv.setVisibility(View.GONE);
+                tv.setOnClickListener(null);
+            }
+        } catch (Throwable e) {
+            e.printStackTrace();
         }
     }
 
@@ -112,7 +115,7 @@ public class SearchProgressView extends LinearLayout {
     }
 
     private void initRetryTextViews() {
-        retryTextViews = new TextView[] {
+        retryTextViews = new TextView[]{
                 (TextView) findViewById(R.id.view_search_progress_retry_textview_1),
                 (TextView) findViewById(R.id.view_search_progress_retry_textview_2),
                 (TextView) findViewById(R.id.view_search_progress_retry_textview_3),
@@ -181,7 +184,7 @@ public class SearchProgressView extends LinearLayout {
         public void onClick(SearchProgressView owner, View v) {
             TextView tv = (TextView) v;
             if (retryListener != null) {
-                retryListener.onRetry(owner,tv.getText().toString());
+                retryListener.onRetry(owner, tv.getText().toString());
             }
         }
     }
