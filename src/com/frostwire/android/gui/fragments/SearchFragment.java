@@ -331,12 +331,16 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     }
 
     private void setupRetrySuggestions(final int fileType) {
-        searchProgress.setupRetrySuggestions(buildSuggestions(), new SearchProgressView.OnRetryListener() {
-            public void onRetry(SearchProgressView v, String keywords) {
-                searchInput.setText(keywords);
-                performSearch(keywords, fileType);
-            }
-        });
+        try {
+            searchProgress.setupRetrySuggestions(buildSuggestions(), new SearchProgressView.OnRetryListener() {
+                public void onRetry(SearchProgressView v, String keywords) {
+                    searchInput.setText(keywords);
+                    performSearch(keywords, fileType);
+                }
+            });
+        } catch (Throwable e) {
+            LOG.error("Error setting up search suggestions", e);
+        }
     }
 
     private String[] buildSuggestions() {
