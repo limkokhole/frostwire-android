@@ -120,6 +120,7 @@ public class TransfersFragment extends AbstractFragment implements TimerObserver
     public void onResume() {
         super.onResume();
         initStorageRelatedRichNotifications(getView());
+        onTime();
     }
 
     @Override
