@@ -73,7 +73,7 @@ import java.util.regex.Pattern;
  * @author aldenml
  *
  */
-public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener {
+public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, CurrentQueryReporter {
 
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
     private static int startedDownloadsBeforeSticky = 0;
@@ -87,11 +87,14 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private SearchProgressView searchProgress;
     private ListView list;
 
+    private String currentQuery;
+
     private final FileTypeCounter fileTypeCounter;
 
     public SearchFragment() {
         super(R.layout.fragment_search);
         fileTypeCounter = new FileTypeCounter();
+        currentQuery = null;
     }
 
     @Override
@@ -148,6 +151,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                     performYTSearch(query);
                 } else if (query.startsWith("magnet:?xt=urn:btih:")) {
                     startMagnetDownload(query);
+                    currentQuery=null;
                     searchInput.setText("");
                 }
                 else {
@@ -178,6 +182,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
 
         searchProgress = findView(view, R.id.fragment_search_search_progress);
+        searchProgress.setCurrentQueryReporter((CurrentQueryReporter) this);
+
         searchProgress.setCancelOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -195,14 +201,14 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     }
 
     private void startMagnetDownload(String magnet) {
+        //go!
+        TransferManager.instance().downloadTorrent(magnet);
+
         //Show me the transfer tab
         Intent i = new Intent(getActivity(), MainActivity.class);
         i.setAction(Constants.ACTION_SHOW_TRANSFERS);
         i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(i);
-
-        //go!
-        TransferManager.instance().downloadTorrent(magnet);
     }
 
     private static String extractYTId(String ytUrl) {
@@ -286,6 +292,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         adapter.setFileType(mediaTypeId);
         fileTypeCounter.clear();
         refreshFileTypeCounters(false);
+        currentQuery = query;
         LocalSearchEngine.instance().performSearch(query);
         searchProgress.setProgressEnabled(true);
         showSearchView(getView());
@@ -296,6 +303,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         adapter.clear();
         fileTypeCounter.clear();
         refreshFileTypeCounters(false);
+        currentQuery = null;
         LocalSearchEngine.instance().cancelSearch();
         searchProgress.setProgressEnabled(false);
         showSearchView(getView());
@@ -442,6 +450,11 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 UXStats.instance().log(UXAction.DOWNLOAD_FULL_TORRENT_FILE);
             }
         }
+    }
+
+    @Override
+    public String getCurrentQuery() {
+        return currentQuery;
     }
 
     private static class LoadSlidesTask extends AsyncTask<Void, Void, List<Slide>> {

@@ -27,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
+import com.frostwire.android.gui.fragments.CurrentQueryReporter;
 import com.frostwire.android.gui.util.OfferUtils;
 
 /**
@@ -43,9 +44,10 @@ public class SearchProgressView extends LinearLayout {
     private Button buttonFreeApps;
     private TextView textNoResults;
     private TextView textTryOtherKeywords;
-    private TextView[] retryTextViews;
+    private Button[] retryTextViews;
 
     private boolean progressEnabled;
+    private CurrentQueryReporter currentQueryReporter;
 
     public SearchProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -112,11 +114,11 @@ public class SearchProgressView extends LinearLayout {
     }
 
     private void initRetryTextViews() {
-        retryTextViews = new TextView[] {
-                (TextView) findViewById(R.id.view_search_progress_retry_textview_1),
-                (TextView) findViewById(R.id.view_search_progress_retry_textview_2),
-                (TextView) findViewById(R.id.view_search_progress_retry_textview_3),
-                (TextView) findViewById(R.id.view_search_progress_retry_textview_4),
+        retryTextViews = new Button[] {
+                (Button) findViewById(R.id.view_search_progress_retry_textview_1),
+                (Button) findViewById(R.id.view_search_progress_retry_textview_2),
+                (Button) findViewById(R.id.view_search_progress_retry_textview_3),
+                (Button) findViewById(R.id.view_search_progress_retry_textview_4),
         };
 
         hideRetryViews();
@@ -148,8 +150,17 @@ public class SearchProgressView extends LinearLayout {
         progressbar.setVisibility(View.GONE);
         buttonCancel.setText(R.string.retry_search);
         textNoResults.setVisibility(View.VISIBLE);
-        textTryOtherKeywords.setVisibility(View.VISIBLE);
         buttonFreeApps.setVisibility(OfferUtils.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
+
+        if (currentQueryReporter.getCurrentQuery()!=null) {
+            textTryOtherKeywords.setVisibility(View.VISIBLE);
+        } else {
+            hideRetryViews();
+        }
+    }
+
+    public void setCurrentQueryReporter(CurrentQueryReporter currentQueryReporter) {
+        this.currentQueryReporter = currentQueryReporter;
     }
 
     private static final class FreeAppsListener extends ClickAdapter<View> {

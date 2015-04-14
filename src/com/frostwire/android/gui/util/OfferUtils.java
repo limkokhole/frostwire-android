@@ -79,7 +79,6 @@ public class OfferUtils {
      * @param callbackResponse
      */
     public static boolean showMobileCoreInterstitial(Activity callerActivity, boolean mobileCoreStarted, CallbackResponse callbackResponse) {
-
         if (isMobileCoreEnabled() && mobileCoreStarted && MobileCore.isInterstitialReady()) {
             try {
                 MobileCore.showInterstitial(callerActivity, callbackResponse);
