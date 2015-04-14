@@ -96,6 +96,19 @@ public class SearchProgressView extends LinearLayout {
         }
     }
 
+    public void hideRetryViews() {
+        if (textTryOtherKeywords != null) {
+            textTryOtherKeywords.setVisibility(View.GONE);
+        }
+
+        if (retryTextViews != null) {
+            for (TextView tv : retryTextViews) {
+                tv.setVisibility(View.GONE);
+                tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            }
+        }
+    }
+
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
@@ -125,15 +138,6 @@ public class SearchProgressView extends LinearLayout {
         };
 
         hideRetryViews();
-    }
-
-    private void hideRetryViews() {
-        textTryOtherKeywords.setVisibility(View.GONE);
-
-        for (TextView tv : retryTextViews) {
-            tv.setVisibility(View.GONE);
-            tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        }
     }
 
     private void initButtonFreeApps() {

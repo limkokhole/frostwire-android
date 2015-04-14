@@ -340,6 +340,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             });
         } catch (Throwable e) {
             LOG.error("Error setting up search suggestions", e);
+            searchProgress.hideRetryViews();
         }
     }
 
