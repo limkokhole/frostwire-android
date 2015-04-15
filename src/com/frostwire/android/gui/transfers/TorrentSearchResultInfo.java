@@ -18,7 +18,7 @@
 
 package com.frostwire.android.gui.transfers;
 
-import com.frostwire.search.TorrentScrapedFileSearchResult;
+import com.frostwire.search.torrent.TorrentScrapedFileSearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 
