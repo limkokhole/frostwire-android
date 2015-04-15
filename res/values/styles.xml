@@ -282,7 +282,7 @@
     </style>
 
     <style name="SearchProgressViewRetryButton">
-        <item name="android:background">@drawable/blue_button_background_selector</item>
+        <item name="android:background">@drawable/retry_search_button_basic_blue_round_background</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">12sp</item>
         <item name="android:height">20dp</item>
@@ -290,9 +290,12 @@
         <item name="android:singleLine">true</item>
         <item name="android:ellipsize">middle</item>
         <item name="android:padding">2dp</item>
+        <item name="android:paddingLeft">4dp</item>
+        <item name="android:paddingRight">4dp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">20dp</item>
         <item name="android:layout_margin">3dp</item>
+        <item name="android:minWidth">60dp</item>
         <!--
         <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/basic_blue</item>

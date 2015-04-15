@@ -19,7 +19,9 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Paint;
+import android.graphics.drawable.GradientDrawable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +31,7 @@ import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.fragments.CurrentQueryReporter;
 import com.frostwire.android.gui.util.OfferUtils;
+import com.frostwire.android.gui.util.UIUtils;
 
 /**
  * @author gubatron
@@ -50,9 +53,7 @@ public class SearchProgressView extends LinearLayout {
 
     public SearchProgressView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
         this.freeAppsListener = new FreeAppsListener(this);
-
         this.progressEnabled = true;
     }
 
@@ -136,7 +137,17 @@ public class SearchProgressView extends LinearLayout {
                 (Button) findViewById(R.id.view_search_progress_retry_button_4),
         };
 
+        rotateRetryButtonsLayout();
         hideRetryViews();
+    }
+
+    private void rotateRetryButtonsLayout() {
+        try {
+            int layoutOrientation = getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
+            LinearLayout retryButtonsLayout = (LinearLayout) findViewById(R.id.view_search_progress_retry_buttons_linearlayout);
+            retryButtonsLayout.setOrientation(layoutOrientation);
+        } catch (Throwable e) {
+        }
     }
 
     private void initButtonFreeApps() {

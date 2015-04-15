@@ -32,7 +32,7 @@
                   android:layout_marginBottom="20dp">
         <TextView android:id="@+id/view_search_progress_try_other_keywords" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center_horizontal" android:text="@string/try_other_keywords" android:textSize="20sp" android:textStyle="bold" android:layout_marginTop="20dp" android:layout_marginBottom="10dp"/>
 
-        <LinearLayout android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center_horizontal" android:gravity="center_horizontal" android:padding="0dp" android:layout_weight="0">
+        <LinearLayout android:id="@+id/view_search_progress_retry_buttons_linearlayout" android:layout_width="fill_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:layout_gravity="center_horizontal" android:gravity="center_horizontal" android:padding="0dp" android:layout_weight="0">
             <Button android:layout_weight="0" android:layout_marginLeft="3dp" android:id="@+id/view_search_progress_retry_button_1" android:text="foo man chu fu" style="@style/SearchProgressViewRetryButton"/>
             <Button android:layout_weight="0" android:id="@+id/view_search_progress_retry_button_2" android:text="foo man chu" style="@style/SearchProgressViewRetryButton"/>
             <Button android:layout_weight="0" android:id="@+id/view_search_progress_retry_button_3" android:text="foo man" style="@style/SearchProgressViewRetryButton"/>
