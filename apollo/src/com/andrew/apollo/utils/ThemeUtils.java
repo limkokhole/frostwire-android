@@ -326,31 +326,34 @@ public class ThemeUtils {
     }
 
     private void setOverflowIcon(Window window) {
-        // The content description used to locate the overflow button
-        final String overflowDesc = window.getContext().getString(R.string.action_menu_overflow_description);
-        // The top-level window
-        final ViewGroup decor = (ViewGroup) window.getDecorView();
+        try {
+            final String overflowDesc = window.getContext().getString(R.string.action_menu_overflow_description);
+            final ViewGroup decor = (ViewGroup) window.getDecorView();
 
-        final ViewTreeObserver obs = mActionBarLayout.getViewTreeObserver();
-        obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-            @Override
-            public boolean onPreDraw() {
-                // The List that contains the matching views
-                final ArrayList<View> outViews = new ArrayList<View>();
-                // Traverse the view-hierarchy and locate the overflow button
-                decor.findViewsWithText(outViews, overflowDesc,
-                        View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
-                // Guard against any errors
-                if (outViews.isEmpty()) {
+            final ViewTreeObserver obs = mActionBarLayout.getViewTreeObserver();
+            obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+                @Override
+                public boolean onPreDraw() {
+                    try {
+                        final ArrayList<View> outViews = new ArrayList<View>();
+                        decor.findViewsWithText(outViews, overflowDesc, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+
+                        if (!outViews.isEmpty()) {
+                            ImageButton overflow = (ImageButton) outViews.get(0);
+                            overflow.setImageResource(R.drawable.ic_menu_moreoverflow);
+                            return true;
+                        }
+
+                    } catch (Throwable e) {
+                        e.printStackTrace();
+                    }
+
                     return false;
                 }
-                // Do something with the view
-                final ImageButton overflow = (ImageButton) outViews.get(0);
-                overflow.setImageResource(R.drawable.ic_menu_moreoverflow);
-
-                return true;
-            }
-        });
+            });
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
     }
 
     /**
