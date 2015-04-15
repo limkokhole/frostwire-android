@@ -138,7 +138,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
         mPlaybackStatus = new PlaybackStatus(this);
 
         // Theme the action bar
-        mResources.themeActionBar(getActionBar(), getString(R.string.app_name));
+        mResources.themeActionBar(getActionBar(), getString(R.string.app_name), getWindow());
         getActionBar().setDisplayHomeAsUpEnabled(true);
         TextView actionBarTitleTextView = (TextView) findViewById(R.id.action_bar_title);
         if (actionBarTitleTextView != null) {

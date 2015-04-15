@@ -128,7 +128,7 @@ public class SearchActivity extends Activity implements LoaderCallbacks<Cursor>,
 
         // Theme the action bar
         final ActionBar actionBar = getActionBar();
-        mResources.themeActionBar(actionBar, getString(R.string.app_name));
+        mResources.themeActionBar(actionBar, getString(R.string.app_name), getWindow());
         actionBar.setDisplayHomeAsUpEnabled(true);
 
         // Set the layout

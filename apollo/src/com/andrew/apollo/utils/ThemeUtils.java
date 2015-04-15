@@ -18,24 +18,19 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
+import android.graphics.*;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
 import com.frostwire.android.R;
+
+import java.util.ArrayList;
 
 /**
  * In order to implement the theme chooser for Apollo, this class returns a
@@ -315,7 +310,7 @@ public class ThemeUtils {
      * @param title The title for the action bar
      * @param subtitle The subtitle for the action bar.
      */
-    public void themeActionBar(final ActionBar actionBar, final String title) {
+    public void themeActionBar(final ActionBar actionBar, final String title, Window window) {
         // Set the custom layout
         actionBar.setCustomView(mActionBarLayout);
         actionBar.setDisplayShowCustomEnabled(true);
@@ -326,6 +321,36 @@ public class ThemeUtils {
 
         // Theme the title
         setTitle(title);
+
+        setOverflowIcon(window);
+    }
+
+    private void setOverflowIcon(Window window) {
+        // The content description used to locate the overflow button
+        final String overflowDesc = window.getContext().getString(R.string.action_menu_overflow_description);
+        // The top-level window
+        final ViewGroup decor = (ViewGroup) window.getDecorView();
+
+        final ViewTreeObserver obs = mActionBarLayout.getViewTreeObserver();
+        obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
+            @Override
+            public boolean onPreDraw() {
+                // The List that contains the matching views
+                final ArrayList<View> outViews = new ArrayList<View>();
+                // Traverse the view-hierarchy and locate the overflow button
+                decor.findViewsWithText(outViews, overflowDesc,
+                        View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+                // Guard against any errors
+                if (outViews.isEmpty()) {
+                    return false;
+                }
+                // Do something with the view
+                final ImageButton overflow = (ImageButton) outViews.get(0);
+                overflow.setImageResource(R.drawable.ic_menu_moreoverflow);
+
+                return true;
+            }
+        });
     }
 
     /**
