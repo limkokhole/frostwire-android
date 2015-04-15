@@ -18,6 +18,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
@@ -95,7 +96,7 @@ public class NotificationHelper {
 
         // Notification Builder
         mNotification = new NotificationCompat.Builder(mService)
-                .setSmallIcon(R.drawable.frostwire_notification)
+                .setSmallIcon(getNotificationIcon())
                 .setContentIntent(pendingintent)
                 .setPriority(0)//(Notification.PRIORITY_DEFAULT)
                 .setContent(mNotificationTemplate)
@@ -122,6 +123,10 @@ public class NotificationHelper {
         }
         // d7fa67cc74 NotificationHelper.java:102
         mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
+    }
+
+    private int getNotificationIcon() {
+        return Build.VERSION.SDK_INT >= 21 ? R.drawable.frostwire_notification_flat : R.drawable.frostwire_notification;
     }
 
     /**

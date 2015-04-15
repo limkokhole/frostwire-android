@@ -218,7 +218,14 @@ public class EngineService extends Service implements IEngineService {
             PendingIntent pi = PendingIntent.getActivity(context, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
 
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            Notification notification = new Notification(R.drawable.frostwire_notification, getString(R.string.download_finished), System.currentTimeMillis());
+
+            Notification notification = new Notification.Builder(context)
+                    .setWhen(System.currentTimeMillis())
+                    .setContentText(getString(R.string.download_finished))
+                    .setContentTitle(getString(R.string.download_finished))
+                    .setSmallIcon(getNotificationIcon())
+                    .getNotification();
+
             notification.vibrate = ConfigurationManager.instance().vibrateOnFinishedDownload() ? VENEZUELAN_VIBE : null;
             notification.number = TransferManager.instance().getDownloadsToReview();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
@@ -227,6 +234,10 @@ public class EngineService extends Service implements IEngineService {
         } catch (Throwable e) {
             Log.e(TAG, "Error creating notification for download finished", e);
         }
+    }
+
+    private int getNotificationIcon() {
+        return Build.VERSION.SDK_INT >= 21 ? R.drawable.frostwire_notification_flat : R.drawable.frostwire_notification;
     }
 
     @Override
