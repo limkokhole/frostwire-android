@@ -420,7 +420,7 @@
     <string name="deleted_crawl_cache">Deleted crawl cache</string>
     <string name="clear_search_cache">Clear search cache</string>
     <string name="clear_search_cache_summary">Clear search cache entries</string>
-    <string name="no_results_feedback">No results were found.\n\nCheck your internet connection or\ntry different search terms.</string>
+    <string name="no_results_feedback">No results were found.</string>
     <string name="donate">Donate</string>
     <string name="one_dollar">$1</string>
     <string name="five_dollars">$5</string>

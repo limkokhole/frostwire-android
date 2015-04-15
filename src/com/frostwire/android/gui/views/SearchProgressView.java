@@ -43,7 +43,7 @@ public class SearchProgressView extends LinearLayout {
     private Button buttonFreeApps;
     private TextView textNoResults;
     private TextView textTryOtherKeywords;
-    private Button[] retryTextViews;
+    private Button[] retryButtons;
 
     private boolean progressEnabled;
     private CurrentQueryReporter currentQueryReporter;
@@ -79,14 +79,14 @@ public class SearchProgressView extends LinearLayout {
     public void setupRetrySuggestions(String[] keywords, OnRetryListener retryListener) {
         try {
             int i = 0;
-            for (; i < Math.min(keywords.length, retryTextViews.length); i++) {
-                TextView tv = retryTextViews[i];
+            for (; i < Math.min(keywords.length, retryButtons.length); i++) {
+                Button tv = retryButtons[i];
                 tv.setText(keywords[i]);
                 tv.setVisibility(View.VISIBLE);
                 tv.setOnClickListener(new OnRetryAdapter(this, retryListener));
             }
-            for (; i < retryTextViews.length; i++) {
-                TextView tv = retryTextViews[i];
+            for (; i < retryButtons.length; i++) {
+                Button tv = retryButtons[i];
                 tv.setText("");
                 tv.setVisibility(View.GONE);
                 tv.setOnClickListener(null);
@@ -101,10 +101,9 @@ public class SearchProgressView extends LinearLayout {
             textTryOtherKeywords.setVisibility(View.GONE);
         }
 
-        if (retryTextViews != null) {
-            for (TextView tv : retryTextViews) {
-                tv.setVisibility(View.GONE);
-                tv.setPaintFlags(tv.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        if (retryButtons != null) {
+            for (Button b : retryButtons) {
+                b.setVisibility(View.GONE);
             }
         }
     }
@@ -130,11 +129,11 @@ public class SearchProgressView extends LinearLayout {
     }
 
     private void initRetryTextViews() {
-        retryTextViews = new Button[] {
-                (Button) findViewById(R.id.view_search_progress_retry_textview_1),
-                (Button) findViewById(R.id.view_search_progress_retry_textview_2),
-                (Button) findViewById(R.id.view_search_progress_retry_textview_3),
-                (Button) findViewById(R.id.view_search_progress_retry_textview_4),
+        retryButtons = new Button[] {
+                (Button) findViewById(R.id.view_search_progress_retry_button_1),
+                (Button) findViewById(R.id.view_search_progress_retry_button_2),
+                (Button) findViewById(R.id.view_search_progress_retry_button_3),
+                (Button) findViewById(R.id.view_search_progress_retry_button_4),
         };
 
         hideRetryViews();
@@ -197,9 +196,9 @@ public class SearchProgressView extends LinearLayout {
 
         @Override
         public void onClick(SearchProgressView owner, View v) {
-            TextView tv = (TextView) v;
+            Button b = (Button) v;
             if (retryListener != null) {
-                retryListener.onRetry(owner, tv.getText().toString());
+                retryListener.onRetry(owner, b.getText().toString());
             }
         }
     }
