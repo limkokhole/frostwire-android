@@ -255,7 +255,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                         @Override
                         public void run() {
                             searchProgress.setProgressEnabled(false);
-                            setupRetrySuggestions(adapter.getFileType());
+                            setupRetrySuggestions();
                             deepSearchProgress.setVisibility(View.GONE);
                         }
                     });
@@ -325,17 +325,19 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         boolean searchFinished = LocalSearchEngine.instance().isSearchFinished();
         searchProgress.setProgressEnabled(!searchFinished);
-        if (searchFinished && adapter != null) { //this NPE check will go away once we bye bye fragments... Google...
-            setupRetrySuggestions(adapter.getFileType());
+        if (searchFinished) {
+            setupRetrySuggestions();
         }
     }
 
-    private void setupRetrySuggestions(final int fileType) {
+    public void setupRetrySuggestions() {
         try {
             searchProgress.setupRetrySuggestions(buildSuggestions(), new SearchProgressView.OnRetryListener() {
                 public void onRetry(SearchProgressView v, String keywords) {
                     searchInput.setText(keywords);
-                    performSearch(keywords, fileType);
+                    if (adapter != null) {
+                        performSearch(keywords, adapter.getFileType());
+                    }
                 }
             });
         } catch (Throwable e) {

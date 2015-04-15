@@ -22,6 +22,8 @@ import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.Button;
@@ -30,6 +32,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.fragments.CurrentQueryReporter;
+import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.util.OfferUtils;
 import com.frostwire.android.gui.util.UIUtils;
 
@@ -55,6 +58,15 @@ public class SearchProgressView extends LinearLayout {
         super(context, attrs);
         this.freeAppsListener = new FreeAppsListener(this);
         this.progressEnabled = true;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) {
+        super.onRestoreInstanceState(state);
+
+        if (currentQueryReporter != null && currentQueryReporter.getCurrentQuery() != null && currentQueryReporter instanceof SearchFragment) {
+            ((SearchFragment) currentQueryReporter).setupRetrySuggestions();
+        }
     }
 
     public boolean isProgressEnabled() {
