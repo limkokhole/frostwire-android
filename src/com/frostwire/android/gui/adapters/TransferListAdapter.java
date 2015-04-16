@@ -18,49 +18,36 @@
 
 package com.frostwire.android.gui.adapters;
 
-import java.io.File;
-import java.lang.ref.WeakReference;
-import java.util.*;
-
-import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.ScaleDrawable;
-import com.frostwire.android.gui.adapters.menu.*;
-import com.frostwire.bittorrent.PaymentOptions;
-import com.frostwire.transfers.TransferItem;
-import com.frostwire.transfers.TransferState;
-import org.apache.commons.io.FilenameUtils;
-
 import android.app.Dialog;
 import android.content.Context;
-import android.util.Log;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.BaseExpandableListAdapter;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-
+import android.widget.*;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
 import com.frostwire.android.gui.NetworkManager;
-import com.frostwire.android.gui.transfers.BittorrentDownload;
-import com.frostwire.android.gui.transfers.DownloadTransfer;
-import com.frostwire.android.gui.transfers.HttpDownload;
-import com.frostwire.android.gui.transfers.PeerHttpDownload;
-import com.frostwire.android.gui.transfers.PeerHttpUpload;
-import com.frostwire.android.gui.transfers.SoundcloudDownload;
-import com.frostwire.android.gui.transfers.Transfer;
-import com.frostwire.android.gui.transfers.YouTubeDownload;
+import com.frostwire.android.gui.adapters.menu.*;
+import com.frostwire.android.gui.transfers.*;
 import com.frostwire.android.gui.util.UIUtils;
+import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.android.gui.views.MenuAction;
 import com.frostwire.android.gui.views.MenuAdapter;
 import com.frostwire.android.gui.views.MenuBuilder;
+import com.frostwire.bittorrent.PaymentOptions;
+import com.frostwire.jlibtorrent.Logger;
+import com.frostwire.transfers.TransferItem;
+import com.frostwire.transfers.TransferState;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 /**
  * 
@@ -70,32 +57,24 @@ import com.frostwire.android.gui.views.MenuBuilder;
  */
 public class TransferListAdapter extends BaseExpandableListAdapter {
 
-    private static final String TAG = "FW.TransferListAdapter";
-
+    private static final Logger LOG = Logger.getLogger(TransferListAdapter.class);
     private final WeakReference<Context> context;
-
     private final OnClickListener viewOnClickListener;
     private final ViewOnLongClickListener viewOnLongClickListener;
     private final OpenOnClickListener playOnClickListener;
 
     /** Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks */
     private final List<Dialog> dialogs;
-
     private List<Transfer> list;
-
     private final Map<String,String> TRANSFER_STATE_STRING_MAP = new Hashtable<String,String>();
 
     public TransferListAdapter(Context context, List<Transfer> list) {
         this.context = new WeakReference<Context>(context);
-
         this.viewOnClickListener = new ViewOnClickListener();
         this.viewOnLongClickListener = new ViewOnLongClickListener();
         this.playOnClickListener = new OpenOnClickListener();
-
         this.dialogs = new ArrayList<Dialog>();
-
         this.list = list.equals(Collections.emptyList()) ? new ArrayList<Transfer>() : list;
-
         initTransferStateStringMap();
     }
 
@@ -132,7 +111,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         return list.get(groupPosition).getItems().get(childPosition);
     }
 
-    public TransferItem getChildItem(int groupPosition, int childPosition) {
+    private TransferItem getChildItem(int groupPosition, int childPosition) {
         return list.get(groupPosition).getItems().get(childPosition);
     }
 
@@ -148,19 +127,15 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
         if (convertView == null) {
             convertView = View.inflate(context.get(), R.layout.view_transfer_item_list_item, null);
-
             convertView.setOnClickListener(viewOnClickListener);
             convertView.setOnLongClickListener(viewOnLongClickListener);
         }
 
         try {
-
             initTouchFeedback(convertView, item);
-
             populateChildView(convertView, item);
-
         } catch (Throwable e) {
-            Log.e(TAG, "Fatal error getting view: " + e.getMessage());
+            LOG.error("Fatal error getting view: " + e.getMessage(), e);
         }
 
         return convertView;
@@ -177,7 +152,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         return list.get(groupPosition);
     }
 
-    public Transfer getGroupItem(int groupPosition) {
+    private Transfer getGroupItem(int groupPosition) {
         return list.get(groupPosition);
     }
 
@@ -194,36 +169,34 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     @Override
     public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         Transfer item = getGroupItem(groupPosition);
-
-        if (convertView == null || convertView instanceof TextView) {
-            // convertView could be a dummy view due to an issue with the slide menu layout request order
-            try {
-                convertView = View.inflate(context.get(), R.layout.view_transfer_list_item, null);
-            } catch (Throwable e) {
-                // creating a dummy view to avoid a force close due to a NPE
-                // next time the "if" will try to recover the actual layout
-                convertView = new TextView(context.get());
-                ((TextView) convertView).setText("Rendering error");
+        ExpandableListView expandableListView = (ExpandableListView) parent;
+        LinearLayout listItemLinearLayoutHolder = (LinearLayout) convertView;
+        if (convertView == null) { //if we don't have it yet, we inflate it ourselves.
+            convertView = View.inflate(context.get(), R.layout.view_transfer_list_item, null);
+            if (convertView instanceof LinearLayout) {
+                listItemLinearLayoutHolder = (LinearLayout) convertView;
             }
         }
 
+        listItemLinearLayoutHolder.setOnClickListener(viewOnClickListener);
+        listItemLinearLayoutHolder.setOnLongClickListener(viewOnLongClickListener);
+        listItemLinearLayoutHolder.setClickable(true);
+        listItemLinearLayoutHolder.setLongClickable(true);
+        listItemLinearLayoutHolder.setTag(item);
+
         try {
-            boolean clickable = item.getItems().size() == 0;
-            convertView.setOnClickListener(clickable ? viewOnClickListener : null);
-            convertView.setOnLongClickListener(clickable ? viewOnLongClickListener : null);
-
-            convertView.setClickable(clickable);
-            convertView.setLongClickable(clickable);
-
-            setupGroupIndicator(convertView, isExpanded, item);
-
-            convertView.setTag(item);
-            populateGroupView(convertView, item);
+            populateGroupView(listItemLinearLayoutHolder, item);
         } catch (Throwable e) {
-            Log.e(TAG, "Fatal error getting the group view: " + e.getMessage(), e);
+            LOG.error("Not able to populate group view in expandable list:" + e.getMessage(), e);
         }
 
-        return convertView;
+        try {
+            setupGroupIndicator(listItemLinearLayoutHolder, expandableListView, isExpanded, item, groupPosition);
+        } catch (Throwable e2) {
+            LOG.error("Not able to setup touch handlers for group indicator ImageView: " + e2.getMessage(), e2);
+        }
+
+        return listItemLinearLayoutHolder;
     }
 
     @Override
@@ -246,17 +219,17 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
             try {
                 dialog.dismiss();
             } catch (Throwable e) {
-                Log.w(TAG, "Error dismissing dialog", e);
+                LOG.warn("Error dismissing dialog", e);
             }
         }
     }
 
     @SuppressWarnings("unchecked")
-    protected static <TView extends View> TView findView(View view, int id) {
+    private static <TView extends View> TView findView(View view, int id) {
         return (TView) view.findViewById(id);
     }
 
-    protected void populateGroupView(View view, Transfer transfer) {
+    private void populateGroupView(View view, Transfer transfer) {
         if (transfer instanceof BittorrentDownload) {
             populateBittorrentDownload(view, (BittorrentDownload) transfer);
         } else if (transfer instanceof PeerHttpDownload) {
@@ -272,11 +245,11 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    protected void populateChildView(View view, TransferItem item) {
+    private void populateChildView(View view, TransferItem item) {
         populateBittorrentDownloadItem(view, item);
     }
 
-    protected MenuAdapter getMenuAdapter(View view) {
+    private MenuAdapter getMenuAdapter(View view) {
         Object tag = view.getTag();
         String title = "";
         List<MenuAction> items = new ArrayList<MenuAction>();
@@ -300,15 +273,14 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
                     boolean wifiIsUp = NetworkManager.instance().isDataWIFIUp();
                     boolean bittorrentOnMobileData = ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA);
 
-                    if (wifiIsUp || (!wifiIsUp && bittorrentOnMobileData)) {
+                    if (wifiIsUp || bittorrentOnMobileData) {
                         if (!download.isComplete()) {
                             items.add(new ResumeDownloadMenuAction(context.get(), download, R.string.resume_torrent_menu_action));
                         } else {
                             //let's see if we can seed...
                             boolean seedTorrents = ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS);
                             boolean seedTorrentsOnWifiOnly = ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY);
-                            if ((seedTorrents && !seedTorrentsOnWifiOnly) ||
-                                (seedTorrents && seedTorrentsOnWifiOnly && wifiIsUp)) {
+                            if ((seedTorrents && seedTorrentsOnWifiOnly && wifiIsUp) || (seedTorrents && !seedTorrentsOnWifiOnly)) {
                                 items.add(new ResumeDownloadMenuAction(context.get(), download, R.string.seed));
                             }
                         }
@@ -334,9 +306,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
             boolean errored = download.getStatus() != null && getStatusFromResId(download.getStatus()).contains("Error");
 
-            boolean openMenu = false;
-            openMenu |= !errored && download.isComplete() && (tag instanceof HttpDownload || tag instanceof PeerHttpDownload || tag instanceof YouTubeDownload || tag instanceof SoundcloudDownload);
-
+            boolean openMenu = !errored && download.isComplete() && (tag instanceof HttpDownload || tag instanceof PeerHttpDownload || tag instanceof YouTubeDownload || tag instanceof SoundcloudDownload);
             if (openMenu) {
                 items.add(new OpenMenuAction(context.get(), download.getDisplayName(), download.getSavePath().getAbsolutePath(), extractMime(download)));
             }
@@ -358,7 +328,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         return items.size() > 0 ? new MenuAdapter(context.get(), title, items) : null;
     }
 
-    protected String extractMime(DownloadTransfer download) {
+    private String extractMime(DownloadTransfer download) {
         if (download instanceof PeerHttpDownload) {
             return ((PeerHttpDownload) download).getFD().mime;
         } else {
@@ -366,57 +336,69 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    protected Dialog trackDialog(Dialog dialog) {
+    private void trackDialog(Dialog dialog) {
         dialogs.add(dialog);
-        return dialog;
     }
 
-    private void setupGroupIndicator(View view, boolean expanded, Transfer item) {
-        ImageView groupIndicator = findView(view, R.id.view_transfer_list_item_group_indicator);
+    private void setupGroupIndicator(final LinearLayout listItemMainLayout,
+                                     final ExpandableListView expandableListView,
+                                     final boolean expanded,
+                                     final Transfer item,
+                                     final int groupPosition) {
+        final ImageView groupIndicator = findView(listItemMainLayout, R.id.view_transfer_list_item_group_indicator);
+        groupIndicator.setClickable(true);
+        final int totalItems = item.getItems().size();
+        prepareGroupIndicatorDrawable(item, groupIndicator, totalItems > 1, expanded);
 
-        if (groupIndicator != null) {
-            if (item.getItems().size() <= 1) {
-                //show the file type for the only file there is
-                String extension = null;
-                String path = null;
+        if (totalItems > 1) {
+            groupIndicator.setOnClickListener(new GroupIndicatorClickAdapter(expandableListView,groupPosition));
+        }
+    }
 
-                if (item instanceof BittorrentDownload) {
-                    BittorrentDownload bItem = (BittorrentDownload) item;
-                    if (bItem.getItems().size() > 0) {
-                        TransferItem transferItem = bItem.getItems().get(0);
-                        path = transferItem.getFile().getAbsolutePath();
-                        extension = FilenameUtils.getExtension(path);
-                    }
-                } else if (item instanceof DownloadTransfer) {
-                    DownloadTransfer transferItem = (DownloadTransfer) item;
-                    if (transferItem.getSavePath() != null) {
-                        path = transferItem.getSavePath().getAbsolutePath();
-                        extension = FilenameUtils.getExtension(path);
-                    }
-                } else if (item instanceof PeerHttpUpload) {
-                    PeerHttpUpload transferItem = (PeerHttpUpload) item;
-                    path = transferItem.getFD().filePath;
-                    extension = FilenameUtils.getExtension(path);
+    private void prepareGroupIndicatorDrawable(final Transfer item,
+                                               final ImageView groupIndicator,
+                                               final boolean hasMultipleFiles,
+                                               final boolean expanded) {
+        if (hasMultipleFiles) {
+            groupIndicator.setImageResource(expanded ? R.drawable.transfer_menuitem_minus : R.drawable.transfer_menuitem_plus);
+        } else {
+            String path = null;
+            if (item instanceof BittorrentDownload) {
+                BittorrentDownload bItem = (BittorrentDownload) item;
+                if (bItem.getItems().size() > 0) {
+                    TransferItem transferItem = bItem.getItems().get(0);
+                    path = transferItem.getFile().getAbsolutePath();
                 }
+            } else if (item instanceof DownloadTransfer) {
+                DownloadTransfer transferItem = (DownloadTransfer) item;
+                if (transferItem.getSavePath() != null) {
+                    path = transferItem.getSavePath().getAbsolutePath();
+                }
+            } else if (item instanceof PeerHttpUpload) {
+                PeerHttpUpload transferItem = (PeerHttpUpload) item;
+                path = transferItem.getFD().filePath;
+            }
 
-                if (extension != null && extension.equals("apk")) {
-                    try {
-                        //Apk apk = new Apk(context,path);
+            String extension = null;
+            if (path != null) {
+                extension = FilenameUtils.getExtension(path);
+            }
 
-                        //TODO: Get the APK Icon so we can show the APK icon on the transfer manager once
-                        //it's finished downloading, or as it's uploading to another peer.
-                        //apk.getDrawable(id);
+            if (extension != null && extension.equals("apk")) {
+                try {
+                    //Apk apk = new Apk(context,path);
 
-                        //in the meantime, just hardcode it
-                        groupIndicator.setImageResource(R.drawable.browse_peer_application_icon_selector_menu);
-                    } catch (Throwable e) {
-                        groupIndicator.setImageResource(R.drawable.browse_peer_application_icon_selector_menu);
-                    }
-                } else {
-                    groupIndicator.setImageResource(getFileTypeIconId(extension));
+                    //TODO: Get the APK Icon so we can show the APK icon on the transfer manager once
+                    //it's finished downloading, or as it's uploading to another peer.
+                    //apk.getDrawable(id);
+
+                    //in the meantime, just hardcode it
+                    groupIndicator.setImageResource(R.drawable.browse_peer_application_icon_selector_menu);
+                } catch (Throwable e) {
+                    groupIndicator.setImageResource(R.drawable.browse_peer_application_icon_selector_menu);
                 }
             } else {
-                groupIndicator.setImageResource(expanded ? R.drawable.transfer_menuitem_minus : R.drawable.transfer_menuitem_plus);
+                groupIndicator.setImageResource(getFileTypeIconId(extension));
             }
         }
     }
@@ -428,6 +410,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
         if (v instanceof ViewGroup) {
             ViewGroup vg = (ViewGroup) v;
+
             int count = vg.getChildCount();
             for (int i = 0; i < count; i++) {
                 View child = vg.getChildAt(i);
@@ -442,7 +425,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView status = findView(view, R.id.view_transfer_list_item_status);
         TextView speed = findView(view, R.id.view_transfer_list_item_speed);
         TextView size = findView(view, R.id.view_transfer_list_item_size);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
@@ -459,18 +441,18 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
 
-        buttonAction.setTag(download);
-
-        buttonAction.setOnClickListener(viewOnClickListener);
-
         if (download.hasPaymentOptions()) {
-            final PaymentOptions paymentOptions = download.getPaymentOptions();
-            final Resources r = context.get().getResources();
-            Drawable tipDrawable = (paymentOptions.bitcoin != null) ? r.getDrawable(R.drawable.contextmenu_icon_donation_bitcoin) : r.getDrawable(R.drawable.contextmenu_icon_donation_fiat);
-            final int iconHeightInPixels = r.getDimensionPixelSize(R.dimen.view_transfer_list_item_title_left_drawable);
-            tipDrawable.setBounds(0, 0, iconHeightInPixels, iconHeightInPixels);
-            title.setCompoundDrawables(tipDrawable, null, null, null);
+            setPaymentOptionDrawable(download, title);
         }
+    }
+
+    private void setPaymentOptionDrawable(BittorrentDownload download, TextView title) {
+        final PaymentOptions paymentOptions = download.getPaymentOptions();
+        final Resources r = context.get().getResources();
+        Drawable tipDrawable = (paymentOptions.bitcoin != null) ? r.getDrawable(R.drawable.contextmenu_icon_donation_bitcoin) : r.getDrawable(R.drawable.contextmenu_icon_donation_fiat);
+        final int iconHeightInPixels = r.getDimensionPixelSize(R.dimen.view_transfer_list_item_title_left_drawable);
+        tipDrawable.setBounds(0, 0, iconHeightInPixels, iconHeightInPixels);
+        title.setCompoundDrawables(tipDrawable, null, null, null);
     }
 
     private void populatePeerDownload(View view, PeerHttpDownload download) {
@@ -481,7 +463,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         seeds.setText("");
         peers.setText("");
@@ -491,9 +472,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
-
-        buttonAction.setTag(download);
-        buttonAction.setOnClickListener(viewOnClickListener);
     }
 
     private void populatePeerUpload(View view, PeerHttpUpload upload) {
@@ -504,7 +482,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         seeds.setText("");
         peers.setText("");
@@ -514,9 +491,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(upload.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(upload.getUploadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(upload.getSize()));
-
-        buttonAction.setTag(upload);
-        buttonAction.setOnClickListener(viewOnClickListener);
     }
 
     private void populateHttpDownload(View view, HttpDownload download) {
@@ -527,7 +501,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         seeds.setText("");
         peers.setText("");
@@ -537,9 +510,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
-
-        buttonAction.setTag(download);
-        buttonAction.setOnClickListener(viewOnClickListener);
     }
 
     private void populateBittorrentDownloadItem(View view, TransferItem item) {
@@ -567,7 +537,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         seeds.setText("");
         peers.setText("");
@@ -577,9 +546,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
-
-        buttonAction.setTag(download);
-        buttonAction.setOnClickListener(viewOnClickListener);
     }
 
     private void populateSoundcloudDownload(View view, SoundcloudDownload download) {
@@ -590,7 +556,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageView buttonAction = findView(view, R.id.view_transfer_list_item_button_action);
 
         seeds.setText("");
         peers.setText("");
@@ -600,9 +565,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
-
-        buttonAction.setTag(download);
-        buttonAction.setOnClickListener(viewOnClickListener);
     }
 
     private String getStatusFromResId(String str) {
@@ -645,7 +607,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
                 return true;
             }
         } catch (Throwable e) {
-            Log.e(TAG, "Failed to create the menu", e);
+            LOG.error("Failed to create the menu", e);
         }
         return false;
     }
@@ -665,9 +627,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     private final class OpenOnClickListener implements OnClickListener {
         public void onClick(View v) {
             TransferItem item = (TransferItem) v.getTag();
-
-            boolean canOpen = false;
-            canOpen |= item.isComplete();
+            boolean canOpen = item.isComplete();
 
             if (canOpen) {
                 File savePath = item.getFile();
@@ -682,4 +642,23 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
             }
         }
     }
+
+    private static final class GroupIndicatorClickAdapter extends ClickAdapter<ExpandableListView> {
+        private final int groupPosition;
+
+        public GroupIndicatorClickAdapter(ExpandableListView owner, int groupPosition) {
+            super(owner);
+            this.groupPosition = groupPosition;
+        }
+
+        @Override
+        public void onClick(ExpandableListView owner, View v) {
+            if (owner.isGroupExpanded(groupPosition)) {
+                owner.collapseGroup(groupPosition);
+            } else {
+                owner.expandGroup(groupPosition);
+            }
+        }
+    }
+
 }

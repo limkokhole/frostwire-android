@@ -53,6 +53,7 @@ import com.frostwire.util.Ref;
 import com.frostwire.util.StringUtils;
 
 import java.io.File;
+import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
@@ -79,6 +80,7 @@ public class TransfersFragment extends AbstractFragment implements TimerObserver
     private ClearableEditTextView addTransferUrlTextView;
 
     private TransferListAdapter adapter;
+    private WeakReference<ExpandableListView> expandableListViewWeakReference;
 
     private TransferStatus selectedStatus;
 
