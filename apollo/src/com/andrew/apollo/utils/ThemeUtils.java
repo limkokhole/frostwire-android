@@ -321,39 +321,6 @@ public class ThemeUtils {
 
         // Theme the title
         setTitle(title);
-
-        setOverflowIcon(window);
-    }
-
-    private void setOverflowIcon(Window window) {
-        try {
-            final String overflowDesc = window.getContext().getString(R.string.action_menu_overflow_description);
-            final ViewGroup decor = (ViewGroup) window.getDecorView();
-
-            final ViewTreeObserver obs = mActionBarLayout.getViewTreeObserver();
-            obs.addOnPreDrawListener(new ViewTreeObserver.OnPreDrawListener() {
-                @Override
-                public boolean onPreDraw() {
-                    try {
-                        final ArrayList<View> outViews = new ArrayList<View>();
-                        decor.findViewsWithText(outViews, overflowDesc, View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
-
-                        if (!outViews.isEmpty()) {
-                            ImageButton overflow = (ImageButton) outViews.get(0);
-                            overflow.setImageResource(R.drawable.ic_menu_moreoverflow);
-                            return true;
-                        }
-
-                    } catch (Throwable e) {
-                        e.printStackTrace();
-                    }
-
-                    return true;
-                }
-            });
-        } catch (Throwable e) {
-            e.printStackTrace();
-        }
     }
 
     /**
