@@ -348,7 +348,7 @@ public class ThemeUtils {
                         e.printStackTrace();
                     }
 
-                    return false;
+                    return true;
                 }
             });
         } catch (Throwable e) {
