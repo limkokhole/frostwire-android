@@ -244,9 +244,12 @@ public final class UniversalScanner {
             Constructor<?> mediaScannerC = clazz.getDeclaredConstructor(Context.class);
             Object scanner = mediaScannerC.newInstance(context);
 
-            Method setLocaleM = clazz.getDeclaredMethod("setLocale", String.class);
-            setLocaleM.invoke(scanner, Locale.US.toString());
-
+            try {
+                Method setLocaleM = clazz.getDeclaredMethod("setLocale", String.class);
+                setLocaleM.invoke(scanner, Locale.US.toString());
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
 
             Field mClientF = clazz.getDeclaredField("mClient");
             mClientF.setAccessible(true);
