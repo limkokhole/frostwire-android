@@ -1,11 +1,13 @@
-FrostWire 1.5.2 - APRIL/15/2015
- - Significant improvements in search result availability.
- - Reduced used of DHT network for search.
- - Faster torrent download start time.
+FrostWire 1.5.2 - APRIL/17/2015
+ - Significant improvements in search results for individual files.
+ - Significant reduction of DHT queries, freeing up networking resources.
+ - Faster torrent download start.
  - Fixes download error on some Archive.org search results.
  - When no search results are found, search suggestions are calculated from search keywords.
  - Fixes Yify search.
  - Icon/buttons refresh on transfer screen.
+ - Fixes issues with SD Card storage on Android 5.0 (Lollipop)
+ - FrostWire notification icon now Lollipop compatible.
 
 FrostWire 1.5.1 - APRIL/07/2015
  - Removed all notifications explaining why no more YouTube search results on Basic version.
