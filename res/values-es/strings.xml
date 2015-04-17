@@ -146,7 +146,7 @@
     <string name="pending">pendiente</string>
     <string name="manual">manual</string>
     <string name="disabled">deshabilitado</string>
-    <string name="open">Abierto</string>
+    <string name="open">Abrir</string>
     <string name="connected_to">Conectado a</string>
     <string name="sharing_preferences">Preferencias de Compartir</string>
     <string name="nickname">Nombre</string>
@@ -293,7 +293,7 @@
     <string name="searching_indeterminate">Buscando…</string>
     <string name="show_exit_button">Mostrar Botón de Salida</string>
     <string name="download_finished">Descarga Terminada</string>
-    <string name="clear_complete">Borrar las Completadas</string>
+    <string name="clear_complete">Borrar Descargas Terminadas</string>
     <string name="downloading_promotion">Descargando %s</string>
     <string name="activity_about_droidwire_description">FrostWire para Android</string>
     <string name="dummy_hint">[Consejo]</string>
