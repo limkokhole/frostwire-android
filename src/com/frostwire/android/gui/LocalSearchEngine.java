@@ -20,11 +20,8 @@ package com.frostwire.android.gui;
 
 import android.text.Html;
 import com.frostwire.search.*;
-import com.frostwire.search.extratorrent.ExtratorrentScrapedFileSearchResult;
 import com.frostwire.search.extratorrent.ExtratorrentSearchResult;
-import com.frostwire.search.kat.KATScrapedFileSearchResult;
 import com.frostwire.search.kat.KATSearchResult;
-import com.frostwire.search.torrent.TorrentScrapedFileSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.util.StringUtils;
@@ -162,7 +159,7 @@ public final class LocalSearchEngine {
                         if (((TorrentSearchResult)sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
                             continue;
                         }
-                    } else if (sr instanceof TorrentScrapedFileSearchResult) {
+                    } else if (sr instanceof ScrapedTorrentFileSearchResult) {
                         // TODO: Search architecture hack, gotta abstract these guys.
                         if (((TorrentSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
                             continue;
@@ -178,8 +175,7 @@ public final class LocalSearchEngine {
                         if (!((YouTubeCrawledSearchResult) sr).getFilename().endsWith(".flv")) {
                             list.add(sr);
                         }
-                    } else if (sr instanceof KATScrapedFileSearchResult || sr instanceof ExtratorrentScrapedFileSearchResult) {
-                        // TODO: Search architecture hack, gotta abstract these guys.
+                    } else if (sr instanceof ScrapedTorrentFileSearchResult) {
                         list.add(sr);
                     } else if (filter(new LinkedList<String>(currentSearchTokens), sr)) {
                         list.add(sr);
