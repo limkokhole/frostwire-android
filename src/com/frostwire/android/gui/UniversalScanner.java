@@ -25,6 +25,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -243,6 +244,10 @@ public final class UniversalScanner {
             Constructor<?> mediaScannerC = clazz.getDeclaredConstructor(Context.class);
             Object scanner = mediaScannerC.newInstance(context);
 
+            Method setLocaleM = clazz.getDeclaredMethod("setLocale", String.class);
+            setLocaleM.invoke(scanner, Locale.US.toString());
+
+
             Field mClientF = clazz.getDeclaredField("mClient");
             mClientF.setAccessible(true);
             Object mClient = mClientF.get(scanner);
@@ -265,6 +270,14 @@ public final class UniversalScanner {
                 mFileCacheF.set(scanner, new HashMap<String, Object>());
             } catch (Throwable e) {
                 // no an HTC, I need some time to refactor this hack
+            }
+
+            try {
+                Field mFileCacheF = clazz.getDeclaredField("mNoMediaPaths");
+                mFileCacheF.setAccessible(true);
+                mFileCacheF.set(scanner, new HashMap<String, String>());
+            } catch (Throwable e) {
+                e.printStackTrace();
             }
 
             Method doScanFileM = mClient.getClass().getDeclaredMethod("doScanFile", String.class, String.class, long.class, long.class, boolean.class, boolean.class, boolean.class);
