@@ -1,3 +1,7 @@
+FrostWire 1.5.3 - APRIL/20/2015
+ - libtorrent updates.
+ - Spanish, Portuguese, Polish translation updates.
+
 FrostWire 1.5.2 - APRIL/17/2015
  - Significant improvements in search results for individual files.
  - Significant reduction of DHT queries, freeing up networking resources.
