@@ -524,4 +524,13 @@
     <string name="issue_with_tip_donation_uri">Hay algo malo con la dirección web de la propina.</string>
     <string name="enable_dht">Habilitar DHT</string>
     <string name="send_tip_donation">Dar Propina</string>
+    <string name="dummy_build">[build number]</string>
+    <string name="enable_dht_summary">Use Hash Table distribuidas para anunciar/buscar distribuidores de torrent</string>
+    <string name="send_bitcoin_tip">Envíe propina Bitcoin</string>
+    <string name="basic">Básico</string>
+    <string name="issue_with_tip_donation_uri">Hay un error con la dirección web del Donativo/Propina</string>
+    <string name="enable_dht">Habilitar DHT</string>
+    <string name="send_tip_donation">Enviar Propina/Donación</string>
+    <string name="plus">Plus</string>
+    <string name="try_other_keywords">Intente otras palabras</string>
 </resources>
