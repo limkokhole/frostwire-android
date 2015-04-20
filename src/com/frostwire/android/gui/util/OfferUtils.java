@@ -177,11 +177,12 @@ public class OfferUtils {
         public void onInterstitialFailed(IMInterstitial imInterstitial, IMErrorCode imErrorCode) {
             LOG.error(imErrorCode.name());
             LOG.error(imErrorCode.toString());
+
             new Thread("OfferUtils.onInterstitialFailed") {
                 @Override
                 public void run() {
                     try {
-                        TimeUnit.MINUTES.sleep(1);
+                        TimeUnit.MINUTES.sleep(30);
                         if (Ref.alive(activityRef)) {
                             Activity activity = activityRef.get();
                             if (activity instanceof MainActivity) {
