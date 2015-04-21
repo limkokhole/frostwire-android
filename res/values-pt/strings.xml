@@ -456,8 +456,7 @@
     <string name="context_menu_delete">Deletar</string>
     <string name="use_eztv">Use Eztv</string>
     <string name="device_memory">Memória do dispositivo</string>
-    <string name="please_check_connection_status_before_resuming_download">Por favor, verifique o estado da sua conexão com a internet antes de 
-retomar.</string>
+    <string name="please_check_connection_status_before_resuming_download">Por favor, verifique o estado da sua conexão com a internet antes de retomar.</string>
     <string name="page_recent">Recente</string>
     <string name="durationformatshort">%2$d:%3$02d</string>
     <string name="cloud_downloads_coming">Desculpe: a partir de downloads nuvem daqui estará disponível em mais atualizações.</string>
@@ -535,7 +534,6 @@ retomar.</string>
     <string name="wifi_sharing_settings">Configurações de Compartilhamento Wi-Fi</string>
     <string name="torrent_max_peers">Max Pares</string>
     <string name="app_shutdown_dlg_message">Isto vai fechar todas as transferências e serviços em segundo plano. Você tem certeza?</string>
-    <string name="please_check_connection_status_before_resuming_download">Por favor verifique o status da sua conexão à Internet antes de continuar.</string>
     <string name="use_kat_summary">O motor de busca KAT está baseado no Magnet e somente funciona via Wi-Fi</string>
     <string name="checking_ellipsis">Verificando&#8230;</string>
     <string name="error_wrong_md5_hash">Erro: Hash MD5 errado</string>

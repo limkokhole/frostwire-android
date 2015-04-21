@@ -519,11 +519,6 @@
     <string name="free_sponsored_app">App Gratis Patrocinada</string>
     <string name="support">Soporte</string>
     <string name="torrent_max_peers_summary">Max Usuarios</string>
-    <string name="enable_dht_summary">Utilizar la tabla distribuida de hashes para anunciar/buscar usuarios</string>
-    <string name="send_bitcoin_tip">Dar Propina Bitcoin</string>
-    <string name="issue_with_tip_donation_uri">Hay algo malo con la dirección web de la propina.</string>
-    <string name="enable_dht">Habilitar DHT</string>
-    <string name="send_tip_donation">Dar Propina</string>
     <string name="dummy_build">[build number]</string>
     <string name="enable_dht_summary">Use Hash Table distribuidas para anunciar/buscar distribuidores de torrent</string>
     <string name="send_bitcoin_tip">Envíe propina Bitcoin</string>
