@@ -30,9 +30,15 @@ import com.frostwire.search.torrent.TorrentSearchResult;
 class TorrentSearchResultInfo implements TorrentDownloadInfo {
 
     private final TorrentSearchResult sr;
+    private final String referrerUrl;
+
+    public TorrentSearchResultInfo(TorrentSearchResult sr, String referrerUrl) {
+        this.sr = sr;
+        this.referrerUrl = referrerUrl;
+    }
 
     public TorrentSearchResultInfo(TorrentSearchResult sr) {
-        this.sr = sr;
+        this(sr, sr.getDetailsUrl());
     }
 
     @Override
@@ -70,5 +76,10 @@ class TorrentSearchResultInfo implements TorrentDownloadInfo {
         else {
             return null;
         }
+    }
+
+    @Override
+    public String getReferrerUrl() {
+        return referrerUrl;
     }
 }

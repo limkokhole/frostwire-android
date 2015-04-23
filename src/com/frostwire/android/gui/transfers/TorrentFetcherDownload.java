@@ -233,7 +233,7 @@ public class TorrentFetcherDownload implements BittorrentDownload {
             try {
                 byte[] data = null;
                 String uri = info.getTorrentUrl();
-                String referrer = info.getDetailsUrl();
+                String referrer = info.getReferrerUrl();
                 if (uri.startsWith("http")) {
                     // use our http client, since we can handle referer
                     data = HttpClientFactory.newInstance().getBytes(uri, 30000, referrer);

@@ -62,4 +62,9 @@ class TorrentUrlInfo implements TorrentDownloadInfo {
     public String getRelativePath() {
         return null;
     }
+
+    @Override
+    public String getReferrerUrl() {
+        return null;
+    }
 }
