@@ -1,4 +1,4 @@
-FrostWire 1.5.3 - APRIL/20/2015
+FrostWire 1.5.3 - APRIL/23/2015
  - Crash fixes.
  - Binary Optimizations.
  - libtorrent updates.
