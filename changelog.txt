@@ -1,5 +1,7 @@
 FrostWire 1.5.3 - APRIL/23/2015
  - Crash fixes.
+ - Reduced installer size to 7.6 MB.
+ - Lollipop compatibility fixes.
  - Binary Optimizations.
  - libtorrent updates.
  - Spanish, Portuguese, Polish translation updates.
