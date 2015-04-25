@@ -506,7 +506,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
     
     private boolean checkIfNotExists(FileDescriptor fd) {
-        if (fd == null) {
+        if (fd == null || fd.filePath == null) {
             return true;
         }
         
