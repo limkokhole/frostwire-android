@@ -1427,15 +1427,15 @@ public final class MusicUtils {
             c.moveToFirst();
             while (!c.isAfterLast()) {
                 final String name = c.getString(1);
-                final File f = new File(name);
                 try { // File.delete can throw a security exception
+                    final File f = new File(name);
                     if (!f.delete()) {
                         // I'm not sure if we'd ever get here (deletion would
                         // have to fail, but no exception thrown)
                         Log.e("MusicUtils", "Failed to delete file " + name);
                     }
                     c.moveToNext();
-                } catch (final SecurityException ex) {
+                } catch (final Throwable ex) {
                     c.moveToNext();
                 }
             }
