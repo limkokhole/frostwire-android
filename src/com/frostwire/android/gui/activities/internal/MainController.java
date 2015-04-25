@@ -199,7 +199,7 @@ public final class MainController {
 
         FileDescriptor fileDescriptor = Librarian.instance().getFileDescriptor(uri);
 
-        if (fileDescriptor != null && new File(fileDescriptor.filePath).exists()) {
+        if (fileDescriptor != null && fileDescriptor.filePath != null && new File(fileDescriptor.filePath).exists()) {
             fileDescriptor.shared = true;
             Librarian.instance().updateSharedStates(fileDescriptor.fileType, Arrays.asList(fileDescriptor));
             result = true;
