@@ -458,6 +458,8 @@ public final class ImageCache {
             evictAll();
         }  catch (final NullPointerException e) {
             // Log.e(TAG, "NullPointerException - getArtworkFromFile - ", e);
+        } catch (SecurityException e) {
+
         }
         return artwork;
     }
