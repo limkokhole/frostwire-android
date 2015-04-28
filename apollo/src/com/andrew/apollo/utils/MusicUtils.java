@@ -869,9 +869,9 @@ public final class MusicUtils {
             final String[] projection = new String[] {
                 PlaylistsColumns.NAME
             };
-            final String selection = PlaylistsColumns.NAME + " = '" + name + "'";
+            final String selection = PlaylistsColumns.NAME + " = ?";
             Cursor cursor = resolver.query(MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI,
-                    projection, selection, null, null);
+                    projection, selection, new String[] {name}, null);
             if (cursor != null && cursor.getCount() <= 0) {
                 final ContentValues values = new ContentValues(1);
                 values.put(PlaylistsColumns.NAME, name);
