@@ -1810,11 +1810,16 @@ public class MusicPlaybackService extends Service {
      * @return The current song artist name
      */
     public String getArtistName() {
-        synchronized (this) {
-            if (mCursor == null) {
-                return null;
+        try {
+            synchronized (this) {
+                if (mCursor == null) {
+                    return null;
+                }
+                return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
             }
-            return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
+        } catch (Throwable e) {
+            // what else
+            return "";
         }
     }
 
