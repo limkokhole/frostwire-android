@@ -1,3 +1,7 @@
+FrostWire 1.5.4 - APRIL/29/2015
+ - Major icons make over. Crisp look on higher density screens.
+ - New rate-us reminder.
+
 FrostWire 1.5.3 - APRIL/23/2015
  - Crash fixes.
  - Reduced installer size to 7.6 MB.
