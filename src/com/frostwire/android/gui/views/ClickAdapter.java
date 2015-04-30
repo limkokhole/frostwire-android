@@ -41,6 +41,8 @@ public abstract class ClickAdapter<T> implements View.OnClickListener, View.OnLo
         this.ownerRef = Ref.weak(owner);
     }
 
+
+
     @Override
     public final void onClick(View v) {
         if (Ref.alive(ownerRef)) {

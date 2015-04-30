@@ -18,6 +18,7 @@
 
 package com.frostwire.android.gui.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -41,6 +42,7 @@ import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter.FilteredSearchResults;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
+import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.tasks.DownloadSoundcloudFromUrlTask;
 import com.frostwire.android.gui.tasks.StartDownloadTask;
 import com.frostwire.android.gui.transfers.HttpSlideSearchResult;
@@ -63,7 +65,6 @@ import com.frostwire.uxstats.UXStats;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -74,9 +75,7 @@ import java.util.regex.Pattern;
  *
  */
 public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, CurrentQueryReporter {
-
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
-    private static int startedDownloadsBeforeSticky = 0;
 
     private SearchResultListAdapter adapter;
     private List<Slide> slides;
@@ -116,7 +115,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     public View getHeader(Activity activity) {
 
         LayoutInflater inflater = LayoutInflater.from(activity);
-        TextView header = (TextView) inflater.inflate(R.layout.view_main_fragment_simple_header, null);
+        @SuppressLint("InflateParams") TextView header = (TextView) inflater.inflate(R.layout.view_main_fragment_simple_header, null);
         header.setText(R.string.search);
 
         return header;
@@ -144,7 +143,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         searchInput.setOnSearchListener(new OnSearchListener() {
             public void onSearch(View v, String query, int mediaTypeId) {
                 if (query.contains("://m.soundcloud.com/") || query.contains("://soundcloud.com/")) {
-                    cancelSearch(view);
+                    cancelSearch();
                     new DownloadSoundcloudFromUrlTask(getActivity(), query).execute();
                     searchInput.setText("");
                 } else if (query.contains("youtube.com/")) {
@@ -165,7 +164,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             }
 
             public void onClear(View v) {
-                cancelSearch(view);
+                cancelSearch();
             }
         });
 
@@ -182,7 +181,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
 
         searchProgress = findView(view, R.id.fragment_search_search_progress);
-        searchProgress.setCurrentQueryReporter((CurrentQueryReporter) this);
+        searchProgress.setCurrentQueryReporter(this);
 
         searchProgress.setCancelOnClickListener(new OnClickListener() {
             @Override
@@ -190,7 +189,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 if (LocalSearchEngine.instance().isSearchFinished()) {
                     performSearch(searchInput.getText(), adapter.getFileType()); // retry
                 } else {
-                    cancelSearch(view);
+                    cancelSearch();
                 }
             }
         });
@@ -198,6 +197,10 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         list = findView(view, R.id.fragment_search_list);
 
         showSearchView(view);
+
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+            showRatingsReminder(view);
+        }
     }
 
     private void startMagnetDownload(String magnet) {
@@ -299,7 +302,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         UXStats.instance().log(UXAction.SEARCH_STARTED_ENTER_KEY);
     }
 
-    private void cancelSearch(View view) {
+    private void cancelSearch() {
         adapter.clear();
         fileTypeCounter.clear();
         refreshFileTypeCounters(false);
@@ -408,9 +411,49 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         UIUtils.showTransfersOnDownloadStart(ctx);
     }
-    
+
+    private void showRatingsReminder(View v) {
+        final RichNotification ratingReminder = findView(v, R.id.fragment_search_rating_reminder_notification);
+        ratingReminder.setVisibility(View.GONE);
+
+        final ConfigurationManager CM = ConfigurationManager.instance();
+        boolean alreadyRated = CM.getBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET);
+
+        if (alreadyRated) {
+            return;
+        }
+
+        if (ratingReminder.wasDismissed()) {
+            return;
+        }
+
+        final int finishedDownloads = Engine.instance().getNotifiedDownloadsBloomFilter().count();
+
+        LOG.info("Finished Downloads: " + finishedDownloads);
+        final int REMINDER_INTERVAL = CM.getInt(Constants.PREF_KEY_GUI_FINISHED_DOWNLOADS_BETWEEN_RATINGS_REMINDER);
+
+        if (finishedDownloads > 1 && finishedDownloads % REMINDER_INTERVAL != 0) {
+            return;
+        }
+
+        ratingReminder.setVisibility(View.VISIBLE);
+        ratingReminder.setOnClickListener(new ClickAdapter<SearchFragment>(SearchFragment.this) {
+            @Override
+            public void onClick(SearchFragment owner, View v) {
+                ratingReminder.setVisibility(View.GONE);
+                CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse("market://details?id=" + Constants.APP_PACKAGE_NAME));
+                try {
+                    startActivity(intent);
+                } catch (Throwable t) {
+                }
+            }
+        });
+    }
+
     private void startPromotionDownload(Slide slide) {
-        SearchResult sr = null;
+        SearchResult sr;
 
         switch (slide.method) {
         case Slide.DOWNLOAD_METHOD_TORRENT:

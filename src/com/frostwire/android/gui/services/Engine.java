@@ -167,6 +167,10 @@ public final class Engine implements IEngineService {
         return EngineService.threadPool;
     }
 
+    public BloomFilter<String> getNotifiedDownloadsBloomFilter() {
+        return notifiedDownloads;
+    }
+
     public void notifyDownloadFinished(String displayName, File file, String optionalInfoHash) {
         if (service != null) {
             if (optionalInfoHash != null && !optionalInfoHash.equals("0000000000000000000000000000000000000000")) {

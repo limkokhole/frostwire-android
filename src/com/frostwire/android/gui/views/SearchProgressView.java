@@ -181,7 +181,7 @@ public class SearchProgressView extends LinearLayout {
         textNoResults.setVisibility(View.VISIBLE);
         buttonFreeApps.setVisibility(OfferUtils.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
 
-        if (currentQueryReporter.getCurrentQuery()!=null) {
+        if (currentQueryReporter.getCurrentQuery() != null) {
             textTryOtherKeywords.setVisibility(View.VISIBLE);
         } else {
             hideRetryViews();
