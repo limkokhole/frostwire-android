@@ -583,7 +583,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
-    private void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
+    public void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
         boolean mobileCoreShown = false;
         boolean inMobiShown = false;
         boolean interstitialShown = false;

@@ -73,7 +73,6 @@ public final class SoftwareUpdater {
     private Update update;
 
     private long updateTimestamp;
-    private AsyncTask<Void, Void, Boolean> updateTask;
 
     private final Set<ConfigurationUpdateListener> configurationUpdateListeners;
 
@@ -108,7 +107,8 @@ public final class SoftwareUpdater {
         }
 
         updateTimestamp = now;
-        updateTask = new AsyncTask<Void, Void, Boolean>() {
+
+        AsyncTask<Void, Void, Boolean> updateTask = new AsyncTask<Void, Void, Boolean>() {
             @Override
             protected Boolean doInBackground(Void... params) {
                 try {
@@ -128,9 +128,7 @@ public final class SoftwareUpdater {
 
                     updateConfiguration(update);
 
-                    boolean notifyUpdate = handleOTAUpdate();
-                    return notifyUpdate;
-
+                    return handleOTAUpdate();
                 } catch (Throwable e) {
                     Log.e(TAG, "Failed to check/retrieve/update the update information", e);
                 }
@@ -158,6 +156,11 @@ public final class SoftwareUpdater {
         updateTask.execute();
     }
 
+    /**
+     *
+     * @return true if there's an update available.
+     * @throws IOException
+     */
     private boolean handleOTAUpdate() throws IOException {
         if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
             return false;
@@ -241,13 +244,10 @@ public final class SoftwareUpdater {
      * 
      * @param md5
      *            - Expected MD5 hash as a string.
-     * @return
+     * @return true if the latest apk was downloaded and md5 verified.
      */
     private boolean downloadedLatestFrostWire(String md5) {
-        if (!SystemPaths.getUpdateApk().exists()) {
-            return false;
-        }
-        return checkMD5(SystemPaths.getUpdateApk(), md5);
+        return SystemPaths.getUpdateApk().exists() && checkMD5(SystemPaths.getUpdateApk(), md5);
     }
 
     /**
@@ -306,18 +306,13 @@ public final class SoftwareUpdater {
         }
 
         String checkedMD5 = getMD5(f);
-        if (checkedMD5 == null) {
-            return false;
-        }
-
-        return checkedMD5.trim().equalsIgnoreCase(expectedMD5.trim());
+        return checkedMD5 != null && checkedMD5.trim().equalsIgnoreCase(expectedMD5.trim());
     }
 
     private void updateConfiguration(Update update) {
         if (update.config == null) {
             return;
         }
-
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE_THRESHOLD, ByteUtils.randomInt(0, 100) < update.config.supportThreshold);
 
@@ -335,6 +330,8 @@ public final class SoftwareUpdater {
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, update.config.mobileCore);
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_INMOBI, update.config.inmobi);
+        ConfigurationManager.instance().setInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS, update.config.interstitialOffersTransferStarts);
+        ConfigurationManager.instance().setInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES, update.config.interstitialTransferOffersTimeoutInMinutes);
 
         if (update.config.uxEnabled && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_UXSTATS_ENABLED)) {
             String url = "http://ux.frostwire.com/aux";
@@ -382,11 +379,15 @@ public final class SoftwareUpdater {
         public Config config;
     }
 
+    @SuppressWarnings("CanBeFinal")
     private static class Config {
         public int supportThreshold = 100;
         public Map<String, Boolean> activeSearchEngines;
         public boolean mobileCore = false;
         public boolean inmobi = false;
+        public int interstitialOffersTransferStarts = 5;
+        public int interstitialTransferOffersTimeoutInMinutes = 15;
+
         // ux stats
         public boolean uxEnabled = false;
         public int uxPeriod = 3600;
