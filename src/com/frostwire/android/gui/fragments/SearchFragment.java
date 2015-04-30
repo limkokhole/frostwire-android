@@ -428,8 +428,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
 
         final int finishedDownloads = Engine.instance().getNotifiedDownloadsBloomFilter().count();
-
-        LOG.info("Finished Downloads: " + finishedDownloads);
         final int REMINDER_INTERVAL = CM.getInt(Constants.PREF_KEY_GUI_FINISHED_DOWNLOADS_BETWEEN_RATINGS_REMINDER);
 
         if (finishedDownloads > 1 && finishedDownloads % REMINDER_INTERVAL != 0) {
