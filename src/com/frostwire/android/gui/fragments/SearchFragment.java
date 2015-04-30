@@ -66,6 +66,7 @@ import com.frostwire.uxstats.UXStats;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,6 +77,9 @@ import java.util.regex.Pattern;
  */
 public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, CurrentQueryReporter {
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
+
+    private static int startedTransfers = 0;
+    private static long lastInterstitialShownTimestamp = System.currentTimeMillis();
 
     private SearchResultListAdapter adapter;
     private List<Slide> slides;
@@ -410,6 +414,26 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             task.execute();
         }
         UIUtils.showTransfersOnDownloadStart(ctx);
+
+        showInterstitialOfferIfNecessary((MainActivity) ctx);
+    }
+
+    private static void showInterstitialOfferIfNecessary(MainActivity ctx) {
+        startedTransfers++;
+        ConfigurationManager CM = ConfigurationManager.instance();
+        long now = System.currentTimeMillis();
+        int INTERSTITIAL_OFFERS_TRANSFER_STARTS = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
+        int INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
+        long timeSinceLastOffer = System.currentTimeMillis() - lastInterstitialShownTimestamp;
+        long timeoutBetweenOffers = TimeUnit.MINUTES.toMillis(INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
+        boolean itsBeenLongEnough = timeSinceLastOffer > timeoutBetweenOffers;
+        boolean weAreModuloZero = startedTransfers > 0 && startedTransfers % INTERSTITIAL_OFFERS_TRANSFER_STARTS == 0;
+
+        if (itsBeenLongEnough || weAreModuloZero) {
+            ctx.showInterstitial(false, false);
+            startedTransfers = 0;
+            lastInterstitialShownTimestamp = now;
+        }
     }
 
     private void showRatingsReminder(View v) {
