@@ -584,9 +584,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
-        boolean mobileCoreShown = false;
+        boolean mobileCoreShown;
         boolean inMobiShown = false;
-        boolean interstitialShown = false;
+        boolean interstitialShown;
 
         mobileCoreShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
             @Override

@@ -171,6 +171,8 @@ public class OfferUtils {
                     // meh, activity was a goner already, shutdown was true most likely.
                 }
             }
+
+            imInterstitial.loadInterstitial();
         }
 
         @Override

@@ -79,7 +79,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
 
     private static int startedTransfers = 0;
-    private static long lastInterstitialShownTimestamp = System.currentTimeMillis();
+    private static long lastInterstitialShownTimestamp = -1;
 
     private SearchResultListAdapter adapter;
     private List<Slide> slides;
@@ -103,6 +103,15 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            startedTransfers = savedInstanceState.getInt("startedTransfers");
+
+            lastInterstitialShownTimestamp = savedInstanceState.getLong("lastInterstitialShownTimestamp");
+            if (lastInterstitialShownTimestamp == 0) {
+                lastInterstitialShownTimestamp = -1;
+            }
+        }
 
         setupAdapter();
 
@@ -137,6 +146,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     @Override
     public void onSaveInstanceState(Bundle outState) {
       //No call for super(). Bug on API Level > 11.
+        outState.putInt("startedTransfers",startedTransfers);
+        outState.putLong("lastInterstitialShownTimestamp",lastInterstitialShownTimestamp);
     }
 
     @Override
@@ -203,7 +214,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         showSearchView(view);
 
         if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
-            showRatingsReminder(view);
+            //showRatingsReminder(view);
         }
     }
 
@@ -421,18 +432,19 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private static void showInterstitialOfferIfNecessary(MainActivity ctx) {
         startedTransfers++;
         ConfigurationManager CM = ConfigurationManager.instance();
-        long now = System.currentTimeMillis();
-        int INTERSTITIAL_OFFERS_TRANSFER_STARTS = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
-        int INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
-        long timeSinceLastOffer = System.currentTimeMillis() - lastInterstitialShownTimestamp;
-        long timeoutBetweenOffers = TimeUnit.MINUTES.toMillis(INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
-        boolean itsBeenLongEnough = timeSinceLastOffer > timeoutBetweenOffers;
-        boolean weAreModuloZero = startedTransfers > 0 && startedTransfers % INTERSTITIAL_OFFERS_TRANSFER_STARTS == 0;
+        final int INTERSTITIAL_OFFERS_TRANSFER_STARTS = 3;//CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
+        final int INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES = 2;//CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
+        final long INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MS = TimeUnit.MINUTES.toMillis(INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
 
-        if (itsBeenLongEnough || weAreModuloZero) {
+        long timeSinceLastOffer = System.currentTimeMillis() - lastInterstitialShownTimestamp;
+        boolean itsBeenLongEnough = timeSinceLastOffer >= INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MS;
+        boolean startedEnoughTransfers = startedTransfers >= INTERSTITIAL_OFFERS_TRANSFER_STARTS;
+        boolean shouldDisplayFirstOne = (lastInterstitialShownTimestamp == -1 && startedEnoughTransfers);
+
+        if (shouldDisplayFirstOne || (itsBeenLongEnough && startedEnoughTransfers)) {
             ctx.showInterstitial(false, false);
             startedTransfers = 0;
-            lastInterstitialShownTimestamp = now;
+            lastInterstitialShownTimestamp = System.currentTimeMillis();;
         }
     }
 

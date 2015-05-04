@@ -108,6 +108,7 @@ public abstract class AbstractDialog extends DialogFragment {
         return super.onCreateView(inflater, container, savedInstanceState);
     }
 
+
     protected abstract void initComponents(Dialog dlg, Bundle savedInstanceState);
 
     @SuppressWarnings("unchecked")
