@@ -19,7 +19,7 @@
  */
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:frostwire="http://schemas.android.com/apk/res/com.frostwire.android" >
+    xmlns:frostwire="http://schemas.android.com/apk/res-auto" >
 
     <PreferenceCategory android:title="@string/sharing_preferences" >
         <SwitchPreference android:key="frostwire.prefs.internal.connect_disconnect"
