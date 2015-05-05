@@ -40,7 +40,7 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = "187";
+    public static final String FROSTWIRE_BUILD = "188";
 
     public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // true -> FrostWire Basic, false -> FrostWire Plus.
 
