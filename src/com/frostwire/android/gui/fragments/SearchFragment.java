@@ -432,8 +432,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private static void showInterstitialOfferIfNecessary(MainActivity ctx) {
         startedTransfers++;
         ConfigurationManager CM = ConfigurationManager.instance();
-        final int INTERSTITIAL_OFFERS_TRANSFER_STARTS = 3;//CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
-        final int INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES = 2;//CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
+        final int INTERSTITIAL_OFFERS_TRANSFER_STARTS = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
+        final int INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
         final long INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MS = TimeUnit.MINUTES.toMillis(INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES);
 
         long timeSinceLastOffer = System.currentTimeMillis() - lastInterstitialShownTimestamp;
