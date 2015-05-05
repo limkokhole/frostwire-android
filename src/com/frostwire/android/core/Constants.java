@@ -42,7 +42,7 @@ public final class Constants {
      * needing to pass the Android app context to obtain the PackageManager instance.  */
     public static final String FROSTWIRE_BUILD = "188";
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // true -> FrostWire Basic, false -> FrostWire Plus.
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // true -> FrostWire Basic, false -> FrostWire Plus.
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
