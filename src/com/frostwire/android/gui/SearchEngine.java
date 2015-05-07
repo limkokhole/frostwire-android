@@ -223,7 +223,7 @@ public abstract class SearchEngine {
     public static final SearchEngine KAT = new SearchEngine("KAT", Constants.PREF_KEY_SEARCH_USE_KAT) {
 
         @Override
-        public SearchPeYrformer getPerformer(long token, String keywords) {
+        public SearchPerformer getPerformer(long token, String keywords) {
             KATSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
                 performer = new KATSearchPerformer("kickass.to", token, keywords, DEFAULT_TIMEOUT);
