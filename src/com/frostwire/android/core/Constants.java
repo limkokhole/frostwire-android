@@ -32,19 +32,21 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final String APP_PACKAGE_NAME = "com.frostwire.android";
-
-    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 5, (byte) 4 };
-
-    public static final String FROSTWIRE_VERSION_STRING = FROSTWIRE_VERSION[0] + "." + FROSTWIRE_VERSION[1] + "." + FROSTWIRE_VERSION[2];
-
-    /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
-     * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = "188";
-
     public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // true -> FrostWire Basic, false -> FrostWire Plus.
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
+
+    public static final String BUILD_PREFIX = !IS_GOOGLE_PLAY_DISTRIBUTION ? "100":"";
+
+    /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
+     * needing to pass the Android app context to obtain the PackageManager instance.  */
+    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "190";
+
+    public static final String APP_PACKAGE_NAME = "com.frostwire.android";
+
+    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 5, (byte) 5 };
+
+    public static final String FROSTWIRE_VERSION_STRING = FROSTWIRE_VERSION[0] + "." + FROSTWIRE_VERSION[1] + "." + FROSTWIRE_VERSION[2];
 
     /**
      * 65280 - Default LAN bound port
