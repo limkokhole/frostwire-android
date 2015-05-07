@@ -26,7 +26,6 @@ import com.frostwire.search.SearchPerformer;
 import com.frostwire.search.archiveorg.ArchiveorgSearchPerformer;
 import com.frostwire.search.bitsnoop.BitSnoopSearchPerformer;
 import com.frostwire.search.btjunkie.BtjunkieSearchPerformer;
-import com.frostwire.search.domainalias.DomainAliasManager;
 import com.frostwire.search.extratorrent.ExtratorrentSearchPerformer;
 import com.frostwire.search.eztv.EztvSearchPerformer;
 import com.frostwire.search.frostclick.FrostClickSearchPerformer;
@@ -109,63 +108,63 @@ public abstract class SearchEngine {
     public static final SearchEngine EXTRATORRENT = new SearchEngine("Extratorrent", Constants.PREF_KEY_SEARCH_USE_EXTRATORRENT) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new ExtratorrentSearchPerformer(new DomainAliasManager("extratorrent.cc"), token, keywords, DEFAULT_TIMEOUT);
+            return new ExtratorrentSearchPerformer("extratorrent.cc", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine MININOVA = new SearchEngine("Mininova", Constants.PREF_KEY_SEARCH_USE_MININOVA) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new MininovaSearchPerformer(new DomainAliasManager("www.mininova.org"), token, keywords, DEFAULT_TIMEOUT);
+            return new MininovaSearchPerformer("www.mininova.org", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine YOUTUBE = new SearchEngine("YouTube", Constants.PREF_KEY_SEARCH_USE_YOUTUBE) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new YouTubeSearchPerformer(new DomainAliasManager("gdata.youtube.com"), token, keywords, DEFAULT_TIMEOUT);
+            return new YouTubeSearchPerformer("gdata.youtube.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine SOUNCLOUD = new SearchEngine("Soundcloud", Constants.PREF_KEY_SEARCH_USE_SOUNDCLOUD) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new SoundcloudSearchPerformer(new DomainAliasManager("api.sndcdn.com"), token, keywords, DEFAULT_TIMEOUT);
+            return new SoundcloudSearchPerformer("api.sndcdn.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine ARCHIVE = new SearchEngine("Archive.org", Constants.PREF_KEY_SEARCH_USE_ARCHIVEORG) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new ArchiveorgSearchPerformer(new DomainAliasManager("archive.org"), token, keywords, DEFAULT_TIMEOUT);
+            return new ArchiveorgSearchPerformer("archive.org", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine FROSTCLICK = new SearchEngine("FrostClick", Constants.PREF_KEY_SEARCH_USE_FROSTCLICK) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new FrostClickSearchPerformer(new DomainAliasManager("api.frostclick.com"), token, keywords, DEFAULT_TIMEOUT, FROSTWIRE_ANDROID_USER_AGENT);
+            return new FrostClickSearchPerformer("api.frostclick.com", token, keywords, DEFAULT_TIMEOUT, FROSTWIRE_ANDROID_USER_AGENT);
         }
     };
 
     public static final SearchEngine BITSNOOP = new SearchEngine("BitSnoop", Constants.PREF_KEY_SEARCH_USE_BITSNOOP) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new BitSnoopSearchPerformer(new DomainAliasManager("bitsnoop.com"), token, keywords, DEFAULT_TIMEOUT);
+            return new BitSnoopSearchPerformer("bitsnoop.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine TORLOCK = new SearchEngine("TorLock", Constants.PREF_KEY_SEARCH_USE_TORLOCK) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new TorLockSearchPerformer(new DomainAliasManager("www.torlock.com"), token, keywords, DEFAULT_TIMEOUT);
+            return new TorLockSearchPerformer("www.torlock.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
     public static final SearchEngine EZTV = new SearchEngine("Eztv", Constants.PREF_KEY_SEARCH_USE_EZTV) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new EztvSearchPerformer(new DomainAliasManager("eztv.it"), token, keywords, DEFAULT_TIMEOUT);
+            return new EztvSearchPerformer("eztv.it", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
@@ -174,7 +173,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             TPBSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new TPBSearchPerformer(new DomainAliasManager("thepiratebay.se"), token, keywords, DEFAULT_TIMEOUT);
+                performer = new TPBSearchPerformer("thepiratebay.se", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No TPBSearchPerformer, WiFi not up");
             }
@@ -187,7 +186,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             MonovaSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new MonovaSearchPerformer(new DomainAliasManager("www.monova.org"), token, keywords, DEFAULT_TIMEOUT);
+                performer = new MonovaSearchPerformer("www.monova.org", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No MonovaSearchPerformer, WiFi not up");
             }
@@ -200,7 +199,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             YifySearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new YifySearchPerformer(new DomainAliasManager("www.yify-torrent.org"), token, keywords, DEFAULT_TIMEOUT);
+                performer = new YifySearchPerformer("www.yify-torrent.org", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No YifySearchPerformer, WiFi not up");
             }
@@ -213,7 +212,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             BtjunkieSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new BtjunkieSearchPerformer(new DomainAliasManager("btjunkie.eu"), token, keywords, DEFAULT_TIMEOUT);
+                performer = new BtjunkieSearchPerformer("btjunkie.eu", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No BtjunkieSearchPerformer, WiFi not up");
             }
@@ -227,7 +226,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             KATSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new KATSearchPerformer(new DomainAliasManager("kickass.to"), token, keywords, DEFAULT_TIMEOUT);
+                performer = new KATSearchPerformer("kickass.to", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No KATSearchPerformer, WiFi not up");
             }
