@@ -1,3 +1,6 @@
+FrostWire 1.5.5 - MAY/07/2015
+ - Domain alias manager removed.
+
 FrostWire 1.5.4 - MAY/04/2015
  - Crash fixes.
  - Major icons make over. Crisp look on higher density screens.
