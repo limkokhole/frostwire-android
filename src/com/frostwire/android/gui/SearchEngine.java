@@ -57,7 +57,7 @@ public abstract class SearchEngine {
     private final String preferenceKey;
 
     private boolean active;
-    
+
     private SearchEngine(String name, String preferenceKey) {
         this.name = name;
         this.preferenceKey = preferenceKey;
@@ -122,7 +122,7 @@ public abstract class SearchEngine {
     public static final SearchEngine YOUTUBE = new SearchEngine("YouTube", Constants.PREF_KEY_SEARCH_USE_YOUTUBE) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new YouTubeSearchPerformer("gdata.youtube.com", token, keywords, DEFAULT_TIMEOUT);
+            return new YouTubeSearchPerformer("www.youtube.com", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
@@ -180,7 +180,7 @@ public abstract class SearchEngine {
             return performer;
         }
     };
-    
+
     public static final SearchEngine MONOVA = new SearchEngine("Monova", Constants.PREF_KEY_SEARCH_USE_MONOVA) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
@@ -193,7 +193,7 @@ public abstract class SearchEngine {
             return performer;
         }
     };
-    
+
     public static final SearchEngine YIFY = new SearchEngine("Yify", Constants.PREF_KEY_SEARCH_USE_YIFY) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
@@ -206,7 +206,7 @@ public abstract class SearchEngine {
             return performer;
         }
     };
-    
+
     public static final SearchEngine BTJUNKIE = new SearchEngine("Btjunkie.eu", Constants.PREF_KEY_SEARCH_USE_BTJUNKIE) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
@@ -223,7 +223,7 @@ public abstract class SearchEngine {
     public static final SearchEngine KAT = new SearchEngine("KAT", Constants.PREF_KEY_SEARCH_USE_KAT) {
 
         @Override
-        public SearchPerformer getPerformer(long token, String keywords) {
+        public SearchPeYrformer getPerformer(long token, String keywords) {
             KATSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
                 performer = new KATSearchPerformer("kickass.to", token, keywords, DEFAULT_TIMEOUT);
