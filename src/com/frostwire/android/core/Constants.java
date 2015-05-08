@@ -36,7 +36,7 @@ public final class Constants {
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
-    public static final String BUILD_PREFIX = !IS_GOOGLE_PLAY_DISTRIBUTION ? "100":"";
+    public static final String BUILD_PREFIX = !IS_GOOGLE_PLAY_DISTRIBUTION ? "1000":"";
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
