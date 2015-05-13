@@ -40,11 +40,11 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "190";
+    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "191";
 
     public static final String APP_PACKAGE_NAME = "com.frostwire.android";
 
-    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 5, (byte) 5 };
+    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 5, (byte) 6 };
 
     public static final String FROSTWIRE_VERSION_STRING = FROSTWIRE_VERSION[0] + "." + FROSTWIRE_VERSION[1] + "." + FROSTWIRE_VERSION[2];
 
@@ -158,9 +158,10 @@ public final class Constants {
     /**
      * URL where FrostWire checks for software updates
      */
-    public static final String SERVER_UPDATE_URL = "http://update1.frostwire.com/android";
+    public static final String SERVER_UPDATE_URL = "http://update.frostwire.com/android";
 
-    public static final String SERVER_PROMOTIONS_URL = "http://update.frostwire.com/o.php";
+    public static final String SERVER_PROMOTIONS_URL = "http://update.frostwire.com/o.php?from=android&basic="+
+            (IS_GOOGLE_PLAY_DISTRIBUTION ? "1":"0")+"&version="+FROSTWIRE_VERSION_STRING+"&build="+FROSTWIRE_BUILD;
 
     public static final long LIBRARIAN_FILE_COUNT_CACHE_TIMEOUT = 2 * 60 * 1000; // 2 minutes
 
