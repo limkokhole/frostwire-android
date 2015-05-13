@@ -1,3 +1,6 @@
+FrostWire 1.5.6 - MAY/08/2015
+ - Further YouTube search fixes for non-english users.
+
 FrostWire 1.5.5 - MAY/07/2015
  - YouTube search fixed. (FrostWire Plus only)
  - Domain alias manager removed.
