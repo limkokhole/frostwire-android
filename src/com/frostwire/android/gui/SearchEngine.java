@@ -226,7 +226,7 @@ public abstract class SearchEngine {
         public SearchPerformer getPerformer(long token, String keywords) {
             KATSearchPerformer performer = null;
             if (NetworkManager.instance().isDataWIFIUp()) {
-                performer = new KATSearchPerformer("kickass.to", token, keywords, DEFAULT_TIMEOUT);
+                performer = new KATSearchPerformer("kat.cr", token, keywords, DEFAULT_TIMEOUT);
             } else {
                 LOG.info("No KATSearchPerformer, WiFi not up");
             }
