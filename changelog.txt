@@ -1,6 +1,9 @@
-FrostWire 1.5.7 - MAY/14/2015
+FrostWire 1.5.7 - MAY/15/2015
  - KAT search fixed.
  - Monova search fixed.
+ - EZTV search fixed.
+ - Bitsnoop downloads fixed.
+ - BTJunkie downloads fixed.
 
 FrostWire 1.5.6 - MAY/08/2015
  - Further YouTube search fixes for non-english users.
