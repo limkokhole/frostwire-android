@@ -481,7 +481,11 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
     @Override
     public void onTouchUp() {
         if (mViewPager.isFakeDragging()) {
-            mViewPager.endFakeDrag();
+            try {
+                mViewPager.endFakeDrag();
+            } catch (Throwable t) {
+
+            }
         }
     }
 
