@@ -1749,7 +1749,7 @@ public class MusicPlaybackService extends Service {
      */
     public String getPath() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.isClosed()) {
                 return null;
             }
             return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.DATA));
@@ -1763,7 +1763,7 @@ public class MusicPlaybackService extends Service {
      */
     public String getAlbumName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.isClosed()) {
                 return null;
             }
             try {
@@ -1782,7 +1782,7 @@ public class MusicPlaybackService extends Service {
      */
     public String getTrackName() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.isClosed()) {
                 return null;
             }
             try {
@@ -1802,7 +1802,7 @@ public class MusicPlaybackService extends Service {
     public String getArtistName() {
         try {
             synchronized (this) {
-                if (mCursor == null) {
+                if (mCursor == null || mCursor.isClosed()) {
                     return null;
                 }
                 return mCursor.getString(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST));
@@ -1820,7 +1820,7 @@ public class MusicPlaybackService extends Service {
      */
     public String getAlbumArtistName() {
         synchronized (this) {
-            if (mAlbumCursor == null) {
+            if (mAlbumCursor == null || mAlbumCursor.isClosed()) {
                 return null;
             }
             return mAlbumCursor.getString(mAlbumCursor.getColumnIndexOrThrow(AlbumColumns.ARTIST));
@@ -1834,7 +1834,7 @@ public class MusicPlaybackService extends Service {
      */
     public long getAlbumId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.isClosed()) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ALBUM_ID));
@@ -1848,7 +1848,7 @@ public class MusicPlaybackService extends Service {
      */
     public long getArtistId() {
         synchronized (this) {
-            if (mCursor == null) {
+            if (mCursor == null || mCursor.isClosed()) {
                 return -1;
             }
             return mCursor.getLong(mCursor.getColumnIndexOrThrow(AudioColumns.ARTIST_ID));
