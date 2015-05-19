@@ -16,37 +16,22 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
-import android.content.BroadcastReceiver;
-import android.content.ComponentName;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
 import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaMetadataRetriever;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnCompletionListener;
 import android.media.RemoteControlClient;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
-import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.IBinder;
-import android.os.Looper;
-import android.os.Message;
-import android.os.PowerManager;
+import android.os.*;
 import android.os.PowerManager.WakeLock;
-import android.os.RemoteException;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.util.Log;
-
 import com.andrew.apollo.appwidgets.AppWidgetLarge;
 import com.andrew.apollo.appwidgets.AppWidgetLargeAlternate;
 import com.andrew.apollo.appwidgets.AppWidgetSmall;
@@ -59,7 +44,6 @@ import com.andrew.apollo.ui.activities.AudioPlayerActivity;
 import com.andrew.apollo.utils.ApolloUtils;
 import com.andrew.apollo.utils.Lists;
 import com.andrew.apollo.utils.MusicUtils;
-import com.andrew.apollo.utils.PreferenceUtils;
 import com.frostwire.util.Ref;
 
 import java.io.IOException;
@@ -1039,8 +1023,14 @@ public class MusicPlaybackService extends Service {
 
     private Cursor openCursorAndGoToFirst(Uri uri, String[] projection,
             String selection, String[] selectionArgs) {
-        Cursor c = getContentResolver().query(uri, projection,
-                selection, selectionArgs, null);
+        Cursor c;
+
+        try {
+            c = getContentResolver().query(uri, projection, selection, selectionArgs, null);
+        } catch (Throwable t) {
+            return null;
+        }
+
         if (c == null) {
             return null;
         }

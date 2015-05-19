@@ -16,13 +16,12 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
-
-import com.frostwire.android.R;
 import com.andrew.apollo.model.Album;
 import com.andrew.apollo.utils.Lists;
 import com.andrew.apollo.utils.PreferenceUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,7 +57,12 @@ public class AlbumLoader extends WrappedAsyncTaskLoader<List<Album>> {
     @Override
     public List<Album> loadInBackground() {
         // Create the Cursor
-        mCursor = makeAlbumCursor(getContext());
+        try {
+            mCursor = makeAlbumCursor(getContext());
+        } catch (Throwable e) {
+            return Collections.EMPTY_LIST;
+        }
+
         // Gather the data
         if (mCursor != null && mCursor.moveToFirst()) {
             do {
