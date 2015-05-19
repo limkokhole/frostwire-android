@@ -122,7 +122,9 @@ public class NotificationHelper {
             initExpandedLayout(trackName, albumName, artistName, albumArt);
         }
         // d7fa67cc74 NotificationHelper.java:102
-        mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
+        if (mNotification != null) { //it can happen
+            mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
+        }
     }
 
     private int getNotificationIcon() {
