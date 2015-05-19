@@ -381,7 +381,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         super.onPause();
         
         if (mainBroadcastReceiver != null) {
-            unregisterReceiver(mainBroadcastReceiver);
+            try {
+                unregisterReceiver(mainBroadcastReceiver);
+            } catch (Throwable t) {
+                //oh well (the api doesn't provide a way to know if it's been registered before,
+                //seems like overkill keeping track of these ourselves.)
+            }
         }
     }
 
