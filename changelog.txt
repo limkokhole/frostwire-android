@@ -1,3 +1,6 @@
+FrostWire 1.5.8 - JUNE/02/2015
+ - Added SSL (https) support for torrent web seeds.
+
 FrostWire 1.5.7 - MAY/15/2015
  - KAT search fixed.
  - Monova search fixed.
