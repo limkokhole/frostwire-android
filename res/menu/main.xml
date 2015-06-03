@@ -40,11 +40,13 @@
         android:icon="@drawable/menu_icon_transfers"
         android:title="@string/transfers">
     </item>
+    <!-- LSD:
     <item
         android:id="@+id/menu_main_peers"
         android:icon="@drawable/menu_icon_peers"
         android:title="@string/wifi_sharing">
     </item>
+    -->
     <item
         android:id="@+id/menu_main_preferences"
         android:icon="@drawable/menu_icon_preferences"

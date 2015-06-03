@@ -523,17 +523,20 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             TextView title = (TextView) header.findViewById(R.id.view_browse_peer_header_text_title);
             TextView total = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total);
-            TextView shared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_shared);
-            TextView unshared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_unshared);
+            // LSD:
+            //TextView shared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_shared);
+            //TextView unshared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_unshared);
 
             FileVisibilityFilterListener visibilityFilterListener = new FileVisibilityFilterListener();
-            shared.setOnClickListener(visibilityFilterListener);
-            unshared.setOnClickListener(visibilityFilterListener);
+            // LSD:
+            //shared.setOnClickListener(visibilityFilterListener);
+            //unshared.setOnClickListener(visibilityFilterListener);
 
             title.setText(fileTypeStr);
             total.setText("(" + String.valueOf(numTotal) + ")");
-            shared.setText(String.valueOf(numShared));
-            unshared.setText(String.valueOf(numTotal - numShared));
+            // LSD:
+            //shared.setText(String.valueOf(numShared));
+            //unshared.setText(String.valueOf(numTotal - numShared));
 
             updateFileVisiblityIndicatorsAlpha();
 
@@ -684,7 +687,8 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     }
 
     public void updateFileVisiblityIndicatorsAlpha() {
-
+        // LSD:
+        /*
         if (adapter == null) {
             return;
         }
@@ -708,6 +712,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             UIUtils.setTextViewAlpha(unshared, 255);
             break;
         }
+        */
     }
 
     public static interface OnRefreshSharedListener {

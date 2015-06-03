@@ -19,6 +19,7 @@
 package com.frostwire.android.gui;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -55,7 +56,8 @@ public final class PeerManager {
     private static PeerManager instance;
 
     private final LocalPeerManager peerManager;
-    private final HttpServerManager httpServerManager;
+    // LSD:
+    //private final HttpServerManager httpServerManager;
 
     public static PeerManager instance() {
         if (instance == null) {
@@ -83,7 +85,8 @@ public final class PeerManager {
             }
         });
 
-        this.httpServerManager = new HttpServerManager();
+        // LSD:
+        //this.httpServerManager = new HttpServerManager();
     }
 
     public Peer getLocalPeer() {
@@ -141,7 +144,8 @@ public final class PeerManager {
 
     public void start() {
         if (!peerManager.isRunning()) {
-            httpServerManager.start(NetworkManager.instance().getListeningPort());
+            // LSD:
+            //httpServerManager.start(NetworkManager.instance().getListeningPort());
             try {
                 peerManager.start(NetworkManager.instance().getMulticastInetAddress(), createLocalPeer());
             } catch (IOException e) {
@@ -151,7 +155,8 @@ public final class PeerManager {
     }
 
     public void stop() {
-        httpServerManager.stop();
+        // LSD:
+        //httpServerManager.stop();
         peerManager.stop();
     }
 
@@ -214,6 +219,44 @@ public final class PeerManager {
                 return 1;
             }
             return lhs.getNickname().compareTo(rhs.getNickname());
+        }
+    }
+
+    private static final class DummyLocalPeerManager implements LocalPeerManager {
+
+        @Override
+        public LocalPeerManagerListener getListener() {
+            return null;
+        }
+
+        @Override
+        public void setListener(LocalPeerManagerListener listener) {
+
+        }
+
+        @Override
+        public boolean isRunning() {
+            return false;
+        }
+
+        @Override
+        public void start(InetAddress addr, LocalPeer peer) {
+
+        }
+
+        @Override
+        public void start(LocalPeer peer) {
+
+        }
+
+        @Override
+        public void stop() {
+
+        }
+
+        @Override
+        public void update(LocalPeer peer) {
+
         }
     }
 }

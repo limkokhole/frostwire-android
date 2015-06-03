@@ -101,6 +101,7 @@
                 frostwire:button_text="@string/clear" />
     </PreferenceScreen>
 
+    <!-- LSD:
     <PreferenceScreen
         android:key="frostwire.prefs.wifisharing.preference_category"
         android:title="@string/wifi_sharing_settings"
@@ -127,6 +128,7 @@
                 android:summary="@string/how_other_users_will_see_you"
                 android:title="@string/nickname" />
     </PreferenceScreen>
+    -->
     <PreferenceScreen
         android:key="frostwire.prefs.search.preference_category"
         android:title="@string/search_settings"

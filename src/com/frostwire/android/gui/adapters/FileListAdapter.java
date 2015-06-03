@@ -67,7 +67,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     private final byte fileType;
     private final ImageLoader thumbnailLoader;
 
-    private final PadLockClickListener padLockClickListener;
+    // LSD:
+    //private final PadLockClickListener padLockClickListener;
     private final DownloadButtonClickListener downloadButtonClickListener;
 
     public static final int FILE_LIST_FILTER_SHOW_ALL = 0;
@@ -89,7 +90,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         this.fileType = fileType;
         this.thumbnailLoader = ImageLoader.getInstance(context);
 
-        this.padLockClickListener = new PadLockClickListener();
+        // LSD:
+        //this.padLockClickListener = new PadLockClickListener();
         this.downloadButtonClickListener = new DownloadButtonClickListener();
 
         checkSDStatus();
@@ -148,9 +150,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (showSingleOptions) {
                 items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
 
-                if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
-                    items.add(new SendFileMenuAction(context, fd)); //applications cause a force close with GMail
-                }
+                // LSD:
+                //if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
+                //    items.add(new SendFileMenuAction(context, fd)); //applications cause a force close with GMail
+                //}
 
                 if ((fd.fileType == Constants.FILE_TYPE_RINGTONES || fd.fileType == Constants.FILE_TYPE_AUDIO) && numChecked <= 1) {
                     items.add(new SetAsRingtoneMenuAction(context, fd));
@@ -174,6 +177,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 items.add(new AddToPlaylistMenuAction(context, list));
             }
 
+            // LSD:
+            /*
             // Share Selected.
             items.add(new SetSharedStateFileGrainedMenuAction(context, this, list, true));
 
@@ -182,6 +187,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
             // Toogle Shared States.
             items.add(new ToggleFileGrainedSharingMenuAction(context, this, list));
+            */
 
             if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
                 items.add(new DeleteFileMenuAction(context, this, list));
@@ -300,6 +306,9 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
      */
     private void populatePadlockAppearance(FileDescriptor fd, ImageButton padlock, TextView title) {
         if (local) {
+            // LSD:
+            padlock.setVisibility(View.GONE);
+            /*
             padlock.setVisibility(View.VISIBLE);
             padlock.setTag(fd);
             padlock.setOnClickListener(padLockClickListener);
@@ -309,6 +318,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             } else {
                 padlock.setImageResource(R.drawable.browse_peer_padlock_locked_icon);
             }
+            */
         } else {
             padlock.setVisibility(View.GONE);
         }

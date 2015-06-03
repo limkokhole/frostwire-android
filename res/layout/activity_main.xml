@@ -61,6 +61,7 @@
                     android:layout_height="match_parent"
                     android:tag="transfers_fragment" />
 
+                <!-- LSD:
                 <fragment
                     android:id="@+id/activity_main_fragment_browse_peers"
                     android:name="com.frostwire.android.gui.fragments.BrowsePeersFragment"
@@ -72,6 +73,7 @@
                     android:name="com.frostwire.android.gui.fragments.BrowsePeersDisabledFragment"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent" />
+                    -->
             </FrameLayout>
 
             <com.frostwire.android.gui.views.PlayerNotifierView

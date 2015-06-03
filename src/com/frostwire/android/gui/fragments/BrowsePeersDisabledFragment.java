@@ -107,10 +107,13 @@ public class BrowsePeersDisabledFragment extends Fragment implements MainFragmen
 
                 @Override
                 protected void onPostExecute(Void result) {
+                    // LSD:
+                    /*
                     MainActivity activity = (MainActivity) getActivity();
                     activity.switchFragment(R.id.menu_main_peers);
                     wifiSharingEnableButton.setText(buttonCaption);
                     wifiSharingEnableButton.setEnabled(true);
+                    */
                 }
 
             };

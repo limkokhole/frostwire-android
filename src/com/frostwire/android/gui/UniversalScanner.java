@@ -74,6 +74,8 @@ public final class UniversalScanner {
     }
 
     private static void shareFinishedDownload(FileDescriptor fd) {
+        // LSD:
+        /*
         if (fd != null) {
             if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TRANSFER_SHARE_FINISHED_DOWNLOADS)) {
                 fd.shared = true;
@@ -81,6 +83,7 @@ public final class UniversalScanner {
             }
             Librarian.instance().invalidateCountCache(fd.fileType);
         }
+        */
     }
 
     private void scanDocument(String filePath) {

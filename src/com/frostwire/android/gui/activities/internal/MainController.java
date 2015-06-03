@@ -193,6 +193,8 @@ public final class MainController {
 
     private boolean shareFileByUri(Uri uri) {
         boolean result = false;
+        // LSD:
+        /*
         if (uri == null) {
             return false;
         }
@@ -204,6 +206,7 @@ public final class MainController {
             Librarian.instance().updateSharedStates(fileDescriptor.fileType, Arrays.asList(fileDescriptor));
             result = true;
         }
+        */
 
         return result;
     }

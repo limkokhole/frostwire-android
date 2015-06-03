@@ -84,8 +84,9 @@ public final class MainMenuAdapter extends AbstractAdapter<MenuItem> {
                 return R.drawable.menu_icon_library_over;
             case R.id.menu_main_transfers:
                 return R.drawable.menu_icon_transfers_over;
-            case R.id.menu_main_peers:
-                return R.drawable.menu_icon_peers_over;
+            // LSD:
+            //case R.id.menu_main_peers:
+            //    return R.drawable.menu_icon_peers_over;
             case R.id.menu_main_preferences:
                 return R.drawable.menu_icon_preferences_over;
             case R.id.menu_main_shutdown:
