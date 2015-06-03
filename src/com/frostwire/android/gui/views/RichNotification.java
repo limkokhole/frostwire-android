@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.views;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import android.content.Context;
@@ -26,7 +27,11 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.UnderlineSpan;
+import android.text.util.Linkify;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -42,7 +47,9 @@ public class RichNotification extends LinearLayout {
 	private final String title;
 	private String description;
 	private final Drawable icon;
+	private final int numberOfActionLinks;
 	private OnClickListener clickListener;
+    public final List<RichNotificationActionLink> actionLinks = new LinkedList<RichNotificationActionLink>();
 	
 	public RichNotification(Context context, AttributeSet attrs) {
 		super(context, attrs);		
@@ -55,12 +62,50 @@ public class RichNotification extends LinearLayout {
         	title = attributes.getString(R.styleable.RichNotification_rich_notification_title);
         }
 		description = attributes.getString(R.styleable.RichNotification_rich_notification_description);
-		attributes.recycle();
+		numberOfActionLinks = attributes.getInteger(R.styleable.RichNotification_rich_notification_number_of_action_links, 0);
 		clickListener = null;
+        attributes.recycle();
 	}
 
+    public void setOnClickListener(OnClickListener listener) {
+        clickListener = listener;
+    }
 
-	@Override
+    public OnClickListener getOnClickListener() { return clickListener; }
+
+    public boolean wasDismissed() {
+        return wasDismissed.contains(this.getId());
+    }
+
+    /**
+     * Removes all previous action links if they were there
+     * and adds the corresponding TextViews.
+     * @param links
+     */
+    public void updateActionLinks(RichNotificationActionLink ... actionLinks) {
+        if (actionLinks != null && actionLinks.length > 0) {
+            LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
+            actionLinksContainer.setVisibility(View.INVISIBLE);
+
+            while (actionLinksContainer.getChildCount() > 0) {
+                actionLinksContainer.getChildAt(0).setOnClickListener(null);
+                actionLinksContainer.removeViewAt(0);
+            }
+
+            for (RichNotificationActionLink actionLink : actionLinks) {
+                actionLinksContainer.addView(createActionLinkTextView(actionLink));
+            }
+
+            actionLinksContainer.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void setDescription(String newDescription) {
+        description = newDescription;
+        updateTextViewText(R.id.view_rich_notification_description, description, null);
+    }
+
+    @Override
 	protected void onFinishInflate() {
 		super.onFinishInflate();
 		View.inflate(getContext(), R.layout.view_rich_notification, this);
@@ -94,6 +139,11 @@ public class RichNotification extends LinearLayout {
 				onDismiss();				
 			}
 		});
+
+		if (numberOfActionLinks > 0) {
+			LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
+            actionLinksContainer.setVisibility(View.VISIBLE);
+		}
 	}
 	
 	private TextView updateTextViewText(int textViewId, CharSequence text, OnClickListener onClickNotificationListener) {
@@ -115,22 +165,39 @@ public class RichNotification extends LinearLayout {
 		return textView;
 	}
 
+    private TextView createActionLinkTextView(RichNotificationActionLink actionLink) {
+        TextView tv = new TextView(getContext());
+        tv.setClickable(true);
+        tv.setLinksClickable(true);
+        tv.setAutoLinkMask(Linkify.WEB_URLS);
+        SpannableString text = new SpannableString(actionLink.getText());
+        text.setSpan(new UnderlineSpan(), 0, text.length(), 0);
+        tv.setText(text);
+        tv.setOnClickListener(actionLink.getClickAdapter());
+        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
+        //todo fix vertical alignment.
+        return tv;
+    }
 
-	public void setOnClickListener(OnClickListener listener) {
-		clickListener = listener;
-	}
+    public static class RichNotificationActionLink {
+        private final String text;
+        private final ClickAdapter clickAdapter;
 
-	public OnClickListener getOnClickListener() { return clickListener; }
-	
-	public boolean wasDismissed() {
-		return wasDismissed.contains(this.getId());
-	}
-	
-	public void setDescription(String newDescription) {
-		description = newDescription;
-		updateTextViewText(R.id.view_rich_notification_description, description, null);
-	}
-	
+        public RichNotificationActionLink(String text, ClickAdapter clickAdapter) {
+             this.text = text;
+             this.clickAdapter = clickAdapter;
+        }
+
+        public String getText() {
+            return text;
+        }
+
+        public ClickAdapter getClickAdapter() {
+            return this.clickAdapter;
+        }
+    }
+
+
 	protected void onDismiss() {
 		wasDismissed.add(getId());
 		setVisibility(View.GONE);

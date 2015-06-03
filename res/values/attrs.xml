@@ -24,6 +24,7 @@
 	    <attr name="rich_notification_title" format="string"/>
 	    <attr name="rich_notification_title_underlined" format="boolean"/>
 	    <attr name="rich_notification_description" format="string"/>
+        <attr name="rich_notification_number_of_action_links" format="integer"/>
 	</declare-styleable>
 	
     <declare-styleable name="SimpleActionPreference">

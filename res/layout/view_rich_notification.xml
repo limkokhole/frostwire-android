@@ -55,7 +55,16 @@
             android:textSize="@dimen/text_size_micro"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="left"/>        
+            android:layout_gravity="left"/>
+
+        <LinearLayout android:id="@+id/view_rich_notification_action_links" android:layout_gravity="right"
+                android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                android:layout_marginBottom="5sp">
+            <TextView android:text="@string/dummy_extra" android:layout_width="wrap_content" android:layout_height="wrap_content"
+                    />
+
+        </LinearLayout>
     </LinearLayout>
     
     <View android:id="@+id/view_rich_notification_close_button_vertical_separator"

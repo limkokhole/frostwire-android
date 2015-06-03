@@ -35,8 +35,9 @@
             frostwire:rich_notification_title="@string/like_me_so_far"
             frostwire:rich_notification_title_underlined="true"
             frostwire:rich_notification_description="@string/show_us_some_love_give_us_feedback_say_hi"
+            frostwire:rich_notification_number_of_action_links="2"
             android:layout_width="match_parent"
-            android:layout_height="64sp"
+            android:layout_height="100sp"
             android:visibility="gone"
             />
 

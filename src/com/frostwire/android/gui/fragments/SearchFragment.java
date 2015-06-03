@@ -213,8 +213,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         showSearchView(view);
 
-        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
-            //showRatingsReminder(view);
+        if (!Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
+            showRatingsReminder(view);
         }
     }
 
@@ -466,12 +466,11 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         final int finishedDownloads = Engine.instance().getNotifiedDownloadsBloomFilter().count();
         final int REMINDER_INTERVAL = CM.getInt(Constants.PREF_KEY_GUI_FINISHED_DOWNLOADS_BETWEEN_RATINGS_REMINDER);
 
-        if (finishedDownloads > 1 && finishedDownloads % REMINDER_INTERVAL != 0) {
+        if (finishedDownloads > 1 && finishedDownloads > REMINDER_INTERVAL) {// != 0) {
             return;
         }
 
-        ratingReminder.setVisibility(View.VISIBLE);
-        ratingReminder.setOnClickListener(new ClickAdapter<SearchFragment>(SearchFragment.this) {
+        ClickAdapter<SearchFragment> onRateAdapter = new ClickAdapter<SearchFragment>(SearchFragment.this) {
             @Override
             public void onClick(SearchFragment owner, View v) {
                 ratingReminder.setVisibility(View.GONE);
@@ -483,7 +482,14 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 } catch (Throwable t) {
                 }
             }
-        });
+        };
+
+        RichNotification.RichNotificationActionLink rateFrostWireActionLink =
+                new RichNotification.RichNotificationActionLink(getString(R.string.rate_frostwire), onRateAdapter);
+
+        ratingReminder.updateActionLinks(rateFrostWireActionLink);
+        ratingReminder.setVisibility(View.VISIBLE);
+        //ratingReminder.setOnClickListener(onRateAdapter);
     }
 
     private void startPromotionDownload(Slide slide) {

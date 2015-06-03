@@ -523,7 +523,7 @@
     <string name="try_other_keywords">Try other keywords</string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="like_me_so_far">How do you like me so far?</string>
-    <string name="show_us_some_love_give_us_feedback_say_hi">Show us some love, rate us, give us some feedback, or simply
-        say hi.
-    </string>
+    <string name="show_us_some_love_give_us_feedback_say_hi">If you love FrostWire please rate us, otherwise please give us some feedback.</string>
+    <string name="rate_frostwire">Rate FrostWire</string>
+    <string name="send_feedback">Send Feedback</string>
 </resources>
