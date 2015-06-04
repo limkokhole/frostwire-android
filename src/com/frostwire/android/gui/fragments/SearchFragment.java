@@ -451,27 +451,40 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private void showRatingsReminder(View v) {
         final RichNotification ratingReminder = findView(v, R.id.fragment_search_rating_reminder_notification);
         ratingReminder.setVisibility(View.GONE);
-
         final ConfigurationManager CM = ConfigurationManager.instance();
         boolean alreadyRated = CM.getBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET);
 
-        if (alreadyRated) {
-            return;
-        }
-
-        if (ratingReminder.wasDismissed()) {
+        if (alreadyRated || ratingReminder.wasDismissed()) {
             return;
         }
 
         final int finishedDownloads = Engine.instance().getNotifiedDownloadsBloomFilter().count();
         final int REMINDER_INTERVAL = CM.getInt(Constants.PREF_KEY_GUI_FINISHED_DOWNLOADS_BETWEEN_RATINGS_REMINDER);
 
-        if (finishedDownloads > 1 && finishedDownloads > REMINDER_INTERVAL) {// != 0) {
+        if (finishedDownloads > 1 && finishedDownloads > REMINDER_INTERVAL) {
             return;
         }
 
-        // takes user to Google Play store so it can rate the app.
-        ClickAdapter<SearchFragment> onRateAdapter = new ClickAdapter<SearchFragment>(SearchFragment.this) {
+        ClickAdapter<SearchFragment> onRateAdapter = createOnRateClickAdapter(ratingReminder, CM);
+        ratingReminder.setOnClickListener(onRateAdapter);
+
+        RichNotificationActionLink rateFrostWireActionLink =
+                new RichNotificationActionLink(ratingReminder.getContext(),
+                        getString(R.string.rate_frostwire),
+                        onRateAdapter);
+
+        RichNotificationActionLink sendFeedbackActionLink =
+                new RichNotificationActionLink(ratingReminder.getContext(),
+                        getString(R.string.email_feedback),
+                        createOnFeedbackClickAdapter(ratingReminder));
+
+        ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
+        ratingReminder.setVisibility(View.VISIBLE);
+    }
+
+    // takes user to Google Play store so it can rate the app.
+    private ClickAdapter<SearchFragment> createOnRateClickAdapter(final RichNotification ratingReminder, final ConfigurationManager CM) {
+        return new ClickAdapter<SearchFragment>(SearchFragment.this) {
             @Override
             public void onClick(SearchFragment owner, View v) {
                 ratingReminder.setVisibility(View.GONE);
@@ -484,23 +497,40 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
             }
         };
+    }
 
-        // opens default email client and pre-fills email to support@frostwire.com
-        // with some information about the app and environment.
+    // opens default email client and pre-fills email to support@frostwire.com
+    // with some information about the app and environment.
+    private ClickAdapter<SearchFragment> createOnFeedbackClickAdapter(final RichNotification ratingReminder) {
+        return new ClickAdapter<SearchFragment>(SearchFragment.this) {
+            @Override
+            public void onClick(SearchFragment owner, View v) {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "support@frostwire.com" });
+                String plusOrBasic = (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) ? "basic" : "plus";
+                intent.putExtra(Intent.EXTRA_SUBJECT, String.format("[Feedback - frostwire-android (%s) - v%s b%s]", plusOrBasic, Constants.FROSTWIRE_VERSION_STRING, Constants.FROSTWIRE_BUILD) );
 
-        RichNotificationActionLink rateFrostWireActionLink =
-                new RichNotificationActionLink(ratingReminder.getContext(),
-                        getString(R.string.rate_frostwire),
-                        onRateAdapter);
+                String body = String.format("\n\nAndroid SDK: %d\nAndroid RELEASE: %s (%s)\nManufacturer-Model: %s - %s\nDevice: %s\nBoard: %s\nCPU ABI: %s\nCPU ABI2: %s\n\n",
+                        Build.VERSION.SDK_INT,
+                        Build.VERSION.RELEASE,
+                        Build.VERSION.CODENAME,
+                        Build.MANUFACTURER,
+                        Build.MODEL,
+                        Build.DEVICE,
+                        Build.BOARD,
+                        Build.CPU_ABI,
+                        Build.CPU_ABI2);
 
-        RichNotificationActionLink sendFeedbackActionLink =
-                new RichNotificationActionLink(ratingReminder.getContext(),
-                        getString(R.string.send_feedback),
-                        null);
+                intent.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(intent,getString(R.string.choose_email_app)));
 
-        ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
-        ratingReminder.setVisibility(View.VISIBLE);
-        //ratingReminder.setOnClickListener(onRateAdapter);
+                ratingReminder.setVisibility(View.GONE);
+
+                //TODO: Comment this when we're ready to go.
+                //CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
+            }
+        };
     }
 
     private void startPromotionDownload(Slide slide) {

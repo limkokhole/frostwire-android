@@ -18,6 +18,7 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableString;
 import android.text.style.UnderlineSpan;
 import android.text.util.Linkify;
@@ -41,7 +42,7 @@ public class RichNotificationActionLink {
     private final WeakReference<Context> contextReference;
 
     public RichNotificationActionLink(Context context, String text, ClickAdapter clickAdapter) {
-        this.contextReference = new WeakReference<Context>(context);
+        this.contextReference = Ref.weak(context);
         this.text = text;
         this.clickAdapter = clickAdapter;
     }
@@ -64,8 +65,9 @@ public class RichNotificationActionLink {
             SpannableString text = new SpannableString(getText());
             text.setSpan(new UnderlineSpan(), 0, text.length(), 0);
             tv.setText(text);
+            tv.setTextColor(Color.BLUE);
             tv.setOnClickListener(getClickAdapter());
-            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
+            tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14.0f);
             result = tv;
         }
 

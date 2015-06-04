@@ -522,8 +522,9 @@
     <string name="plus">Plus</string>
     <string name="try_other_keywords">Try other keywords</string>
     <string name="action_menu_overflow_description">More options</string>
-    <string name="like_me_so_far">How do you like me so far?</string>
-    <string name="show_us_some_love_give_us_feedback_say_hi">If you love FrostWire please rate us, otherwise please give us some feedback.</string>
+    <string name="liking_frostwire">Liking FrostWire?</string>
+    <string name="rating_reminder_description">If you love FrostWire please rate us or send us some feedback.</string>
     <string name="rate_frostwire">Rate FrostWire</string>
-    <string name="send_feedback">Send Feedback</string>
+    <string name="email_feedback">Email Feedback</string>
+    <string name="choose_email_app">Choose an Email App...</string>
 </resources>

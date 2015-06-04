@@ -32,13 +32,13 @@
     <com.frostwire.android.gui.views.RichNotification
             android:id="@+id/fragment_search_rating_reminder_notification"
             frostwire:rich_notification_icon="@null"
-            frostwire:rich_notification_title="@string/like_me_so_far"
+            frostwire:rich_notification_title="@string/liking_frostwire"
             frostwire:rich_notification_title_underlined="true"
-            frostwire:rich_notification_description="@string/show_us_some_love_give_us_feedback_say_hi"
+            frostwire:rich_notification_description="@string/rating_reminder_description"
             frostwire:rich_notification_number_of_action_links="2"
-            frostwire:rich_notification_action_links_horizontal_margin="10"
+            frostwire:rich_notification_action_links_horizontal_margin="14"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="75sp"
             android:visibility="gone"
             />
 
