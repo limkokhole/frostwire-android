@@ -32,7 +32,7 @@
     <com.frostwire.android.gui.views.RichNotification
             android:id="@+id/fragment_search_rating_reminder_notification"
             frostwire:rich_notification_icon="@null"
-            frostwire:rich_notification_title="@string/liking_frostwire"
+            frostwire:rich_notification_title="@string/rate_our_app"
             frostwire:rich_notification_title_underlined="true"
             frostwire:rich_notification_description="@string/rating_reminder_description"
             frostwire:rich_notification_number_of_action_links="2"

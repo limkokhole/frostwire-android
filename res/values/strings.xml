@@ -522,8 +522,8 @@
     <string name="plus">Plus</string>
     <string name="try_other_keywords">Try other keywords</string>
     <string name="action_menu_overflow_description">More options</string>
-    <string name="liking_frostwire">Liking FrostWire?</string>
-    <string name="rating_reminder_description">If you love FrostWire please rate us or send us some feedback.</string>
+    <string name="rate_our_app">Rate our App</string>
+    <string name="rating_reminder_description">If you love FrostWire please take a moment to rate us.</string>
     <string name="rate_frostwire">Rate FrostWire</string>
     <string name="email_feedback">Email Feedback</string>
     <string name="choose_email_app">Choose an Email App...</string>
