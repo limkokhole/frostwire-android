@@ -27,11 +27,7 @@ import android.content.res.TypedArray;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.text.Html;
-import android.text.SpannableString;
-import android.text.style.UnderlineSpan;
-import android.text.util.Linkify;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -48,6 +44,7 @@ public class RichNotification extends LinearLayout {
 	private String description;
 	private final Drawable icon;
 	private final int numberOfActionLinks;
+    private final int actionLinksHorizontalMargin;
 	private OnClickListener clickListener;
     public final List<RichNotificationActionLink> actionLinks = new LinkedList<RichNotificationActionLink>();
 	
@@ -63,7 +60,8 @@ public class RichNotification extends LinearLayout {
         }
 		description = attributes.getString(R.styleable.RichNotification_rich_notification_description);
 		numberOfActionLinks = attributes.getInteger(R.styleable.RichNotification_rich_notification_number_of_action_links, 0);
-		clickListener = null;
+		actionLinksHorizontalMargin = attributes.getInteger(R.styleable.RichNotification_rich_notification_action_links_horizontal_margin, 5);
+        clickListener = null;
         attributes.recycle();
 	}
 
@@ -93,7 +91,12 @@ public class RichNotification extends LinearLayout {
             }
 
             for (RichNotificationActionLink actionLink : actionLinks) {
-                actionLinksContainer.addView(createActionLinkTextView(actionLink));
+                View v = actionLink.getView();
+                if (v != null) {
+                    actionLinksContainer.addView(v);
+                    ((LinearLayout.LayoutParams) v.getLayoutParams()).setMargins(actionLinksHorizontalMargin, 0, actionLinksHorizontalMargin, 0);
+                    v.requestLayout();
+                }
             }
 
             actionLinksContainer.setVisibility(View.VISIBLE);
@@ -165,40 +168,8 @@ public class RichNotification extends LinearLayout {
 		return textView;
 	}
 
-    private TextView createActionLinkTextView(RichNotificationActionLink actionLink) {
-        TextView tv = new TextView(getContext());
-        tv.setClickable(true);
-        tv.setLinksClickable(true);
-        tv.setAutoLinkMask(Linkify.WEB_URLS);
-        SpannableString text = new SpannableString(actionLink.getText());
-        text.setSpan(new UnderlineSpan(), 0, text.length(), 0);
-        tv.setText(text);
-        tv.setOnClickListener(actionLink.getClickAdapter());
-        tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12.0f);
-        //todo fix vertical alignment.
-        return tv;
-    }
 
-    public static class RichNotificationActionLink {
-        private final String text;
-        private final ClickAdapter clickAdapter;
-
-        public RichNotificationActionLink(String text, ClickAdapter clickAdapter) {
-             this.text = text;
-             this.clickAdapter = clickAdapter;
-        }
-
-        public String getText() {
-            return text;
-        }
-
-        public ClickAdapter getClickAdapter() {
-            return this.clickAdapter;
-        }
-    }
-
-
-	protected void onDismiss() {
+    protected void onDismiss() {
 		wasDismissed.add(getId());
 		setVisibility(View.GONE);
 	}

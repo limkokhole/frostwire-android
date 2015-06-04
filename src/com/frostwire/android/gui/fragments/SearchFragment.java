@@ -470,6 +470,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             return;
         }
 
+        // takes user to Google Play store so it can rate the app.
         ClickAdapter<SearchFragment> onRateAdapter = new ClickAdapter<SearchFragment>(SearchFragment.this) {
             @Override
             public void onClick(SearchFragment owner, View v) {
@@ -484,10 +485,20 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             }
         };
 
-        RichNotification.RichNotificationActionLink rateFrostWireActionLink =
-                new RichNotification.RichNotificationActionLink(getString(R.string.rate_frostwire), onRateAdapter);
+        // opens default email client and pre-fills email to support@frostwire.com
+        // with some information about the app and environment.
 
-        ratingReminder.updateActionLinks(rateFrostWireActionLink);
+        RichNotificationActionLink rateFrostWireActionLink =
+                new RichNotificationActionLink(ratingReminder.getContext(),
+                        getString(R.string.rate_frostwire),
+                        onRateAdapter);
+
+        RichNotificationActionLink sendFeedbackActionLink =
+                new RichNotificationActionLink(ratingReminder.getContext(),
+                        getString(R.string.send_feedback),
+                        null);
+
+        ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
         ratingReminder.setVisibility(View.VISIBLE);
         //ratingReminder.setOnClickListener(onRateAdapter);
     }
