@@ -470,12 +470,12 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         RichNotificationActionLink rateFrostWireActionLink =
                 new RichNotificationActionLink(ratingReminder.getContext(),
-                        getString(R.string.rate_frostwire),
+                        getString(R.string.love_frostwire),
                         onRateAdapter);
 
         RichNotificationActionLink sendFeedbackActionLink =
                 new RichNotificationActionLink(ratingReminder.getContext(),
-                        getString(R.string.email_feedback),
+                        getString(R.string.send_feedback),
                         createOnFeedbackClickAdapter(ratingReminder));
 
         ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
