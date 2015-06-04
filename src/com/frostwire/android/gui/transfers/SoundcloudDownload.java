@@ -176,8 +176,12 @@ public class SoundcloudDownload extends TemporaryDownloadTransfer<SoundcloudSear
                 String tempPath = tempFile.getAbsolutePath() + ".tmp";
                 File tempTemp = new File(tempPath);
                 if (tempFile.renameTo(tempTemp)) {
-                    setAlbumArt(coverArtBytes, tempPath, tempFile.getAbsolutePath());
-                    tempTemp.delete();
+                    boolean r = setAlbumArt(coverArtBytes, tempPath, tempFile.getAbsolutePath());
+                    if (!r) {
+                        tempTemp.renameTo(tempFile);
+                    } else {
+                        tempTemp.delete();
+                    }
                 }
             }
         }
