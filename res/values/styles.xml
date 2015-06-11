@@ -223,8 +223,8 @@
     <style name="TransfersButton">
         <item name="android:textColor">@color/transfers_top_button_selector</item>
         <item name="android:textAllCaps">true</item>
-        <item name="android:paddingTop">10dp</item>
-        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">14dp</item>
+        <item name="android:paddingBottom">14dp</item>
     </style>
 
     <!-- Transfers indicator begin -->
