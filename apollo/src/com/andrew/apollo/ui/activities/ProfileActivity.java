@@ -122,7 +122,7 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
         mPagerAdapter = new PagerAdapter(this);
 
         // Initialze the carousel
-        mTabCarousel = (ProfileTabCarousel)findViewById(R.id.acivity_profile_base_tab_carousel);
+        mTabCarousel = (ProfileTabCarousel)findViewById(R.id.activity_profile_base_tab_carousel);
         mTabCarousel.reset();
         mTabCarousel.getPhoto().setOnClickListener(new View.OnClickListener() {
 

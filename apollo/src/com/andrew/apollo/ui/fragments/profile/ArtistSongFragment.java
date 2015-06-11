@@ -111,7 +111,7 @@ public class ArtistSongFragment extends Fragment implements LoaderCallbacks<List
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
         mProfileTabCarousel = (ProfileTabCarousel)activity
-                .findViewById(R.id.acivity_profile_base_tab_carousel);
+                .findViewById(R.id.activity_profile_base_tab_carousel);
     }
 
     /**
