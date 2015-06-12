@@ -28,6 +28,7 @@ import java.util.Map;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.util.SystemUtils;
+import com.frostwire.jlibtorrent.Utils;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.util.OSUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -324,14 +325,15 @@ public final class YouTubeDownload implements DownloadTransfer {
     }
 
     private void complete() {
-
         status = STATUS_COMPLETE;
-
         manager.incrementDownloadsToReview();
-        Engine.instance().notifyDownloadFinished(getDisplayName(), getSavePath());
 
         if (completeFile.getAbsoluteFile().exists()) {
             Librarian.instance().scan(getSavePath().getAbsoluteFile());
+            String sha1 = Utils.getSha1(completeFile);
+            Engine.instance().notifyDownloadFinished(getDisplayName(), completeFile, sha1);
+        } else {
+            Engine.instance().notifyDownloadFinished(getDisplayName(), getSavePath());
         }
 
         cleanupIncomplete();

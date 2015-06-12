@@ -21,11 +21,11 @@
 
     <!-- Page titles -->
     <string name="page_last_added">Last Added</string>
+    <string name="page_playlists">Playlists</string>
     <string name="page_recent">Recent</string>
     <string name="page_artists">Artists</string>
-    <string name="page_albums">Albums</string>
     <string name="page_songs">Songs</string>
-    <string name="page_playlists">Playlists</string>
+    <string name="page_albums">Albums</string>
     <string name="page_genres">Genres</string>
 
     <!-- Option menu items -->
