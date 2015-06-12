@@ -19,13 +19,8 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 import android.view.ViewGroup;
 
+import com.andrew.apollo.ui.fragments.*;
 import com.frostwire.android.R;
-import com.andrew.apollo.ui.fragments.AlbumFragment;
-import com.andrew.apollo.ui.fragments.ArtistFragment;
-import com.andrew.apollo.ui.fragments.GenreFragment;
-import com.andrew.apollo.ui.fragments.PlaylistFragment;
-import com.andrew.apollo.ui.fragments.RecentFragment;
-import com.andrew.apollo.ui.fragments.SongFragment;
 import com.andrew.apollo.utils.Lists;
 
 import java.lang.ref.WeakReference;
@@ -170,6 +165,10 @@ public class PagerAdapter extends FragmentPagerAdapter {
          * The playlist fragment
          */
         PLAYLIST(PlaylistFragment.class),
+        /**
+         * The Last Songs added Fragment
+         */
+        LAST(LastAddedFragment.class),
         /**
          * The recent fragment
          */

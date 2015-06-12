@@ -20,6 +20,7 @@
     <string name="app_name">My Music</string>
 
     <!-- Page titles -->
+    <string name="page_last_added">Last Added</string>
     <string name="page_recent">Recent</string>
     <string name="page_artists">Artists</string>
     <string name="page_albums">Albums</string>
