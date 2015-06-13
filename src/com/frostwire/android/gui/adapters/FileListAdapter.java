@@ -649,5 +649,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
             return fd.equals(((FileDescriptorItem) o).fd);
         }
+
+        @Override
+        public int hashCode() {
+            return fd.id;
+        }
     }
 }

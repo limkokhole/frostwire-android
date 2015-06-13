@@ -49,7 +49,10 @@ import com.frostwire.logging.Logger;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author gubatron
@@ -87,6 +90,8 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private OnUpdateFilesListener onUpdateFilesListener;
 
     private long lastAdapterRefresh;
+
+    private Set<FileListAdapter.FileDescriptorItem> previouslyChecked;
 
     public BrowsePeerFragment() {
         super(R.layout.fragment_browse_peer);
@@ -427,6 +432,13 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     private void browseFilesButtonClick(byte fileType) {
         if (adapter != null) {
+
+            final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
+            if (checked != null && !checked.isEmpty()) {
+                previouslyChecked = new HashSet<FileListAdapter.FileDescriptorItem>(checked);;
+            } else {
+                previouslyChecked = null;
+            }
             saveListViewVisiblePosition(adapter.getFileType());
             adapter.clear();
         }
@@ -591,6 +603,11 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             };
             adapter.setCheckboxesVisibility(true);
+            if (previouslyChecked != null && !previouslyChecked.isEmpty()) {
+                adapter.setChecked(previouslyChecked);
+            }
+
+
             list.setAdapter(adapter);
 
             if (onUpdateFilesListener != null) {

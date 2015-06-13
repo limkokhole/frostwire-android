@@ -44,6 +44,7 @@ import android.widget.Filterable;
 import android.widget.LinearLayout;
 
 import com.frostwire.android.R;
+import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 /**
@@ -59,6 +60,7 @@ import com.frostwire.util.Ref;
 public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filterable {
 
     private static String TAG = "FW.AbstractListAdapter";
+    private static Logger LOG = Logger.getLogger(AbstractListAdapter.class);
 
     private final WeakReference<Context> context;
     private final int viewItemId;
@@ -132,6 +134,11 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
     public Set<T> getChecked() {
         return checked;
     }
+
+    public void setChecked(Set<T> newChecked) {
+        checked = newChecked;
+    }
+
 
     public void clearChecked() {
         if (checked != null && checked.size() > 0) {
