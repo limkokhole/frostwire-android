@@ -50,7 +50,6 @@ import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -170,17 +169,13 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     @Override
     public void onResume() {
         super.onResume();
-
         initBroadcastReceiver();
-
         getLoaderManager().destroyLoader(LOADER_FINGER_ID);
         getLoaderManager().restartLoader(LOADER_FINGER_ID, null, this);
 
         if (adapter != null) {
-            //adapter.notifyDataSetChanged();
+            restorePreviouslyChecked();
             browseFilesButtonClick(adapter.getFileType());
-        } else {
-            //browseFilesButtonClick(Constants.FILE_TYPE_AUDIO);
         }
     }
 
@@ -267,6 +262,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     @Override
     public void onPause() {
         super.onPause();
+        savePreviouslyCheckedFileDescriptors();
         getActivity().unregisterReceiver(broadcastReceiver);
     }
 
@@ -432,13 +428,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     private void browseFilesButtonClick(byte fileType) {
         if (adapter != null) {
-
-            final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
-            if (checked != null && !checked.isEmpty()) {
-                previouslyChecked = new HashSet<FileListAdapter.FileDescriptorItem>(checked);;
-            } else {
-                previouslyChecked = null;
-            }
+            savePreviouslyCheckedFileDescriptors();
             saveListViewVisiblePosition(adapter.getFileType());
             adapter.clear();
         }
@@ -452,6 +442,15 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         getLoaderManager().restartLoader(LOADER_FILES_ID, bundle, this);
 
         onRefreshShared(fileType);
+    }
+
+    private void savePreviouslyCheckedFileDescriptors() {
+        final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
+        if (checked != null && !checked.isEmpty()) {
+            previouslyChecked = new HashSet<FileListAdapter.FileDescriptorItem>(checked);;
+        } else {
+            previouslyChecked = null;
+        }
     }
 
     private Loader<Object> createLoaderFinger() {
@@ -603,11 +602,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             };
             adapter.setCheckboxesVisibility(true);
-            if (previouslyChecked != null && !previouslyChecked.isEmpty()) {
-                adapter.setChecked(previouslyChecked);
-            }
-
-
+            restorePreviouslyChecked();
             list.setAdapter(adapter);
 
             if (onUpdateFilesListener != null) {
@@ -619,6 +614,12 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             }
         } catch (Throwable e) {
             LOG.error("Error updating files in list", e);
+        }
+    }
+
+    private void restorePreviouslyChecked() {
+        if (previouslyChecked != null && !previouslyChecked.isEmpty()) {
+            adapter.setChecked(previouslyChecked);
         }
     }
 
