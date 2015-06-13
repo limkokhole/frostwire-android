@@ -1,4 +1,5 @@
-FrostWire 1.5.8 - JUNE/11/2015
+FrostWire 1.5.8 - JUNE/13/2015
+ - TorLock search fixed.
  - Added SSL (https) support for torrent web seeds.
  - Icons/graphics update.
  - New 'Rate us' reminder notification.
