@@ -25,6 +25,9 @@ import com.frostwire.search.kat.KATSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.util.StringUtils;
+import rx.Observable;
+import rx.functions.Action1;
+import rx.subjects.PublishSubject;
 
 import java.text.Normalizer;
 import java.util.*;
@@ -32,18 +35,16 @@ import java.util.*;
 /**
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class LocalSearchEngine {
 
     private final SearchManager manager;
+    private final PublishSubject<List<SearchResult>> subject;
 
     // filter constants
     private final int MIN_SEEDS_TORRENT_RESULT;
 
     private static final int KAT_MIN_SEEDS_TORRENT_RESULT = 2;
-
-    private SearchManagerListener listener;
 
     private long currentSearchToken;
     private List<String> currentSearchTokens;
@@ -60,25 +61,36 @@ public final class LocalSearchEngine {
         }
         instance = new LocalSearchEngine(androidId);
     }
-    
+
     public static LocalSearchEngine instance() {
         return instance;
     }
 
     private LocalSearchEngine(String androidId) {
         this.manager = new SearchManagerImpl();
-        this.manager.registerListener(new ManagerListener());
+        this.manager.observable().subscribe(new Action1<SearchManagerSignal>() {
+            @Override
+            public void call(SearchManagerSignal s) {
+                if (s instanceof SearchManagerSignal.Results) {
+                    onResults(s.token, ((SearchManagerSignal.Results) s).elements);
+                } else {
+                    onFinished(s.token);
+                }
+            }
+        });
+        this.subject = PublishSubject.create();
+
         // TODO: review the logic behind putting this in a preference
         this.MIN_SEEDS_TORRENT_RESULT = 10;//ConfigurationManager.instance().getInt(Constants.PREF_KEY_SEARCH_MIN_SEEDS_FOR_TORRENT_RESULT);
         this.androidId = androidId;
     }
-    
+
     public String getAndroidId() {
         return androidId;
     }
 
-    public void registerListener(SearchManagerListener listener) {
-        this.listener = listener;
+    public Observable<List<SearchResult>> observable() {
+        return subject;
     }
 
     public void performSearch(String query) {
@@ -123,26 +135,36 @@ public final class LocalSearchEngine {
         return CrawlPagedWebSearchPerformer.getCacheSize();
     }
 
-    private void onFinished(long token) {
-        searchFinished = true;
-        if (listener != null) {
-            listener.onFinished(token);
+    private void onResults(long token, List<? extends SearchResult> results) {
+        if (token == currentSearchToken) { // one more additional protection
+            @SuppressWarnings("unchecked")
+            List<SearchResult> filtered = filter(results);
+            if (!filtered.isEmpty()) {
+                subject.onNext(filtered);
+            }
         }
     }
 
-    private List<SearchResult> filter(SearchPerformer performer, List<SearchResult> results) {
+    private void onFinished(long token) {
+        if (token == currentSearchToken) {
+            searchFinished = true;
+            subject.onCompleted();
+        }
+    }
+
+    private List<SearchResult> filter(List<? extends SearchResult> results) {
         List<SearchResult> list;
 
         if (currentSearchTokens == null || currentSearchTokens.isEmpty()) {
             list = Collections.emptyList();
         } else {
-            list = filter(results);
+            list = filter2(results);
         }
 
         return list;
     }
 
-    private List<SearchResult> filter(List<? extends SearchResult> results) {
+    private List<SearchResult> filter2(List<? extends SearchResult> results) {
         List<SearchResult> list = new LinkedList<SearchResult>();
 
         try {
@@ -156,7 +178,7 @@ public final class LocalSearchEngine {
                         }
                     } else if (sr instanceof KATSearchResult || sr instanceof ExtratorrentSearchResult) {
                         // TODO: Search architecture hack, gotta abstract these guys.
-                        if (((TorrentSearchResult)sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
+                        if (((TorrentSearchResult) sr).getSeeds() < KAT_MIN_SEEDS_TORRENT_RESULT) {
                             continue;
                         }
                     } else if (sr instanceof ScrapedTorrentFileSearchResult) {
@@ -251,30 +273,5 @@ public final class LocalSearchEngine {
         Set<String> tokens = new HashSet<String>(Arrays.asList(keywords.toLowerCase(Locale.US).split(" ")));
 
         return new ArrayList<String>(normalizeTokens(tokens));
-    }
-
-    private final class ManagerListener implements SearchManagerListener {
-
-        @Override
-        public void onResults(SearchPerformer performer, List<? extends SearchResult> results) {
-            if (listener != null && !performer.isStopped()) {
-                if (performer.getToken() == currentSearchToken) { // one more additional protection
-                    @SuppressWarnings("unchecked")
-                    List<SearchResult> filtered = filter(performer, (List<SearchResult>) results);
-                    if (!filtered.isEmpty()) {
-                        listener.onResults(performer, filtered);
-                    }
-                } else {
-                    performer.stop(); // why? just in case there is an inner error in an alternative search manager
-                }
-            }
-        }
-
-        @Override
-        public void onFinished(long token) {
-            if (token == currentSearchToken) {
-                LocalSearchEngine.this.onFinished(token);
-            }
-        }
     }
 }
