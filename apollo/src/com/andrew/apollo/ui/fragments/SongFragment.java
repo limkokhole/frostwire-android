@@ -58,7 +58,7 @@ public class SongFragment extends Fragment implements LoaderCallbacks<List<Song>
     /**
      * Used to keep context menu items from bleeding into other fragments
      */
-    private static final int GROUP_ID = 4;
+    private static final int GROUP_ID = TabFragmentOrder.SONGS_POSITION;
 
     /**
      * LoaderCallbacks identifier

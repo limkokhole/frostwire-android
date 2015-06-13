@@ -55,7 +55,7 @@ public class AlbumFragment extends Fragment implements LoaderCallbacks<List<Albu
     /**
      * Used to keep context menu items from bleeding into other fragments
      */
-    private static final int GROUP_ID = 3;
+    private static final int GROUP_ID = TabFragmentOrder.ALBUMS_POSITION;
 
     /**
      * Grid view column count. ONE - list, TWO - normal grid, FOUR - landscape

@@ -477,7 +477,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         RichNotificationActionLink sendFeedbackActionLink =
                 new RichNotificationActionLink(ratingReminder.getContext(),
                         getString(R.string.send_feedback),
-                        createOnFeedbackClickAdapter(ratingReminder));
+                        createOnFeedbackClickAdapter(ratingReminder, CM));
 
         ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
         ratingReminder.setVisibility(View.VISIBLE);
@@ -502,7 +502,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
     // opens default email client and pre-fills email to support@frostwire.com
     // with some information about the app and environment.
-    private ClickAdapter<SearchFragment> createOnFeedbackClickAdapter(final RichNotification ratingReminder) {
+    private ClickAdapter<SearchFragment> createOnFeedbackClickAdapter(final RichNotification ratingReminder, final ConfigurationManager CM) {
         return new ClickAdapter<SearchFragment>(SearchFragment.this) {
             @Override
             public void onClick(SearchFragment owner, View v) {
@@ -527,9 +527,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 startActivity(Intent.createChooser(intent,getString(R.string.choose_email_app)));
 
                 ratingReminder.setVisibility(View.GONE);
-
-                //TODO: Comment this when we're ready to go.
-                //CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
+                CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
             }
         };
     }

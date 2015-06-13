@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2015 Angel Leon, Andrew Neal Licensed under the Apache License, Version 2.0
+ * Copyright (C) 2015 Angel Leon, Alden Torres, Andrew Neal Licensed under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -45,6 +45,8 @@ import java.util.List;
  * This class is used to display all of the songs on a user's device.
  *
  * @author Andrew Neal (andrewdneal@gmail.com)
+ * @author Angel Leon (@gubatron)
+ * @author Alden Torres (@aldenml)
  */
 public class LastAddedFragment extends Fragment implements LoaderCallbacks<List<Song>>,
         OnItemClickListener, MusicStateListener {
@@ -52,7 +54,7 @@ public class LastAddedFragment extends Fragment implements LoaderCallbacks<List<
     /**
      * Used to keep context menu items from bleeding into other fragments
      */
-    private static final int GROUP_ID = 4;
+    private static final int GROUP_ID = TabFragmentOrder.LAST_ADDED_POSITION;
 
     /**
      * LoaderCallbacks identifier

@@ -21,12 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.andrew.apollo.ui.fragments.*;
 import com.frostwire.android.R;
 import com.andrew.apollo.adapters.PagerAdapter;
 import com.andrew.apollo.adapters.PagerAdapter.MusicFragments;
-import com.andrew.apollo.ui.fragments.AlbumFragment;
-import com.andrew.apollo.ui.fragments.ArtistFragment;
-import com.andrew.apollo.ui.fragments.SongFragment;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.NavUtils;
 import com.andrew.apollo.utils.PreferenceUtils;
@@ -309,42 +307,48 @@ public class MusicBrowserPhoneFragment extends Fragment implements
     @Override
     public void onCenterItemClick(final int position) {
         // If on the artist fragment, scrolls to the current artist
-        if (position == 2) {
+        if (position == TabFragmentOrder.ARTISTS_POSITION) {
             getArtistFragment().scrollToCurrentArtist();
             // If on the album fragment, scrolls to the current album
-        } else if (position == 3) {
+        } else if (position == TabFragmentOrder.ALBUMS_POSITION) {
             getAlbumFragment().scrollToCurrentAlbum();
             // If on the song fragment, scrolls to the current song
-        } else if (position == 4) {
+        } else if (position == TabFragmentOrder.SONGS_POSITION) {
             getSongFragment().scrollToCurrentSong();
+        } else if (position == TabFragmentOrder.RECENT_POSITION) {
+            getRecentFragment().scrollToCurrentAlbum();
         }
     }
 
     private boolean isArtistPage() {
-        return mViewPager.getCurrentItem() == 2;
+        return mViewPager.getCurrentItem() == TabFragmentOrder.ARTISTS_POSITION;
     }
 
     private ArtistFragment getArtistFragment() {
-        return (ArtistFragment)mPagerAdapter.getFragment(2);
+        return (ArtistFragment)mPagerAdapter.getFragment(TabFragmentOrder.ARTISTS_POSITION);
     }
 
     private boolean isAlbumPage() {
-        return mViewPager.getCurrentItem() == 3;
+        return mViewPager.getCurrentItem() == TabFragmentOrder.ALBUMS_POSITION;
     }
 
     private AlbumFragment getAlbumFragment() {
-        return (AlbumFragment)mPagerAdapter.getFragment(3);
+        return (AlbumFragment)mPagerAdapter.getFragment(TabFragmentOrder.ALBUMS_POSITION);
     }
 
     private boolean isSongPage() {
-        return mViewPager.getCurrentItem() == 4;
+        return mViewPager.getCurrentItem() == TabFragmentOrder.SONGS_POSITION;
     }
 
     private SongFragment getSongFragment() {
-        return (SongFragment)mPagerAdapter.getFragment(4);
+        return (SongFragment)mPagerAdapter.getFragment(TabFragmentOrder.SONGS_POSITION);
     }
 
     private boolean isRecentPage() {
-        return mViewPager.getCurrentItem() == 1;
+        return mViewPager.getCurrentItem() == TabFragmentOrder.RECENT_POSITION;
+    }
+
+    private RecentFragment getRecentFragment() {
+        return (RecentFragment)mPagerAdapter.getFragment(TabFragmentOrder.RECENT_POSITION);
     }
 }
