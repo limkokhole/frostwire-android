@@ -445,11 +445,13 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     }
 
     private void savePreviouslyCheckedFileDescriptors() {
-        final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
-        if (checked != null && !checked.isEmpty()) {
-            previouslyChecked = new HashSet<FileListAdapter.FileDescriptorItem>(checked);;
-        } else {
-            previouslyChecked = null;
+        if (adapter != null) {
+            final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
+            if (checked != null && !checked.isEmpty()) {
+                previouslyChecked = new HashSet<FileListAdapter.FileDescriptorItem>(checked);
+            } else {
+                previouslyChecked = null;
+            }
         }
     }
 
