@@ -19,6 +19,7 @@
 package com.frostwire.android.gui;
 
 import android.text.Html;
+import com.frostwire.logging.Logger;
 import com.frostwire.search.*;
 import com.frostwire.search.extratorrent.ExtratorrentSearchResult;
 import com.frostwire.search.kat.KATSearchResult;
@@ -54,6 +55,8 @@ public final class LocalSearchEngine {
     private String androidId;
 
     private static LocalSearchEngine instance;
+
+    private static Logger LOG = Logger.getLogger(LocalSearchEngine.class);
 
     public synchronized static void create(String androidId) {
         if (instance != null) {
@@ -148,7 +151,6 @@ public final class LocalSearchEngine {
     private void onFinished(long token) {
         if (token == currentSearchToken) {
             searchFinished = true;
-            subject.onCompleted();
         }
     }
 

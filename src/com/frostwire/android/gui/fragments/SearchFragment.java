@@ -65,6 +65,7 @@ import com.frostwire.util.*;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import rx.Observer;
+import rx.Subscription;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
@@ -95,6 +96,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private String currentQuery;
 
     private final FileTypeCounter fileTypeCounter;
+    private Subscription localSearchSubscription;
 
     public SearchFragment() {
         super(R.layout.fragment_search);
@@ -150,6 +152,18 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         //No call for super(). Bug on API Level > 11.
         outState.putInt("startedTransfers", startedTransfers);
         outState.putLong("lastInterstitialShownTimestamp", lastInterstitialShownTimestamp);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (this.localSearchSubscription != null) {
+            try {
+                this.localSearchSubscription.unsubscribe();
+            } catch (Throwable t) {
+
+            }
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -249,7 +263,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
             };
 
-            LocalSearchEngine.instance().observable().subscribe(new Observer<List<SearchResult>>() {
+            this.localSearchSubscription = LocalSearchEngine.instance().observable().subscribe(new Observer<List<SearchResult>>() {
                 @Override
                 public void onCompleted() {
                     getActivity().runOnUiThread(new Runnable() {
