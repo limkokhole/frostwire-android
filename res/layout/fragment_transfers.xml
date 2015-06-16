@@ -41,7 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="0dp"
-        android:background="@color/basic_blue"
+        android:background="@color/app_dark_blue_selector"
         android:checkedButton="@+id/fragment_transfers_button_select_all"
         android:orientation="horizontal" >
 

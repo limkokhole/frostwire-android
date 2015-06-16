@@ -29,7 +29,7 @@
     <item android:bottom="5dp">
         <shape>
 
-           <solid android:color="@color/basic_blue"></solid>
+           <solid android:color="@color/app_dark_blue_selector"></solid>
         </shape>
     </item>
 
