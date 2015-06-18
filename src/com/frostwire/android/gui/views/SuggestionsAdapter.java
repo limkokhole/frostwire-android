@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,25 +18,21 @@
 
 package com.frostwire.android.gui.views;
 
-import java.net.URLEncoder;
-import java.util.Locale;
-
-import org.json.JSONArray;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
-
 import com.frostwire.android.R;
-import com.frostwire.util.StringUtils;
 import com.frostwire.util.HttpClient;
 import com.frostwire.util.HttpClientFactory;
+import com.frostwire.util.StringUtils;
+import org.json.JSONArray;
+
+import java.net.URLEncoder;
+import java.util.Locale;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 class SuggestionsAdapter extends SimpleCursorAdapter {
 
@@ -48,7 +44,7 @@ class SuggestionsAdapter extends SimpleCursorAdapter {
     private boolean discardLastResult;
 
     public SuggestionsAdapter(Context context) {
-        super(context, R.layout.view_suggestion_item, null, new String[] { SuggestionsCursor.COLUMN_SUGGESTION }, new int[] { R.id.view_suggestion_item_text }, 0);
+        super(context, R.layout.view_suggestion_item, null, new String[]{SuggestionsCursor.COLUMN_SUGGESTION}, new int[]{R.id.view_suggestion_item_text}, 0);
         this.client = HttpClientFactory.newInstance();
     }
 
@@ -57,7 +53,8 @@ class SuggestionsAdapter extends SimpleCursorAdapter {
         try {
             String url = String.format(SUGGESTIONS_URL, URLEncoder.encode(constraint.toString(), "UTF-8"));
 
-            String json = client.get(url, HTTP_QUERY_TIMEOUT);
+            String js = client.get(url, HTTP_QUERY_TIMEOUT);
+            String json = stripJs(js);
 
             if (!discardLastResult) {
                 return new SuggestionsCursor(new JSONArray(json).getJSONArray(1));
@@ -89,6 +86,13 @@ class SuggestionsAdapter extends SimpleCursorAdapter {
             lang = "en";
         }
 
-        return "http://suggestqueries.google.com/complete/search?output=firefox&hl=" + Locale.getDefault() + "&q=%s";
+        return "https://clients1.google.com/complete/search?client=youtube&q=%s&hl=" + lang + "&gl=us&gs_rn=23&gs_ri=youtube&ds=yt&cp=2&gs_id=8&callback=google.sbox.p50";
+    }
+
+    private String stripJs(String js) {
+        js = js.replace("google.sbox.p50 && google.sbox.p50(", "");
+        js = js.replace("}])", "}]");
+
+        return js;
     }
 }
