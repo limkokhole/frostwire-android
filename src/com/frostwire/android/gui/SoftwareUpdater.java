@@ -146,6 +146,9 @@ public final class SoftwareUpdater {
                 if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) {
                     SearchEngine ytSE = SearchEngine.forName("YouTube");
                     ytSE.setActive(false);
+
+                    SearchEngine scSE = SearchEngine.forName("Soundcloud");
+                    scSE.setActive(false);
                 }
 
                 //nav menu always needs to be updated after we read the config.

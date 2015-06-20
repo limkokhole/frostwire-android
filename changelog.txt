@@ -1,3 +1,6 @@
+FrostWire 1.5.9 - JUNE/20/2015
+ - Improved search suggestions.
+
 FrostWire 1.5.8 - JUNE/16/2015
  - Search performance improvements.
  - Issues where subsequent searches would stop working fixed.

@@ -32,7 +32,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // true -> FrostWire Basic, false -> FrostWire Plus.
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // true -> FrostWire Basic, false -> FrostWire Plus.
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
@@ -40,7 +40,7 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "194";
+    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "195";
 
     public static final String APP_PACKAGE_NAME = "com.frostwire.android";
 

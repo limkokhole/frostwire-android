@@ -185,7 +185,7 @@ public class PreferencesActivity extends PreferenceActivity {
                 if (preference != null) { //it could already have been removed due to remote config value.
                     //LOG.info(engine.getName() + " is enabled: " + engine.isActive());
                     if (!engine.isActive()) {
-                        LOG.info("removing preference.");
+                        LOG.info("removing preference for engine " + engine.getName());
                         category.removePreference(preference);
                     }
                 }
