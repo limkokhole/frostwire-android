@@ -32,7 +32,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = true; // true -> FrostWire Basic, false -> FrostWire Plus.
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // true -> FrostWire Basic, false -> FrostWire Plus.
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
