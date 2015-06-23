@@ -237,7 +237,7 @@
     <string name="activity_media_player_image_description">Медиа изображение</string>
     <string name="ringtone_set">Установка рингтона</string>
     <string name="search">Поиск</string>
-    <string name="transfers">Передачи</string>
+    <string name="transfers">Загрузки</string>
     <string name="dummy_title">[Название]</string>
     <string name="dummy_status">[Статус]</string>
     <string name="dummy_speed">[Скорость]</string>
@@ -318,7 +318,6 @@
     <string name="dummy_version">[Версия]</string>
     <string name="dummy_engine">[Устройство]</string>
     <string name="dummy_sources">[Источники]</string>
-    <string name="empty_string"></string>
     <string name="seed_finished_torrents">Раздавать завершенные торренты</string>
     <string name="seed_finished_torrents_summary">Раздавать части скаченных торрентов кому-либо в Интернете с помощью BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Раздавать только по Wi-Fi</string>
@@ -348,7 +347,7 @@
     <string name="seeding_settings">Настройки раздачи</string>
     <string name="seeding_settings_explanation">Пользователи BitTorrent в сети смогут скачивать части файла, который раздает ваш торрент.</string>
     <string name="seeding_wifi_settings_explanation">Раздавайте только при Wi-Fi подключении. Избегайте дополнительных расходов у своего сотового оператора.</string>
-    <string name="intent_text">FrostWire - это пиринговая программа для обмена только разрешенными файлами. Установка и использование программы не дает право на получение или распространение несанкционированного контента.</string>
+    <string name="intent_text">FrostWire - это пиринговая программа для обмена только разрешенными файлами. Установка и использование программы не дает право на получение или несанкционированное распространение контента.</string>
     <string name="accept_intent">Я не буду использовать FrostWire с целью нарушения авторских прав</string>
     <string name="toast_on_disconnect">Разъединено от BitTorrent. Все передачи на BitTorrent были остановлены.</string>
     <string name="toast_on_connect">Ядро BitTorrent запущено.</string>
@@ -414,10 +413,6 @@
     <string name="clear_search_cache_summary">Очистить кэш поиска</string>
     <string name="no_results_feedback">Ничего не найдено.\n\nПроверьте интернет соединение или\nпопробуйте другие ключевые слова.</string>
     <string name="donate">Пожертвовать</string>
-    <string name="one_dollar">$1</string>
-    <string name="five_dollars">$5</string>
-    <string name="ten_dollars">$10</string>
-    <string name="twenty_five_dollars">$25</string>
     <string name="watch_tv">Смотреть ТВ</string>
     <string name="free_apps">Бесплатные приложения</string>
     <string name="use_frostclick">Использовать FrostClick</string>
@@ -434,7 +429,6 @@
     <string name="use_eztv">Использовать Eztv</string>
     <string name="transfer_status_demuxing">Демультиплексирование</string>
     <string name="player_paused_press_and_hold_to_stop">Приостановлено. (Совет: нажмите и удерживайте, чтобы приостановить)</string>
-    <string name="btc">BTC</string>
     <string name="you_need_a_bitcoin_wallet_app">На вашем устройстве должен быть Bitcoin кошелёк, чтобы отправить BTC для пожертвования.</string>
     <string name="transfers_select_all">все</string>
     <string name="transfers_select_downloading">загружаемые</string>
@@ -449,7 +443,7 @@
     <string name="donate_in_btc">Пожертвовать, биткоинами</string>
     <string name="torrent_transfer_enqueued_on_mobile_data">Торрент начнет загрузку автоматически, при подключении к сети Wi-Fi. (Проверьте настройки, касающиеся использования 3G/LTE)</string>
     <string name="torrent_transfer_consuming_mobile_data">Внимание: Эта торрент загрузка использует 3G/LTE сеть. (В настройках, можно настроить использование BitTorrent только через Wi-Fi)</string>
-    <string name="add_transfer_label">Вставьте ссылку на magnet или торрент</string>
+    <string name="add_transfer_label">Вставьте magnet или торрент ссылку</string>
     <string name="please_enter_valid_url">Пожалуйста, введите правильный URL</string>
     <string name="magnet_url_added">Magnet-ссылка добавлена для передачи. (лучше всего работают через Wi-Fi)</string>
     <string name="torrent_url_added">Torrent-ссылка добавлена для передачи.</string>
@@ -467,10 +461,6 @@
     <string name="track">трек</string>
     <string name="playlist">плейлист</string>
     <string name="are_you_sure_you_want_to_download_the_following">Вы уверены, что хотите загрузить %1$s (%2$s)?</string>
-    <string name="prepend_shortcut_label"></string>
-    <string name="menu_enter_shortcut_label">Enter</string>
-    <string name="menu_delete_shortcut_label">Del</string>
-    <string name="menu_space_shortcut_label">Space</string>
     <string name="cant_open_file_does_not_exist">Невозможно открыть %1$s, файл не существует.</string>
     <string name="saving_to_sd_card">Сохранение на SD-карту.</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android сотрёт загруженные файлы, если они были удалены из FrostWire.</string>
