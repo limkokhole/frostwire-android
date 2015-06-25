@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,11 +31,9 @@ import android.util.Log;
 
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.httpserver.HttpServerManager;
 import com.frostwire.localpeer.AndroidMulticastLock;
 import com.frostwire.localpeer.LocalPeer;
 import com.frostwire.localpeer.LocalPeerManager;
-import com.frostwire.localpeer.LocalPeerManagerImpl;
 import com.frostwire.localpeer.LocalPeerManagerListener;
 
 /**
@@ -71,7 +69,7 @@ public final class PeerManager {
 
         this.peerComparator = new PeerComparator();
 
-        this.peerManager = new LocalPeerManagerImpl(new AndroidMulticastLock(NetworkManager.instance().getWifiManager()));
+        this.peerManager = new DummyLocalPeerManager();
         this.peerManager.setListener(new LocalPeerManagerListener() {
 
             @Override
