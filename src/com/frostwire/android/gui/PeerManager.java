@@ -31,7 +31,6 @@ import android.util.Log;
 
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.localpeer.AndroidMulticastLock;
 import com.frostwire.localpeer.LocalPeer;
 import com.frostwire.localpeer.LocalPeerManager;
 import com.frostwire.localpeer.LocalPeerManagerListener;
