@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -55,42 +55,12 @@ public class PromotionsAdapter extends AbstractAdapter<Slide> {
     @Override
     public void setupView(View convertView, ViewGroup parent, Slide viewItem) {
         ImageView imageView = findView(convertView, R.id.view_promotions_item_image);
-
-        /**
-        Button downloadButton = findView(convertView, R.id.view_promotions_item_download_button);
-        downloadButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-         */
         
         GridView gridView = (GridView) parent;
         int promoWidth = getColumnWidth(gridView); //hack
         int promoHeight = (int) (promoWidth * PROMO_HEIGHT_TO_WIDTH_RATIO);
         imageLoader.load(Uri.parse(viewItem.imageSrc), imageView, promoWidth, promoHeight);
      }
-
-//    @Override
-//    public View getView(int position, View convertView, ViewGroup parent) {
-//        if (convertView != null && convertView instanceof ImageView) {
-//            return convertView;
-//        }
-//
-//        ImageView imageView = new ImageView(parent.getContext());
-//        imageView.setScaleType(ScaleType.MATRIX);
-//        imageView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-//        imageView.setPadding(0, 0, 0, 0);
-//        imageView.setAdjustViewBounds(true);
-//        
-//        GridView gridView = (GridView) parent;
-//        int promoWidth = getColumnWidth(gridView); //hack
-//        int promoHeight = (int) (promoWidth * PROMO_HEIGHT_TO_WIDTH_RATIO);
-//        imageLoader.load(Uri.parse(getItem(position).imageSrc), imageView, promoWidth, promoHeight);
-//
-//        return imageView;
-//    }
 
     @Override
     public int getCount() {

@@ -58,15 +58,6 @@ public class WizardActivity extends AbstractActivity {
             }
         };
     }
-
-    /**
-     * Note: This is supposed to be deprecated, but for some reason, the new Fragment api way doesn't
-     * work well with the compatibility library.
-     */
-//    @Override
-//    public Object onRetainCustomNonConfigurationInstance() {
-//        return viewFlipper.getCurrentView().getTag();
-//    }
     
     @Override
     protected void onCreate(Bundle savedInstance) {
@@ -99,16 +90,6 @@ public class WizardActivity extends AbstractActivity {
             }
             view.setTag(i);
         }
-
-//        try {
-//            Integer currentIndex = (Integer) getLastCustomNonConfigurationInstance();
-//            if (currentIndex != null) {
-//                viewFlipper.setDisplayedChild(currentIndex);
-//            }
-//        } catch (NoSuchMethodError e) {
-//            // why? I don't know, reported by a few android devices
-//            // ignore
-//        }
 
         setupViewPage();
     }

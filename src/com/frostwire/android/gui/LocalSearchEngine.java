@@ -52,24 +52,20 @@ public final class LocalSearchEngine {
 
     private boolean searchFinished;
 
-    private String androidId;
-
     private static LocalSearchEngine instance;
 
-    private static Logger LOG = Logger.getLogger(LocalSearchEngine.class);
-
-    public synchronized static void create(String androidId) {
+    public synchronized static void create() {
         if (instance != null) {
             return;
         }
-        instance = new LocalSearchEngine(androidId);
+        instance = new LocalSearchEngine();
     }
 
     public static LocalSearchEngine instance() {
         return instance;
     }
 
-    private LocalSearchEngine(String androidId) {
+    private LocalSearchEngine() {
         this.manager = new SearchManagerImpl();
         this.manager.observable().subscribe(new Action1<SearchManagerSignal>() {
             @Override
@@ -85,11 +81,6 @@ public final class LocalSearchEngine {
 
         // TODO: review the logic behind putting this in a preference
         this.MIN_SEEDS_TORRENT_RESULT = 10;//ConfigurationManager.instance().getInt(Constants.PREF_KEY_SEARCH_MIN_SEEDS_FOR_TORRENT_RESULT);
-        this.androidId = androidId;
-    }
-
-    public String getAndroidId() {
-        return androidId;
     }
 
     public Observable<List<SearchResult>> observable() {

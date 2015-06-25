@@ -71,7 +71,7 @@ public class MainApplication extends Application {
             CrawlPagedWebSearchPerformer.setCache(new DiskCrawlCache(this));
             CrawlPagedWebSearchPerformer.setMagnetDownloader(null); // this effectively turn off magnet downloads
 
-            LocalSearchEngine.create(getDeviceId());//getAndroidId());
+            LocalSearchEngine.create();
 
             cleanTemp();
 
@@ -80,17 +80,6 @@ public class MainApplication extends Application {
         } catch (Throwable e) {
             throw new CoreRuntimeException("Unable to initialized main components", e);
         }
-    }
-
-    private String getDeviceId() {
-        TelephonyManager tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String deviceId = tm.getDeviceId();
-
-        //probably it's a tablet... Sony's tablet returns null here.
-        if (deviceId == null) {
-            deviceId = Secure.getString(getApplicationContext().getContentResolver(), Secure.ANDROID_ID);
-        }
-        return deviceId;
     }
 
     @Override

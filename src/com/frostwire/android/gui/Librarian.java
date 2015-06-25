@@ -162,10 +162,6 @@ public final class Librarian {
         return result;
     }
 
-    public FileDescriptor getFileDescriptor(byte fileType, int fileId) {
-        return getFileDescriptor(fileType, fileId, true);
-    }
-
     public FileDescriptor getFileDescriptor(byte fileType, int fileId, boolean sharedOnly) {
         List<FileDescriptor> fds = getFiles(0, 1, TableFetchers.getFetcher(fileType), BaseColumns._ID + "=?", new String[] { String.valueOf(fileId) }, sharedOnly);
         if (fds.size() > 0) {
@@ -593,35 +589,6 @@ public final class Librarian {
         return fds;
     }
 
-    private Pair<List<Integer>, List<String>> getAllFiles(byte fileType) {
-        Pair<List<Integer>, List<String>> result = new Pair<List<Integer>, List<String>>(new ArrayList<Integer>(), new ArrayList<String>());
-
-        Cursor c = null;
-
-        try {
-            TableFetcher fetcher = TableFetchers.getFetcher(fileType);
-
-            ContentResolver cr = context.getContentResolver();
-
-            c = cr.query(fetcher.getContentUri(), new String[] { BaseColumns._ID, MediaColumns.DATA }, null, null, BaseColumns._ID);
-
-            if (c != null) {
-                while (c.moveToNext()) {
-                    result.first.add(c.getInt(0));
-                    result.second.add(c.getString(1));
-                }
-            }
-        } catch (Throwable e) {
-            Log.e(TAG, "General failure getting all files", e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-
-        return result;
-    }
-
     /**
      * Updates the number of files for this type.
      * @param fileType
@@ -726,27 +693,6 @@ public final class Librarian {
         }
 
         return sm;
-    }
-
-    public double getScreenSizeInInches() {
-        double screenInches = 0;
-
-        try {
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            context.getResources().getDisplayMetrics();
-            DisplayMetrics dm = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(dm);
-
-            double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-            double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-
-            screenInches = Math.sqrt(x + y);
-
-        } catch (Throwable e) {
-            Log.e(TAG, "Unable to get the device display dimensions", e);
-        }
-
-        return screenInches;
     }
 
     /**
