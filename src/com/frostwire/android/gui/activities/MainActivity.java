@@ -320,7 +320,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             startActivity(i);
 
             //go!
-            TransferManager.instance().downloadTorrent(intent.getDataString());
+            final String uri = intent.getDataString();
+            if (uri != null) {
+                TransferManager.instance().downloadTorrent(uri);
+            } else {
+                LOG.warn("MainActivity.onNewIntent(): Couldn't start torrent download from Intent's URI, intent.getDataString() -> null");
+                LOG.warn("(maybe URI is coming in another property of the intent object - #fragmentation)");
+            }
         }
         // When another application wants to "Share" a file and has chosen FrostWire to do so.
         // We make the file "Shared" so it's visible for other FrostWire devices on the local network.
