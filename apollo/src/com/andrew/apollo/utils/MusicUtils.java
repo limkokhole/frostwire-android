@@ -508,19 +508,25 @@ public final class MusicUtils {
      * @return The song list for an artist.
      */
     public static final long[] getSongListForArtist(final Context context, final long id) {
-        final String[] projection = new String[] {
-            BaseColumns._ID
-        };
-        final String selection = AudioColumns.ARTIST_ID + "=" + id + " AND "
-                + AudioColumns.IS_MUSIC + "=1";
-        Cursor cursor = context.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null,
-                AudioColumns.ALBUM_KEY + "," + AudioColumns.TRACK);
-        if (cursor != null) {
-            final long[] mList = getSongListForCursor(cursor);
-            cursor.close();
-            cursor = null;
-            return mList;
+        try {
+            final String[] projection = new String[]{
+                    BaseColumns._ID
+            };
+            final String selection = AudioColumns.ARTIST_ID + "=" + id + " AND "
+                    + AudioColumns.IS_MUSIC + "=1";
+            Cursor cursor = context.getContentResolver().query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, selection, null,
+                    AudioColumns.ALBUM_KEY + "," + AudioColumns.TRACK);
+            if (cursor != null) {
+                final long[] mList = getSongListForCursor(cursor);
+                cursor.close();
+                if (mList == null) {
+                    return sEmptyList;
+                }
+                return mList;
+            }
+        } catch (Throwable t) {
+          return sEmptyList;
         }
         return sEmptyList;
     }
@@ -912,6 +918,16 @@ public final class MusicUtils {
      * @param playlistid The id of the playlist being added to.
      */
     public static void addToPlaylist(final Context context, final long[] ids, final long playlistid) {
+        if (ids == null) {
+            LOG.warn("song ids given null, not adding anything to playlist.");
+            return;
+        }
+
+        if (ids == sEmptyList) {
+            LOG.warn("song ids was empty, not adding anything to playlist.");
+            return;
+        }
+
         final int size = ids.length;
         final ContentResolver resolver = context.getContentResolver();
         final String[] projection = new String[] {
