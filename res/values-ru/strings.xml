@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
@@ -312,7 +312,6 @@
     <string name="torrent_max_uploads">Максимум раздач</string>
     <string name="torrent_max_total_connections_summary">Максимальное количество подключений</string>
     <string name="torrent_max_total_connections">Максимальное количество подключений</string>
-    <string name="torrent_max_torrent_connection_summary">Максимум торрент соединений</string>
     <string name="torrent_max_torrent_connection">Максимум торрент соединений</string>
     <string name="dummy_summary">[Сводка]</string>
     <string name="dummy_version">[Версия]</string>
@@ -384,7 +383,6 @@
     <string name="support_frostwire_summary">Показать объявления на поддержку развития этого приложения.</string>
     <string name="storage_preference_title">Выбор места хранения</string>
     <string name="storage_preference_summary">Место хранения по умолчанию, где будут сохранены файлы.</string>
-    <string name="connectivity">Соединение</string>
     <string name="loading">Загрузка</string>
     <string name="wifi_sharing">Раздача по Wi-Fi</string>
     <string name="activity_mediaplayer_name">Медиа проигрыватель</string>
@@ -450,7 +448,6 @@
     <string name="cloud_downloads_coming">К сожалению, возможность загрузки в облако, пока ещё в разработке.</string>
     <string name="seed">Сид</string>
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Передача была приостановлена, потому что нет соединения с сетью. (Проверьте ваше BitTorrent-соединение в настройках)</string>
-    <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>
     <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="remove_from_recent">Удалить из истории</string>
     <string name="now_playing">Сейчас проигрывается</string>
@@ -476,4 +473,50 @@
     <string name="file_descriptor_sd_mounted">Этот файл был удален с SD-карты, или вы вставили другую SD-карту.</string>
     <string name="file_descriptor_sd_unmounted">Этот файл находиться на SD-карте, пожалуйста вставьте её.</string>
     <string name="help_translate_frostwire">Помогите перевести FrostWire</string>
+    <string name="use_tpb_summary">TPB is magnet based, works only on Wi-Fi</string>
+    <string name="use_monova">Use Monova</string>
+    <string name="use_monova_summary">Monova is magnet based, works only on Wi-Fi</string>
+    <string name="use_kat_summary">KAT is magnet based, works only on Wi-Fi</string>
+    <string name="use_yify">Use Yify</string>
+    <string name="use_yify_summary">Yify is magnet based, works only on Wi-Fi</string>
+    <string name="yes_no_cancel_transfer_question_cloud">Are you sure you want to stop and remove this download from the list?</string>
+    <string name="torrent_max_peers_summary">Max Peers</string>
+    <string name="torrent_max_peers">Max Peers</string>
+    <string name="bittorrent">BitTorrent</string>
+    <string name="bittorrent_network_summary">Connection status</string>
+    <string name="couldnt_share_file">Could not share the file. Weird path found.</string>
+    <string name="queued_for_checking">Queued for checking</string>
+    <string name="checking_ellipsis">Checking…</string>
+    <string name="downloading_metadata">Downloading metadata</string>
+    <string name="error_moving_incomplete">Error: Moving Incomplete</string>
+    <string name="error_wrong_md5_hash">Error: Wrong MD5 hash</string>
+    <string name="error_wrong_signature">Error: Wrong signature</string>
+    <string name="pausing">Pausing</string>
+    <string name="canceling">Canceling</string>
+    <string name="app_shutdown_dlg_title">Shutdown</string>
+    <string name="app_shutdown_dlg_message">This will shutdown all transfers and background services. Are you sure?</string>
+    <string name="error_not_enough_peers">Try again, not enough peers</string>
+    <string name="http_download_status_save_dir_error">Save directory does not exist or can\'t be created</string>
+    <string name="my_music">Моя музыка</string>
+    <string name="support">Поодердка</string>
+    <string name="wifi_sharing_settings">Wi-Fi Sharing Settings</string>
+    <string name="use_btjunkie">Использовать BTJunkie</string>
+    <string name="free_download">Free Download</string>
+    <string name="error_no_space_left_on_device">Error: No space left to save file</string>
+    <string name="free_sponsored_app">Free Sponsored App</string>
+    <string name="send_bitcoin_tip">Send Bitcoin Tip</string>
+    <string name="send_tip_donation">Send Tip/Donation</string>
+    <string name="issue_with_tip_donation_uri">There\'s something wrong with the Tip/Donation web address</string>
+    <string name="enable_dht">Включить DHT</string>
+    <string name="enable_dht_summary">Use the Distributed Hash Table to announce/search torrent peers</string>
+    <string name="dummy_build">[номер сборки]</string>
+    <string name="basic">Базовый</string>
+    <string name="plus">Плюс</string>
+    <string name="try_other_keywords">Try other keywords</string>
+    <string name="action_menu_overflow_description">More options</string>
+    <string name="rate_our_app">Rate our App</string>
+    <string name="rating_reminder_description">If you love FrostWire please take a moment to rate us.</string>
+    <string name="love_frostwire">Люблю FrostWire</string>
+    <string name="send_feedback">Оставить отзыв</string>
+    <string name="choose_email_app">Choose an Email App...</string>
 </resources>
