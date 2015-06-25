@@ -298,8 +298,6 @@
 		<!-- providers -->
 		<provider android:name="com.frostwire.android.core.providers.DocumentsProvider"
 			android:authorities="com.frostwire.android.core.providers.Documents" android:exported="true" />
-		<provider android:name="com.frostwire.android.core.providers.SharingProvider"
-			android:authorities="com.frostwire.android.core.providers.Sharing" android:exported="true" />
 		<provider android:name="com.frostwire.android.core.providers.ApplicationsProvider"
 			android:authorities="com.frostwire.android.core.providers.Applications" android:exported="true" />
 

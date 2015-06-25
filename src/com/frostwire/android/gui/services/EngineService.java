@@ -172,10 +172,6 @@ public class EngineService extends Service implements IEngineService {
 
         PeerManager.instance().clear();
 
-        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING)) {
-            PeerManager.instance().start();
-        }
-
         state = STATE_STARTED;
         Log.v(TAG, "Engine started");
     }

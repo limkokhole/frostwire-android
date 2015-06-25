@@ -91,7 +91,6 @@ public class PreferencesActivity extends PreferenceActivity {
         setupNickname();
         setupClearIndex();
         setupSearchEngines();
-        setupWifiSharingOption();
         setupUXStatsOption();
     }
 
@@ -223,24 +222,6 @@ public class PreferencesActivity extends PreferenceActivity {
         preference.setEnabled(false);
         preference.setSummary(R.string.im_on_it);
         preference.setOnPreferenceChangeListener(onPreferenceChangeListener);
-    }
-
-    /** Wi-Fi Sharing (not libtorrent's UPnP) */
-    private void setupWifiSharingOption() {
-        final SwitchPreference preferenceUPnP = (SwitchPreference) findPreference(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING);
-        if (preferenceUPnP != null) {
-            preferenceUPnP.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    boolean newVal = (Boolean) newValue;
-                    if (newVal) {
-                        PeerManager.instance().start();
-                    } else {
-                        PeerManager.instance().stop();
-                    }
-                    return true;
-                }
-            });
-        }
     }
 
     private void setupEnableDHTOption() {

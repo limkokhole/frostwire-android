@@ -31,7 +31,6 @@ import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.activities.PreferencesActivity;
 import com.frostwire.android.gui.activities.WizardActivity;
-import com.frostwire.android.gui.dialogs.ShareIndicationDialog;
 import com.frostwire.android.gui.fragments.BrowsePeerFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
@@ -109,10 +108,6 @@ public final class MainController {
     public void showMyFiles() {
         if (!(activity.getCurrentFragment() instanceof BrowsePeerFragment)) {
             switchFragment(R.id.menu_main_library);
-        }
-        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_SHOW_SHARE_INDICATION)) {
-            ShareIndicationDialog dlg = new ShareIndicationDialog();
-            dlg.show(activity.getFragmentManager());
         }
     }
 

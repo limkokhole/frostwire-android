@@ -557,27 +557,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
     }
 
-    private final class PadLockClickListener implements OnClickListener {
-        public void onClick(View v) {
-            FileDescriptor fd = (FileDescriptor) v.getTag();
-
-            if (fd == null) {
-                return;
-            }
-            
-            if (checkIfNotExists(fd)) {
-                return;
-            }
-
-            fd.shared = !fd.shared;
-
-            UXStats.instance().log(fd.shared ? UXAction.WIFI_SHARING_SHARED : UXAction.WIFI_SHARING_UNSHARED);
-
-            notifyDataSetChanged();
-            Librarian.instance().updateSharedStates(fileType, Arrays.asList(fd));
-        }
-    }
-
     private final class DownloadButtonClickListener implements OnClickListener {
         public void onClick(View v) {
             FileDescriptor fd = (FileDescriptor) v.getTag();
