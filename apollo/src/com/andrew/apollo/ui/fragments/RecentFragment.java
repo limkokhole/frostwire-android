@@ -253,10 +253,12 @@ public class RecentFragment extends Fragment implements LoaderCallbacks<List<Alb
                     return true;
                 case FragmentMenuItems.DELETE:
                     mShouldRefresh = true;
-                    final String album = mAlbum.mAlbumName;
-                    DeleteDialog.newInstance(album, mAlbumList,
-                            ImageFetcher.generateAlbumCacheKey(album, mAlbum.mArtistName))
-                            .show(getFragmentManager(), "DeleteDialog");
+                    if (mAlbum != null) {
+                        final String album = mAlbum.mAlbumName;
+                        DeleteDialog.newInstance(album, mAlbumList,
+                                ImageFetcher.generateAlbumCacheKey(album, mAlbum.mArtistName))
+                                .show(getFragmentManager(), "DeleteDialog");
+                    }
                     return true;
                 default:
                     break;
