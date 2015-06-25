@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -238,10 +238,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     private void populateGroupView(View view, Transfer transfer) {
         if (transfer instanceof BittorrentDownload) {
             populateBittorrentDownload(view, (BittorrentDownload) transfer);
-        } else if (transfer instanceof PeerHttpDownload) {
-            populatePeerDownload(view, (PeerHttpDownload) transfer);
-        } else if (transfer instanceof PeerHttpUpload) {
-            populatePeerUpload(view, (PeerHttpUpload) transfer);
         } else if (transfer instanceof HttpDownload) {
             populateHttpDownload(view, (HttpDownload) transfer);
         } else if (transfer instanceof YouTubeDownload) {
@@ -312,34 +308,20 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
             boolean errored = download.getStatus() != null && getStatusFromResId(download.getStatus()).contains("Error");
 
-            boolean openMenu = !errored && download.isComplete() && (tag instanceof HttpDownload || tag instanceof PeerHttpDownload || tag instanceof YouTubeDownload || tag instanceof SoundcloudDownload);
+            boolean openMenu = !errored && download.isComplete() && (tag instanceof HttpDownload || tag instanceof YouTubeDownload || tag instanceof SoundcloudDownload);
             if (openMenu) {
                 items.add(new OpenMenuAction(context.get(), download.getDisplayName(), download.getSavePath().getAbsolutePath(), extractMime(download)));
             }
 
-            if (download instanceof PeerHttpDownload) {
-                PeerHttpDownload pdownload = (PeerHttpDownload) download;
-                items.add(new BrowsePeerMenuAction(context.get(), pdownload.getPeer()));
-            }
-
             items.add(new CancelMenuAction(context.get(), download, !openMenu));
 
-        } else if (tag instanceof PeerHttpUpload) {
-            PeerHttpUpload upload = (PeerHttpUpload) tag;
-            title = upload.getDisplayName();
-
-            items.add(new CancelMenuAction(context.get(), upload, false));
         }
 
         return items.size() > 0 ? new MenuAdapter(context.get(), title, items) : null;
     }
 
     private String extractMime(DownloadTransfer download) {
-        if (download instanceof PeerHttpDownload) {
-            return ((PeerHttpDownload) download).getFD().mime;
-        } else {
-            return UIUtils.getMimeType(download.getSavePath().getAbsolutePath());
-        }
+        return UIUtils.getMimeType(download.getSavePath().getAbsolutePath());
     }
 
     private void trackDialog(Dialog dialog) {
@@ -380,9 +362,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
                 if (transferItem.getSavePath() != null) {
                     path = transferItem.getSavePath().getAbsolutePath();
                 }
-            } else if (item instanceof PeerHttpUpload) {
-                PeerHttpUpload transferItem = (PeerHttpUpload) item;
-                path = transferItem.getFD().filePath;
             }
 
             String extension = null;
@@ -459,44 +438,6 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         final int iconHeightInPixels = r.getDimensionPixelSize(R.dimen.view_transfer_list_item_title_left_drawable);
         tipDrawable.setBounds(0, 0, iconHeightInPixels, iconHeightInPixels);
         title.setCompoundDrawables(tipDrawable, null, null, null);
-    }
-
-    private void populatePeerDownload(View view, PeerHttpDownload download) {
-        TextView title = findView(view, R.id.view_transfer_list_item_title);
-        ProgressBar progress = findView(view, R.id.view_transfer_list_item_progress);
-        TextView status = findView(view, R.id.view_transfer_list_item_status);
-        TextView speed = findView(view, R.id.view_transfer_list_item_speed);
-        TextView size = findView(view, R.id.view_transfer_list_item_size);
-        TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
-        TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-
-        seeds.setText("");
-        peers.setText("");
-        title.setText(download.getDisplayName());
-        title.setCompoundDrawables(null, null, null, null);
-        progress.setProgress(download.getProgress());
-        status.setText(getStatusFromResId(download.getStatus()));
-        speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
-        size.setText(UIUtils.getBytesInHuman(download.getSize()));
-    }
-
-    private void populatePeerUpload(View view, PeerHttpUpload upload) {
-        TextView title = findView(view, R.id.view_transfer_list_item_title);
-        ProgressBar progress = findView(view, R.id.view_transfer_list_item_progress);
-        TextView status = findView(view, R.id.view_transfer_list_item_status);
-        TextView speed = findView(view, R.id.view_transfer_list_item_speed);
-        TextView size = findView(view, R.id.view_transfer_list_item_size);
-        TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
-        TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-
-        seeds.setText("");
-        peers.setText("");
-        title.setText(upload.getDisplayName());
-        title.setCompoundDrawables(null, null, null, null);
-        progress.setProgress(upload.getProgress());
-        status.setText(getStatusFromResId(upload.getStatus()));
-        speed.setText(UIUtils.getBytesInHuman(upload.getUploadSpeed()) + "/s");
-        size.setText(UIUtils.getBytesInHuman(upload.getSize()));
     }
 
     private void populateHttpDownload(View view, HttpDownload download) {

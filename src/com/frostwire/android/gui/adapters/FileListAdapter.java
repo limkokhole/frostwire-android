@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -192,12 +192,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
                 items.add(new DeleteFileMenuAction(context, this, list));
             }
-        } else {
-            if (0 < numChecked && numChecked <= Constants.MAX_NUM_DOWNLOAD_CHECKED) {
-                items.add(new DownloadCheckedMenuAction(context, this, checked, peer));
-            }
-
-            items.add(new DownloadMenuAction(context, this, peer, fd));
         }
 
         return new MenuAdapter(context, fd.title, items);
@@ -230,15 +224,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 UIUtils.openFile(getContext(), fd.filePath, fd.mime);
             }
         }
-    }
-
-    /**
-     * Start a transfer
-     */
-    private DownloadTransfer startDownload(FileDescriptor fd) {
-        DownloadTransfer download = TransferManager.instance().download(peer, fd);
-        notifyDataSetChanged();
-        return download;
     }
 
     private void populateViewThumbnail(View view, FileDescriptorItem item) {
@@ -607,29 +592,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
             if (local) {
                 localPlay(fd);
-            } else {
-
-                List<FileDescriptor> list = convertItems(getChecked());
-
-                if (list == null || list.size() == 0) {
-                    // if no files are selected, they want to download this one.
-                    if (!(startDownload(fd) instanceof ExistingDownload)) {
-                        UIUtils.showLongMessage(getContext(), R.string.download_added_to_queue);
-                        UIUtils.showTransfersOnDownloadStart(getContext());
-                    }
-                } else {
-
-                    // if many are selected... do they want to download many
-                    // or just this one?
-                    List<MenuAction> items = new ArrayList<MenuAction>(2);
-
-                    items.add(new DownloadCheckedMenuAction(getContext(), FileListAdapter.this, list, peer));
-                    items.add(new DownloadMenuAction(getContext(), FileListAdapter.this, peer, fd));
-
-                    MenuAdapter menuAdapter = new MenuAdapter(getContext(), R.string.wanna_download_question, items);
-
-                    trackDialog(new MenuBuilder(menuAdapter).show());
-                }
             }
         }
     }
