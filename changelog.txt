@@ -1,5 +1,6 @@
-FrostWire 1.5.9 - JUNE/20/2015
+FrostWire 1.5.9 - JUNE/25/2015
  - Improved search suggestions.
+ - Multiple crash fixes in music player.
 
 FrostWire 1.5.8 - JUNE/16/2015
  - Search performance improvements.
