@@ -536,22 +536,9 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             TextView title = (TextView) header.findViewById(R.id.view_browse_peer_header_text_title);
             TextView total = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total);
-            // LSD:
-            //TextView shared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_shared);
-            //TextView unshared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_unshared);
-
-            FileVisibilityFilterListener visibilityFilterListener = new FileVisibilityFilterListener();
-            // LSD:
-            //shared.setOnClickListener(visibilityFilterListener);
-            //unshared.setOnClickListener(visibilityFilterListener);
 
             title.setText(fileTypeStr);
             total.setText("(" + String.valueOf(numTotal) + ")");
-            // LSD:
-            //shared.setText(String.valueOf(numShared));
-            //unshared.setText(String.valueOf(numTotal - numShared));
-
-            updateFileVisiblityIndicatorsAlpha();
 
             if (fileType == Constants.FILE_TYPE_AUDIO) {
                 buttonAudio.setChecked(true);
@@ -587,7 +574,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             @SuppressWarnings("unchecked")
             List<FileDescriptor> items = (List<FileDescriptor>) data[1];
-            adapter = new FileListAdapter(getActivity(), items, peer, local, fileType) {
+            adapter = new FileListAdapter(getActivity(), items, local, fileType) {
 
                 @Override
                 protected void onItemChecked(View v, boolean isChecked) {
@@ -691,48 +678,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             }
         }
-    }
-
-    private class FileVisibilityFilterListener implements OnClickListener {
-        @Override
-        public void onClick(View v) {
-            LOG.debug("clicked filter");
-            if (adapter != null) {
-                adapter.setFileVisibilityBySharedState((adapter.getFileVisibilityBySharedState() + 1) % 3);
-                adapter.getFilter().filter(filesBar.getText());
-            }
-
-            updateFileVisiblityIndicatorsAlpha();
-        }
-    }
-
-    public void updateFileVisiblityIndicatorsAlpha() {
-        // LSD:
-        /*
-        if (adapter == null) {
-            return;
-        }
-
-        TextView shared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_shared);
-        TextView unshared = (TextView) header.findViewById(R.id.view_browse_peer_header_text_total_unshared);
-
-        int transparentValue = 128;
-
-        switch (adapter.getFileVisibilityBySharedState()) {
-        case FileListAdapter.FILE_LIST_FILTER_SHOW_ALL:
-            UIUtils.setTextViewAlpha(shared, 255);
-            UIUtils.setTextViewAlpha(unshared, 255);
-            break;
-        case FileListAdapter.FILE_LIST_FILTER_SHOW_SHARED:
-            UIUtils.setTextViewAlpha(shared, 255);
-            UIUtils.setTextViewAlpha(unshared, transparentValue);
-            break;
-        case FileListAdapter.FILE_LIST_FILTER_SHOW_UNSHARED:
-            UIUtils.setTextViewAlpha(shared, transparentValue);
-            UIUtils.setTextViewAlpha(unshared, 255);
-            break;
-        }
-        */
     }
 
     public static interface OnRefreshSharedListener {

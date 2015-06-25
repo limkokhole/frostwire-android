@@ -62,13 +62,11 @@ import java.util.Map.Entry;
  * 
  */
 public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
-    private final Peer peer;
+
     private final boolean local;
     private final byte fileType;
     private final ImageLoader thumbnailLoader;
 
-    // LSD:
-    //private final PadLockClickListener padLockClickListener;
     private final DownloadButtonClickListener downloadButtonClickListener;
 
     public static final int FILE_LIST_FILTER_SHOW_ALL = 0;
@@ -77,7 +75,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private FileListFilter fileListFilter;
 
-    public FileListAdapter(Context context, List<FileDescriptor> files, Peer peer, boolean local, byte fileType) {
+    public FileListAdapter(Context context, List<FileDescriptor> files, boolean local, byte fileType) {
         super(context, getViewItemId(local, fileType), convertFiles(files));
 
         setShowMenuOnClick(true);
@@ -85,13 +83,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         fileListFilter = new FileListFilter();
         setAdapterFilter(fileListFilter);
 
-        this.peer = peer;
         this.local = local;
         this.fileType = fileType;
         this.thumbnailLoader = ImageLoader.getInstance(context);
 
-        // LSD:
-        //this.padLockClickListener = new PadLockClickListener();
         this.downloadButtonClickListener = new DownloadButtonClickListener();
 
         checkSDStatus();
@@ -150,11 +145,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (showSingleOptions) {
                 items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
 
-                // LSD:
-                //if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
-                //    items.add(new SendFileMenuAction(context, fd)); //applications cause a force close with GMail
-                //}
-
                 if ((fd.fileType == Constants.FILE_TYPE_RINGTONES || fd.fileType == Constants.FILE_TYPE_AUDIO) && numChecked <= 1) {
                     items.add(new SetAsRingtoneMenuAction(context, fd));
                 }
@@ -176,18 +166,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (fd.fileType == Constants.FILE_TYPE_AUDIO) {
                 items.add(new AddToPlaylistMenuAction(context, list));
             }
-
-            // LSD:
-            /*
-            // Share Selected.
-            items.add(new SetSharedStateFileGrainedMenuAction(context, this, list, true));
-
-            // Unshare Selected.
-            items.add(new SetSharedStateFileGrainedMenuAction(context, this, list, false));
-
-            // Toogle Shared States.
-            items.add(new ToggleFileGrainedSharingMenuAction(context, this, list));
-            */
 
             if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
                 items.add(new DeleteFileMenuAction(context, this, list));
@@ -256,12 +234,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             }
         }
 
-        ImageButton padlock = findView(view, R.id.view_browse_peer_list_item_lock_toggle);
-
         TextView title = findView(view, R.id.view_browse_peer_list_item_file_title);
         title.setText(fd.title);
-
-        populatePadlockAppearance(fd, padlock, title);
 
         if (fd.fileType == Constants.FILE_TYPE_AUDIO || fd.fileType == Constants.FILE_TYPE_APPLICATIONS) {
             TextView fileExtra = findView(view, R.id.view_browse_peer_list_item_extra_text);
@@ -280,44 +254,12 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         populateSDState(view, item);
     }
 
-    /**
-     * Same factors are considered to show the padlock icon state and color.
-     * 
-     * When the file is not local and it's been marked for download the text color appears as blue.
-     * 
-     * @param fd
-     * @param padlock
-     * @param title
-     */
-    private void populatePadlockAppearance(FileDescriptor fd, ImageButton padlock, TextView title) {
-        if (local) {
-            // LSD:
-            padlock.setVisibility(View.GONE);
-            /*
-            padlock.setVisibility(View.VISIBLE);
-            padlock.setTag(fd);
-            padlock.setOnClickListener(padLockClickListener);
-
-            if (fd.shared) {
-                padlock.setImageResource(R.drawable.browse_peer_padlock_unlocked_icon);
-            } else {
-                padlock.setImageResource(R.drawable.browse_peer_padlock_locked_icon);
-            }
-            */
-        } else {
-            padlock.setVisibility(View.GONE);
-        }
-    }
-
     private void populateViewPlain(View view, FileDescriptorItem item) {
         FileDescriptor fd = item.fd;
-
-        ImageButton padlock = findView(view, R.id.view_browse_peer_list_item_lock_toggle);
 
         TextView title = findView(view, R.id.view_browse_peer_list_item_file_title);
         title.setText(fd.title);
 
-        populatePadlockAppearance(fd, padlock, title);
         populateContainerAction(view);
 
         if (fd.fileType == Constants.FILE_TYPE_AUDIO || fd.fileType == Constants.FILE_TYPE_APPLICATIONS) {
@@ -351,7 +293,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private void populateSDState(View v, FileDescriptorItem item) {
         ImageView img = findView(v, R.id.view_browse_peer_list_item_sd);
-        ImageView lock = findView(v, R.id.view_browse_peer_list_item_lock_toggle);
 
         if (item.inSD) {
             if (item.mounted) {
@@ -362,12 +303,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 v.setBackgroundResource(R.drawable.browse_peer_listview_item_inactive_background);
                 setInactiveTextColors(v);
                 img.setVisibility(View.VISIBLE);
-
-                if (item.fd.shared) {
-                    lock.setImageResource(R.drawable.browse_peer_padlock_unlocked_icon_inactive);
-                } else {
-                    lock.setImageResource(R.drawable.browse_peer_padlock_locked_icon_inactive);
-                }
             }
         } else {
             v.setBackgroundResource(R.drawable.listview_item_background_selector);

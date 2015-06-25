@@ -54,8 +54,6 @@ public final class PeerManager {
     private static PeerManager instance;
 
     private final LocalPeerManager peerManager;
-    // LSD:
-    //private final HttpServerManager httpServerManager;
 
     public static PeerManager instance() {
         if (instance == null) {
@@ -82,9 +80,6 @@ public final class PeerManager {
                 onMessageReceived(peer, false);
             }
         });
-
-        // LSD:
-        //this.httpServerManager = new HttpServerManager();
     }
 
     public Peer getLocalPeer() {
@@ -142,8 +137,6 @@ public final class PeerManager {
 
     public void start() {
         if (!peerManager.isRunning()) {
-            // LSD:
-            //httpServerManager.start(NetworkManager.instance().getListeningPort());
             try {
                 peerManager.start(NetworkManager.instance().getMulticastInetAddress(), createLocalPeer());
             } catch (IOException e) {
@@ -153,8 +146,6 @@ public final class PeerManager {
     }
 
     public void stop() {
-        // LSD:
-        //httpServerManager.stop();
         peerManager.stop();
     }
 

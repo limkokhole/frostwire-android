@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -73,19 +73,6 @@ public final class UniversalScanner {
         new MultiFileAndroidScanner(filesToScan).scan();
     }
 
-    private static void shareFinishedDownload(FileDescriptor fd) {
-        // LSD:
-        /*
-        if (fd != null) {
-            if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TRANSFER_SHARE_FINISHED_DOWNLOADS)) {
-                fd.shared = true;
-                Librarian.instance().updateSharedStates(fd.fileType, Arrays.asList(fd));
-            }
-            Librarian.instance().invalidateCountCache(fd.fileType);
-        }
-        */
-    }
-
     private void scanDocument(String filePath) {
         File file = new File(filePath);
 
@@ -107,13 +94,7 @@ public final class UniversalScanner {
         values.put(DocumentsColumns.DATE_MODIFIED, file.lastModified());
         values.put(DocumentsColumns.MIME_TYPE, UIUtils.getMimeType(filePath));
 
-        Uri uri = cr.insert(Documents.Media.CONTENT_URI, values);
-
-        FileDescriptor fd = new FileDescriptor();
-        fd.fileType = Constants.FILE_TYPE_DOCUMENTS;
-        fd.id = Integer.valueOf(uri.getLastPathSegment());
-
-        shareFinishedDownload(fd);
+        cr.insert(Documents.Media.CONTENT_URI, values);
     }
 
     private boolean documentExists(String filePath, long size) {
@@ -186,12 +167,6 @@ public final class UniversalScanner {
             if (uri != null && !path.contains("/Android/data/" + context.getPackageName())) {
                 if (mt != null && mt.getId() == Constants.FILE_TYPE_DOCUMENTS) {
                     scanDocument(path);
-                } else {
-                    //LOG.debug("Scanned new file: " + uri);
-                    FileDescriptor fd = Librarian.instance().getFileDescriptor(uri);
-                    if (fd != null) {
-                        shareFinishedDownload(fd);
-                    }
                 }
             } else {
                 if (path.endsWith(".apk")) {
@@ -223,18 +198,9 @@ public final class UniversalScanner {
             if (n > 0) {
                 LOG.debug("Deleted from Files provider: " + oldUri);
             }
-            Uri uri = nativeScanFile(context, filePath);
-
-            if (uri != null) {
-                FileDescriptor fd = new FileDescriptor();
-                fd.fileType = (byte) mt.getId();
-                fd.id = Integer.valueOf(uri.getLastPathSegment());
-
-                shareFinishedDownload(fd);
-            }
+            nativeScanFile(context, filePath);
         } catch (Throwable e) {
-            // eat
-            e.printStackTrace();
+            LOG.error("Unable to scan file: " + filePath, e);
         }
     }
 
