@@ -78,7 +78,7 @@ import java.util.regex.Pattern;
  * @author gubatron
  * @author aldenml
  */
-public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, CurrentQueryReporter {
+public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, SearchProgressView.CurrentQueryReporter {
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
 
     private static int startedTransfers = 0;

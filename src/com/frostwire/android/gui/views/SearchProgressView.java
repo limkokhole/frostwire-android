@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,9 +20,6 @@ package com.frostwire.android.gui.views;
 
 import android.content.Context;
 import android.content.res.Configuration;
-import android.graphics.Paint;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -31,10 +28,8 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
-import com.frostwire.android.gui.fragments.CurrentQueryReporter;
 import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.util.OfferUtils;
-import com.frostwire.android.gui.util.UIUtils;
 
 /**
  * @author gubatron
@@ -142,7 +137,7 @@ public class SearchProgressView extends LinearLayout {
     }
 
     private void initRetryTextViews() {
-        retryButtons = new Button[] {
+        retryButtons = new Button[]{
                 (Button) findViewById(R.id.view_search_progress_retry_button_1),
                 (Button) findViewById(R.id.view_search_progress_retry_button_2),
                 (Button) findViewById(R.id.view_search_progress_retry_button_3),
@@ -224,5 +219,9 @@ public class SearchProgressView extends LinearLayout {
                 retryListener.onRetry(owner, b.getText().toString());
             }
         }
+    }
+
+    public interface CurrentQueryReporter {
+        String getCurrentQuery();
     }
 }
