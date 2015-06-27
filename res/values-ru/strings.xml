@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
@@ -19,7 +19,6 @@
  */
 -->
 <resources>
-    <string name="application_label">FrostWire</string>
     <string name="activity_preferences_name">Настройки</string>
     <string name="activity_browse_peer_name">Обзор хостов</string>
     <string name="activity_browse_peers_name">Люди поблизости</string>
@@ -312,7 +311,6 @@
     <string name="torrent_max_uploads">Максимум раздач</string>
     <string name="torrent_max_total_connections_summary">Максимальное количество подключений</string>
     <string name="torrent_max_total_connections">Максимальное количество подключений</string>
-    <string name="torrent_max_torrent_connection_summary">Максимум торрент соединений</string>
     <string name="torrent_max_torrent_connection">Максимум торрент соединений</string>
     <string name="dummy_summary">[Сводка]</string>
     <string name="dummy_version">[Версия]</string>
@@ -384,7 +382,6 @@
     <string name="support_frostwire_summary">Показать объявления на поддержку развития этого приложения.</string>
     <string name="storage_preference_title">Выбор места хранения</string>
     <string name="storage_preference_summary">Место хранения по умолчанию, где будут сохранены файлы.</string>
-    <string name="connectivity">Соединение</string>
     <string name="loading">Загрузка</string>
     <string name="wifi_sharing">Раздача по Wi-Fi</string>
     <string name="activity_mediaplayer_name">Медиа проигрыватель</string>
@@ -450,7 +447,6 @@
     <string name="cloud_downloads_coming">К сожалению, возможность загрузки в облако, пока ещё в разработке.</string>
     <string name="seed">Сид</string>
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Передача была приостановлена, потому что нет соединения с сетью. (Проверьте ваше BitTorrent-соединение в настройках)</string>
-    <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>
     <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="remove_from_recent">Удалить из истории</string>
     <string name="now_playing">Сейчас проигрывается</string>
@@ -476,4 +472,50 @@
     <string name="file_descriptor_sd_mounted">Этот файл был удален с SD-карты, или вы вставили другую SD-карту.</string>
     <string name="file_descriptor_sd_unmounted">Этот файл находиться на SD-карте, пожалуйста вставьте её.</string>
     <string name="help_translate_frostwire">Помогите перевести FrostWire</string>
+    <string name="use_tpb_summary">TPB основан на magnet-ссылках, работает только по Wi-Fi</string>
+    <string name="use_monova">Использовать Monova</string>
+    <string name="use_monova_summary">Monova основан на magnet-ссылках, работает только по Wi-Fi</string>
+    <string name="use_kat_summary">KAT основан на magnet-ссылках, работает только по Wi-Fi</string>
+    <string name="use_yify">Использовать Yify</string>
+    <string name="use_yify_summary">Yify основан на magnet-ссылках, работает только по Wi-Fi</string>
+    <string name="yes_no_cancel_transfer_question_cloud">Вы уверены, что хотите остановить и удалить эту загрузку из списка?</string>
+    <string name="torrent_max_peers_summary">Максимум пиров</string>
+    <string name="torrent_max_peers">Максимум пиров</string>
+    <string name="bittorrent">BitTorrent</string>
+    <string name="bittorrent_network_summary">Статус соединения</string>
+    <string name="couldnt_share_file">Не смог поделиться файлом. Странно, но путь найден.</string>
+    <string name="queued_for_checking">В очереди на проверку</string>
+    <string name="checking_ellipsis">Проверка…</string>
+    <string name="downloading_metadata">Загрузка методанных</string>
+    <string name="error_moving_incomplete">Ошибка: Перемещение не завершено</string>
+    <string name="error_wrong_md5_hash">Ошибка: Неправильный MD5 хэш</string>
+    <string name="error_wrong_signature">Ошибка: Неправильная подпись</string>
+    <string name="pausing">Приостановка</string>
+    <string name="canceling">Отмена</string>
+    <string name="app_shutdown_dlg_title">Выключение</string>
+    <string name="app_shutdown_dlg_message">Будет завершина работа всех загрузок и фоновых служб. Вы уверены?</string>
+    <string name="error_not_enough_peers">Попробуйте еще раз, не хватает пиров</string>
+    <string name="http_download_status_save_dir_error">Директория для сохранения не существует или не может быть создана</string>
+    <string name="my_music">Моя музыка</string>
+    <string name="support">Поддержка</string>
+    <string name="wifi_sharing_settings">Настройки загрузок по Wi-Fi</string>
+    <string name="use_btjunkie">Использовать BTJunkie</string>
+    <string name="free_download">Скачать бесплатно</string>
+    <string name="error_no_space_left_on_device">Ошибка: Не хватает свободного места для сохранения файла</string>
+    <string name="free_sponsored_app">Бесплатные приложения от спонсоров</string>
+    <string name="send_bitcoin_tip">Отправить Bitcoin чаевые</string>
+    <string name="send_tip_donation">Отправить Чаевые/Пожертвование</string>
+    <string name="issue_with_tip_donation_uri">Что-то не так с веб-адресом для Чаевых/Пожертвований</string>
+    <string name="enable_dht">Включить DHT</string>
+    <string name="enable_dht_summary">Включите использование "распределённой хеш-таблицы" для объявления/поиска торрент-пиров</string>
+    <string name="dummy_build">[номер сборки]</string>
+    <string name="basic">Базовый</string>
+    <string name="plus">Плюс</string>
+    <string name="try_other_keywords">Попробуйте другие ключевые слова</string>
+    <string name="action_menu_overflow_description">Больше параметров</string>
+    <string name="rate_our_app">Оцените наше приложение</string>
+    <string name="rating_reminder_description">Если вы любите FrostWire, пожалуйста, уделите минуту, чтобы оценить нас.</string>
+    <string name="love_frostwire">Люблю FrostWire</string>
+    <string name="send_feedback">Оставить отзыв</string>
+    <string name="choose_email_app">Выберите приложение эл.почты...</string>
 </resources>
