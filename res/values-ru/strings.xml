@@ -48,7 +48,7 @@
     <string name="waiting">Подождите...</string>
     <string name="use_icons_to_browse">Используйте иконки для того, чтобы просматривать файлы.</string>
     <string name="type_to_filter_results">Введите слово, для фильтрации результатов.</string>
-    <string name="fetching_file_list">Полученние списка раздачи</string>
+    <string name="fetching_file_list">Получение списка раздачи</string>
     <string name="not_sharing_files">не раздаёт никакие файлы.</string>
     <string name="browse_peer">Просмотреть пир</string>
     <string name="peer">Пир</string>
@@ -119,7 +119,7 @@
     <string name="failed_to_set_wallpaper">Не удалось установить в качестве обоев</string>
     <string name="tell_others_chooser">Рассказать через Твиттер/SMS/E-Mail</string>
     <string name="tell_others_subject">Уже есть FrostWire для Андроида?</string>
-    <string name="and_choose_what_filetypes_to_share">Отметьте, какие типы файлов Вы бы хотели раздавать в FrostWire Mobile через мобильную сеть и разрешенный Wi-Fi на ближайших компьютерах.</string>
+    <string name="and_choose_what_filetypes_to_share">Отметьте, какие типы файлов Вы бы хотели раздавать в FrostWire через мобильную сеть и разрешенный Wi-Fi на ближайших компьютерах.</string>
     <string name="before_getting_started">Прежде, чем начать</string>
     <string name="user_connecting">Пользователь подключается</string>
     <string name="accept_connection_from">Принять подключение от</string>
@@ -161,7 +161,7 @@
     <string name="multicast_discovery_summary">Подключаться к пирам, внутри Wi-Fi сети с помощью Multicast (рекомендовано)</string>
     <string name="broadcast_discovery">Использовать Broadcast</string>
     <string name="broadcast_discovery_summary">Подключаться к пирам, внутри Wi-Fi сети с помощью Broadcast (больше трафика на роутере)</string>
-    <string name="internet_discovery">Испольовать Интернет</string>
+    <string name="internet_discovery">Интернет обнаружение</string>
     <string name="internet_discovery_summary">Подключиться к удаленным пирам в Интернете.</string>
     <string name="meter">м</string>
     <string name="kilometer">км</string>
@@ -182,7 +182,7 @@
     <string name="cant_open_file">Извините, не знаем, чем открыть этот файл.</string>
     <string name="downloading_from_desktop">Скачивается файл(ы) с компьютера</string>
     <string name="share_indication_dialog_title">Как начать или прекратить раздавать файлы</string>
-    <string name="dialog_share_indicator_text_text">Посмотрите вокруг, разрешите или запретите разадачу файлов, отметив их с помощью флажков.\n\nИспользуйте значёк замка для того, чтобы разрешить или запретить раздачу отдельно взятого файла.</string>
+    <string name="dialog_share_indicator_text_text">Посмотрите вокруг, разрешите или запретите раздачу файлов, отметив их с помощью флажков.\n\nИспользуйте значок замка для того, чтобы разрешить или запретить раздачу отдельно взятого файла.</string>
     <string name="dialog_share_indicator_check_text">Показать эту подсказку в следующий раз</string>
     <string name="show_share_indication">Показывать подсказку при раздаче</string>
     <string name="download_added_to_queue">1 файл будет загружен</string>
@@ -245,7 +245,7 @@
     <string name="dummy_seeds">[Сиды]</string>
     <string name="dummy_peers">[Пиры]</string>
     <string name="view_transfer_item_list_item_icon">Иконка для типа файла</string>
-    <string name="nickname_sharing_count_files">%1$s - Раздает %2$d файлы</string>
+    <string name="nickname_sharing_count_files">%1$s - Раздаёт %2$d файлы</string>
     <string name="play_image_description">Включить</string>
     <string name="view_transfer_list_item_button_action_description">Действие</string>
     <string name="yes_no_cancel_transfer_question">Вы уверены, что хотите остановить и удалить из списка это скачивание (Данные не будут удалены)?</string>
@@ -277,7 +277,7 @@
     <string name="pause_torrent_menu_action">Пауза</string>
     <string name="resume_torrent_menu_action">Возобновить</string>
     <string name="peer_http_download_status_downloading">Идет скачивание</string>
-    <string name="peer_http_download_status_complete">Завершиено</string>
+    <string name="peer_http_download_status_complete">Завершено</string>
     <string name="peer_http_download_status_error">Ошибка</string>
     <string name="peer_http_download_status_cancelled">Отменено</string>
     <string name="peer_http_download_status_waiting">В процессе</string>
@@ -299,7 +299,7 @@
     <string name="dummy_peer_file_count">[Пир/Всего файлов]</string>
     <string name="download_type_not_supported">Скачиваемый тип не поддерживается</string>
     <string name="im_on_it">Я в...</string>
-    <string name="hint_transfers">Используйте "Меню" для большенства действий</string>
+    <string name="hint_transfers">Используйте "Меню" для большинства действий</string>
     <string name="torrent_settings">Торрент</string>
     <string name="torrent_max_download_speed_summary">Максимальная скорость загрузки</string>
     <string name="torrent_max_download_speed">Максимальная скорость загрузки</string>
@@ -376,7 +376,7 @@
     <string name="block_computer">Заблокировать у себя этот компьютер</string>
     <string name="desktop_transfer_status_transferring">Передаётся</string>
     <string name="desktop_transfer_status_complete">Завершено</string>
-    <string name="desktop_transfer_status_cancelled">Отменнено</string>
+    <string name="desktop_transfer_status_cancelled">Отменено</string>
     <string name="desktop_transfer_status_unknown">Неизвестный статус</string>
     <string name="support_frostwire">Поддержка FrostWire</string>
     <string name="support_frostwire_summary">Показать объявления на поддержку развития этого приложения.</string>
@@ -391,12 +391,12 @@
     <string name="donate_10">Пожертвовать $10</string>
     <string name="donate_25">Пожертвовать $25</string>
     <string name="one_file_shared">Один файл теперь доступен для устройств Frostwire в этой Wi-Fi сети.</string>
-    <string name="n_files_shared">%d файлов теперь доступены для устройств Frostwire в этой Wi-Fi сети.</string>
+    <string name="n_files_shared">%d файлов, теперь доступны для устройств с Frostwire в этой Wi-Fi сети.</string>
     <string name="playing_now_colon">Сейчас играет:</string>
     <string name="my_filetype">Мои %s</string>
     <string name="paused">На паузе</string>
     <string name="use_youtube">Использовать YouTube</string>
-    <string name="use_soundcloud">Использовать Soundcloud</string>
+    <string name="use_soundcloud">Использовать SoundCloud</string>
     <string name="enable_wifi_sharing">Раздавать по Wi-Fi</string>
     <string name="enable_wifi_sharing_summary">Раздавать файлы для пиров в локальной сети Wi-Fi.</string>
     <string name="youtube_download_status_verifying">Проверка</string>
@@ -451,7 +451,7 @@
     <string name="remove_from_recent">Удалить из истории</string>
     <string name="now_playing">Сейчас проигрывается</string>
     <string name="dummy_author">[Автор]</string>
-    <string name="install_bitcoin_wallet">Установить Bitcoin кашелёк</string>
+    <string name="install_bitcoin_wallet">Установить Bitcoin кошелёк</string>
     <string name="cant_resume_torrent_transfers">Не удается возобновить торрент-передачу, проверьте статус сети в "Настройки" > "Связь"</string>
     <string name="confirm_download">Подтвердите загрузку</string>
     <string name="track">трек</string>
@@ -486,14 +486,14 @@
     <string name="couldnt_share_file">Не смог поделиться файлом. Странно, но путь найден.</string>
     <string name="queued_for_checking">В очереди на проверку</string>
     <string name="checking_ellipsis">Проверка…</string>
-    <string name="downloading_metadata">Загрузка методанных</string>
+    <string name="downloading_metadata">Загрузка метаданных</string>
     <string name="error_moving_incomplete">Ошибка: Перемещение не завершено</string>
     <string name="error_wrong_md5_hash">Ошибка: Неправильный MD5 хэш</string>
     <string name="error_wrong_signature">Ошибка: Неправильная подпись</string>
     <string name="pausing">Приостановка</string>
     <string name="canceling">Отмена</string>
     <string name="app_shutdown_dlg_title">Выключение</string>
-    <string name="app_shutdown_dlg_message">Будет завершина работа всех загрузок и фоновых служб. Вы уверены?</string>
+    <string name="app_shutdown_dlg_message">Будет завершена работа всех загрузок и фоновых служб. Вы уверены?</string>
     <string name="error_not_enough_peers">Попробуйте еще раз, не хватает пиров</string>
     <string name="http_download_status_save_dir_error">Директория для сохранения не существует или не может быть создана</string>
     <string name="my_music">Моя музыка</string>
