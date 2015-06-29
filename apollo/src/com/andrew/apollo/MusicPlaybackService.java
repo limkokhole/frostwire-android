@@ -1199,11 +1199,16 @@ public class MusicPlaybackService extends Service {
     private void setNextTrack() {
         mNextPlayPos = getNextPosition(false);
         if (D) Log.d(TAG, "setNextTrack: next play position = " + mNextPlayPos);
-        if (mNextPlayPos >= 0 && mPlayList != null) {
-            final long id = mPlayList[mNextPlayPos];
-            mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
+
+        if (mPlayer != null) {
+            if (mNextPlayPos >= 0 && mPlayList != null) {
+                final long id = mPlayList[mNextPlayPos];
+                mPlayer.setNextDataSource(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/" + id);
+            } else {
+                mPlayer.setNextDataSource(null);
+            }
         } else {
-            mPlayer.setNextDataSource(null);
+            Log.w(TAG, "setNextTrack() -> no mPlayer instance available.");
         }
     }
 

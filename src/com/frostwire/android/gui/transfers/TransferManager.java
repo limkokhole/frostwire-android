@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -157,27 +157,6 @@ public final class TransferManager {
         }
 
         return transfer;
-    }
-
-    public DownloadTransfer download(Peer peer, FileDescriptor fd) {
-        PeerHttpDownload download = new PeerHttpDownload(this, peer, fd);
-
-        if (alreadyDownloading(download.getDetailsUrl())) {
-            return new ExistingDownload();
-        }
-
-        downloads.add(download);
-        download.start();
-
-        UXStats.instance().log(UXAction.WIFI_SHARING_DOWNLOAD);
-
-        return download;
-    }
-
-    public PeerHttpUpload upload(FileDescriptor fd) {
-        PeerHttpUpload upload = new PeerHttpUpload(this, fd);
-        uploads.add(upload);
-        return upload;
     }
 
     public void clearComplete() {

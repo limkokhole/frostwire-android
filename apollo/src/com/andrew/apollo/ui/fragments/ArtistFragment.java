@@ -50,6 +50,7 @@ import com.andrew.apollo.utils.ApolloUtils;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.NavUtils;
 import com.andrew.apollo.utils.PreferenceUtils;
+import com.frostwire.jlibtorrent.Logger;
 import com.viewpagerindicator.TitlePageIndicator;
 
 import java.util.List;
@@ -111,6 +112,8 @@ public class ArtistFragment extends Fragment implements LoaderCallbacks<List<Art
      * True if the list should execute {@code #restartLoader()}.
      */
     private boolean mShouldRefresh = false;
+
+    private static Logger LOG = Logger.getLogger(ArtistFragment.class);
 
     /**
      * Empty constructor as per the {@link Fragment} documentation
@@ -241,9 +244,13 @@ public class ArtistFragment extends Fragment implements LoaderCallbacks<List<Art
                     return true;
                 case FragmentMenuItems.DELETE:
                     mShouldRefresh = true;
-                    final String artist = mArtist.mArtistName;
-                    DeleteDialog.newInstance(artist, mArtistList, artist).show(
-                            getFragmentManager(), "DeleteDialog");
+                    if (mArtist != null) {
+                        final String artist = mArtist.mArtistName;
+                        DeleteDialog.newInstance(artist, mArtistList, artist).show(
+                                getFragmentManager(), "DeleteDialog");
+                    } else {
+                        LOG.error("Could not delete artist: mArtist == null");
+                    }
                     return true;
                 default:
                     break;

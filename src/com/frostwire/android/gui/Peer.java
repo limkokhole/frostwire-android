@@ -39,7 +39,6 @@ public final class Peer {
 
     private static final int BROWSE_HTTP_TIMEOUT = 10000;
 
-    private String udn;
     private String address;
     private int listeningPort;
 
@@ -47,27 +46,21 @@ public final class Peer {
      * 16 bytes (128bit - UUID identifier letting us know who is the sender)
      */
     private String nickname;
-    private int numSharedFiles;
     private String clientVersion;
-    private int deviceMajorType;
 
     private int hashCode = -1;
     private final boolean localhost;
 
     private String key;
-    private final LocalPeer p;
 
     private final HttpClient httpClient;
 
     public Peer(LocalPeer p, boolean localhost) {
-        this.p = p;
         this.key = p.address + ":" + p.port;
         this.address = p.address;
         this.listeningPort = p.port;
 
         this.nickname = p.nickname;
-        this.numSharedFiles = p.numSharedFiles;
-        this.deviceMajorType = p.deviceType;
         this.clientVersion = p.clientVersion;
         this.localhost = localhost;
 
@@ -75,16 +68,8 @@ public final class Peer {
         this.httpClient = HttpClientFactory.newInstance();
     }
 
-    public String getUdn() {
-        return udn;
-    }
-
     public String getAddress() {
         return address;
-    }
-
-    public int getListeningPort() {
-        return listeningPort;
     }
 
     public String getNickname() {
@@ -93,18 +78,6 @@ public final class Peer {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public int getNumSharedFiles() {
-        return numSharedFiles;
-    }
-
-    public int getDeviceMajorType() {
-        return deviceMajorType;
-    }
-
-    public String getClientVersion() {
-        return clientVersion;
     }
 
     public boolean isLocalHost() {
@@ -117,10 +90,6 @@ public final class Peer {
 
     public String getBrowseUri(byte fileType) {
         return "http://" + address + ":" + listeningPort + "/browse?type=" + fileType;
-    }
-
-    public String getDownloadUri(FileDescriptor fd) {
-        return "http://" + address + ":" + listeningPort + "/download?type=" + fd.fileType + "&id=" + fd.id;
     }
 
     public Finger finger() {

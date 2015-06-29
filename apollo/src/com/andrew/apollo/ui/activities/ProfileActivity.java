@@ -121,8 +121,8 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
         // Initialize the pager adapter
         mPagerAdapter = new PagerAdapter(this);
 
-        // Initialze the carousel
-        mTabCarousel = (ProfileTabCarousel)findViewById(R.id.acivity_profile_base_tab_carousel);
+        // Initialize the carousel
+        mTabCarousel = (ProfileTabCarousel)findViewById(R.id.activity_profile_base_tab_carousel);
         mTabCarousel.reset();
         mTabCarousel.getPhoto().setOnClickListener(new View.OnClickListener() {
 
@@ -525,29 +525,35 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
                     MediaStore.Images.Media.DATA
                 };
 
-                Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null,
-                        null, null);
+                try {
+                    Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null,
+                            null, null);
 
-                if (cursor != null && cursor.moveToFirst()) {
-                    final int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                    final String picturePath = cursor.getString(columnIndex);
+                    if (cursor != null && cursor.moveToFirst()) {
+                        final int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                        final String picturePath = cursor.getString(columnIndex);
 
-                    cursor.close();
+                        cursor.close();
 
-                    String key = mProfileName;
-                    if (isArtist()) {
-                        key = mArtistName;
-                    } else if (isAlbum()) {
-                        key = ImageFetcher.generateAlbumCacheKey(mProfileName, mArtistName);
+                        String key = mProfileName;
+                        if (isArtist()) {
+                            key = mArtistName;
+                        } else if (isAlbum()) {
+                            key = ImageFetcher.generateAlbumCacheKey(mProfileName, mArtistName);
+                        }
+
+                        final Bitmap bitmap = ImageFetcher.decodeSampledBitmapFromFile(picturePath);
+                        mImageFetcher.addBitmapToCache(key, bitmap);
+                        if (isAlbum()) {
+                            mTabCarousel.getAlbumArt().setImageBitmap(bitmap);
+                        } else {
+                            mTabCarousel.getPhoto().setImageBitmap(bitmap);
+                        }
                     }
-
-                    final Bitmap bitmap = ImageFetcher.decodeSampledBitmapFromFile(picturePath);
-                    mImageFetcher.addBitmapToCache(key, bitmap);
-                    if (isAlbum()) {
-                        mTabCarousel.getAlbumArt().setImageBitmap(bitmap);
-                    } else {
-                        mTabCarousel.getPhoto().setImageBitmap(bitmap);
-                    }
+                } catch (Throwable t) {
+                    // it seems to be complaining about not having the '_data' column.
+                    // #fragmentation?
+                    t.printStackTrace();
                 }
             } else {
                 selectOldPhoto();

@@ -1,10 +1,18 @@
-FrostWire 1.5.8 - JUNE/10/2015
+FrostWire 1.5.9 - JUNE/25/2015
+ - Improved search suggestions.
+ - Multiple crash fixes in music player.
+
+FrostWire 1.5.8 - JUNE/16/2015
+ - Search performance improvements.
+ - Issues where subsequent searches would stop working fixed.
+ - TorLock search fixed.
  - Added SSL (https) support for torrent web seeds.
  - Icons/graphics update.
  - New 'Rate us' reminder notification.
  - WiFi sharing functionality removed. Less than 0.2% of the user
    base making use of this, despite multiple rewrites we never
    managed to get it to work 100% of the time.
+ - frostwire-jlibtorrent library updates.
 
 FrostWire 1.5.7 - MAY/15/2015
  - KAT search fixed.

@@ -106,9 +106,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private SearchFragment search;
     private BrowsePeerFragment library;
     private TransfersFragment transfers;
-    // LSD:
-    //private BrowsePeersFragment peers;
-    //private BrowsePeersDisabledFragment peersDisabled;
 
     private Fragment currentFragment;
     private final Stack<Integer> fragmentsStack;
@@ -320,7 +317,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             startActivity(i);
 
             //go!
-            TransferManager.instance().downloadTorrent(intent.getDataString());
+            final String uri = intent.getDataString();
+            if (uri != null) {
+                TransferManager.instance().downloadTorrent(uri);
+            } else {
+                LOG.warn("MainActivity.onNewIntent(): Couldn't start torrent download from Intent's URI, intent.getDataString() -> null");
+                LOG.warn("(maybe URI is coming in another property of the intent object - #fragmentation)");
+            }
         }
         // When another application wants to "Share" a file and has chosen FrostWire to do so.
         // We make the file "Shared" so it's visible for other FrostWire devices on the local network.
@@ -351,7 +354,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     protected void onResume() {
         super.onResume();
 
-        refreshPeersFragment();
         refreshPlayerItem();
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
@@ -564,11 +566,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         updateHeader(getCurrentFragment());
     }
 
-    // LSD:
-//    private Fragment getWifiSharingFragment() {
-//        return Engine.instance().isStarted() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING) ? peers : peersDisabled;
-//    }
-
     private void showLastBackDialog() {
         YesNoDialog dlg = YesNoDialog.newInstance(LAST_BACK_DIALOG_ID, R.string.minimize_frostwire, R.string.are_you_sure_you_wanna_leave);
         dlg.show(getFragmentManager()); //see onDialogClick
@@ -647,10 +644,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         } else if (fragment instanceof TransfersFragment) {
             setSelectedItem(R.id.menu_main_transfers);
         }
-        // LSD:
-        //} else if (fragment instanceof BrowsePeersFragment || fragment instanceof BrowsePeersDisabledFragment) {
-        //    setSelectedItem(R.id.menu_main_peers);
-        //}
 
         updateHeader(getCurrentFragment());
     }
@@ -706,9 +699,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         search = (SearchFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_search);
         library = (BrowsePeerFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_browse_peer);
         transfers = (TransfersFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_transfers);
-        // LSD:
-        //peers = (BrowsePeersFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_browse_peers);
-        //peersDisabled = (BrowsePeersDisabledFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_browse_peers_disabled);
 
         hideFragments(getFragmentManager().beginTransaction()).commit();
 
@@ -716,8 +706,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private FragmentTransaction hideFragments(FragmentTransaction ts) {
-        // LSD:
-        //return ts.hide(search).hide(library).hide(transfers).hide(peers).hide(peersDisabled);
         return ts.hide(search).hide(library).hide(transfers);
     }
 
@@ -775,17 +763,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
-    private void refreshPeersFragment() {
-        // LSD:
-        /*
-        Fragment fragment = getCurrentFragment();
-        if (fragment instanceof BrowsePeersFragment || fragment instanceof BrowsePeersDisabledFragment) {
-            controller.switchFragment(R.id.menu_main_peers);
-        }
-        PeerManager.instance().updateLocalPeer();
-        */
-    }
-
     private void switchContent(Fragment fragment, boolean addToStack) {
         hideFragments(getFragmentManager().beginTransaction()).show(fragment).commitAllowingStateLoss();
         if (addToStack && (fragmentsStack.isEmpty() || fragmentsStack.peek() != fragment.getId())) {
@@ -807,9 +784,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return library;
         case R.id.menu_main_transfers:
             return transfers;
-        // LSD:
-        //case R.id.menu_main_peers:
-        //    return getWifiSharingFragment();
         default:
             return null;
         }

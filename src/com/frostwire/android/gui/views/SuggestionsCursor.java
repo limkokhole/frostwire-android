@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,22 +18,19 @@
 
 package com.frostwire.android.gui.views;
 
+import android.database.AbstractCursor;
 import org.json.JSONArray;
 
-import android.database.AbstractCursor;
-
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 class SuggestionsCursor extends AbstractCursor {
 
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_SUGGESTION = "suggestion";
 
-    public static final String[] COLUMNS = { COLUMN_ID, COLUMN_SUGGESTION };
+    public static final String[] COLUMNS = {COLUMN_ID, COLUMN_SUGGESTION};
 
     private final JSONArray suggestions;
 
@@ -86,7 +83,7 @@ class SuggestionsCursor extends AbstractCursor {
     public String getString(int column) {
         if (column == 1) {
             try {
-                return suggestions.getString(mPos);
+                return suggestions.getJSONArray(mPos).getString(0);
             } catch (Throwable e) {
                 // ignore
             }

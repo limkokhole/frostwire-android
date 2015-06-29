@@ -13,7 +13,6 @@ package com.andrew.apollo.ui.fragments.profile;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
@@ -104,7 +103,7 @@ public class ArtistAlbumFragment extends Fragment implements LoaderCallbacks<Lis
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
         mProfileTabCarousel = (ProfileTabCarousel)activity
-                .findViewById(R.id.acivity_profile_base_tab_carousel);
+                .findViewById(R.id.activity_profile_base_tab_carousel);
     }
 
     /**

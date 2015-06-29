@@ -30,21 +30,6 @@
         android:background="@drawable/browse_peer_list_item_download_button_background"
         android:contentDescription="@null" />
 
-    <ImageButton
-        android:id="@+id/view_browse_peer_list_item_lock_toggle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_margin="3dp"
-        android:background="@null"
-        android:contentDescription="@null"
-        android:paddingBottom="6dip"
-        android:paddingRight="6dip"
-        android:paddingTop="6dip"
-        android:scaleType="fitCenter"
-        android:src="@drawable/browse_peer_padlock_locked_icon" />
-
     <TextView
         android:id="@+id/view_browse_peer_list_item_file_title"
         style="@style/BrowsePeerList.Item.Title"
@@ -52,7 +37,6 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="6dip"
         android:layout_marginTop="4dip"
-        android:layout_toLeftOf="@id/view_browse_peer_list_item_lock_toggle"
         android:layout_toRightOf="@id/view_browse_peer_list_item_file_thumbnail"
         android:text="@string/dummy_title" />
 

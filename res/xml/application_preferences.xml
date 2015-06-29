@@ -100,35 +100,6 @@
                 android:title="@string/clear_search_cache"
                 frostwire:button_text="@string/clear" />
     </PreferenceScreen>
-
-    <!-- LSD:
-    <PreferenceScreen
-        android:key="frostwire.prefs.wifisharing.preference_category"
-        android:title="@string/wifi_sharing_settings"
-        android:persistent="false" >
-        <SwitchPreference
-                android:key="froswire.prefs.network.enable_wifi_sharing"
-                android:summary="@string/enable_wifi_sharing_summary"
-                android:title="@string/enable_wifi_sharing" />
-
-        <CheckBoxPreference
-                android:key="frostwire.prefs.transfer.share_finished_downloads"
-                android:summary="@string/share_finished_downloads_summary"
-                android:title="@string/share_finished_downloads" />
-
-        <com.frostwire.android.gui.views.preference.NumberSpinnerPreference
-            android:key="frostwire.prefs.network.max_concurrent_uploads"
-            android:summary="@string/simultaneous_uploads_summary"
-            android:title="@string/simultaneous_uploads"
-            frostwire:spinner_defaultValue="3"
-            frostwire:spinner_endRange="6"
-            frostwire:spinner_startRange="1" />
-        <EditTextPreference
-                android:key="frostwire.prefs.gui.nickname"
-                android:summary="@string/how_other_users_will_see_you"
-                android:title="@string/nickname" />
-    </PreferenceScreen>
-    -->
     <PreferenceScreen
         android:key="frostwire.prefs.search.preference_category"
         android:title="@string/search_settings"

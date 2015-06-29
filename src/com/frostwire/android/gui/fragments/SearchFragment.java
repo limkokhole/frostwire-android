@@ -56,12 +56,16 @@ import com.frostwire.frostclick.Slide;
 import com.frostwire.frostclick.SlideList;
 import com.frostwire.frostclick.TorrentPromotionSearchResult;
 import com.frostwire.logging.Logger;
-import com.frostwire.search.*;
+import com.frostwire.search.FileSearchResult;
+import com.frostwire.search.HttpSearchResult;
+import com.frostwire.search.SearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.util.*;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import rx.Observer;
+import rx.Subscription;
 
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
@@ -73,9 +77,8 @@ import java.util.regex.Pattern;
 /**
  * @author gubatron
  * @author aldenml
- *
  */
-public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, CurrentQueryReporter {
+public final class SearchFragment extends AbstractFragment implements MainFragment, OnDialogClickListener, SearchProgressView.CurrentQueryReporter {
     private static final Logger LOG = Logger.getLogger(SearchFragment.class);
 
     private static int startedTransfers = 0;
@@ -93,6 +96,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private String currentQuery;
 
     private final FileTypeCounter fileTypeCounter;
+    private Subscription localSearchSubscription;
 
     public SearchFragment() {
         super(R.layout.fragment_search);
@@ -142,12 +146,24 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             refreshFileTypeCounters(true);
         }
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
-      //No call for super(). Bug on API Level > 11.
-        outState.putInt("startedTransfers",startedTransfers);
-        outState.putLong("lastInterstitialShownTimestamp",lastInterstitialShownTimestamp);
+        //No call for super(). Bug on API Level > 11.
+        outState.putInt("startedTransfers", startedTransfers);
+        outState.putLong("lastInterstitialShownTimestamp", lastInterstitialShownTimestamp);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (this.localSearchSubscription != null) {
+            try {
+                this.localSearchSubscription.unsubscribe();
+            } catch (Throwable t) {
+
+            }
+        }
+        super.onDestroy();
     }
 
     @Override
@@ -165,10 +181,9 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                     performYTSearch(query);
                 } else if (query.startsWith("magnet:?xt=urn:btih:")) {
                     startMagnetDownload(query);
-                    currentQuery=null;
+                    currentQuery = null;
                     searchInput.setText("");
-                }
-                else {
+                } else {
                     performSearch(query, mediaTypeId);
                 }
             }
@@ -208,7 +223,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
             }
         });
-        
+
         list = findView(view, R.id.fragment_search_list);
 
         showSearchView(view);
@@ -233,7 +248,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         String vId = null;
         Pattern pattern = Pattern.compile(".*(?:youtu.be\\/|v\\/|u\\/\\w\\/|embed\\/|watch\\?v=)([^#\\&\\?]*).*");
         Matcher matcher = pattern.matcher(ytUrl);
-        if (matcher.matches()){
+        if (matcher.matches()) {
             vId = matcher.group(1);
         }
         return vId;
@@ -248,9 +263,26 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
             };
 
-            LocalSearchEngine.instance().registerListener(new SearchManagerListener() {
+            this.localSearchSubscription = LocalSearchEngine.instance().observable().subscribe(new Observer<List<SearchResult>>() {
                 @Override
-                public void onResults(SearchPerformer performer, final List<? extends SearchResult> results) {
+                public void onCompleted() {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            searchProgress.setProgressEnabled(false);
+                            setupRetrySuggestions();
+                            deepSearchProgress.setVisibility(View.GONE);
+                        }
+                    });
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    LOG.error("Some error in the rx stream", e);
+                }
+
+                @Override
+                public void onNext(final List<SearchResult> results) {
                     @SuppressWarnings("unchecked")
                     FilteredSearchResults fsr = adapter.filter((List<SearchResult>) results);
                     final List<SearchResult> filteredList = fsr.filtered;
@@ -266,21 +298,9 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                         }
                     });
                 }
-
-                @Override
-                public void onFinished(long token) {
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            searchProgress.setProgressEnabled(false);
-                            setupRetrySuggestions();
-                            deepSearchProgress.setVisibility(View.GONE);
-                        }
-                    });
-                }
             });
         }
-        
+
         list.setAdapter(adapter);
     }
 
@@ -296,15 +316,15 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     }
 
     public void performYTSearch(String query) {
-        String ytId=extractYTId(query);
-        if (ytId != null){
+        String ytId = extractYTId(query);
+        if (ytId != null) {
             searchInput.setText("");
             searchInput.performClickOnRadioButton(Constants.FILE_TYPE_VIDEOS);
-            performSearch(ytId,Constants.FILE_TYPE_VIDEOS);
-            searchInput.setHint(getActivity().getString(R.string.searching_for) + " youtube:"+ytId);
+            performSearch(ytId, Constants.FILE_TYPE_VIDEOS);
+            searchInput.setHint(getActivity().getString(R.string.searching_for) + " youtube:" + ytId);
         }
     }
-    
+
     private void performSearch(String query, int mediaTypeId) {
         adapter.clear();
         adapter.setFileType(mediaTypeId);
@@ -375,9 +395,9 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             return new String[0];
         }
 
-        final String[] suggestions = new String[Math.min(split.length-1,4)];
-        for (int i=0; i < suggestions.length ; i++) {
-            suggestions[i] = TextUtils.join(" ", Arrays.copyOfRange(split, 0, suggestions.length-i));
+        final String[] suggestions = new String[Math.min(split.length - 1, 4)];
+        for (int i = 0; i < suggestions.length; i++) {
+            suggestions[i] = TextUtils.join(" ", Arrays.copyOfRange(split, 0, suggestions.length - i));
         }
         return suggestions;
     }
@@ -416,10 +436,10 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         uxLogAction(sr);
     }
-    
+
     private static void startDownload(Context ctx, SearchResult sr, String message) {
         StartDownloadTask task = new StartDownloadTask(ctx, sr, message);
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.HONEYCOMB) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         } else {
             task.execute();
@@ -444,7 +464,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         if (shouldDisplayFirstOne || (itsBeenLongEnough && startedEnoughTransfers)) {
             ctx.showInterstitial(false, false);
             startedTransfers = 0;
-            lastInterstitialShownTimestamp = System.currentTimeMillis();;
+            lastInterstitialShownTimestamp = System.currentTimeMillis();
+            ;
         }
     }
 
@@ -460,8 +481,9 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         final int finishedDownloads = Engine.instance().getNotifiedDownloadsBloomFilter().count();
         final int REMINDER_INTERVAL = CM.getInt(Constants.PREF_KEY_GUI_FINISHED_DOWNLOADS_BETWEEN_RATINGS_REMINDER);
+        //LOG.info("successful finishedDownloads: " + finishedDownloads);
 
-        if (finishedDownloads > 1 && finishedDownloads > REMINDER_INTERVAL) {
+        if (finishedDownloads < REMINDER_INTERVAL) {
             return;
         }
 
@@ -476,7 +498,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         RichNotificationActionLink sendFeedbackActionLink =
                 new RichNotificationActionLink(ratingReminder.getContext(),
                         getString(R.string.send_feedback),
-                        createOnFeedbackClickAdapter(ratingReminder));
+                        createOnFeedbackClickAdapter(ratingReminder, CM));
 
         ratingReminder.updateActionLinks(rateFrostWireActionLink, sendFeedbackActionLink);
         ratingReminder.setVisibility(View.VISIBLE);
@@ -501,15 +523,15 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
     // opens default email client and pre-fills email to support@frostwire.com
     // with some information about the app and environment.
-    private ClickAdapter<SearchFragment> createOnFeedbackClickAdapter(final RichNotification ratingReminder) {
+    private ClickAdapter<SearchFragment> createOnFeedbackClickAdapter(final RichNotification ratingReminder, final ConfigurationManager CM) {
         return new ClickAdapter<SearchFragment>(SearchFragment.this) {
             @Override
             public void onClick(SearchFragment owner, View v) {
                 Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setType("text/plain");
-                intent.putExtra(Intent.EXTRA_EMAIL, new String[] { "support@frostwire.com" });
+                intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"support@frostwire.com"});
                 String plusOrBasic = (Constants.IS_GOOGLE_PLAY_DISTRIBUTION) ? "basic" : "plus";
-                intent.putExtra(Intent.EXTRA_SUBJECT, String.format("[Feedback - frostwire-android (%s) - v%s b%s]", plusOrBasic, Constants.FROSTWIRE_VERSION_STRING, Constants.FROSTWIRE_BUILD) );
+                intent.putExtra(Intent.EXTRA_SUBJECT, String.format("[Feedback - frostwire-android (%s) - v%s b%s]", plusOrBasic, Constants.FROSTWIRE_VERSION_STRING, Constants.FROSTWIRE_BUILD));
 
                 String body = String.format("\n\nAndroid SDK: %d\nAndroid RELEASE: %s (%s)\nManufacturer-Model: %s - %s\nDevice: %s\nBoard: %s\nCPU ABI: %s\nCPU ABI2: %s\n\n",
                         Build.VERSION.SDK_INT,
@@ -522,13 +544,11 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                         Build.CPU_ABI,
                         Build.CPU_ABI2);
 
-                intent.putExtra(Intent.EXTRA_TEXT,body);
-                startActivity(Intent.createChooser(intent,getString(R.string.choose_email_app)));
+                intent.putExtra(Intent.EXTRA_TEXT, body);
+                startActivity(Intent.createChooser(intent, getString(R.string.choose_email_app)));
 
                 ratingReminder.setVisibility(View.GONE);
-
-                //TODO: Comment this when we're ready to go.
-                //CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
+                CM.setBoolean(Constants.PREF_KEY_GUI_ALREADY_RATED_US_IN_MARKET, true);
             }
         };
     }
@@ -537,15 +557,15 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         SearchResult sr;
 
         switch (slide.method) {
-        case Slide.DOWNLOAD_METHOD_TORRENT:
-            sr = new TorrentPromotionSearchResult(slide);
-            break;
-        case Slide.DOWNLOAD_METHOD_HTTP:
-            sr = new HttpSlideSearchResult(slide);
-            break;
-        default:
-            sr = null;
-            break;
+            case Slide.DOWNLOAD_METHOD_TORRENT:
+                sr = new TorrentPromotionSearchResult(slide);
+                break;
+            case Slide.DOWNLOAD_METHOD_HTTP:
+                sr = new HttpSlideSearchResult(slide);
+                break;
+            default:
+                sr = null;
+                break;
         }
         if (sr == null) {
 
@@ -562,8 +582,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         try {
             stringDownloadingPromo = getString(R.string.downloading_promotion, sr.getDisplayName());
-        }  catch (Throwable e) {
-             stringDownloadingPromo = getString(R.string.azureus_manager_item_downloading);
+        } catch (Throwable e) {
+            stringDownloadingPromo = getString(R.string.azureus_manager_item_downloading);
         }
 
         startTransfer(sr, stringDownloadingPromo);

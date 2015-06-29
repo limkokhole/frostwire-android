@@ -636,7 +636,10 @@ public class DragSortListView extends ListView {
             } else if (position == mSrcPos) {
                 heights.child = 0;
             } else {
-                heights.child = ((ViewGroup)item).getChildAt(0).getMeasuredHeight();
+                final View childAt = ((ViewGroup) item).getChildAt(0);
+                if (childAt != null) {
+                    heights.child = childAt.getMeasuredHeight();
+                }
             }
         }
     }

@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -43,8 +43,6 @@ import com.frostwire.android.core.providers.TableFetchers;
 import com.frostwire.android.core.providers.UniversalStore;
 import com.frostwire.android.core.providers.UniversalStore.Applications;
 import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
-import com.frostwire.android.core.providers.UniversalStore.Sharing;
-import com.frostwire.android.core.providers.UniversalStore.Sharing.SharingColumns;
 import com.frostwire.android.gui.transfers.Transfers;
 import com.frostwire.android.gui.util.Apk;
 import com.frostwire.localpeer.Finger;
@@ -157,15 +155,11 @@ public final class Librarian {
             }
         }
 
-        result = onlyShared ? (getSharedFiles(fileType).size()) : numFiles;
+        result = numFiles;
 
         updateCacheNumFiles(fileType, result, onlyShared);
 
         return result;
-    }
-
-    public FileDescriptor getFileDescriptor(byte fileType, int fileId) {
-        return getFileDescriptor(fileType, fileId, true);
     }
 
     public FileDescriptor getFileDescriptor(byte fileType, int fileId, boolean sharedOnly) {
@@ -211,52 +205,12 @@ public final class Librarian {
         return null;
     }
 
-    public void updateSharedStates(byte fileType, List<FileDescriptor> fds) {
-        if (fds == null || fds.size() == 0) {
-            return;
-        }
-
-        try {
-            ContentResolver cr = context.getContentResolver();
-
-            Set<Integer> sharedFiles = getSharedFiles(fds.get(0).fileType);
-
-            int size = fds.size();
-
-            // we know this is a slow process, we can improve it later
-            for (int i = 0; i < size; i++) {
-
-                FileDescriptor fileDescriptor = fds.get(i);
-
-                ContentValues contentValues = new ContentValues();
-                contentValues.put(SharingColumns.SHARED, fileDescriptor.shared ? 1 : 0);
-
-                // Is this a NEW Shared File?
-                if (!sharedFiles.contains(fileDescriptor.id) && fileDescriptor.shared) {
-                    // insert in table as unshared.
-                    contentValues.put(SharingColumns.FILE_ID, fileDescriptor.id);
-                    contentValues.put(SharingColumns.FILE_TYPE, fileType);
-                    cr.insert(Sharing.Media.CONTENT_URI, contentValues);
-                } else {
-                    // everything else is an update
-                    cr.update(Sharing.Media.CONTENT_URI, contentValues, SharingColumns.FILE_ID + "=? AND " + SharingColumns.FILE_TYPE + "=?", new String[] { String.valueOf(fileDescriptor.id), String.valueOf(fileType) });
-                }
-            }
-
-            invalidateCountCache(fileType);
-
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to update share states", e);
-        }
-    }
-
     public void deleteFiles(byte fileType, Collection<FileDescriptor> fds, final Context context) {
         List<Integer> ids = new ArrayList<Integer>(fds.size());
         final int audioMediaType = MediaType.getAudioMediaType().getId();
         for (FileDescriptor fd : fds) {
             if (new File(fd.filePath).delete()) {
                 ids.add(fd.id);
-                deleteSharedState(fd.fileType, fd.id);
                 if (context != null && fileType == fd.fileType && fileType == audioMediaType) {
                     MusicUtils.removeSongFromAllPlaylists(context, fd.id);
                 }
@@ -582,8 +536,6 @@ public final class Librarian {
         List<FileDescriptor> result = new ArrayList<FileDescriptor>();
 
         Cursor c = null;
-        Set<Integer> sharedIds = getSharedFiles(fetcher.getFileType());
-
         try {
 
             ContentResolver cr = context.getContentResolver();
@@ -603,12 +555,6 @@ public final class Librarian {
 
             do {
                 FileDescriptor fd = fetcher.fetch(c);
-
-                fd.shared = sharedIds.contains(fd.id);
-
-                if (sharedOnly && !fd.shared) {
-                    continue;
-                }
 
                 result.add(fd);
 
@@ -641,114 +587,6 @@ public final class Librarian {
 
         List<FileDescriptor> fds = Librarian.instance().getFiles(fileType, where, whereArgs);
         return fds;
-    }
-
-    private Pair<List<Integer>, List<String>> getAllFiles(byte fileType) {
-        Pair<List<Integer>, List<String>> result = new Pair<List<Integer>, List<String>>(new ArrayList<Integer>(), new ArrayList<String>());
-
-        Cursor c = null;
-
-        try {
-            TableFetcher fetcher = TableFetchers.getFetcher(fileType);
-
-            ContentResolver cr = context.getContentResolver();
-
-            c = cr.query(fetcher.getContentUri(), new String[] { BaseColumns._ID, MediaColumns.DATA }, null, null, BaseColumns._ID);
-
-            if (c != null) {
-                while (c.moveToNext()) {
-                    result.first.add(c.getInt(0));
-                    result.second.add(c.getString(1));
-                }
-            }
-        } catch (Throwable e) {
-            Log.e(TAG, "General failure getting all files", e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-
-        return result;
-    }
-
-    private Set<Integer> getSharedFiles(byte fileType) {
-        TreeSet<Integer> result = new TreeSet<Integer>();
-        List<Integer> delete = new ArrayList<Integer>();
-
-        Cursor c = null;
-
-        try {
-            ContentResolver cr = context.getContentResolver();
-            String[] columns = new String[] { SharingColumns.FILE_ID, SharingColumns._ID };
-            c = cr.query(Sharing.Media.CONTENT_URI, columns, SharingColumns.SHARED + "=1 AND " + SharingColumns.FILE_TYPE + "=?", new String[] { String.valueOf(fileType) }, null);
-
-            if (c == null || !c.moveToFirst()) {
-                return result;
-            }
-
-            int fileIdCol = c.getColumnIndex(SharingColumns.FILE_ID);
-            int sharingIdCol = c.getColumnIndex(SharingColumns._ID);
-
-            Pair<List<Integer>, List<String>> pair = getAllFiles(fileType);
-            List<Integer> files = pair.first;
-            List<String> paths = pair.second;
-
-            do {
-                int fileId = c.getInt(fileIdCol);
-                int sharingId = c.getInt(sharingIdCol);
-
-                int index = Collections.binarySearch(files, fileId);
-
-                try {
-                    if (index >= 0) {
-                        File f = new File(paths.get(index));
-                        if (f.exists() && f.isFile()) {
-                            result.add(fileId);
-                        } else {
-                            delete.add(sharingId);
-                        }
-                    } else {
-                        delete.add(sharingId);
-                    }
-                } catch (Throwable e) {
-                    Log.e(TAG, "Error checking fileId: " + fileId + ", fileType: " + fileId);
-                }
-            } while (c.moveToNext());
-
-        } catch (Throwable e) {
-            Log.e(TAG, "General failure getting shared/unshared files ids", e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-
-            if (delete.size() > 0) {
-                deleteSharedStates(delete);
-            }
-        }
-
-        return result;
-    }
-
-    private void deleteSharedState(byte fileType, int fileId) {
-        try {
-            ContentResolver cr = context.getContentResolver();
-            int deleted = cr.delete(UniversalStore.Sharing.Media.CONTENT_URI, SharingColumns.FILE_ID + "= ? AND " + SharingColumns.FILE_TYPE + " = ?", new String[] { String.valueOf(fileId), String.valueOf(fileType) });
-            Log.d(TAG, "deleteSharedState " + deleted + " rows  (fileType: " + fileType + ", fileId: " + fileId + " )");
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to delete shared state for fileType=" + fileType + ", fileId=" + fileId, e);
-        }
-    }
-
-    private void deleteSharedStates(List<Integer> sharingIds) {
-        try {
-            ContentResolver cr = context.getContentResolver();
-            int deleted = cr.delete(UniversalStore.Sharing.Media.CONTENT_URI, SharingColumns._ID + " IN " + StringUtils.buildSet(sharingIds), null);
-            Log.d(TAG, "Deleted " + deleted + " shared states");
-        } catch (Throwable e) {
-            Log.e(TAG, "Failed to delete shared states", e);
-        }
     }
 
     /**
@@ -855,27 +693,6 @@ public final class Librarian {
         }
 
         return sm;
-    }
-
-    public double getScreenSizeInInches() {
-        double screenInches = 0;
-
-        try {
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            context.getResources().getDisplayMetrics();
-            DisplayMetrics dm = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(dm);
-
-            double x = Math.pow(dm.widthPixels / dm.xdpi, 2);
-            double y = Math.pow(dm.heightPixels / dm.ydpi, 2);
-
-            screenInches = Math.sqrt(x + y);
-
-        } catch (Throwable e) {
-            Log.e(TAG, "Unable to get the device display dimensions", e);
-        }
-
-        return screenInches;
     }
 
     /**

@@ -100,12 +100,9 @@ final class ConfigurationDefaults {
 
         defaultValues.put(Constants.PREF_KEY_NETWORK_USE_RANDOM_LISTENING_PORT, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_ENABLE_DHT, true);
-        defaultValues.put(Constants.PREF_KEY_NETWORK_ENABLE_WIFI_SHARING, false);
         defaultValues.put(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_MAX_CONCURRENT_UPLOADS, 3);
         defaultValues.put(Constants.PREF_KEY_NETWORK_PINGS_INTERVAL, 4000);
-
-        defaultValues.put(Constants.PREF_KEY_TRANSFER_SHARE_FINISHED_DOWNLOADS, false);
 
         defaultValues.put(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS, false);
         defaultValues.put(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY, true);

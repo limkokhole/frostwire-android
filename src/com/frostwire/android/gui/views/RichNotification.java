@@ -81,8 +81,10 @@ public class RichNotification extends LinearLayout {
      * @param links
      */
     public void updateActionLinks(RichNotificationActionLink ... actionLinks) {
+		LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
+		boolean gotActionLinks = false;
         if (actionLinks != null && actionLinks.length > 0) {
-            LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
+			gotActionLinks = true;
             actionLinksContainer.setVisibility(View.INVISIBLE);
 
             while (actionLinksContainer.getChildCount() > 0) {
@@ -98,9 +100,8 @@ public class RichNotification extends LinearLayout {
                     v.requestLayout();
                 }
             }
-
-            actionLinksContainer.setVisibility(View.VISIBLE);
         }
+		actionLinksContainer.setVisibility(gotActionLinks? View.VISIBLE : View.GONE);
     }
 
     public void setDescription(String newDescription) {
@@ -143,10 +144,8 @@ public class RichNotification extends LinearLayout {
 			}
 		});
 
-		if (numberOfActionLinks > 0) {
-			LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
-            actionLinksContainer.setVisibility(View.VISIBLE);
-		}
+		LinearLayout actionLinksContainer = (LinearLayout) findViewById(R.id.view_rich_notification_action_links);
+		actionLinksContainer.setVisibility(numberOfActionLinks > 0 ? View.VISIBLE : View.GONE);
 	}
 	
 	private TextView updateTextViewText(int textViewId, CharSequence text, OnClickListener onClickNotificationListener) {

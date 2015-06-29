@@ -25,25 +25,18 @@ import android.net.Uri;
 import com.andrew.apollo.ui.activities.AudioPlayerActivity;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
-import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.activities.PreferencesActivity;
 import com.frostwire.android.gui.activities.WizardActivity;
-import com.frostwire.android.gui.dialogs.ShareIndicationDialog;
 import com.frostwire.android.gui.fragments.BrowsePeerFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.OfferUtils;
-import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.logging.Logger;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * 
@@ -52,8 +45,6 @@ import java.util.Arrays;
  *
  */
 public final class MainController {
-
-    private static final Logger LOG = Logger.getLogger(MainController.class);
 
     private final MainActivity activity;
 
@@ -110,10 +101,6 @@ public final class MainController {
         if (!(activity.getCurrentFragment() instanceof BrowsePeerFragment)) {
             switchFragment(R.id.menu_main_library);
         }
-        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_SHOW_SHARE_INDICATION)) {
-            ShareIndicationDialog dlg = new ShareIndicationDialog();
-            dlg.show(activity.getFragmentManager());
-        }
     }
 
     public void startWizardActivity() {
@@ -134,24 +121,6 @@ public final class MainController {
         String action = intent.getAction();
         if (action.equals(Intent.ACTION_SEND)) {
             handleSendSingleFile(intent);
-        } else if (action.equals(Intent.ACTION_SEND_MULTIPLE)) {
-            handleSendMultipleFiles(intent);
-        }
-    }
-
-    private void handleSendMultipleFiles(Intent intent) {
-        ArrayList<Uri> fileUris = intent.getParcelableArrayListExtra(Intent.EXTRA_STREAM);
-        if (fileUris != null && fileUris.size() > 0) {
-            int sharedFiles = 0;
-            for (Uri uri : fileUris) {
-                if (shareFileByUri(uri)) {
-                    sharedFiles++;
-                }
-            }
-
-            FileDescriptor fileDescriptor = Librarian.instance().getFileDescriptor(fileUris.get(0));
-            showFile(fileDescriptor);
-            UIUtils.showLongMessage(activity, activity.getString(R.string.n_files_shared, sharedFiles));
         }
     }
 
@@ -169,45 +138,7 @@ public final class MainController {
             if (fileDescriptor.filePath != null && fileDescriptor.filePath.endsWith(".torrent")) {
                 TransferManager.instance().downloadTorrent(uri.toString());
                 activity.switchFragment(R.id.menu_main_transfers);
-            } else {
-                try {
-                    if (shareFileByUri(uri)) {
-                        showFile(fileDescriptor);
-                        UIUtils.showLongMessage(activity, R.string.one_file_shared);
-                    } else {
-                        UIUtils.showLongMessage(activity, R.string.couldnt_share_file);
-                    }
-                } catch (Throwable t) {
-                    UIUtils.showLongMessage(activity, R.string.couldnt_share_file);
-                }
             }
         }
-    }
-
-    private void showFile(FileDescriptor fileDescriptor) {
-        if (fileDescriptor != null) {
-            showMyFiles();
-            ((BrowsePeerFragment) activity.getFragmentByMenuId(R.id.menu_main_library)).showFile(fileDescriptor);
-        }
-    }
-
-    private boolean shareFileByUri(Uri uri) {
-        boolean result = false;
-        // LSD:
-        /*
-        if (uri == null) {
-            return false;
-        }
-
-        FileDescriptor fileDescriptor = Librarian.instance().getFileDescriptor(uri);
-
-        if (fileDescriptor != null && fileDescriptor.filePath != null && new File(fileDescriptor.filePath).exists()) {
-            fileDescriptor.shared = true;
-            Librarian.instance().updateSharedStates(fileDescriptor.fileType, Arrays.asList(fileDescriptor));
-            result = true;
-        }
-        */
-
-        return result;
     }
 }
