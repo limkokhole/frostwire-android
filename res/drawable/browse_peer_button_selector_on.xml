@@ -22,13 +22,20 @@
 
     <item>
         <shape>
-            <solid android:color="@color/app_dark_blue_highlight" />
+            <solid android:color="@color/basic_blue_highlight"></solid>
         </shape>
     </item>
-    <item>
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/browse_peer_picture_icon_selector_on" />
+    <item android:bottom="5dp">
+        <shape>
+            <solid android:color="@color/app_dark_blue_selector"></solid>
+        </shape>
     </item>
 
+    <item android:id="@+id/browse_peer_button_selector_on_bitmap">
+        <!-- this is just a placeholder as this bitmap is replaced during runtime dynamically
+             by a BitmapSelectorFactory. -->
+        <bitmap
+            android:gravity="center"
+            android:src="@drawable/browse_peer_application_icon_selector_on"/>
+    </item>
 </layer-list>

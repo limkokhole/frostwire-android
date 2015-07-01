@@ -19,20 +19,18 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.AttributeSet;
 import android.util.SparseIntArray;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
+import android.widget.*;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
-
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
+import com.frostwire.android.gui.helpers.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.views.ClearableEditTextView.OnActionListener;
 import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
@@ -181,15 +179,25 @@ public class SearchInputView extends LinearLayout {
         textInput.setHint(searchFiles + " " + orEnterYTorSCUrl);
     }
 
-    private RadioButton initRadioButton(int viewId, byte fileType) {
+    private RadioButton initRadioButton(int viewId, final byte fileType) {
         mediaTypeToRadioButtonMap.put(fileType, viewId);
         final RadioButton button = (RadioButton) findViewById(viewId);
-        button.setOnClickListener(new RadioButtonListener(this, fileType));
+        final Resources r = getResources();
+        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());;
+        button.setOnClickListener(new RadioButtonListener(this, fileType, button));
+        button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+                button.setBackgroundDrawable(isChecked ?
+                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
+                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
+            }
+        });
 
         if (mediaTypeId == fileType) {
             button.setChecked(true);
         }
-
         return button;
     }
     
@@ -207,13 +215,13 @@ public class SearchInputView extends LinearLayout {
         ConfigurationManager.instance().setLastMediaTypeFilter(mediaTypeId);
     }
 
-    public static interface OnSearchListener {
+    public interface OnSearchListener {
 
-        public void onSearch(View v, String query, int mediaTypeId);
+        void onSearch(View v, String query, int mediaTypeId);
 
-        public void onMediaTypeSelected(View v, int mediaTypeId);
+        void onMediaTypeSelected(View v, int mediaTypeId);
 
-        public void onClear(View v);
+        void onClear(View v);
     }
 
     public void updateFileTypeCounter(byte fileType, int numFiles) {
@@ -295,14 +303,22 @@ public class SearchInputView extends LinearLayout {
     private static final class RadioButtonListener extends ClickAdapter<SearchInputView> {
 
         private final byte fileType;
+        private final RadioButton button;
 
-        public RadioButtonListener(SearchInputView owner, byte fileType) {
+        public RadioButtonListener(SearchInputView owner, byte fileType, RadioButton button) {
             super(owner);
             this.fileType = fileType;
+            this.button = button;
         }
 
         @Override
         public void onClick(SearchInputView owner, View v) {
+            final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, button.getResources());
+            boolean on = button.isChecked();
+            button.setBackgroundDrawable(on ?
+                    fileTypeRadioButtonSelectorFactory.getSelectorOn() :
+                    fileTypeRadioButtonSelectorFactory.getSelectorOff());
+
             owner.radioButtonFileTypeClick(fileType);
             UXStats.instance().log(UXAction.SEARCH_RESULT_FILE_TYPE_CLICK);
         }

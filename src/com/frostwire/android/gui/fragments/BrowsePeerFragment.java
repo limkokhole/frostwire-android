@@ -22,8 +22,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.*;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -39,6 +41,7 @@ import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.adapters.FileListAdapter;
+import com.frostwire.android.gui.helpers.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractFragment;
 import com.frostwire.android.gui.views.BrowsePeerSearchBarView;
@@ -407,22 +410,34 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     private RadioButton initRadioButton(View v, int viewId, final byte fileType) {
         final RadioButton button = findView(v, viewId);
+        final Resources r = button.getResources();
+        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());
+
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (button.isChecked()) {
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+                boolean on = button.isChecked();
+                if (on) {
                     browseFilesButtonClick(fileType);
                 }
+                button.setBackgroundDrawable(on ?
+                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
+                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
             }
         });
         button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
                 if (isChecked) {
                     browseFilesButtonClick(fileType);
                 }
+                button.setBackgroundDrawable(isChecked ?
+                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
+                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
             }
         });
-
         return button;
     }
 
@@ -502,32 +517,25 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             byte fileType = adapter != null ? adapter.getFileType() : Constants.FILE_TYPE_AUDIO;
 
-            int numShared = 0;
             int numTotal = 0;
 
             switch (fileType) {
             case Constants.FILE_TYPE_APPLICATIONS:
-                numShared = finger.numSharedApplicationFiles;
                 numTotal = finger.numTotalApplicationFiles;
                 break;
             case Constants.FILE_TYPE_AUDIO:
-                numShared = finger.numSharedAudioFiles;
                 numTotal = finger.numTotalAudioFiles;
                 break;
             case Constants.FILE_TYPE_DOCUMENTS:
-                numShared = finger.numSharedDocumentFiles;
                 numTotal = finger.numTotalDocumentFiles;
                 break;
             case Constants.FILE_TYPE_PICTURES:
-                numShared = finger.numSharedPictureFiles;
                 numTotal = finger.numTotalPictureFiles;
                 break;
             case Constants.FILE_TYPE_RINGTONES:
-                numShared = finger.numSharedRingtoneFiles;
                 numTotal = finger.numTotalRingtoneFiles;
                 break;
             case Constants.FILE_TYPE_VIDEOS:
-                numShared = finger.numSharedVideoFiles;
                 numTotal = finger.numTotalVideoFiles;
                 break;
             }
@@ -680,12 +688,12 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         }
     }
 
-    public static interface OnRefreshSharedListener {
-        public void onRefresh(Fragment f, byte fileType, int numShared);
+    public interface OnRefreshSharedListener {
+        void onRefresh(Fragment f, byte fileType, int numShared);
     }
 
-    public static interface OnUpdateFilesListener {
-        public void onUpdateFiles();
+    public interface OnUpdateFilesListener {
+        void onUpdateFiles();
     }
 
     public void refreshSelection() {
@@ -694,4 +702,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             browseFilesButtonClick(adapter.getFileType());
         }
     }
+
+
 }
