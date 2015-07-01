@@ -39,16 +39,6 @@
         android:orientation="horizontal" >
 
         <Button
-            android:id="@+id/dialog_new_transfer_button_yes"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:layout_weight="0.5"
-            android:minLines="1"
-            android:text="@android:string/yes"
-            android:textSize="15sp" />
-
-        <Button
             android:id="@+id/dialog_new_transfer_button_no"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -56,6 +46,16 @@
             android:layout_weight="0.5"
             android:minLines="1"
             android:text="@android:string/no"
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/dialog_new_transfer_button_yes"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:layout_weight="0.5"
+            android:minLines="1"
+            android:text="@android:string/yes"
             android:textSize="15sp" />
     </LinearLayout>
 
