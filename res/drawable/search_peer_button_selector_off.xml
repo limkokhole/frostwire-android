@@ -20,12 +20,10 @@
 -->
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
-    <item android:id="@+id/browse_peer_button_selector_off_bitmap">
-        <!-- this is just a placeholder as this bitmap is replaced during runtime dynamically
-             by a BitmapSelectorFactory. -->
+    <item android:id="@+id/search_peer_button_selector_off_bitmap">
         <bitmap
             android:gravity="center"
-            android:src="@drawable/browse_peer_application_icon_selector_off" />
+            android:src="@drawable/browse_peer_audio_icon_selector_off" />
     </item>
 
 </layer-list>

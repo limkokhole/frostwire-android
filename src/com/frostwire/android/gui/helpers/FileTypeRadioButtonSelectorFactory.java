@@ -1,3 +1,21 @@
+/*
+ * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.frostwire.android.gui.helpers;
 
 import android.content.res.Resources;
@@ -14,14 +32,20 @@ import com.frostwire.android.core.Constants;
  * per radio button.
  */
 public final class FileTypeRadioButtonSelectorFactory {
+    public enum RadioButtonContainerType {
+        SEARCH,
+        BROWSE
+    }
     private byte fileType;
     private Resources r;
     private LayerDrawable selectorOn;
     private LayerDrawable selectorOff;
+    private RadioButtonContainerType containerType;
 
-    public FileTypeRadioButtonSelectorFactory(byte fileType, Resources r) {
+    public FileTypeRadioButtonSelectorFactory(byte fileType, Resources r, RadioButtonContainerType containerType) {
         this.fileType = fileType;
         this.r = r;
+        this.containerType = containerType;
         this.init();
     }
 
@@ -76,7 +100,16 @@ public final class FileTypeRadioButtonSelectorFactory {
         final BitmapDrawable iconOff = (BitmapDrawable) r.getDrawable(selectorOffDrawableId);
         iconOn.setGravity(Gravity.CENTER); // Fixes scaling.
         iconOff.setGravity(Gravity.CENTER);
-        selectorOn.setDrawableByLayerId(R.id.browse_peer_button_selector_on_bitmap, iconOn);
-        selectorOff.setDrawableByLayerId(R.id.browse_peer_button_selector_off_bitmap, iconOff);
+
+        int onBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
+                R.id.search_peer_button_selector_on_bitmap :
+                R.id.browse_peer_button_selector_on_bitmap;
+
+        int offBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
+                R.id.search_peer_button_selector_off_bitmap :
+                R.id.browse_peer_button_selector_off_bitmap;
+
+        selectorOn.setDrawableByLayerId(onBitmapId, iconOn);
+        selectorOff.setDrawableByLayerId(offBitmapId, iconOff);
     }
 }

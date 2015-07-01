@@ -25,7 +25,6 @@ import android.content.*;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -411,13 +410,19 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private RadioButton initRadioButton(View v, int viewId, final byte fileType) {
         final RadioButton button = findView(v, viewId);
         final Resources r = button.getResources();
-        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                new FileTypeRadioButtonSelectorFactory(fileType,
+                        r,
+                        FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
         button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());
 
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                        new FileTypeRadioButtonSelectorFactory(fileType,
+                                r,
+                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
                 boolean on = button.isChecked();
                 if (on) {
                     browseFilesButtonClick(fileType);
@@ -429,7 +434,10 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         });
         button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                        new FileTypeRadioButtonSelectorFactory(fileType,
+                                r,
+                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
                 if (isChecked) {
                     browseFilesButtonClick(fileType);
                 }
@@ -702,6 +710,4 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             browseFilesButtonClick(adapter.getFileType());
         }
     }
-
-
 }

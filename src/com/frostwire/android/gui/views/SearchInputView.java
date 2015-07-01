@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -183,12 +183,18 @@ public class SearchInputView extends LinearLayout {
         mediaTypeToRadioButtonMap.put(fileType, viewId);
         final RadioButton button = (RadioButton) findViewById(viewId);
         final Resources r = getResources();
-        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
-        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());;
+        final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                new FileTypeRadioButtonSelectorFactory(fileType,
+                        r,
+                        FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
+        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());
         button.setOnClickListener(new RadioButtonListener(this, fileType, button));
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, r);
+                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                        new FileTypeRadioButtonSelectorFactory(fileType,
+                                r,
+                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
                 button.setBackgroundDrawable(isChecked ?
                         fileTypeRadioButtonSelectorFactory.getSelectorOn() :
                         fileTypeRadioButtonSelectorFactory.getSelectorOff());
@@ -210,7 +216,6 @@ public class SearchInputView extends LinearLayout {
     private void radioButtonFileTypeClick(final int mediaTypeId) {
         updateHint(mediaTypeId);
         onMediaTypeSelected(mediaTypeId);
-
         SearchInputView.this.mediaTypeId = mediaTypeId;
         ConfigurationManager.instance().setLastMediaTypeFilter(mediaTypeId);
     }
@@ -313,7 +318,10 @@ public class SearchInputView extends LinearLayout {
 
         @Override
         public void onClick(SearchInputView owner, View v) {
-            final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory = new FileTypeRadioButtonSelectorFactory(fileType, button.getResources());
+            final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
+                    new FileTypeRadioButtonSelectorFactory(fileType,
+                            button.getResources(),
+                            FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
             boolean on = button.isChecked();
             button.setBackgroundDrawable(on ?
                     fileTypeRadioButtonSelectorFactory.getSelectorOn() :
