@@ -414,36 +414,23 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 new FileTypeRadioButtonSelectorFactory(fileType,
                         r,
                         FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
-        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());
+        fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
 
         button.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
-                        new FileTypeRadioButtonSelectorFactory(fileType,
-                                r,
-                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
-                boolean on = button.isChecked();
-                if (on) {
+                if (button.isChecked()) {
                     browseFilesButtonClick(fileType);
                 }
-                button.setBackgroundDrawable(on ?
-                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
-                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
+                fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
             }
         });
         button.setOnCheckedChangeListener(new OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
-                        new FileTypeRadioButtonSelectorFactory(fileType,
-                                r,
-                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.BROWSE);
                 if (isChecked) {
                     browseFilesButtonClick(fileType);
                 }
-                button.setBackgroundDrawable(isChecked ?
-                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
-                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
+                fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
             }
         });
         return button;

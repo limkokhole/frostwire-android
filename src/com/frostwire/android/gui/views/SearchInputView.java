@@ -187,17 +187,11 @@ public class SearchInputView extends LinearLayout {
                 new FileTypeRadioButtonSelectorFactory(fileType,
                         r,
                         FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
-        button.setBackgroundDrawable(fileTypeRadioButtonSelectorFactory.getSelectorOff());
-        button.setOnClickListener(new RadioButtonListener(this, fileType, button));
+        fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
+        button.setOnClickListener(new RadioButtonListener(this, fileType, button, fileTypeRadioButtonSelectorFactory));
         button.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
-                        new FileTypeRadioButtonSelectorFactory(fileType,
-                                r,
-                                FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
-                button.setBackgroundDrawable(isChecked ?
-                        fileTypeRadioButtonSelectorFactory.getSelectorOn() :
-                        fileTypeRadioButtonSelectorFactory.getSelectorOff());
+                fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
             }
         });
 
@@ -309,24 +303,21 @@ public class SearchInputView extends LinearLayout {
 
         private final byte fileType;
         private final RadioButton button;
+        private final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory;
 
-        public RadioButtonListener(SearchInputView owner, byte fileType, RadioButton button) {
+        public RadioButtonListener(SearchInputView owner,
+                                   byte fileType,
+                                   RadioButton button,
+                                   FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory) {
             super(owner);
             this.fileType = fileType;
             this.button = button;
+            this.fileTypeRadioButtonSelectorFactory = fileTypeRadioButtonSelectorFactory;
         }
 
         @Override
         public void onClick(SearchInputView owner, View v) {
-            final FileTypeRadioButtonSelectorFactory fileTypeRadioButtonSelectorFactory =
-                    new FileTypeRadioButtonSelectorFactory(fileType,
-                            button.getResources(),
-                            FileTypeRadioButtonSelectorFactory.RadioButtonContainerType.SEARCH);
-            boolean on = button.isChecked();
-            button.setBackgroundDrawable(on ?
-                    fileTypeRadioButtonSelectorFactory.getSelectorOn() :
-                    fileTypeRadioButtonSelectorFactory.getSelectorOff());
-
+            fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
             owner.radioButtonFileTypeClick(fileType);
             UXStats.instance().log(UXAction.SEARCH_RESULT_FILE_TYPE_CLICK);
         }

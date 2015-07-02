@@ -18,12 +18,16 @@
 
 package com.frostwire.android.gui.helpers;
 
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
+import android.widget.RadioButton;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
+import com.frostwire.logging.Logger;
+
 
 /**
  * This class uses browse_peer_button_selector.xml, browse_peer_button_selector_on.xlm and
@@ -32,6 +36,8 @@ import com.frostwire.android.core.Constants;
  * per radio button.
  */
 public final class FileTypeRadioButtonSelectorFactory {
+    private static Logger LOG = Logger.getLogger(FileTypeRadioButtonSelectorFactory.class);
+
     public enum RadioButtonContainerType {
         SEARCH,
         BROWSE
@@ -57,15 +63,42 @@ public final class FileTypeRadioButtonSelectorFactory {
         return selectorOff;
     }
 
+    public RadioButtonContainerType getContainerType() {
+        return containerType;
+    }
+
+    public void updateButtonBackground(RadioButton button) {
+        LayerDrawable drawable = button.isChecked() ? getSelectorOn() : getSelectorOff();
+        if (getContainerType() == RadioButtonContainerType.SEARCH) {
+            // things are a bit different for the radio buttons on the search screen.
+            if (button.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                // android:drawableTop
+                button.setBackgroundDrawable(null);
+                button.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+            } else {
+                button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                button.setBackgroundDrawable(drawable);
+            }
+        } else {
+            button.setBackgroundDrawable(drawable);
+        }
+    }
+
     private void init() {
         // Get layer-lists to modify.
-        selectorOn = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_on);
-        selectorOff = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_off);
+        if (containerType == RadioButtonContainerType.BROWSE) {
+            selectorOn = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_on);
+            selectorOff = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_off);
+        } else if (containerType == RadioButtonContainerType.SEARCH) {
+            selectorOn = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_on);
+            selectorOff = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_off);
+        }
 
         // Load the image we want for this file type.
         int selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
         int selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
 
+        LOG.info("Got fileType: " + fileType);
         switch (fileType) {
             case Constants.FILE_TYPE_AUDIO:
                 selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
@@ -96,9 +129,12 @@ public final class FileTypeRadioButtonSelectorFactory {
                 selectorOffDrawableId = R.drawable.browse_peer_video_icon_selector_off;
                 break;
         }
+
         final BitmapDrawable iconOn = (BitmapDrawable) r.getDrawable(selectorOnDrawableId);
         final BitmapDrawable iconOff = (BitmapDrawable) r.getDrawable(selectorOffDrawableId);
-        iconOn.setGravity(Gravity.CENTER); // Fixes scaling.
+
+        // Fix scaling.
+        iconOn.setGravity(Gravity.CENTER);
         iconOff.setGravity(Gravity.CENTER);
 
         int onBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
