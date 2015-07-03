@@ -21,6 +21,7 @@ package com.frostwire.android.gui.helpers;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.widget.RadioButton;
@@ -98,7 +99,6 @@ public final class FileTypeRadioButtonSelectorFactory {
         int selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
         int selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
 
-        LOG.info("Got fileType: " + fileType);
         switch (fileType) {
             case Constants.FILE_TYPE_AUDIO:
                 selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
