@@ -40,7 +40,6 @@ import com.frostwire.android.gui.views.MenuAction;
 import com.frostwire.android.gui.views.MenuAdapter;
 import com.frostwire.android.gui.views.MenuBuilder;
 import com.frostwire.bittorrent.PaymentOptions;
-
 import com.frostwire.logging.Logger;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.transfers.TransferState;
@@ -51,10 +50,8 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public class TransferListAdapter extends BaseExpandableListAdapter {
 
@@ -64,10 +61,12 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     private final ViewOnLongClickListener viewOnLongClickListener;
     private final OpenOnClickListener playOnClickListener;
 
-    /** Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks */
+    /**
+     * Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks
+     */
     private final List<Dialog> dialogs;
     private List<Transfer> list;
-    private final Map<String,String> TRANSFER_STATE_STRING_MAP = new Hashtable<String,String>();
+    private final Map<String, String> TRANSFER_STATE_STRING_MAP = new Hashtable<String, String>();
 
     public TransferListAdapter(Context context, List<Transfer> list) {
         this.context = new WeakReference<Context>(context);
@@ -299,7 +298,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
                 }
 
                 if (po.paypalUrl != null) {
-                    items.add(new SendFiatTipAction(context.get(), po)) ;
+                    items.add(new SendFiatTipAction(context.get(), po));
                 }
             }
         } else if (tag instanceof DownloadTransfer) {
@@ -339,7 +338,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         prepareGroupIndicatorDrawable(item, groupIndicator, totalItems > 1, expanded);
 
         if (totalItems > 1) {
-            groupIndicator.setOnClickListener(new GroupIndicatorClickAdapter(expandableListView,groupPosition));
+            groupIndicator.setOnClickListener(new GroupIndicatorClickAdapter(expandableListView, groupPosition));
         }
     }
 
