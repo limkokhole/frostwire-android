@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.view.View;
@@ -28,6 +29,7 @@ import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
+import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.android.gui.views.ClickAdapter;
@@ -274,10 +276,14 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         }
 
         @Override
-        public void onClick(Context owner, View v) {
+        public void onClick(Context ctx, View v) {
             StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
 
-            System.out.println(sr.getStreamUrl());
+            Intent i = new Intent(ctx, PreviewPlayerActivity.class);
+            i.putExtra("displayName", sr.getDisplayName());
+            i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
+            i.putExtra("streamUrl", sr.getStreamUrl());
+            ctx.startActivity(i);
         }
     }
 }

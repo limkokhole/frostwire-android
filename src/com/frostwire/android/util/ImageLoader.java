@@ -36,6 +36,7 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Picasso.Builder;
 import com.squareup.picasso.Request;
 import com.squareup.picasso.RequestHandler;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.IOException;
@@ -156,6 +157,12 @@ public final class ImageLoader {
     public void load(Uri uri, ImageView target, int targetWidth, int targetHeight, int placeholderResId) {
         if (!shutdown) {
             picasso.load(uri).noFade().resize(targetWidth, targetHeight).placeholder(placeholderResId).into(target);
+        }
+    }
+
+    public void load(Uri uri, Target target) {
+        if (!shutdown) {
+            picasso.load(uri).into(target);
         }
     }
 
