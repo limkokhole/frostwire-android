@@ -72,7 +72,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         this.context = new WeakReference<Context>(context);
         this.viewOnClickListener = new ViewOnClickListener();
         this.viewOnLongClickListener = new ViewOnLongClickListener();
-        this.playOnClickListener = new OpenOnClickListener();
+        this.playOnClickListener = new OpenOnClickListener(context);
         this.dialogs = new ArrayList<Dialog>();
         this.list = list.equals(Collections.emptyList()) ? new ArrayList<Transfer>() : list;
         initTransferStateStringMap();
@@ -570,8 +570,13 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private final class OpenOnClickListener implements OnClickListener {
-        public void onClick(View v) {
+    private static final class OpenOnClickListener extends ClickAdapter<Context> {
+
+        public OpenOnClickListener(Context ctx) {
+            super(ctx);
+        }
+
+        public void onClick(Context ctx, View v) {
             TransferItem item = (TransferItem) v.getTag();
             boolean canOpen = item.isComplete();
 
@@ -580,9 +585,9 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
                 if (savePath != null) {
                     if (savePath.exists()) {
-                        UIUtils.openFile(context.get(), savePath);
+                        UIUtils.openFile(ctx, savePath);
                     } else {
-                        UIUtils.showShortMessage(context.get(), R.string.cant_open_file_does_not_exist, savePath.getName());
+                        UIUtils.showShortMessage(ctx, R.string.cant_open_file_does_not_exist, savePath.getName());
                     }
                 }
             }
