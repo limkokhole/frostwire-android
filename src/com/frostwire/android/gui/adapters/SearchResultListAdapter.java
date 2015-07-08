@@ -38,6 +38,7 @@ import com.frostwire.licences.License;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.search.SearchResult;
 import com.frostwire.search.StreamableSearchResult;
+import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.uxstats.UXAction;
@@ -283,6 +284,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             i.putExtra("displayName", sr.getDisplayName());
             i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
             i.putExtra("streamUrl", sr.getStreamUrl());
+            i.putExtra("audio", sr instanceof SoundcloudSearchResult);
             ctx.startActivity(i);
         }
     }

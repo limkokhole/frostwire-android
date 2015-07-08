@@ -29,14 +29,20 @@ import android.widget.VideoView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.util.ImageLoader;
+import com.frostwire.logging.Logger;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 /**
  * @author gubatron
  * @author aldenml
  */
 public final class PreviewPlayerActivity extends AbstractActivity {
+
+    private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
 
     public PreviewPlayerActivity() {
         super(R.layout.activity_preview_player);
@@ -51,13 +57,13 @@ public final class PreviewPlayerActivity extends AbstractActivity {
 
         String displayName = i.getStringExtra("displayName");
         String thumbnailUrl = i.getStringExtra("thumbnailUrl");
-        String streamUrl = i.getStringExtra("streamUrl");
+        final String streamUrl = i.getStringExtra("streamUrl");
+        final boolean audio = i.getBooleanExtra("audio", false);
 
         setTitle(displayName);
 
         final VideoView v = findView(R.id.activity_preview_player_videoview);
 
-        v.setVideoURI(Uri.parse(streamUrl));
         v.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override
             public void onCompletion(MediaPlayer mp) {
@@ -65,11 +71,13 @@ public final class PreviewPlayerActivity extends AbstractActivity {
             }
         });
 
-        v.start();
         ImageLoader.getInstance(this).load(Uri.parse(thumbnailUrl), new Target() {
             @Override
             public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                v.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                if (audio) {
+                    v.setBackgroundDrawable(new BitmapDrawable(getResources(), bitmap));
+                    v.invalidate();
+                }
             }
 
             @Override
@@ -82,5 +90,48 @@ public final class PreviewPlayerActivity extends AbstractActivity {
 
             }
         });
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+
+                final String url = getFinalUrl(streamUrl);
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        v.setVideoURI(Uri.parse(url));
+                        v.start();
+                    }
+                });
+            }
+        });
+
+        t.start();
+    }
+
+    private String getFinalUrl(String url) {
+        HttpURLConnection con = null;
+        try {
+            con = (HttpURLConnection) (new URL(url).openConnection());
+            con.setInstanceFollowRedirects(false);
+            con.connect();
+            String location = con.getHeaderField("Location");
+
+            if (location != null) {
+                return location;
+            }
+
+        } catch (Throwable e) {
+            LOG.error("Unable to detect final url", e);
+        } finally {
+            if (con != null) {
+                try {
+                    con.disconnect();
+                } catch (Throwable e) {
+                    // ignore
+                }
+            }
+        }
+        return url;
     }
 }
