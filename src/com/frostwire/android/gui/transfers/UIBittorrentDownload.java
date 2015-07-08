@@ -7,6 +7,7 @@ import com.frostwire.android.gui.NetworkManager;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.util.SystemUtils;
 import com.frostwire.bittorrent.BTDownload;
+import com.frostwire.bittorrent.BTDownloadItem;
 import com.frostwire.bittorrent.BTDownloadListener;
 import com.frostwire.bittorrent.PaymentOptions;
 import com.frostwire.logging.Logger;
@@ -165,6 +166,12 @@ public final class UIBittorrentDownload implements BittorrentDownload {
 
     @Override
     public int getProgress() {
+        try {
+            checkSequentialDownload();
+        } catch (Throwable e) {
+            LOG.error("Error checking sequential download");
+        }
+
         return dl.getProgress();
     }
 
@@ -302,5 +309,54 @@ public final class UIBittorrentDownload implements BittorrentDownload {
         }
 
         return l;
+    }
+
+    private void checkSequentialDownload() {
+        BTDownloadItem item = getFirstBiggestItem();
+
+        if (item != null) {
+            long downloaded = item.getSequentialDownloaded();
+            long size = item.getSize();
+
+            if (size > 0) {
+
+                long percent = (100 * downloaded) / size;
+
+                if (percent > 30 || downloaded > 10 * 1024 * 1024) {
+                    if (dl.isSequentialDownload()) {
+                        dl.setSequentialDownload(false);
+                    }
+                } else {
+                    if (!dl.isSequentialDownload()) {
+                        dl.setSequentialDownload(true);
+                    }
+                }
+
+                //LOG.debug("Seq: " + dl.isSequentialDownload() + " Downloaded: " + downloaded);
+            }
+        } else {
+            if (dl.isSequentialDownload()) {
+                dl.setSequentialDownload(false);
+            }
+        }
+    }
+
+    private BTDownloadItem getFirstBiggestItem() {
+        BTDownloadItem item = null;
+
+        for (TransferItem it : items) {
+            if (it instanceof BTDownloadItem) {
+                BTDownloadItem bit = (BTDownloadItem) it;
+                if (item == null) {
+                    item = bit;
+                } else {
+                    if (item.getSize() < 2 * 1024 * 1024 && item.getSize() < bit.getSize()) {
+                        item = bit;
+                    }
+                }
+            }
+        }
+
+        return item;
     }
 }

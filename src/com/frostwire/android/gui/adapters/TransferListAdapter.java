@@ -39,6 +39,7 @@ import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.android.gui.views.MenuAction;
 import com.frostwire.android.gui.views.MenuAdapter;
 import com.frostwire.android.gui.views.MenuBuilder;
+import com.frostwire.bittorrent.BTDownloadItem;
 import com.frostwire.bittorrent.PaymentOptions;
 import com.frostwire.logging.Logger;
 import com.frostwire.transfers.TransferItem;
@@ -471,7 +472,15 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         size.setText(UIUtils.getBytesInHuman(item.getSize()));
 
         buttonPlay.setTag(item);
-        buttonPlay.setVisibility(item.isComplete() ? View.VISIBLE : View.GONE);
+        if (item.isComplete()) {
+            buttonPlay.setVisibility(View.VISIBLE);
+        } else {
+            if (item instanceof BTDownloadItem) {
+                buttonPlay.setVisibility(previewFile((BTDownloadItem) item) != null ? View.VISIBLE : View.GONE);
+            } else {
+                buttonPlay.setVisibility(View.GONE);
+            }
+        }
         buttonPlay.setOnClickListener(playOnClickListener);
     }
 
@@ -578,17 +587,18 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
         public void onClick(Context ctx, View v) {
             TransferItem item = (TransferItem) v.getTag();
-            boolean canOpen = item.isComplete();
 
-            if (canOpen) {
-                File savePath = item.getFile();
+            File path = item.isComplete() ? item.getFile() : null;
 
-                if (savePath != null) {
-                    if (savePath.exists()) {
-                        UIUtils.openFile(ctx, savePath);
-                    } else {
-                        UIUtils.showShortMessage(ctx, R.string.cant_open_file_does_not_exist, savePath.getName());
-                    }
+            if (path == null && item instanceof BTDownloadItem) {
+                path = previewFile((BTDownloadItem) item);
+            }
+
+            if (path != null) {
+                if (path.exists()) {
+                    UIUtils.openFile(ctx, path);
+                } else {
+                    UIUtils.showShortMessage(ctx, R.string.cant_open_file_does_not_exist, path.getName());
                 }
             }
         }
@@ -612,4 +622,25 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private static File previewFile(BTDownloadItem item) {
+        if (item != null) {
+            long downloaded = item.getSequentialDownloaded();
+            long size = item.getSize();
+
+            //LOG.debug("Downloaded: " + downloaded + ", seq: " + dl.isSequentialDownload());
+
+            if (size > 0) {
+
+                long percent = (100 * downloaded) / size;
+
+                if (percent > 30 || downloaded > 10 * 1024 * 1024) {
+                    return item.getFile();
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
 }
