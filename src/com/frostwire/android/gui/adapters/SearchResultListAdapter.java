@@ -46,7 +46,6 @@ import java.util.List;
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
@@ -195,20 +194,20 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     private int getFileTypeIconId() {
         switch (fileType) {
-        case Constants.FILE_TYPE_APPLICATIONS:
-            return R.drawable.browse_peer_application_icon_selector_menu;
-        case Constants.FILE_TYPE_AUDIO:
-            return R.drawable.browse_peer_audio_icon_selector_menu;
-        case Constants.FILE_TYPE_DOCUMENTS:
-            return R.drawable.browse_peer_document_icon_selector_menu;
-        case Constants.FILE_TYPE_PICTURES:
-            return R.drawable.browse_peer_picture_icon_selector_menu;
-        case Constants.FILE_TYPE_VIDEOS:
-            return R.drawable.browse_peer_video_icon_selector_menu;
-        case Constants.FILE_TYPE_TORRENTS:
-            return R.drawable.browse_peer_torrent_icon_selector_menu;
-        default:
-            return R.drawable.question_mark;
+            case Constants.FILE_TYPE_APPLICATIONS:
+                return R.drawable.browse_peer_application_icon_selector_menu;
+            case Constants.FILE_TYPE_AUDIO:
+                return R.drawable.browse_peer_audio_icon_selector_menu;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                return R.drawable.browse_peer_document_icon_selector_menu;
+            case Constants.FILE_TYPE_PICTURES:
+                return R.drawable.browse_peer_picture_icon_selector_menu;
+            case Constants.FILE_TYPE_VIDEOS:
+                return R.drawable.browse_peer_video_icon_selector_menu;
+            case Constants.FILE_TYPE_TORRENTS:
+                return R.drawable.browse_peer_torrent_icon_selector_menu;
+            default:
+                return R.drawable.question_mark;
         }
     }
 
@@ -234,24 +233,24 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         private void increment(MediaType mt) {
             if (mt != null) {
                 switch (mt.getId()) {
-                case Constants.FILE_TYPE_AUDIO:
-                    numAudio++;
-                    break;
-                case Constants.FILE_TYPE_VIDEOS:
-                    numVideo++;
-                    break;
-                case Constants.FILE_TYPE_PICTURES:
-                    numPictures++;
-                    break;
-                case Constants.FILE_TYPE_APPLICATIONS:
-                    numApplications++;
-                    break;
-                case Constants.FILE_TYPE_DOCUMENTS:
-                    numDocuments++;
-                    break;
-                case Constants.FILE_TYPE_TORRENTS:
-                    numTorrents++;
-                    break;
+                    case Constants.FILE_TYPE_AUDIO:
+                        numAudio++;
+                        break;
+                    case Constants.FILE_TYPE_VIDEOS:
+                        numVideo++;
+                        break;
+                    case Constants.FILE_TYPE_PICTURES:
+                        numPictures++;
+                        break;
+                    case Constants.FILE_TYPE_APPLICATIONS:
+                        numApplications++;
+                        break;
+                    case Constants.FILE_TYPE_DOCUMENTS:
+                        numDocuments++;
+                        break;
+                    case Constants.FILE_TYPE_TORRENTS:
+                        numTorrents++;
+                        break;
                 }
             }
         }
