@@ -33,13 +33,9 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Librarian;
-import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.adapters.FileListAdapter.FileDescriptorItem;
 import com.frostwire.android.gui.adapters.menu.*;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.android.gui.transfers.DownloadTransfer;
-import com.frostwire.android.gui.transfers.ExistingDownload;
-import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.BrowseThumbnailImageButton.OverlayState;
@@ -56,14 +52,12 @@ import java.util.Map.Entry;
 /**
  * Adapter in control of the List View shown when we're browsing the files of
  * one peer.
- * 
+ *
  * @author gubatron
  * @author aldenml
- * 
  */
 public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
-    private final boolean local;
     private final byte fileType;
     private final ImageLoader thumbnailLoader;
 
@@ -75,15 +69,14 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private FileListFilter fileListFilter;
 
-    public FileListAdapter(Context context, List<FileDescriptor> files, boolean local, byte fileType) {
-        super(context, getViewItemId(local, fileType), convertFiles(files));
+    public FileListAdapter(Context context, List<FileDescriptor> files, byte fileType) {
+        super(context, getViewItemId(fileType), convertFiles(files));
 
         setShowMenuOnClick(true);
 
         fileListFilter = new FileListFilter();
         setAdapterFilter(fileListFilter);
 
-        this.local = local;
         this.fileType = fileType;
         this.thumbnailLoader = ImageLoader.getInstance(context);
 
@@ -94,17 +87,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     public byte getFileType() {
         return fileType;
-    }
-
-    /**
-     * @param sharedState FILE_LIST_FILTER_SHOW_ALL, FILE_LIST_FILTER_SHOW_SHARED, FILE_LIST_FILTER_SHOW_UNSHARED
-     */
-    public void setFileVisibilityBySharedState(int sharedState) {
-        fileListFilter.filterBySharedState(sharedState);
-    }
-
-    public int getFileVisibilityBySharedState() {
-        return fileListFilter.getCurrentSharedStateShown();
     }
 
     @Override
@@ -131,8 +113,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         } else if (view.getTag() instanceof FileDescriptor) {
             fd = (FileDescriptor) view.getTag();
         }
-        
-        if (local && checkIfNotExists(fd)) {
+
+        if (checkIfNotExists(fd)) {
             return null;
         }
 
@@ -141,35 +123,33 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
         boolean showSingleOptions = showSingleOptions(checked, fd);
 
-        if (local) {
-            if (showSingleOptions) {
-                items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
+        if (showSingleOptions) {
+            items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
 
-                if ((fd.fileType == Constants.FILE_TYPE_RINGTONES || fd.fileType == Constants.FILE_TYPE_AUDIO) && numChecked <= 1) {
-                    items.add(new SetAsRingtoneMenuAction(context, fd));
-                }
-
-                if (fd.fileType == Constants.FILE_TYPE_PICTURES && numChecked <= 1) {
-                    items.add(new SetAsWallpaperMenuAction(context, fd));
-                }
-
-                if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
-                    items.add(new RenameFileMenuAction(context, this, fd));
-                }
+            if ((fd.fileType == Constants.FILE_TYPE_RINGTONES || fd.fileType == Constants.FILE_TYPE_AUDIO) && numChecked <= 1) {
+                items.add(new SetAsRingtoneMenuAction(context, fd));
             }
 
-            List<FileDescriptor> list = checked;
-            if (list.size() == 0) {
-                list = Arrays.asList(fd);
+            if (fd.fileType == Constants.FILE_TYPE_PICTURES && numChecked <= 1) {
+                items.add(new SetAsWallpaperMenuAction(context, fd));
             }
 
-            if (fd.fileType == Constants.FILE_TYPE_AUDIO) {
-                items.add(new AddToPlaylistMenuAction(context, list));
+            if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
+                items.add(new RenameFileMenuAction(context, this, fd));
             }
+        }
 
-            if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
-                items.add(new DeleteFileMenuAction(context, this, list));
-            }
+        List<FileDescriptor> list = checked;
+        if (list.size() == 0) {
+            list = Arrays.asList(fd);
+        }
+
+        if (fd.fileType == Constants.FILE_TYPE_AUDIO) {
+            items.add(new AddToPlaylistMenuAction(context, list));
+        }
+
+        if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
+            items.add(new DeleteFileMenuAction(context, this, list));
         }
 
         return new MenuAdapter(context, fd.title, items);
@@ -210,7 +190,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         BrowseThumbnailImageButton fileThumbnail = findView(view, R.id.view_browse_peer_list_item_file_thumbnail);
         fileThumbnail.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
-        if (local && fileType == Constants.FILE_TYPE_APPLICATIONS) {
+        if (fileType == Constants.FILE_TYPE_APPLICATIONS) {
             Uri uri = Uri.withAppendedPath(ImageLoader.APPLICATION_THUMBNAILS_URI, fd.album);
             thumbnailLoader.load(uri, fileThumbnail, 96, 96);
         } else {
@@ -275,14 +255,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
         BrowseThumbnailImageButton downloadButton = findView(view, R.id.view_browse_peer_list_item_download);
 
-        if (local) {
-            if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
-                downloadButton.setOverlayState(OverlayState.STOP);
-            } else {
-                downloadButton.setOverlayState(OverlayState.PLAY);
-            }
+        if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
+            downloadButton.setOverlayState(OverlayState.STOP);
         } else {
-            downloadButton.setImageResource(R.drawable.download_icon);
+            downloadButton.setOverlayState(OverlayState.PLAY);
         }
 
         downloadButton.setTag(fd);
@@ -310,7 +286,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             img.setVisibility(View.GONE);
         }
     }
-    
+
     private void setNormalTextColors(View v) {
         TextView title = findView(v, R.id.view_browse_peer_list_item_file_title);
         TextView text = findView(v, R.id.view_browse_peer_list_item_extra_text);
@@ -337,13 +313,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private void populateContainerAction(View view) {
         ImageButton preview = findView(view, R.id.view_browse_peer_list_item_button_preview);
-
-        if (local) {
-            preview.setVisibility(View.GONE);
-        } else {
-            // just for now
-            preview.setVisibility(View.GONE);
-        }
+        preview.setVisibility(View.GONE);
     }
 
     private boolean showSingleOptions(List<FileDescriptor> checked, FileDescriptor fd) {
@@ -356,8 +326,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         return true;
     }
 
-    private static int getViewItemId(boolean local, byte fileType) {
-        if (local && (fileType == Constants.FILE_TYPE_PICTURES || fileType == Constants.FILE_TYPE_VIDEOS || fileType == Constants.FILE_TYPE_APPLICATIONS || fileType == Constants.FILE_TYPE_AUDIO)) {
+    private static int getViewItemId(byte fileType) {
+        if (fileType == Constants.FILE_TYPE_PICTURES || fileType == Constants.FILE_TYPE_VIDEOS || fileType == Constants.FILE_TYPE_APPLICATIONS || fileType == Constants.FILE_TYPE_AUDIO) {
             return R.layout.view_browse_thumbnail_peer_list_item;
         } else {
             return R.layout.view_browse_peer_list_item;
@@ -402,19 +372,19 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private void checkSDStatus() {
         Map<String, Boolean> sds = new HashMap<String, Boolean>();
-        
+
         String privateSubpath = "Android" + File.separator + "data";
-        
+
         File[] externalDirs = SystemUtils.getExternalFilesDirs(getContext());
         for (int i = 1; i < externalDirs.length; i++) {
             File path = externalDirs[i];
             String absolutePath = path.getAbsolutePath();
             boolean isSecondaryExternalStorageMounted = SystemUtils.isSecondaryExternalStorageMounted(path);
-            
+
             sds.put(absolutePath, isSecondaryExternalStorageMounted);
-            
+
             if (absolutePath.contains(privateSubpath)) {
-                String prefix = absolutePath.substring(0, absolutePath.indexOf(privateSubpath)-1);
+                String prefix = absolutePath.substring(0, absolutePath.indexOf(privateSubpath) - 1);
                 sds.put(prefix, isSecondaryExternalStorageMounted);
             }
         }
@@ -434,12 +404,12 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             item.exists = true;
         }
     }
-    
+
     private boolean checkIfNotExists(FileDescriptor fd) {
         if (fd == null || fd.filePath == null) {
             return true;
         }
-        
+
         File f = new File(fd.filePath);
 
         if (!f.exists()) {
@@ -499,14 +469,12 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (fd == null) {
                 return;
             }
-            
-            if (local && checkIfNotExists(fd)) {
+
+            if (checkIfNotExists(fd)) {
                 return;
             }
 
-            if (local) {
-                localPlay(fd);
-            }
+            localPlay(fd);
         }
     }
 

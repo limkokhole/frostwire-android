@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -58,7 +58,6 @@ import java.util.Set;
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public class BrowsePeerFragment extends AbstractFragment implements LoaderCallbacks<Object>, MainFragment {
 
@@ -82,7 +81,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private FileListAdapter adapter;
 
     private Peer peer;
-    private boolean local;
     private Finger finger;
 
     private View header;
@@ -113,7 +111,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     public void setPeer(Peer peer) {
         this.peer = peer;
-        this.local = peer.isLocalHost();
     }
 
     @Override
@@ -181,37 +178,26 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         }
     }
 
-    public void showFile(final FileDescriptor scrollToFileDescriptor) {
-        byte fileType = scrollToFileDescriptor.fileType;
-        //adapter is usually null at this point when this is called from outside app to share file w/FrostWire.
-        if (adapter == null) {
-            final List<FileDescriptor> files = peer.browse(fileType);
-            updateFiles(new Object[] { (Byte) fileType, files });
-        }
-        setOnUpdateFilesListener(createScrollToFileOnLoadFinishedListener(scrollToFileDescriptor));
-        clickBrowseFileButton(fileType);
-    }
-
     private void clickBrowseFileButton(byte fileType) {
-         RadioButton button = buttonAudio;
-         switch (fileType) {
-             case Constants.FILE_TYPE_APPLICATIONS:
-                 button = buttonApplications;
-                 break;
-             case Constants.FILE_TYPE_DOCUMENTS:
-                 button = buttonDocuments;
-                 break;
-             case Constants.FILE_TYPE_PICTURES:
-                 button = buttonPictures;
-                 break;
-             case Constants.FILE_TYPE_VIDEOS:
-                 button = buttonVideos;
-                 break;
-             case Constants.FILE_TYPE_AUDIO:
-                 button = buttonAudio;
-                 break;
-         }
-         button.performClick();
+        RadioButton button = buttonAudio;
+        switch (fileType) {
+            case Constants.FILE_TYPE_APPLICATIONS:
+                button = buttonApplications;
+                break;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                button = buttonDocuments;
+                break;
+            case Constants.FILE_TYPE_PICTURES:
+                button = buttonPictures;
+                break;
+            case Constants.FILE_TYPE_VIDEOS:
+                button = buttonVideos;
+                break;
+            case Constants.FILE_TYPE_AUDIO:
+                button = buttonAudio;
+                break;
+        }
+        button.performClick();
     }
 
 
@@ -332,30 +318,30 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 int numShared = 0;
 
                 switch (fileType) {
-                case Constants.FILE_TYPE_APPLICATIONS:
-                    numShared = finger.numSharedApplicationFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_APPLICATIONS);
-                    break;
-                case Constants.FILE_TYPE_AUDIO:
-                    numShared = finger.numSharedAudioFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_AUDIO);
-                    break;
-                case Constants.FILE_TYPE_DOCUMENTS:
-                    numShared = finger.numSharedDocumentFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_DOCUMENTS);
-                    break;
-                case Constants.FILE_TYPE_PICTURES:
-                    numShared = finger.numSharedPictureFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_PICTURES);
-                    break;
-                case Constants.FILE_TYPE_RINGTONES:
-                    numShared = finger.numSharedRingtoneFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_RINGTONES);
-                    break;
-                case Constants.FILE_TYPE_VIDEOS:
-                    numShared = finger.numSharedVideoFiles;
-                    UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_VIDEOS);
-                    break;
+                    case Constants.FILE_TYPE_APPLICATIONS:
+                        numShared = finger.numSharedApplicationFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_APPLICATIONS);
+                        break;
+                    case Constants.FILE_TYPE_AUDIO:
+                        numShared = finger.numSharedAudioFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_AUDIO);
+                        break;
+                    case Constants.FILE_TYPE_DOCUMENTS:
+                        numShared = finger.numSharedDocumentFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_DOCUMENTS);
+                        break;
+                    case Constants.FILE_TYPE_PICTURES:
+                        numShared = finger.numSharedPictureFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_PICTURES);
+                        break;
+                    case Constants.FILE_TYPE_RINGTONES:
+                        numShared = finger.numSharedRingtoneFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_RINGTONES);
+                        break;
+                    case Constants.FILE_TYPE_VIDEOS:
+                        numShared = finger.numSharedVideoFiles;
+                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_VIDEOS);
+                        break;
                 }
 
                 onRefreshSharedListener.onRefresh(this, fileType, numShared);
@@ -378,7 +364,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             if (uuid != null) {
                 try {
                     peer = PeerManager.instance().findPeerByKey(uuid);
-                    local = peer.isLocalHost();
                 } catch (Throwable e) {
                     peer = null; // weird situation reported by a strange bug.
                 }
@@ -399,7 +384,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             if (uuid != null) {
                 try {
                     peer = PeerManager.instance().findPeerByKey(uuid);
-                    local = peer.isLocalHost();
                 } catch (Throwable e) {
                     peer = null; // weird situation reported by a strange bug.
                 }
@@ -486,7 +470,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             @Override
             public Object loadInBackground() {
                 try {
-                    return new Object[] { fileType, peer.browse(fileType) };
+                    return new Object[]{fileType, peer.browse(fileType)};
                 } catch (Throwable e) {
                     LOG.error("Error performing finger", e);
                 }
@@ -515,24 +499,24 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             int numTotal = 0;
 
             switch (fileType) {
-            case Constants.FILE_TYPE_APPLICATIONS:
-                numTotal = finger.numTotalApplicationFiles;
-                break;
-            case Constants.FILE_TYPE_AUDIO:
-                numTotal = finger.numTotalAudioFiles;
-                break;
-            case Constants.FILE_TYPE_DOCUMENTS:
-                numTotal = finger.numTotalDocumentFiles;
-                break;
-            case Constants.FILE_TYPE_PICTURES:
-                numTotal = finger.numTotalPictureFiles;
-                break;
-            case Constants.FILE_TYPE_RINGTONES:
-                numTotal = finger.numTotalRingtoneFiles;
-                break;
-            case Constants.FILE_TYPE_VIDEOS:
-                numTotal = finger.numTotalVideoFiles;
-                break;
+                case Constants.FILE_TYPE_APPLICATIONS:
+                    numTotal = finger.numTotalApplicationFiles;
+                    break;
+                case Constants.FILE_TYPE_AUDIO:
+                    numTotal = finger.numTotalAudioFiles;
+                    break;
+                case Constants.FILE_TYPE_DOCUMENTS:
+                    numTotal = finger.numTotalDocumentFiles;
+                    break;
+                case Constants.FILE_TYPE_PICTURES:
+                    numTotal = finger.numTotalPictureFiles;
+                    break;
+                case Constants.FILE_TYPE_RINGTONES:
+                    numTotal = finger.numTotalRingtoneFiles;
+                    break;
+                case Constants.FILE_TYPE_VIDEOS:
+                    numTotal = finger.numTotalVideoFiles;
+                    break;
             }
 
             String fileTypeStr = getString(R.string.my_filetype, UIUtils.getFileTypeAsString(getResources(), fileType));
@@ -577,7 +561,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             @SuppressWarnings("unchecked")
             List<FileDescriptor> items = (List<FileDescriptor>) data[1];
-            adapter = new FileListAdapter(getActivity(), items, local, fileType) {
+            adapter = new FileListAdapter(getActivity(), items, fileType) {
 
                 @Override
                 protected void onItemChecked(View v, boolean isChecked) {
@@ -664,12 +648,12 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(Constants.ACTION_MEDIA_PLAYER_PLAY) ||
-                action.equals(Constants.ACTION_MEDIA_PLAYER_STOPPED) ||
-                action.equals(Constants.ACTION_MEDIA_PLAYER_PAUSED) ||
-                action.equals(Constants.ACTION_MEDIA_PLAYER_PAUSED) ||
-                action.equals(MusicPlaybackService.PLAYSTATE_CHANGED) ||
-                action.equals(MusicPlaybackService.META_CHANGED)
-                ) {
+                    action.equals(Constants.ACTION_MEDIA_PLAYER_STOPPED) ||
+                    action.equals(Constants.ACTION_MEDIA_PLAYER_PAUSED) ||
+                    action.equals(Constants.ACTION_MEDIA_PLAYER_PAUSED) ||
+                    action.equals(MusicPlaybackService.PLAYSTATE_CHANGED) ||
+                    action.equals(MusicPlaybackService.META_CHANGED)
+                    ) {
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
                 }
