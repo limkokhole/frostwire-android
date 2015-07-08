@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -30,10 +30,12 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
+import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.licences.License;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.search.SearchResult;
+import com.frostwire.search.StreamableSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.uxstats.UXAction;
@@ -52,6 +54,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     private static final int NO_FILE_TYPE = -1;
 
     private final OnLinkClickListener linkListener;
+    private final PreviewClickListener previewClickListener;
 
     private int fileType;
 
@@ -61,6 +64,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         super(context, R.layout.view_bittorrent_search_result_list_item);
 
         this.linkListener = new OnLinkClickListener();
+        this.previewClickListener = new PreviewClickListener(context);
 
         this.fileType = NO_FILE_TYPE;
 
@@ -131,9 +135,16 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     }
 
     private void populateThumbnail(View view, SearchResult sr) {
+        ImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
         if (sr.getThumbnailUrl() != null) {
-            ImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
             thumbLoader.load(Uri.parse(sr.getThumbnailUrl()), fileTypeIcon, 96, 96, getFileTypeIconId());
+        }
+
+        fileTypeIcon.setOnClickListener(previewClickListener);
+        if (sr instanceof StreamableSearchResult) {
+            fileTypeIcon.setTag(sr);
+        } else {
+            fileTypeIcon.setTag(null);
         }
     }
 
@@ -253,6 +264,20 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
                         break;
                 }
             }
+        }
+    }
+
+    private static final class PreviewClickListener extends ClickAdapter<Context> {
+
+        public PreviewClickListener(Context ctx) {
+            super(ctx);
+        }
+
+        @Override
+        public void onClick(Context owner, View v) {
+            StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
+
+            System.out.println(sr.getStreamUrl());
         }
     }
 }

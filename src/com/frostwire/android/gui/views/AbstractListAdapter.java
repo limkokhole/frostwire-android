@@ -48,10 +48,10 @@ import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 /**
- * 
+ *
  * We extend from ListAdapter to populate our ListViews.
  * This one allows us to click and long click on the elements of our ListViews.
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -156,18 +156,14 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
     }
 
     public Context getContext() {
-        Context result = null;
-        if (Ref.alive(context)) {
-            result = context.get();
-        }
-        return result;
+        return context.get();
     }
 
     /** This will return the count for the current file type */
     public int getCount() {
         return visualList == null ? 0 : visualList.size();
     }
-    
+
     /** Should return the total count for all file types. */
     public int getTotalCount() {
         return list == null ? 0 : list.size();
@@ -270,22 +266,22 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
         return list;
     }
 
-    /** 
+    /**
      * Inflates the view out of the XML.
-     * 
+     *
      * Sets click and long click listeners in case you need them. (Override onItemClicked and onItemLongClicked)
-     * 
+     *
      * Let's the adapter know that the view has been created, in case you need to go deeper and create
      * more advanced click behavior or even add new Views during runtime.
-     * 
+     *
      * It will also bind the data to the view, you can refer to it if you need it by doing a .getTag()
-     * 
+     *
      */
     public View getView(int position, View view, ViewGroup parent) {
 
         T item = getItem(position);
         Context ctx = getContext();
-        
+
         if (view == null && ctx != null) {
             // every list view item is wrapped in a generic container which has a hidden checkbox on the left hand side.
             view = View.inflate(ctx, R.layout.view_selectable_list_item, null);
@@ -371,7 +367,7 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
     /**
      * Override this method if you want to do something when the DPAD or ENTER key is pressed and released.
      * This is some sort of master click.
-     * 
+     *
      * @param v
      * @return if handled
      */
@@ -384,7 +380,7 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
 
     /**
      * Helper function.
-     * 
+     *
      * @param <TView>
      * @param view
      * @param id
@@ -394,7 +390,7 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
     protected final <TView extends View> TView findView(View view, int id) {
         return (TView) getView(view, getHolder(view), id);
     }
-    
+
     private SparseArray<View> getHolder(View view) {
         @SuppressWarnings("unchecked")
         SparseArray<View> h = (SparseArray<View>) view.getTag(R.id.abstract_list_adapter_holder_tag_id);
@@ -434,13 +430,13 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
 
     /**
      * Sets up the behavior of a possible checkbox to check this item.
-     * 
+     *
      * Takes in consideration:
      * - Only so many views are created and reused by the ListView
      * - Setting the correct checked/unchecked value without triggering the onCheckedChanged event.
-     * 
+     *
      * @see getChecked()
-     * 
+     *
      * @param view
      * @param item
      */
