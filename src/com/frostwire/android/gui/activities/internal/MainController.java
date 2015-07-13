@@ -90,13 +90,6 @@ public final class MainController {
         }
     }
 
-    public void shutdown() {
-        Intent i = new Intent(activity, MainActivity.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        i.putExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), true);
-        activity.startActivity(i);
-    }
-
     public void showMyFiles() {
         if (!(activity.getCurrentFragment() instanceof BrowsePeerFragment)) {
             switchFragment(R.id.menu_main_library);

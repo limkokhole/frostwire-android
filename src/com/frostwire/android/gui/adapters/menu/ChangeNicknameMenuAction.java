@@ -83,7 +83,7 @@ public class ChangeNicknameMenuAction extends MenuAction {
                     int size = peers.size();
                     for (int i = 0; i < size; i++) {
                         Peer p = peers.get(i);
-                        if (p != null && p.isLocalHost()) {
+                        if (p != null) {
                             p.setNickname(newNick);
                             break;
                         }
