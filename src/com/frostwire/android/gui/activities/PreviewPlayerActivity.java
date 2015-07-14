@@ -55,6 +55,7 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
