@@ -18,6 +18,7 @@
 
 package com.frostwire.android.gui.activities;
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -25,6 +26,7 @@ import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.widget.VideoView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractActivity;
@@ -49,6 +51,15 @@ public final class PreviewPlayerActivity extends AbstractActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     protected void initComponents(Bundle savedInstanceState) {
         Intent i = getIntent();
         if (i == null) {
@@ -60,7 +71,14 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         final String streamUrl = i.getStringExtra("streamUrl");
         final boolean audio = i.getBooleanExtra("audio", false);
 
-        setTitle(displayName);
+        ActionBar ab = getActionBar();
+        if (ab != null) {
+            ab.setHomeButtonEnabled(true);
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setTitle(displayName);
+        } else {
+            setTitle(displayName);
+        }
 
         final VideoView v = findView(R.id.activity_preview_player_videoview);
 
