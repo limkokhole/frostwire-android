@@ -33,6 +33,7 @@ import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.android.gui.views.ClickAdapter;
+import com.frostwire.android.gui.views.SearchThumbnailImageView;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.licences.License;
 import com.frostwire.search.FileSearchResult;
@@ -112,8 +113,6 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
         TextView title = findView(view, R.id.view_bittorrent_search_result_list_item_title);
         title.setText(sr.getDisplayName());
-        // if marked as downloading
-        // title.setTextColor(GlobalConstants.COLOR_DARK_BLUE);
 
         TextView fileSize = findView(view, R.id.view_bittorrent_search_result_list_item_file_size);
         if (sr.getSize() > 0) {
@@ -138,7 +137,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     }
 
     private void populateThumbnail(View view, SearchResult sr) {
-        ImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
+        SearchThumbnailImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
         if (sr.getThumbnailUrl() != null) {
             thumbLoader.load(Uri.parse(sr.getThumbnailUrl()), fileTypeIcon, 96, 96, getFileTypeIconId());
         }
@@ -146,8 +145,10 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         fileTypeIcon.setOnClickListener(previewClickListener);
         if (sr instanceof StreamableSearchResult) {
             fileTypeIcon.setTag(sr);
+            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.PREVIEW);
         } else {
             fileTypeIcon.setTag(null);
+            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.NONE);
         }
     }
 
