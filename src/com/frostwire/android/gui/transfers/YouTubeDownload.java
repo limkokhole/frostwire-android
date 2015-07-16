@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,6 +18,22 @@
 
 package com.frostwire.android.gui.transfers;
 
+import android.util.Log;
+import com.frostwire.android.R;
+import com.frostwire.android.core.SystemPaths;
+import com.frostwire.android.gui.Librarian;
+import com.frostwire.android.gui.services.Engine;
+import com.frostwire.android.util.SystemUtils;
+import com.frostwire.search.extractors.YouTubeExtractor.LinkInfo;
+import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
+import com.frostwire.transfers.TransferItem;
+import com.frostwire.util.HttpClient;
+import com.frostwire.util.HttpClient.HttpClientListener;
+import com.frostwire.util.HttpClientFactory;
+import com.frostwire.util.MP4Muxer;
+import com.frostwire.util.MP4Muxer.MP4Metadata;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
@@ -25,26 +41,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.frostwire.android.core.SystemPaths;
-import com.frostwire.android.gui.fragments.TransfersFragment;
-import com.frostwire.android.util.SystemUtils;
-import com.frostwire.jlibtorrent.Utils;
-import com.frostwire.transfers.TransferItem;
-import com.frostwire.util.OSUtils;
-import org.apache.commons.io.FilenameUtils;
-
-import android.util.Log;
-
-import com.frostwire.android.R;
-import com.frostwire.android.gui.Librarian;
-import com.frostwire.android.gui.services.Engine;
-import com.frostwire.search.extractors.YouTubeExtractor.LinkInfo;
-import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
-import com.frostwire.util.HttpClient;
-import com.frostwire.util.HttpClient.HttpClientListener;
-import com.frostwire.util.HttpClientFactory;
-import com.frostwire.util.MP4Muxer;
-import com.frostwire.util.MP4Muxer.MP4Metadata;
+import static com.frostwire.util.Digests.sha1;
 
 /**
  * @author gubatron
@@ -330,7 +327,7 @@ public final class YouTubeDownload implements DownloadTransfer {
 
         if (completeFile.getAbsoluteFile().exists()) {
             Librarian.instance().scan(getSavePath().getAbsoluteFile());
-            String sha1 = Utils.getSha1(completeFile);
+            String sha1 = sha1(completeFile);
             Engine.instance().notifyDownloadFinished(getDisplayName(), completeFile, sha1);
         } else {
             Engine.instance().notifyDownloadFinished(getDisplayName(), getSavePath());
