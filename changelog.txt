@@ -1,5 +1,6 @@
-FrostWire 1.5.9 - JUNE/25/2015
+FrostWire 1.5.9 - JULY/17/2015
  - Improved search suggestions.
+ - Upgrade bittorrent engine to jlibtorrent 1.0
  - Multiple crash fixes in music player.
 
 FrostWire 1.5.8 - JUNE/16/2015
