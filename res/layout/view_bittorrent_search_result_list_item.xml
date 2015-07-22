@@ -26,7 +26,7 @@
 
     <com.frostwire.android.gui.views.SearchThumbnailImageView
         android:id="@+id/view_bittorrent_search_result_list_item_filetype_icon"
-        android:layout_width="40dp"
+        android:layout_width="50dp"
         android:layout_height="match_parent"
         android:layout_gravity="center|center_vertical"
         android:contentDescription="@null"
@@ -39,8 +39,8 @@
         android:background="@drawable/browse_peer_list_item_download_button_background"
         android:contentDescription="@null"
         android:paddingBottom="21dp"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
         android:paddingTop="21dp"
         android:scaleType="fitCenter"
         android:src="@drawable/download_icon" />
