@@ -144,13 +144,12 @@ public final class PeerManager {
 
     private LocalPeer createLocalPeer() {
         String address = "0.0.0.0";
-        int port = NetworkManager.instance().getListeningPort();
         int numSharedFiles = Librarian.instance().getNumFiles();
         String nickname = ConfigurationManager.instance().getNickname();
         String clientVersion = Constants.FROSTWIRE_VERSION_STRING;
         int deviceType = Constants.DEVICE_MAJOR_TYPE_PHONE;
 
-        return new LocalPeer(address, port, true, nickname, numSharedFiles, deviceType, clientVersion);
+        return new LocalPeer(address, 0, true, nickname, numSharedFiles, deviceType, clientVersion);
     }
 
     private void updatePeerCache2(Peer peer, boolean disconnected) {

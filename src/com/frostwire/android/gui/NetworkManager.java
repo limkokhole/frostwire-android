@@ -40,10 +40,6 @@ import com.frostwire.util.ByteUtils;
  */
 public final class NetworkManager {
 
-    private static final String TAG = "FW.NetworkManager";
-
-    private static Field inetAddressHostNameField;
-
     // The following constants are from the android sdk source code
     // It does not matter if some constants are from a newer android version,
     // since only the latest phone can go to the specified state.
@@ -78,17 +74,6 @@ public final class NetworkManager {
 
     private final Application context;
 
-    private int listeningPort;
-
-    static {
-        try {
-            inetAddressHostNameField = InetAddress.class.getDeclaredField("hostName");
-            inetAddressHostNameField.setAccessible(true);
-        } catch (Throwable e) {
-            Log.e(TAG, "Error getting inetAddressHostNameField", e);
-        }
-    }
-
     private static NetworkManager instance;
 
     public synchronized static void create(Application context) {
@@ -107,16 +92,6 @@ public final class NetworkManager {
 
     private NetworkManager(Application context) {
         this.context = context;
-
-        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_RANDOM_LISTENING_PORT)) {
-            listeningPort = ByteUtils.randomInt(40000, 49999);
-        } else {
-            listeningPort = Constants.GENERIC_LISTENING_PORT;
-        }
-    }
-
-    public int getListeningPort() {
-        return listeningPort;
     }
 
     public boolean isDataUp() {

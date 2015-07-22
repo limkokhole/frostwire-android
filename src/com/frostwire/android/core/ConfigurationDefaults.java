@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -27,10 +27,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- *
  */
 final class ConfigurationDefaults {
 
@@ -53,7 +51,7 @@ final class ConfigurationDefaults {
 
     private void load() {
         defaultValues.put(Constants.PREF_KEY_CORE_UUID, ByteUtils.uuidToByteArray(UUID.randomUUID()));
-        defaultValues.put(Constants.PREF_KEY_CORE_LAST_SEEN_VERSION,"");//won't know until I see it.
+        defaultValues.put(Constants.PREF_KEY_CORE_LAST_SEEN_VERSION, "");//won't know until I see it.
 
         defaultValues.put(Constants.PREF_KEY_GUI_NICKNAME, "FrostNewbie");
         defaultValues.put(Constants.PREF_KEY_GUI_VIBRATE_ON_FINISHED_DOWNLOAD, true);
@@ -98,11 +96,9 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_BTJUNKIE, true);
         defaultValues.put(Constants.PREF_KEY_SEARCH_USE_KAT, true);
 
-        defaultValues.put(Constants.PREF_KEY_NETWORK_USE_RANDOM_LISTENING_PORT, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_ENABLE_DHT, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA, true);
         defaultValues.put(Constants.PREF_KEY_NETWORK_MAX_CONCURRENT_UPLOADS, 3);
-        defaultValues.put(Constants.PREF_KEY_NETWORK_PINGS_INTERVAL, 4000);
 
         defaultValues.put(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS, false);
         defaultValues.put(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY, true);
@@ -117,8 +113,6 @@ final class ConfigurationDefaults {
         defaultValues.put(Constants.PREF_KEY_STORAGE_PATH, Environment.getExternalStorageDirectory().getAbsolutePath()); // /mnt/sdcard
 
         defaultValues.put(Constants.PREF_KEY_UXSTATS_ENABLED, true);
-
-        resetValue(Constants.PREF_KEY_NETWORK_PINGS_INTERVAL);
 
         resetValue(Constants.PREF_KEY_SEARCH_COUNT_DOWNLOAD_FOR_TORRENT_DEEP_SCAN);
         resetValue(Constants.PREF_KEY_SEARCH_COUNT_ROUNDS_FOR_TORRENT_DEEP_SCAN);
