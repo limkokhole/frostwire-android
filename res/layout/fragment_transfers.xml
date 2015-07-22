@@ -40,14 +40,15 @@
         android:id="@+id/fragment_transfers_buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/app_dark_blue"
+        android:layout_margin="0dp"
+        android:background="@color/app_dark_blue_selector"
         android:checkedButton="@+id/fragment_transfers_button_select_all"
         android:orientation="horizontal" >
 
         <RadioButton
             android:id="@+id/fragment_transfers_button_select_all"
             style="@style/TransfersButton"
-            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_weight="1"
             android:background="@drawable/transfers_top_button_selector"
             android:button="@null"
@@ -59,6 +60,7 @@
             android:id="@+id/fragment_transfers_button_select_downloading"
             style="@style/TransfersButton"
             android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_weight="1"
             android:background="@drawable/transfers_top_button_selector"
             android:button="@null"
@@ -70,6 +72,7 @@
             android:id="@+id/fragment_transfers_button_select_completed"
             style="@style/TransfersButton"
             android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_weight="1"
             android:background="@drawable/transfers_top_button_selector"
             android:button="@null"

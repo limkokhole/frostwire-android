@@ -18,11 +18,18 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item>
         <shape>
-            <solid android:color="@color/app_dark_blue_highlight" />
+            <solid android:color="@color/basic_blue_highlight"></solid>
+        </shape>
+    </item>
+    <item android:bottom="5dp">
+        <shape>
+
+           <solid android:color="@color/app_dark_blue_selector"></solid>
         </shape>
     </item>
 
