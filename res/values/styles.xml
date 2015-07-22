@@ -93,7 +93,7 @@
 
     <style name="Preferences" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_ab_back</item>
+        <item name="android:homeAsUpIndicator">@drawable/home_as_up_padding</item>
     </style>
 
     <style name="ProgressBarHolo.Horizontal" parent="android:Widget.ProgressBar.Horizontal">
