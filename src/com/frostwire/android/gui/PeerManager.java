@@ -18,37 +18,31 @@
 
 package com.frostwire.android.gui;
 
-import java.io.IOException;
-import java.net.InetAddress;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
 import android.util.Log;
-
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.localpeer.LocalPeer;
 import com.frostwire.localpeer.LocalPeerManager;
 import com.frostwire.localpeer.LocalPeerManagerListener;
 
+import java.io.IOException;
+import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * Keeps track of the Peers we know.
- * 
+ *
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class PeerManager {
 
     private static final String TAG = "FW.PeerManager";
 
     private final Map<String, Peer> addressMap;
-
-    private final PeerComparator peerComparator;
 
     private static PeerManager instance;
 
@@ -63,8 +57,6 @@ public final class PeerManager {
 
     private PeerManager() {
         this.addressMap = new ConcurrentHashMap<String, Peer>();
-
-        this.peerComparator = new PeerComparator();
 
         this.peerManager = new DummyLocalPeerManager();
         this.peerManager.setListener(new LocalPeerManagerListener() {
@@ -82,12 +74,12 @@ public final class PeerManager {
     }
 
     public Peer getLocalPeer() {
-        return new Peer(createLocalPeer(), true);
+        return new Peer(createLocalPeer());
     }
 
     public void onMessageReceived(LocalPeer p, boolean added) {
         if (p != null) {
-            Peer peer = new Peer(p, p.local);
+            Peer peer = new Peer(p);
 
             updatePeerCache2(peer, !added);
         }
@@ -95,15 +87,13 @@ public final class PeerManager {
 
     /**
      * This returns a shadow-copy of the peer cache as an ArrayList plus the local peer.
-     * 
+     *
      * @return
      */
     public List<Peer> getPeers() {
         List<Peer> peers = new ArrayList<Peer>();
 
         peers.addAll(addressMap.values());
-
-        Collections.sort(peers, peerComparator);
 
         return peers;
     }
@@ -175,7 +165,7 @@ public final class PeerManager {
     /**
      * Invoke this method whenever you have new information about a peer. For
      * now we invoke this whenever we receive a ping.
-     * 
+     *
      * @param peer
      * @param disconnected
      */
@@ -195,18 +185,6 @@ public final class PeerManager {
             } else {
                 addressMap.remove(peer.getKey());
             }
-        }
-    }
-
-    private static final class PeerComparator implements Comparator<Peer> {
-        public int compare(Peer lhs, Peer rhs) {
-            if (lhs.isLocalHost()) {
-                return -1;
-            }
-            if (rhs.isLocalHost()) {
-                return 1;
-            }
-            return lhs.getNickname().compareTo(rhs.getNickname());
         }
     }
 

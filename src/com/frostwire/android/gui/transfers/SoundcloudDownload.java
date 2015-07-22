@@ -29,14 +29,14 @@ import android.util.Log;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.bittorrent.BTEngine;
-import com.frostwire.jlibtorrent.Utils;
 import com.frostwire.mp3.ID3Wrapper;
 import com.frostwire.mp3.ID3v1Tag;
 import com.frostwire.mp3.ID3v23Tag;
 import com.frostwire.mp3.Mp3File;
 import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.transfers.TransferItem;
+
+import static com.frostwire.util.Digests.sha1;
 
 /**
  * @author gubatron
@@ -163,7 +163,7 @@ public class SoundcloudDownload extends TemporaryDownloadTransfer<SoundcloudSear
                         moveFile(download.getSavePath(), Constants.FILE_TYPE_AUDIO);
                         scanFinalFile();
                         File savedFile = getSavePath(); //the update path after the file was moved.
-                        String sha1 = Utils.getSha1(savedFile);
+                        String sha1 = sha1(savedFile);
                         Engine.instance().notifyDownloadFinished(getDisplayName(), savedFile, sha1);
                     }
                 });

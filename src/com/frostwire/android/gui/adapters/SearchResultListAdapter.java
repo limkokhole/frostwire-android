@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.net.Uri;
 import android.view.View;
@@ -28,12 +29,17 @@ import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
+import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
+import com.frostwire.android.gui.views.ClickAdapter;
+import com.frostwire.android.gui.views.SearchThumbnailImageView;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.licences.License;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.search.SearchResult;
+import com.frostwire.search.StreamableSearchResult;
+import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.uxstats.UXAction;
@@ -46,13 +52,13 @@ import java.util.List;
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     private static final int NO_FILE_TYPE = -1;
 
     private final OnLinkClickListener linkListener;
+    private final PreviewClickListener previewClickListener;
 
     private int fileType;
 
@@ -62,6 +68,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         super(context, R.layout.view_bittorrent_search_result_list_item);
 
         this.linkListener = new OnLinkClickListener();
+        this.previewClickListener = new PreviewClickListener(context);
 
         this.fileType = NO_FILE_TYPE;
 
@@ -106,8 +113,6 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
         TextView title = findView(view, R.id.view_bittorrent_search_result_list_item_title);
         title.setText(sr.getDisplayName());
-        // if marked as downloading
-        // title.setTextColor(GlobalConstants.COLOR_DARK_BLUE);
 
         TextView fileSize = findView(view, R.id.view_bittorrent_search_result_list_item_file_size);
         if (sr.getSize() > 0) {
@@ -132,9 +137,18 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     }
 
     private void populateThumbnail(View view, SearchResult sr) {
+        SearchThumbnailImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
         if (sr.getThumbnailUrl() != null) {
-            ImageView fileTypeIcon = findView(view, R.id.view_bittorrent_search_result_list_item_filetype_icon);
             thumbLoader.load(Uri.parse(sr.getThumbnailUrl()), fileTypeIcon, 96, 96, getFileTypeIconId());
+        }
+
+        fileTypeIcon.setOnClickListener(previewClickListener);
+        if (sr instanceof StreamableSearchResult) {
+            fileTypeIcon.setTag(sr);
+            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.PREVIEW);
+        } else {
+            fileTypeIcon.setTag(null);
+            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.NONE);
         }
     }
 
@@ -195,20 +209,20 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     private int getFileTypeIconId() {
         switch (fileType) {
-        case Constants.FILE_TYPE_APPLICATIONS:
-            return R.drawable.browse_peer_application_icon_selector_menu;
-        case Constants.FILE_TYPE_AUDIO:
-            return R.drawable.browse_peer_audio_icon_selector_menu;
-        case Constants.FILE_TYPE_DOCUMENTS:
-            return R.drawable.browse_peer_document_icon_selector_menu;
-        case Constants.FILE_TYPE_PICTURES:
-            return R.drawable.browse_peer_picture_icon_selector_menu;
-        case Constants.FILE_TYPE_VIDEOS:
-            return R.drawable.browse_peer_video_icon_selector_menu;
-        case Constants.FILE_TYPE_TORRENTS:
-            return R.drawable.browse_peer_torrent_icon_selector_menu;
-        default:
-            return R.drawable.question_mark;
+            case Constants.FILE_TYPE_APPLICATIONS:
+                return R.drawable.browse_peer_application_icon_selector_menu;
+            case Constants.FILE_TYPE_AUDIO:
+                return R.drawable.browse_peer_audio_icon_selector_menu;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                return R.drawable.browse_peer_document_icon_selector_menu;
+            case Constants.FILE_TYPE_PICTURES:
+                return R.drawable.browse_peer_picture_icon_selector_menu;
+            case Constants.FILE_TYPE_VIDEOS:
+                return R.drawable.browse_peer_video_icon_selector_menu;
+            case Constants.FILE_TYPE_TORRENTS:
+                return R.drawable.browse_peer_torrent_icon_selector_menu;
+            default:
+                return R.drawable.question_mark;
         }
     }
 
@@ -234,26 +248,45 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         private void increment(MediaType mt) {
             if (mt != null) {
                 switch (mt.getId()) {
-                case Constants.FILE_TYPE_AUDIO:
-                    numAudio++;
-                    break;
-                case Constants.FILE_TYPE_VIDEOS:
-                    numVideo++;
-                    break;
-                case Constants.FILE_TYPE_PICTURES:
-                    numPictures++;
-                    break;
-                case Constants.FILE_TYPE_APPLICATIONS:
-                    numApplications++;
-                    break;
-                case Constants.FILE_TYPE_DOCUMENTS:
-                    numDocuments++;
-                    break;
-                case Constants.FILE_TYPE_TORRENTS:
-                    numTorrents++;
-                    break;
+                    case Constants.FILE_TYPE_AUDIO:
+                        numAudio++;
+                        break;
+                    case Constants.FILE_TYPE_VIDEOS:
+                        numVideo++;
+                        break;
+                    case Constants.FILE_TYPE_PICTURES:
+                        numPictures++;
+                        break;
+                    case Constants.FILE_TYPE_APPLICATIONS:
+                        numApplications++;
+                        break;
+                    case Constants.FILE_TYPE_DOCUMENTS:
+                        numDocuments++;
+                        break;
+                    case Constants.FILE_TYPE_TORRENTS:
+                        numTorrents++;
+                        break;
                 }
             }
+        }
+    }
+
+    private static final class PreviewClickListener extends ClickAdapter<Context> {
+
+        public PreviewClickListener(Context ctx) {
+            super(ctx);
+        }
+
+        @Override
+        public void onClick(Context ctx, View v) {
+            StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
+
+            Intent i = new Intent(ctx, PreviewPlayerActivity.class);
+            i.putExtra("displayName", sr.getDisplayName());
+            i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
+            i.putExtra("streamUrl", sr.getStreamUrl());
+            i.putExtra("audio", sr instanceof SoundcloudSearchResult);
+            ctx.startActivity(i);
         }
     }
 }

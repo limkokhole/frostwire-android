@@ -31,6 +31,10 @@ buildscript {
 
 repositories {
     mavenCentral()
+
+    maven {
+        url '../frostwire-jlibtorrent/repo'
+    }
 }
 
 def manifestVersionCode() {
@@ -55,9 +59,6 @@ android {
             assets.srcDirs = ['assets']
             jniLibs.srcDir 'libs'
             java {
-
-                srcDir "../frostwire-jlibtorrent/src"
-
                 srcDir "../frostwire-common/apache"
                 srcDir "../frostwire-common/core"
                 srcDir "../frostwire-common/gson"
@@ -140,6 +141,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.frostwire:jlibtorrent:1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 

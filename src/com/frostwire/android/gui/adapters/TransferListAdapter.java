@@ -39,8 +39,8 @@ import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.android.gui.views.MenuAction;
 import com.frostwire.android.gui.views.MenuAdapter;
 import com.frostwire.android.gui.views.MenuBuilder;
+import com.frostwire.bittorrent.BTDownloadItem;
 import com.frostwire.bittorrent.PaymentOptions;
-
 import com.frostwire.logging.Logger;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.transfers.TransferState;
@@ -51,10 +51,8 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public class TransferListAdapter extends BaseExpandableListAdapter {
 
@@ -64,16 +62,18 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     private final ViewOnLongClickListener viewOnLongClickListener;
     private final OpenOnClickListener playOnClickListener;
 
-    /** Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks */
+    /**
+     * Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks
+     */
     private final List<Dialog> dialogs;
     private List<Transfer> list;
-    private final Map<String,String> TRANSFER_STATE_STRING_MAP = new Hashtable<String,String>();
+    private final Map<String, String> TRANSFER_STATE_STRING_MAP = new Hashtable<String, String>();
 
     public TransferListAdapter(Context context, List<Transfer> list) {
         this.context = new WeakReference<Context>(context);
         this.viewOnClickListener = new ViewOnClickListener();
         this.viewOnLongClickListener = new ViewOnLongClickListener();
-        this.playOnClickListener = new OpenOnClickListener();
+        this.playOnClickListener = new OpenOnClickListener(context);
         this.dialogs = new ArrayList<Dialog>();
         this.list = list.equals(Collections.emptyList()) ? new ArrayList<Transfer>() : list;
         initTransferStateStringMap();
@@ -299,7 +299,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
                 }
 
                 if (po.paypalUrl != null) {
-                    items.add(new SendFiatTipAction(context.get(), po)) ;
+                    items.add(new SendFiatTipAction(context.get(), po));
                 }
             }
         } else if (tag instanceof DownloadTransfer) {
@@ -339,7 +339,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         prepareGroupIndicatorDrawable(item, groupIndicator, totalItems > 1, expanded);
 
         if (totalItems > 1) {
-            groupIndicator.setOnClickListener(new GroupIndicatorClickAdapter(expandableListView,groupPosition));
+            groupIndicator.setOnClickListener(new GroupIndicatorClickAdapter(expandableListView, groupPosition));
         }
     }
 
@@ -472,7 +472,15 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         size.setText(UIUtils.getBytesInHuman(item.getSize()));
 
         buttonPlay.setTag(item);
-        buttonPlay.setVisibility(item.isComplete() ? View.VISIBLE : View.GONE);
+        if (item.isComplete()) {
+            buttonPlay.setVisibility(View.VISIBLE);
+        } else {
+            if (item instanceof BTDownloadItem) {
+                buttonPlay.setVisibility(previewFile((BTDownloadItem) item) != null ? View.VISIBLE : View.GONE);
+            } else {
+                buttonPlay.setVisibility(View.GONE);
+            }
+        }
         buttonPlay.setOnClickListener(playOnClickListener);
     }
 
@@ -571,20 +579,26 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
-    private final class OpenOnClickListener implements OnClickListener {
-        public void onClick(View v) {
+    private static final class OpenOnClickListener extends ClickAdapter<Context> {
+
+        public OpenOnClickListener(Context ctx) {
+            super(ctx);
+        }
+
+        public void onClick(Context ctx, View v) {
             TransferItem item = (TransferItem) v.getTag();
-            boolean canOpen = item.isComplete();
 
-            if (canOpen) {
-                File savePath = item.getFile();
+            File path = item.isComplete() ? item.getFile() : null;
 
-                if (savePath != null) {
-                    if (savePath.exists()) {
-                        UIUtils.openFile(context.get(), savePath);
-                    } else {
-                        UIUtils.showShortMessage(context.get(), R.string.cant_open_file_does_not_exist, savePath.getName());
-                    }
+            if (path == null && item instanceof BTDownloadItem) {
+                path = previewFile((BTDownloadItem) item);
+            }
+
+            if (path != null) {
+                if (path.exists()) {
+                    UIUtils.openFile(ctx, path);
+                } else {
+                    UIUtils.showShortMessage(ctx, R.string.cant_open_file_does_not_exist, path.getName());
                 }
             }
         }
@@ -608,4 +622,25 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
     }
 
+    private static File previewFile(BTDownloadItem item) {
+        if (item != null) {
+            long downloaded = item.getSequentialDownloaded();
+            long size = item.getSize();
+
+            //LOG.debug("Downloaded: " + downloaded + ", seq: " + dl.isSequentialDownload());
+
+            if (size > 0) {
+
+                long percent = (100 * downloaded) / size;
+
+                if (percent > 30 || downloaded > 10 * 1024 * 1024) {
+                    return item.getFile();
+                } else {
+                    return null;
+                }
+            }
+        }
+
+        return null;
+    }
 }

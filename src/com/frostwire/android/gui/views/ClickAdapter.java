@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,20 +18,17 @@
 
 package com.frostwire.android.gui.views;
 
-import java.lang.ref.WeakReference;
-
 import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.CompoundButton;
-
 import com.frostwire.util.Ref;
 
+import java.lang.ref.WeakReference;
+
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public abstract class ClickAdapter<T> implements View.OnClickListener, View.OnLongClickListener, View.OnKeyListener, DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener {
 
@@ -40,8 +37,6 @@ public abstract class ClickAdapter<T> implements View.OnClickListener, View.OnLo
     public ClickAdapter(T owner) {
         this.ownerRef = Ref.weak(owner);
     }
-
-
 
     @Override
     public final void onClick(View v) {

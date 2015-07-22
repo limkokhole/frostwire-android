@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,6 @@
 
 package com.frostwire.android.gui.util;
 
-import java.io.File;
-import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
-
-import org.apache.commons.io.FilenameUtils;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -33,7 +26,6 @@ import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.InputType;
 import android.text.method.KeyListener;
@@ -41,12 +33,9 @@ import android.text.method.NumberKeyListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup.LayoutParams;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -58,11 +47,16 @@ import com.frostwire.android.gui.services.Engine;
 import com.frostwire.util.MimeDetector;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.text.NumberFormat;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public final class UIUtils {
 
@@ -74,7 +68,7 @@ public final class UIUtils {
     private static NumberFormat NUMBER_FORMAT0; // localized "#,##0"
     private static NumberFormat NUMBER_FORMAT1; // localized "#,##0.0"
 
-    private static String[] BYTE_UNITS = new String[] { "b", "KB", "Mb", "Gb", "Tb" };
+    private static String[] BYTE_UNITS = new String[]{"b", "KB", "Mb", "Gb", "Tb"};
 
     public static String GENERAL_UNIT_KBPSEC = "KB/s";
 
@@ -99,7 +93,7 @@ public final class UIUtils {
             toast.show();
         }
     }
-    
+
     public static void showToastMessage(Context context, String message, int duration) {
         showToastMessage(context, message, duration, Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM, 0, 0);
     }
@@ -125,7 +119,6 @@ public final class UIUtils {
     }
 
     /**
-     * 
      * @param context
      * @param messageId
      * @param titleId
@@ -148,7 +141,6 @@ public final class UIUtils {
     }
 
     /**
-     * 
      * @param context
      * @param messageId
      * @param titleId
@@ -219,7 +211,7 @@ public final class UIUtils {
 
             @Override
             protected char[] getAcceptedChars() {
-                return new char[] { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
+                return new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
             }
         }, text);
     }
@@ -241,48 +233,48 @@ public final class UIUtils {
 
     public static String getFileTypeAsString(Resources resources, byte fileType) {
         switch (fileType) {
-        case Constants.FILE_TYPE_APPLICATIONS:
-            return resources.getString(R.string.applications);
-        case Constants.FILE_TYPE_AUDIO:
-            return resources.getString(R.string.audio);
-        case Constants.FILE_TYPE_DOCUMENTS:
-            return resources.getString(R.string.documents);
-        case Constants.FILE_TYPE_PICTURES:
-            return resources.getString(R.string.pictures);
-        case Constants.FILE_TYPE_RINGTONES:
-            return resources.getString(R.string.ringtones);
-        case Constants.FILE_TYPE_VIDEOS:
-            return resources.getString(R.string.video);
-        case Constants.FILE_TYPE_TORRENTS:
-            return resources.getString(R.string.media_type_torrents);
-        default:
-            return resources.getString(R.string.unknown);
+            case Constants.FILE_TYPE_APPLICATIONS:
+                return resources.getString(R.string.applications);
+            case Constants.FILE_TYPE_AUDIO:
+                return resources.getString(R.string.audio);
+            case Constants.FILE_TYPE_DOCUMENTS:
+                return resources.getString(R.string.documents);
+            case Constants.FILE_TYPE_PICTURES:
+                return resources.getString(R.string.pictures);
+            case Constants.FILE_TYPE_RINGTONES:
+                return resources.getString(R.string.ringtones);
+            case Constants.FILE_TYPE_VIDEOS:
+                return resources.getString(R.string.video);
+            case Constants.FILE_TYPE_TORRENTS:
+                return resources.getString(R.string.media_type_torrents);
+            default:
+                return resources.getString(R.string.unknown);
         }
     }
 
     public static int getFileTypeIconId(byte fileType) {
         switch (fileType) {
-        case Constants.FILE_TYPE_APPLICATIONS:
-            return R.drawable.browse_peer_application_icon_selector_off;
-        case Constants.FILE_TYPE_AUDIO:
-            return R.drawable.browse_peer_audio_icon_selector_off;
-        case Constants.FILE_TYPE_DOCUMENTS:
-            return R.drawable.browse_peer_document_icon_selector_off;
-        case Constants.FILE_TYPE_PICTURES:
-            return R.drawable.browse_peer_picture_icon_selector_off;
-        case Constants.FILE_TYPE_RINGTONES:
-            return R.drawable.browse_peer_ringtone_icon_selector_off;
-        case Constants.FILE_TYPE_VIDEOS:
-            return R.drawable.browse_peer_video_icon_selector_off;
-        default:
-            return R.drawable.question_mark;
+            case Constants.FILE_TYPE_APPLICATIONS:
+                return R.drawable.browse_peer_application_icon_selector_off;
+            case Constants.FILE_TYPE_AUDIO:
+                return R.drawable.browse_peer_audio_icon_selector_off;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                return R.drawable.browse_peer_document_icon_selector_off;
+            case Constants.FILE_TYPE_PICTURES:
+                return R.drawable.browse_peer_picture_icon_selector_off;
+            case Constants.FILE_TYPE_RINGTONES:
+                return R.drawable.browse_peer_ringtone_icon_selector_off;
+            case Constants.FILE_TYPE_VIDEOS:
+                return R.drawable.browse_peer_video_icon_selector_off;
+            default:
+                return R.drawable.question_mark;
         }
     }
 
     /**
      * Opens the given file with the default Android activity for that File and
      * mime type.
-     * 
+     *
      * @param filePath
      * @param mime
      */
@@ -328,6 +320,7 @@ public final class UIUtils {
 
     /**
      * Create an ephemeral playlist with the files of the same type that live on the folder of the given file descriptor and play it.
+     *
      * @param fd
      */
     public static void playEphemeralPlaylist(FileDescriptor fd) {
@@ -352,27 +345,6 @@ public final class UIUtils {
     }
 
     /**
-     * Android devices with SDK below target=11 do not support textView.setAlpha().
-     * This is a work around. 
-     * @param v - the text view
-     * @param alpha - a value from 0 to 255. (0=transparent, 255=fully visible)
-     */
-    public static void setTextViewAlpha(TextView v, int alpha) {
-        v.setTextColor(v.getTextColors().withAlpha(alpha));
-        v.setHintTextColor(v.getHintTextColors().withAlpha(alpha));
-        v.setLinkTextColor(v.getLinkTextColors().withAlpha(alpha));
-
-        Drawable[] compoundDrawables = v.getCompoundDrawables();
-        for (int i = 0; i < compoundDrawables.length; i++) {
-            Drawable d = compoundDrawables[i];
-            if (d != null) {
-                d.setAlpha(alpha);
-            }
-        }
-
-    }
-
-    /**
      * Checks setting to show or not the transfers window right after a download has started.
      * This should probably be moved elsewhere (similar to GUIMediator on the desktop)
      */
@@ -384,13 +356,13 @@ public final class UIUtils {
             context.startActivity(i);
         }
     }
-    
+
     public static void showKeyboard(Context context, View view) {
         view.requestFocus();
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.showSoftInput(view, InputMethodManager.SHOW_IMPLICIT);
     }
-    
+
     public static void hideKeyboardFromActivity(Activity activity) {
         InputMethodManager inputMethodManager = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
         View view = activity.getCurrentFocus();

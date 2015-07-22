@@ -126,7 +126,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="file" android:pathPattern=".*\\.torrent" />
-            </intent-filter>			
+            </intent-filter>
 
 			<!-- share a file sent by another app -->
 			<intent-filter>
@@ -141,13 +141,14 @@
 			android:label="@string/application_label" android:screenOrientation="portrait" />
 		<activity android:name="com.frostwire.android.gui.activities.PreferencesActivity"
 			android:label="@string/activity_preferences_name" android:theme="@style/Preferences" />
-		<activity android:name="com.frostwire.android.gui.activities.BrowsePeerActivity"
-			android:label="@string/activity_browse_peer_name" />
 		<activity android:name="com.frostwire.android.gui.activities.AboutActivity"
 				  android:label="@string/about" />
+		<activity android:name="com.frostwire.android.gui.activities.PreviewPlayerActivity"
+				  android:label="@string/playing"
+                  android:configChanges="orientation|screenSize" />
 
 	    <activity
-			android:name="com.frostwire.android.gui.activities.NoBTCWalletAvailableActivity" 
+			android:name="com.frostwire.android.gui.activities.NoBTCWalletAvailableActivity"
 			android:label="@string/install_bitcoin_wallet">
 		</activity>
 

@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,29 +18,19 @@
 
 package com.frostwire.android.gui;
 
-import java.io.IOException;
-import java.util.List;
-
 import com.frostwire.android.core.FileDescriptor;
-import com.frostwire.android.core.HttpFetcher;
 import com.frostwire.localpeer.Finger;
 import com.frostwire.localpeer.LocalPeer;
-import com.frostwire.util.HttpClient;
-import com.frostwire.util.HttpClientFactory;
-import com.frostwire.util.JsonUtils;
+
+import java.util.List;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class Peer {
 
-    private static final int BROWSE_HTTP_TIMEOUT = 10000;
-
     private String address;
-    private int listeningPort;
 
     /**
      * 16 bytes (128bit - UUID identifier letting us know who is the sender)
@@ -49,23 +39,17 @@ public final class Peer {
     private String clientVersion;
 
     private int hashCode = -1;
-    private final boolean localhost;
 
     private String key;
 
-    private final HttpClient httpClient;
-
-    public Peer(LocalPeer p, boolean localhost) {
+    public Peer(LocalPeer p) {
         this.key = p.address + ":" + p.port;
         this.address = p.address;
-        this.listeningPort = p.port;
 
         this.nickname = p.nickname;
         this.clientVersion = p.clientVersion;
-        this.localhost = localhost;
 
         this.hashCode = key.hashCode();
-        this.httpClient = HttpClientFactory.newInstance();
     }
 
     public String getAddress() {
@@ -80,45 +64,12 @@ public final class Peer {
         this.nickname = nickname;
     }
 
-    public boolean isLocalHost() {
-        return localhost;
-    }
-
-    public String getFingerUri() {
-        return "http://" + address + ":" + listeningPort + "/finger";
-    }
-
-    public String getBrowseUri(byte fileType) {
-        return "http://" + address + ":" + listeningPort + "/browse?type=" + fileType;
-    }
-
     public Finger finger() {
-        if (localhost) {
-            return Librarian.instance().finger(localhost);
-        } else {
-            String uri = getFingerUri();
-            byte[] data = new HttpFetcher(uri).fetch();
-            String json = new String(data);
-            return JsonUtils.toObject(json, Finger.class);
-        }
+        return Librarian.instance().finger();
     }
 
     public List<FileDescriptor> browse(byte fileType) {
-        if (localhost) {
-            return Librarian.instance().getFiles(fileType, 0, Integer.MAX_VALUE, false);
-        } else {
-            String url = getBrowseUri(fileType);
-
-            String json = null;
-            try {
-                json = httpClient.get(url, BROWSE_HTTP_TIMEOUT);
-            } catch (IOException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-            return JsonUtils.toObject(json, FileDescriptorList.class).files;
-        }
+        return Librarian.instance().getFiles(fileType, 0, Integer.MAX_VALUE, false);
     }
 
     @Override
@@ -142,9 +93,5 @@ public final class Peer {
 
     public String getKey() {
         return key;
-    }
-
-    private static final class FileDescriptorList {
-        public List<FileDescriptor> files;
     }
 }

@@ -2,7 +2,7 @@
 <!--
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -33,32 +33,32 @@
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_audio"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_audio_button_selector" />
+            android:background="@drawable/browse_peer_button_selector"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_ringtones"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_ringtone_button_selector" />
+            android:background="@drawable/browse_peer_button_selector" />
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_videos"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_video_button_selector" />
+            android:background="@drawable/browse_peer_button_selector" />
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_pictures"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_picture_button_selector" />
+            android:background="@drawable/browse_peer_button_selector" />
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_applications"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_application_button_selector" />
+            android:background="@drawable/browse_peer_button_selector" />
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_documents"
             style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_document_button_selector" />
+            android:background="@drawable/browse_peer_button_selector" />
     </RadioGroup>
 
     <!-- Checkbox and Search Box for Browse Peer, see view_browse_peer_search_bar.xml -->

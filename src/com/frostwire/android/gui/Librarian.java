@@ -32,7 +32,6 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore.MediaColumns;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.Pair;
 import android.view.WindowManager;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.core.*;
@@ -40,7 +39,6 @@ import com.frostwire.android.core.player.EphemeralPlaylist;
 import com.frostwire.android.core.player.PlaylistItem;
 import com.frostwire.android.core.providers.TableFetcher;
 import com.frostwire.android.core.providers.TableFetchers;
-import com.frostwire.android.core.providers.UniversalStore;
 import com.frostwire.android.core.providers.UniversalStore.Applications;
 import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
 import com.frostwire.android.gui.transfers.Transfers;
@@ -62,10 +60,9 @@ import java.util.*;
  * -> Keeping track of what files we're sharing or not.
  * -> Indexing the files we're sharing.
  * -> Searching for files we're sharing.
- * 
+ *
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class Librarian {
 
@@ -92,7 +89,7 @@ public final class Librarian {
 
     private Librarian(Application context) {
         this.context = context;
-        this.cache = new FileCountCache[] { new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache() };
+        this.cache = new FileCountCache[]{new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache()};
     }
 
     public List<FileDescriptor> getFiles(byte fileType, int offset, int pageSize, boolean sharedOnly) {
@@ -107,7 +104,7 @@ public final class Librarian {
      * Returns the total number of shared files by this peer. note: each of the
      * number of shared files (by type) is stored on _cacheNumFiles, this
      * function returns the sum of this cache.
-     * 
+     *
      * @return
      */
     public int getNumFiles() {
@@ -126,9 +123,8 @@ public final class Librarian {
     }
 
     /**
-     * 
      * @param fileType
-     * @param onlyShared - If false, forces getting all files, shared or unshared. 
+     * @param onlyShared - If false, forces getting all files, shared or unshared.
      * @return
      */
     public int getNumFiles(byte fileType, boolean onlyShared) {
@@ -145,7 +141,7 @@ public final class Librarian {
 
         try {
             ContentResolver cr = context.getContentResolver();
-            c = cr.query(fetcher.getContentUri(), new String[] { BaseColumns._ID }, null, null, null);
+            c = cr.query(fetcher.getContentUri(), new String[]{BaseColumns._ID}, null, null, null);
             numFiles = c != null ? c.getCount() : 0;
         } catch (Exception e) {
             Log.e(TAG, "Failed to get num of files", e);
@@ -163,7 +159,7 @@ public final class Librarian {
     }
 
     public FileDescriptor getFileDescriptor(byte fileType, int fileId, boolean sharedOnly) {
-        List<FileDescriptor> fds = getFiles(0, 1, TableFetchers.getFetcher(fileType), BaseColumns._ID + "=?", new String[] { String.valueOf(fileId) }, sharedOnly);
+        List<FileDescriptor> fds = getFiles(0, 1, TableFetchers.getFetcher(fileType), BaseColumns._ID + "=?", new String[]{String.valueOf(fileId)}, sharedOnly);
         if (fds.size() > 0) {
             return fds.get(0);
         } else {
@@ -192,7 +188,7 @@ public final class Librarian {
 
             TableFetcher fetcher = TableFetchers.getFetcher(fd.fileType);
 
-            cr.update(fetcher.getContentUri(), values, BaseColumns._ID + "=?", new String[] { String.valueOf(fd.id) });
+            cr.update(fetcher.getContentUri(), values, BaseColumns._ID + "=?", new String[]{String.valueOf(fd.id)});
 
             oldFile.renameTo(newFile);
 
@@ -233,7 +229,7 @@ public final class Librarian {
         scan(file, Transfers.getIgnorableFiles());
     }
 
-    public Finger finger(boolean local) {
+    public Finger finger() {
         Finger finger = new Finger();
 
         finger.uuid = ConfigurationManager.instance().getUUIDString();
@@ -256,21 +252,12 @@ public final class Librarian {
         finger.numSharedApplicationFiles = getNumFiles(Constants.FILE_TYPE_APPLICATIONS, true);
         finger.numSharedRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES, true);
 
-        if (local) {
-            finger.numTotalAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO, false);
-            finger.numTotalVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS, false);
-            finger.numTotalPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES, false);
-            finger.numTotalDocumentFiles = getNumFiles(Constants.FILE_TYPE_DOCUMENTS, false);
-            finger.numTotalApplicationFiles = getNumFiles(Constants.FILE_TYPE_APPLICATIONS, false);
-            finger.numTotalRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES, false);
-        } else {
-            finger.numTotalAudioFiles = finger.numSharedAudioFiles;
-            finger.numTotalVideoFiles = finger.numSharedVideoFiles;
-            finger.numTotalPictureFiles = finger.numSharedPictureFiles;
-            finger.numTotalDocumentFiles = finger.numSharedDocumentFiles;
-            finger.numTotalApplicationFiles = finger.numSharedApplicationFiles;
-            finger.numTotalRingtoneFiles = finger.numSharedRingtoneFiles;
-        }
+        finger.numTotalAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO, false);
+        finger.numTotalVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS, false);
+        finger.numTotalPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES, false);
+        finger.numTotalDocumentFiles = getNumFiles(Constants.FILE_TYPE_DOCUMENTS, false);
+        finger.numTotalApplicationFiles = getNumFiles(Constants.FILE_TYPE_APPLICATIONS, false);
+        finger.numTotalRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES, false);
 
         return finger;
     }
@@ -520,16 +507,11 @@ public final class Librarian {
 
     /**
      * Returns a list of Files.
-     * 
-     * @param offset
-     *            - from where (starting at 0)
-     * @param pageSize
-     *            - how many results
-     * @param fetcher
-     *            - An implementation of TableFetcher
-     * @param sharedOnly
-     *            - if true, retrieves only the fine grained shared files.
      *
+     * @param offset     - from where (starting at 0)
+     * @param pageSize   - how many results
+     * @param fetcher    - An implementation of TableFetcher
+     * @param sharedOnly - if true, retrieves only the fine grained shared files.
      * @return List<FileDescriptor>
      */
     private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, String where, String[] whereArgs, boolean sharedOnly) {
@@ -576,14 +558,13 @@ public final class Librarian {
     }
 
     /**
-     * 
      * @param filepath
      * @param exactPathMatch - set it to false and pass an incomplete filepath prefix to get files in a folder for example.
      * @return
      */
     public List<FileDescriptor> getFiles(byte fileType, String filepath, boolean exactPathMatch) {
         String where = MediaColumns.DATA + " LIKE ?";
-        String[] whereArgs = new String[] { (exactPathMatch) ? filepath : "%" + filepath + "%" };
+        String[] whereArgs = new String[]{(exactPathMatch) ? filepath : "%" + filepath + "%"};
 
         List<FileDescriptor> fds = Librarian.instance().getFiles(fileType, where, whereArgs);
         return fds;
@@ -591,6 +572,7 @@ public final class Librarian {
 
     /**
      * Updates the number of files for this type.
+     *
      * @param fileType
      */
     private void updateCacheNumFiles(byte fileType, int num, boolean sharedOnly) {
@@ -603,6 +585,7 @@ public final class Librarian {
 
     /**
      * This function returns an array of string in the following order: version name, label
+     *
      * @param apk
      * @return
      */
@@ -623,25 +606,25 @@ public final class Librarian {
                 }
 
                 switch (type) {
-                case XmlPullParser.START_TAG:
-                    String tagName = parser.getName();
-                    if (tagName.equals("manifest")) {
-                        String versionName = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "versionName");
-                        if (versionName != null && versionName.startsWith("@")) {
-                            versionName = apk.getString(Integer.parseInt(versionName.substring(1)));
+                    case XmlPullParser.START_TAG:
+                        String tagName = parser.getName();
+                        if (tagName.equals("manifest")) {
+                            String versionName = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "versionName");
+                            if (versionName != null && versionName.startsWith("@")) {
+                                versionName = apk.getString(Integer.parseInt(versionName.substring(1)));
+                            }
+                            result[0] = versionName;
+                            manifestParsed = true;
                         }
-                        result[0] = versionName;
-                        manifestParsed = true;
-                    }
-                    if (tagName.equals("application")) {
-                        String label = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "label");
-                        if (label != null && label.startsWith("@")) {
-                            label = apk.getString(Integer.parseInt(label.substring(1)));
+                        if (tagName.equals("application")) {
+                            String label = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "label");
+                            if (label != null && label.startsWith("@")) {
+                                label = apk.getString(Integer.parseInt(label.substring(1)));
+                            }
+                            result[1] = label;
+                            applicationParsed = true;
                         }
-                        result[1] = label;
-                        applicationParsed = true;
-                    }
-                    break;
+                        break;
                 }
             }
 
@@ -701,12 +684,12 @@ public final class Librarian {
      * it will NOT have a `filePath` attribute set (null), also the `fileType` field will be set to
      * Constants.FILE_TYPE_DOCUMENTS, which can throw things off if the given URI is not as expected
      * even though the file may be a media file.
-     *
+     * <p/>
      * This method will use the given URI on the generic content resolver to find the disk file path,
      * update the fileDescriptor.filePath field, and then with the extension it will try to determine
      * the closest fileType (byte) associated.
      *
-     * @param uri (input)
+     * @param uri            (input)
      * @param fileDescriptor (output, can't be null)
      */
     public void updateFileDescriptor(Uri uri, FileDescriptor fileDescriptor) {
