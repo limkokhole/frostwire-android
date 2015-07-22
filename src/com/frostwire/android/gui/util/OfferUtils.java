@@ -52,7 +52,7 @@ public class OfferUtils {
         boolean isFreeAppsEnabled = false;
         try {
             config = ConfigurationManager.instance();
-            isFreeAppsEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && OSUtils.isGooglePlayDistribution();
+            isFreeAppsEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE)) && Constants.IS_GOOGLE_PLAY_DISTRIBUTION;
         } catch (Throwable t) {
         }
         return isFreeAppsEnabled;

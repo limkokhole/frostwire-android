@@ -19,45 +19,11 @@
 
 package com.frostwire.android.gui.util;
 
-import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Build;
-import com.frostwire.android.core.Constants;
 
 public final class OSUtils {
-    
-    public static boolean isKindleFire() {
-        return Build.MANUFACTURER.equals("Amazon")
-                && (Build.MODEL.equals("Kindle Fire")
-                    || Build.MODEL.startsWith("KF"));
-    }
-    
-    public static String getOSName() {
-        String osName = "Android";
-        if (OSUtils.isKindleFire()) {
-            osName = "Kindle Fire";
-        }
-        return osName;
-    }
 
-    public static boolean isGooglePlayDistribution() {
-        return Constants.IS_GOOGLE_PLAY_DISTRIBUTION;
-    }
-    
     public static String getOSVersionString() {
         return Build.VERSION.CODENAME + "_" + Build.VERSION.INCREMENTAL + "_" + Build.VERSION.RELEASE + "_" + Build.VERSION.SDK_INT;
-    }
-    
-    public static String getOSNameAndVersionString() {
-        return OSUtils.getOSName()+"-v"+OSUtils.getOSVersionString();
-    }
-
-    public static boolean isScreenOrientationPortrait(Context context) {
-        try {
-            return context.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        } catch (Throwable t) {
-            //let's assume the user is holding the device in its natural way if we fail to retrieve the current orientation
-            return true;
-        }
     }
 }
