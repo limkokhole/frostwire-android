@@ -16,12 +16,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.helpers;
+package com.frostwire.android.gui.views;
 
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.widget.RadioButton;
@@ -37,8 +36,6 @@ import com.frostwire.logging.Logger;
  * per radio button.
  */
 public final class FileTypeRadioButtonSelectorFactory {
-    private static Logger LOG = Logger.getLogger(FileTypeRadioButtonSelectorFactory.class);
-
     public enum RadioButtonContainerType {
         SEARCH,
         BROWSE

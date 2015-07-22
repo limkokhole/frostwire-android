@@ -30,7 +30,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.helpers.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.views.ClearableEditTextView.OnActionListener;
 import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;

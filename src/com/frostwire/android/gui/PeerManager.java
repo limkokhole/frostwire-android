@@ -25,7 +25,6 @@ import com.frostwire.localpeer.LocalPeer;
 import com.frostwire.localpeer.LocalPeerManager;
 import com.frostwire.localpeer.LocalPeerManagerListener;
 
-import java.io.IOException;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
@@ -125,13 +124,6 @@ public final class PeerManager {
     }
 
     public void start() {
-        if (!peerManager.isRunning()) {
-            try {
-                peerManager.start(NetworkManager.instance().getMulticastInetAddress(), createLocalPeer());
-            } catch (IOException e) {
-                peerManager.start(null, createLocalPeer());
-            }
-        }
     }
 
     public void stop() {

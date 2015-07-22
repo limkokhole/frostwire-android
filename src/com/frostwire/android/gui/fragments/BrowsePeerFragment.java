@@ -40,7 +40,7 @@ import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.adapters.FileListAdapter;
-import com.frostwire.android.gui.helpers.FileTypeRadioButtonSelectorFactory;
+import com.frostwire.android.gui.views.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractFragment;
 import com.frostwire.android.gui.views.BrowsePeerSearchBarView;
