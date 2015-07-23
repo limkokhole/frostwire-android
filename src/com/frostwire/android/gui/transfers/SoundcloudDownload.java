@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -171,6 +171,15 @@ public class SoundcloudDownload extends TemporaryDownloadTransfer<SoundcloudSear
             }
         } catch (Exception e) {
             Log.e(TAG, "Error starting youtube download", e);
+        }
+    }
+
+    @Override
+    public File previewFile() {
+        if (isComplete()) {
+            return getSavePath();
+        } else {
+            return delegate != null ? delegate.getSavePath() : null;
         }
     }
 

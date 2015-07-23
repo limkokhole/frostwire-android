@@ -248,8 +248,21 @@ public final class YouTubeDownload implements DownloadTransfer {
         }
     }
 
-    int getStatusCode() {
-        return status;
+    @Override
+    public File previewFile() {
+        if (isComplete()) {
+            return completeFile;
+        } else {
+            if (tempVideo.exists()) {
+                return tempVideo;
+            }
+
+            if (tempAudio.exists()) {
+                return tempAudio;
+            }
+        }
+
+        return null;
     }
 
     private void start(final LinkInfo inf, final File temp) {
