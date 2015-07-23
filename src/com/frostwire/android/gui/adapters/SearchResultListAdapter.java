@@ -284,6 +284,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
             Intent i = new Intent(ctx, PreviewPlayerActivity.class);
             i.putExtra("displayName", sr.getDisplayName());
+            i.putExtra("source", sr.getSource());
             i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
             i.putExtra("streamUrl", sr.getStreamUrl());
             i.putExtra("audio", isAudio(sr));

@@ -26,6 +26,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractActivity;
@@ -65,6 +66,7 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         }
 
         String displayName = i.getStringExtra("displayName");
+        String source = i.getStringExtra("source");
         String thumbnailUrl = i.getStringExtra("thumbnailUrl");
         final String streamUrl = i.getStringExtra("streamUrl");
         final boolean audio = i.getBooleanExtra("audio", false);
@@ -84,6 +86,11 @@ public final class PreviewPlayerActivity extends AbstractActivity {
 
         final VideoView v = findView(R.id.activity_preview_player_videoview);
         final ImageView img = findView(R.id.activity_preview_player_thumbnail);
+
+        final TextView trackName = findView(R.id.activity_preview_player_track_name);
+        final TextView artistName = findView(R.id.activity_preview_player_artist_name);
+        trackName.setText(displayName);
+        artistName.setText(source);
 
         v.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
             @Override

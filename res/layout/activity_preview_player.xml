@@ -18,20 +18,66 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:app="http://schemas.android.com/apk/res-auto"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
-             android:background="@android:color/black">
+             android:background="@color/body_background_gray_light"
+             android:orientation="vertical">
 
-    <VideoView
-        android:id="@+id/activity_preview_player_videoview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"/>
 
-    <ImageView
-        android:id="@+id/activity_preview_player_thumbnail"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/audio_player_header_height"
+            android:layout_alignParentTop="true"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            android:background="@color/basic_white">
 
-</FrameLayout>
+        <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/audio_player_header_padding_left"
+                android:paddingRight="@dimen/audio_player_header_padding_right">
+
+            <com.andrew.apollo.widgets.theme.ThemeableTextView
+                    android:id="@+id/activity_preview_player_track_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_size_medium"
+                    android:textStyle="bold"
+                    app:themeResource="audio_player_line_one"/>
+
+            <com.andrew.apollo.widgets.theme.ThemeableTextView
+                    android:id="@+id/activity_preview_player_artist_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textSize="@dimen/text_size_small"
+                    app:themeResource="audio_player_line_two"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <FrameLayout android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+            android:layout_weight="1.0">
+        <VideoView
+                android:id="@+id/activity_preview_player_videoview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"/>
+
+        <ImageView
+                android:id="@+id/activity_preview_player_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+    </FrameLayout>
+
+
+
+</LinearLayout>
