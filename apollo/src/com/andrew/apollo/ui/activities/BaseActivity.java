@@ -11,6 +11,7 @@
 
 package com.andrew.apollo.ui.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
@@ -138,8 +139,16 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
         mPlaybackStatus = new PlaybackStatus(this);
 
         // Theme the action bar
-        mResources.themeActionBar(getActionBar(), getString(R.string.app_name), getWindow());
-        getActionBar().setDisplayHomeAsUpEnabled(true);
+        final ActionBar actionBar = getActionBar();
+        mResources.themeActionBar(actionBar, getString(R.string.app_name), getWindow());
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowHomeEnabled(false);
+        actionBar.setIcon(R.color.transparent);
+        actionBar.setDisplayShowTitleEnabled(false);
+
+
         TextView actionBarTitleTextView = (TextView) findViewById(R.id.action_bar_title);
         if (actionBarTitleTextView != null) {
             actionBarTitleTextView.setOnClickListener(new ActionBarTextViewClickListener(this));
