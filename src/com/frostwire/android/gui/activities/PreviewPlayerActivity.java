@@ -25,14 +25,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.VideoView;
+import android.widget.*;
 import com.frostwire.android.R;
+import com.frostwire.android.gui.dialogs.NewTransferDialog;
+import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.views.AbstractActivity;
+import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.logging.Logger;
+import com.frostwire.search.FileSearchResult;
+import com.frostwire.util.Ref;
 
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
@@ -40,13 +44,15 @@ import java.net.URL;
  * @author gubatron
  * @author aldenml
  */
-public final class PreviewPlayerActivity extends AbstractActivity {
+public final class PreviewPlayerActivity extends AbstractActivity implements AbstractDialog.OnDialogClickListener {
 
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
 
     public PreviewPlayerActivity() {
         super(R.layout.activity_preview_player);
     }
+
+    public static WeakReference<FileSearchResult> srRef;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -113,6 +119,14 @@ public final class PreviewPlayerActivity extends AbstractActivity {
             ImageLoader.getInstance(this).load(Uri.parse(thumbnailUrl), img);
         }
 
+        final ImageButton downloadButton = findView(R.id.activity_preview_player_download_button);
+        downloadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDownloadButtonClick();
+            }
+        });
+
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -129,6 +143,17 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         });
 
         t.start();
+    }
+
+    private void onDownloadButtonClick() {
+        if (Ref.alive(srRef)) {
+            NewTransferDialog dlg = NewTransferDialog.newInstance((FileSearchResult) srRef.get(), false);
+            dlg.show(getFragmentManager());
+
+            //TODO: ux log new action, download from preview.
+        } else {
+            finish();
+        }
     }
 
     private String getFinalUrl(String url) {
@@ -155,5 +180,15 @@ public final class PreviewPlayerActivity extends AbstractActivity {
             }
         }
         return url;
+    }
+
+    @Override
+    public void onDialogClick(String tag, int which) {
+        if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
+            if (Ref.alive(NewTransferDialog.srRef)) {
+                SearchFragment.startDownload(this, NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
+            }
+            finish();
+        }
     }
 }

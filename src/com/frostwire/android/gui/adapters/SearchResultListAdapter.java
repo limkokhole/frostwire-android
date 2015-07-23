@@ -43,10 +43,12 @@ import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledStreamableSearchResult;
+import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -282,13 +284,14 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         public void onClick(Context ctx, View v) {
             StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
 
+            PreviewPlayerActivity.srRef = Ref.weak((FileSearchResult) sr);
             Intent i = new Intent(ctx, PreviewPlayerActivity.class);
             i.putExtra("displayName", sr.getDisplayName());
             i.putExtra("source", sr.getSource());
             i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
             i.putExtra("streamUrl", sr.getStreamUrl());
             i.putExtra("audio", isAudio(sr));
-            i.putExtra("hasVideo",hasVideo(sr));
+            i.putExtra("hasVideo", hasVideo(sr));
             ctx.startActivity(i);
         }
 

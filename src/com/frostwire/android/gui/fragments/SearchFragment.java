@@ -437,7 +437,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         uxLogAction(sr);
     }
 
-    private static void startDownload(Context ctx, SearchResult sr, String message) {
+    public static void startDownload(Context ctx, SearchResult sr, String message) {
         StartDownloadTask task = new StartDownloadTask(ctx, sr, message);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             task.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -446,10 +446,13 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         UIUtils.showTransfersOnDownloadStart(ctx);
 
-        showInterstitialOfferIfNecessary((MainActivity) ctx);
+        // TODO: Refactor so we can also show interstitials from PreviewPlayerActivity.
+        if (ctx instanceof MainActivity) {
+            showInterstitialOfferIfNecessary((MainActivity) ctx);
+        }
     }
 
-    private static void showInterstitialOfferIfNecessary(MainActivity ctx) {
+    public static void showInterstitialOfferIfNecessary(MainActivity ctx) {
         startedTransfers++;
         ConfigurationManager CM = ConfigurationManager.instance();
         final int INTERSTITIAL_OFFERS_TRANSFER_STARTS = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);

@@ -140,7 +140,6 @@ public abstract class AbstractDialog extends DialogFragment {
     }
 
     public interface OnDialogClickListener {
-
-        public void onDialogClick(String tag, int which);
+        void onDialogClick(String tag, int which);
     }
 }
