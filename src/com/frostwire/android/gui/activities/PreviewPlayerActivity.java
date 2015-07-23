@@ -73,7 +73,11 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         if (ab != null) {
             ab.setHomeButtonEnabled(true);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle(displayName);
+            int mediaTypeStrId = audio ? R.string.audio : R.string.video;
+            ab.setTitle(getString(R.string.media_preview, getString(mediaTypeStrId)));
+            int icon = audio ? R.drawable.browse_peer_audio_icon_selector_off :
+                               R.drawable.browse_peer_video_icon_selector_off;
+            ab.setIcon(icon);
         } else {
             setTitle(displayName);
         }

@@ -527,4 +527,5 @@
     <string name="love_frostwire">Love FrostWire</string>
     <string name="send_feedback">Send Feedback</string>
     <string name="choose_email_app">Choose an Email App...</string>
+    <string name="media_preview">%s preview</string>
 </resources>

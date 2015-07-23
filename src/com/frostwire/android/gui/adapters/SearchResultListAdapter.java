@@ -42,6 +42,7 @@ import com.frostwire.search.StreamableSearchResult;
 import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
+import com.frostwire.search.youtube.YouTubeCrawledStreamableSearchResult;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
@@ -285,8 +286,21 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             i.putExtra("displayName", sr.getDisplayName());
             i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
             i.putExtra("streamUrl", sr.getStreamUrl());
-            i.putExtra("audio", sr instanceof SoundcloudSearchResult);
+            i.putExtra("audio", isAudio(sr));
             ctx.startActivity(i);
+        }
+
+        private boolean isAudio(StreamableSearchResult sr) {
+            if (sr instanceof SoundcloudSearchResult) {
+                return true;
+            }
+
+            if (sr instanceof YouTubeCrawledStreamableSearchResult) {
+                YouTubeCrawledStreamableSearchResult ytsr = (YouTubeCrawledStreamableSearchResult) sr;
+                return ytsr.getVideo() == null;
+            }
+
+            return false;
         }
     }
 }

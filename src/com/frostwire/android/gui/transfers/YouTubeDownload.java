@@ -248,10 +248,6 @@ public final class YouTubeDownload implements DownloadTransfer {
         }
     }
 
-    int getStatusCode() {
-        return status;
-    }
-
     private void start(final LinkInfo inf, final File temp) {
         if (status == STATUS_SAVE_DIR_ERROR || status == STATUS_ERROR_DISK_FULL || status == STATUS_ERROR) {
             return;
