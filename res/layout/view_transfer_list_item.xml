@@ -125,7 +125,7 @@
     </RelativeLayout>
 
     <ImageButton
-        android:id="@+id/view_transfer_item_list_button_play"
+        android:id="@+id/view_transfer_list_item_button_play"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|center_vertical"

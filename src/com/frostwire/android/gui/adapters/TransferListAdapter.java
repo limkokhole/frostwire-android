@@ -193,13 +193,13 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         try {
             populateGroupView(listItemLinearLayoutHolder, item);
         } catch (Throwable e) {
-            LOG.error("Not able to populate group view in expandable list:" + e.getMessage(), e);
+            LOG.error("Not able to populate group view in expandable list:" + e.getMessage());
         }
 
         try {
             setupGroupIndicator(listItemLinearLayoutHolder, expandableListView, isExpanded, item, groupPosition);
-        } catch (Throwable e2) {
-            LOG.error("Not able to setup touch handlers for group indicator ImageView: " + e2.getMessage(), e2);
+        } catch (Throwable e) {
+            LOG.error("Not able to setup touch handlers for group indicator ImageView: " + e.getMessage());
         }
 
         return listItemLinearLayoutHolder;
@@ -414,7 +414,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
 
-        ImageButton buttonPlay = findView(view, R.id.view_transfer_item_list_button_play);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText(context.get().getString(R.string.seeds_n, download.getSeeds()));
         peers.setText(context.get().getString(R.string.peers_n, download.getPeers()));
@@ -512,7 +512,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageButton buttonPlay = findView(view, R.id.view_transfer_item_list_button_play);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText("");
         peers.setText("");
@@ -527,6 +527,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         if (previewFile != null) {
             buttonPlay.setTag(previewFile);
             buttonPlay.setVisibility(View.VISIBLE);
+            buttonPlay.setOnClickListener(playOnClickListener);
         } else {
             buttonPlay.setVisibility(View.GONE);
         }
@@ -540,7 +541,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
-        ImageButton buttonPlay = findView(view, R.id.view_transfer_item_list_button_play);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText("");
         peers.setText("");
@@ -555,6 +556,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         if (previewFile != null) {
             buttonPlay.setTag(previewFile);
             buttonPlay.setVisibility(View.VISIBLE);
+            buttonPlay.setOnClickListener(playOnClickListener);
         } else {
             buttonPlay.setVisibility(View.GONE);
         }
