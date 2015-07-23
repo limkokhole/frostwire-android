@@ -193,13 +193,13 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         try {
             populateGroupView(listItemLinearLayoutHolder, item);
         } catch (Throwable e) {
-            LOG.error("Not able to populate group view in expandable list:" + e.getMessage(), e);
+            LOG.error("Not able to populate group view in expandable list:" + e.getMessage());
         }
 
         try {
             setupGroupIndicator(listItemLinearLayoutHolder, expandableListView, isExpanded, item, groupPosition);
-        } catch (Throwable e2) {
-            LOG.error("Not able to setup touch handlers for group indicator ImageView: " + e2.getMessage(), e2);
+        } catch (Throwable e) {
+            LOG.error("Not able to setup touch handlers for group indicator ImageView: " + e.getMessage());
         }
 
         return listItemLinearLayoutHolder;
@@ -414,6 +414,8 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
 
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
+
         seeds.setText(context.get().getString(R.string.seeds_n, download.getSeeds()));
         peers.setText(context.get().getString(R.string.peers_n, download.getPeers()));
 
@@ -428,6 +430,24 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
         if (download.hasPaymentOptions()) {
             setPaymentOptionDrawable(download, title);
+        }
+
+        List<TransferItem> items = download.getItems();
+        if (items != null && items.size() == 1) {
+            TransferItem item = items.get(0);
+            buttonPlay.setTag(item);
+            if (item.isComplete()) {
+                buttonPlay.setVisibility(View.VISIBLE);
+            } else {
+                if (item instanceof BTDownloadItem) {
+                    buttonPlay.setVisibility(previewFile((BTDownloadItem) item) != null ? View.VISIBLE : View.GONE);
+                } else {
+                    buttonPlay.setVisibility(View.GONE);
+                }
+            }
+            buttonPlay.setOnClickListener(playOnClickListener);
+        } else {
+            buttonPlay.setVisibility(View.GONE);
         }
     }
 
@@ -492,6 +512,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText("");
         peers.setText("");
@@ -501,6 +522,15 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
+
+        File previewFile = download.previewFile();
+        if (previewFile != null) {
+            buttonPlay.setTag(previewFile);
+            buttonPlay.setVisibility(View.VISIBLE);
+            buttonPlay.setOnClickListener(playOnClickListener);
+        } else {
+            buttonPlay.setVisibility(View.GONE);
+        }
     }
 
     private void populateSoundcloudDownload(View view, SoundcloudDownload download) {
@@ -511,6 +541,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText("");
         peers.setText("");
@@ -520,6 +551,15 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
+
+        File previewFile = download.previewFile();
+        if (previewFile != null) {
+            buttonPlay.setTag(previewFile);
+            buttonPlay.setVisibility(View.VISIBLE);
+            buttonPlay.setOnClickListener(playOnClickListener);
+        } else {
+            buttonPlay.setVisibility(View.GONE);
+        }
     }
 
     private String getStatusFromResId(String str) {
@@ -586,15 +626,27 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         }
 
         public void onClick(Context ctx, View v) {
-            TransferItem item = (TransferItem) v.getTag();
+            Object tag = v.getTag();
+            if (tag instanceof TransferItem) {
+                TransferItem item = (TransferItem) tag;
 
-            File path = item.isComplete() ? item.getFile() : null;
+                File path = item.isComplete() ? item.getFile() : null;
 
-            if (path == null && item instanceof BTDownloadItem) {
-                path = previewFile((BTDownloadItem) item);
-            }
+                if (path == null && item instanceof BTDownloadItem) {
+                    path = previewFile((BTDownloadItem) item);
+                }
 
-            if (path != null) {
+                if (path != null) {
+                    if (path.exists()) {
+                        UIUtils.openFile(ctx, path);
+                    } else {
+                        UIUtils.showShortMessage(ctx, R.string.cant_open_file_does_not_exist, path.getName());
+                    }
+                }
+            } else if (tag instanceof File) {
+                File path = (File) tag;
+                System.out.println(path);
+
                 if (path.exists()) {
                     UIUtils.openFile(ctx, path);
                 } else {

@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -144,10 +144,6 @@ final class InvalidBittorrentDownload implements BittorrentDownload, InvalidTran
     @Override
     public void pause() {
     }
-    
-    @Override
-    public void enqueue() {
-    }
 
     @Override
     public void resume() {
@@ -174,6 +170,11 @@ final class InvalidBittorrentDownload implements BittorrentDownload, InvalidTran
 
     @Override
     public String getDetailsUrl() {
+        return null;
+    }
+
+    @Override
+    public File previewFile() {
         return null;
     }
 }

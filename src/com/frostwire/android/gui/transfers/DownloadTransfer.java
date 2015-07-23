@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,4 +32,6 @@ public interface DownloadTransfer extends Transfer {
     public boolean isDownloading();
     
     public void cancel(boolean deleteData);
+
+    File previewFile();
 }

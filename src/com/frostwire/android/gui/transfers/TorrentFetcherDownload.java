@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -158,10 +158,6 @@ public class TorrentFetcherDownload implements BittorrentDownload {
     public void pause() {
     }
 
-    @Override
-    public void enqueue() {
-    }
-
     public void resume() {
     }
 
@@ -190,6 +186,11 @@ public class TorrentFetcherDownload implements BittorrentDownload {
         String u2 = ((TorrentFetcherDownload) o).info.getTorrentUrl();
 
         return u1.equalsIgnoreCase(u2);
+    }
+
+    @Override
+    public File previewFile() {
+        return null;
     }
 
     private void downloadTorrent(final byte[] data) {

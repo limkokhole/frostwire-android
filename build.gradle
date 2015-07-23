@@ -107,10 +107,10 @@ android {
 
     splits {
         abi {
-            enable true
+            enable false
             reset()
-            include 'armeabi-v7a'
-            universalApk false
+            include 'armeabi-v7a', 'x86'
+            universalApk true
         }
     }
 
