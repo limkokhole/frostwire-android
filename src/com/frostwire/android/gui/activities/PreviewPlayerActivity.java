@@ -69,6 +69,7 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         String source = i.getStringExtra("source");
         String thumbnailUrl = i.getStringExtra("thumbnailUrl");
         final String streamUrl = i.getStringExtra("streamUrl");
+        final boolean hasVideo = i.getBooleanExtra("hasVideo", false);
         final boolean audio = i.getBooleanExtra("audio", false);
 
         ActionBar ab = getActionBar();
@@ -78,7 +79,7 @@ public final class PreviewPlayerActivity extends AbstractActivity {
             int mediaTypeStrId = audio ? R.string.audio : R.string.video;
             ab.setTitle(getString(R.string.media_preview, getString(mediaTypeStrId)));
             int icon = audio ? R.drawable.browse_peer_audio_icon_selector_off :
-                               R.drawable.browse_peer_video_icon_selector_off;
+                                   R.drawable.browse_peer_video_icon_selector_off;
             ab.setIcon(icon);
         } else {
             setTitle(displayName);
@@ -102,7 +103,7 @@ public final class PreviewPlayerActivity extends AbstractActivity {
         v.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                if (!audio) {
+                if (!audio || hasVideo) {
                     img.setVisibility(View.GONE);
                 }
             }

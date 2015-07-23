@@ -288,6 +288,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
             i.putExtra("streamUrl", sr.getStreamUrl());
             i.putExtra("audio", isAudio(sr));
+            i.putExtra("hasVideo",hasVideo(sr));
             ctx.startActivity(i);
         }
 
@@ -302,6 +303,10 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             }
 
             return false;
+        }
+
+        private boolean hasVideo(StreamableSearchResult sr) {
+            return sr instanceof YouTubeCrawledStreamableSearchResult;
         }
     }
 }

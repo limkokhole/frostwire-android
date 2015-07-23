@@ -63,6 +63,11 @@
         </LinearLayout>
     </LinearLayout>
 
+    <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@drawable/layout_divider_1_gray" />
+
     <FrameLayout android:layout_width="match_parent"
                  android:layout_height="match_parent"
             android:layout_weight="1.0">
@@ -75,7 +80,8 @@
         <ImageView
                 android:id="@+id/activity_preview_player_thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+                android:layout_height="match_parent"
+                android:background="@color/body_background_gray_light"/>
     </FrameLayout>
 
 
