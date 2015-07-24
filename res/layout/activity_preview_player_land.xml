@@ -27,9 +27,9 @@
 
 
     <LinearLayout
+            android:id="@+id/activity_preview_player_header"
             android:layout_width="match_parent"
             android:layout_height="@dimen/audio_player_header_height"
-            android:layout_alignParentTop="true"
             android:baselineAligned="false"
             android:orientation="horizontal"
             android:background="@color/basic_white">
@@ -90,9 +90,8 @@
                  android:src="@drawable/download_icon"
                  android:background="@null"
                  android:scaleType="fitCenter"
-                 android:layout_gravity="center_horizontal"
-                 android:layout_marginBottom="20dp"/>
-
-
+                 android:layout_marginTop="20dp"
+                 android:layout_marginBottom="20dp"
+                 android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

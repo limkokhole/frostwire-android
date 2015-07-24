@@ -20,10 +20,14 @@ package com.frostwire.android.gui.activities;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import com.frostwire.android.R;
@@ -49,10 +53,12 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
 
     public PreviewPlayerActivity() {
-        super(R.layout.activity_preview_player);
+        super(R.layout.activity_preview_player_land);
     }
 
     public static WeakReference<FileSearchResult> srRef;
+
+    private boolean isFullScreen = false;
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -109,9 +115,15 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         v.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
             @Override
             public void onPrepared(MediaPlayer mp) {
-                if (!audio || hasVideo) {
-                    img.setVisibility(View.GONE);
-                }
+                onVideoViewPrepared(audio, hasVideo, v, img);
+            }
+        });
+
+        v.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                toggleFullScreen(v);
+                return false;
             }
         });
 
@@ -130,7 +142,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
-
                 final String url = getFinalUrl(streamUrl);
                 runOnUiThread(new Runnable() {
                     @Override
@@ -143,6 +154,15 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         });
 
         t.start();
+    }
+
+    private void onVideoViewPrepared(boolean audio, boolean hasVideo, final VideoView v, final ImageView img) {
+        final ImageButton downloadButton = findView(R.id.activity_preview_player_download_button);
+        downloadButton.setVisibility(View.VISIBLE);
+
+        if (!audio || hasVideo) {
+            img.setVisibility(View.GONE);
+        }
     }
 
     private void onDownloadButtonClick() {
@@ -189,6 +209,82 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 SearchFragment.startDownload(this, NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
             }
             finish();
+        }
+    }
+
+    private void toggleFullScreen(VideoView v) {
+        DisplayMetrics metrics = new DisplayMetrics();
+        final Display defaultDisplay = getWindowManager().getDefaultDisplay();
+        defaultDisplay.getMetrics(metrics);
+        boolean isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
+        android.widget.FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) v.getLayoutParams();
+
+        LinearLayout header = findView(R.id.activity_preview_player_header);
+        ImageButton downloadButton =findView(R.id.activity_preview_player_download_button);
+        ActionBar bar = getActionBar();
+
+        // this one only on landscape
+        LinearLayout rightSide = findView(R.id.activity_preview_player_right_side);
+
+        // Go full screen.
+        if (!isFullScreen) {
+            header.setVisibility(View.GONE);
+            downloadButton.setVisibility(View.GONE);
+            bar.hide();
+
+            if (rightSide != null) {
+                rightSide.setVisibility(View.GONE);
+            }
+
+            System.out.println("width: " + metrics.widthPixels);
+            System.out.println("height: " + metrics.heightPixels);
+
+            if (isPortrait) {
+                params.width = metrics.heightPixels;
+                params.height = metrics.widthPixels;
+                v.setRotation(90);
+            } else {
+                params.width = metrics.widthPixels;
+                params.height = metrics.heightPixels;
+                v.setRotation(0);
+            }
+            params.leftMargin = 0;
+            params.rightMargin = 0;
+            params.topMargin = 0;
+            params.bottomMargin = 0;
+            isFullScreen = true;
+        } else {
+            header.setVisibility(View.VISIBLE);
+            downloadButton.setVisibility(View.VISIBLE);
+            bar.show();
+            if (rightSide != null) {
+                rightSide.setVisibility(View.GONE);
+            }
+
+            v.setRotation(0);
+            params.width = LinearLayout.LayoutParams.MATCH_PARENT;
+            params.height = LinearLayout.LayoutParams.MATCH_PARENT;
+
+            if (isPortrait) {
+                params.bottomMargin = 20;
+            } else {
+                params.leftMargin = 0;
+                params.rightMargin = 0;
+                params.topMargin = 0;
+                params.bottomMargin = 0;
+            }
+            isFullScreen = false;
+        }
+        v.setLayoutParams(params);
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+            setContentView(R.layout.activity_preview_player_land);
+        } else if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            setContentView(R.layout.activity_preview_player_land);
         }
     }
 }
