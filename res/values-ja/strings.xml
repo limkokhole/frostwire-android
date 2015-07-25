@@ -463,8 +463,6 @@
     <string name="cloud_downloads_coming">申し訳ありません: ここでクラウドダウンロードをスタートする機能は将来の更新で有効になります。</string>
     <string name="seed">シード</string>
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">切断されたため転送は一時停止されました。 (設定でBitTorrent接続をチェックしてください)</string>
-    <string name="durationformatshort" translatable="false">%2$d:%3$02d</string>
-    <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="remove_from_recent">最近から削除</string>
     <string name="now_playing">現在プレイ中</string>
     <string name="dummy_author">[作者]</string>

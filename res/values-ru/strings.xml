@@ -447,7 +447,6 @@
     <string name="cloud_downloads_coming">К сожалению, возможность загрузки в облако, пока ещё в разработке.</string>
     <string name="seed">Сид</string>
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Передача была приостановлена, потому что нет соединения с сетью. (Проверьте ваше BitTorrent-соединение в настройках)</string>
-    <string name="durationformatlong" translatable="false">%1$d:%2$02d:%3$02d</string>
     <string name="remove_from_recent">Удалить из истории</string>
     <string name="now_playing">Сейчас проигрывается</string>
     <string name="dummy_author">[Автор]</string>
