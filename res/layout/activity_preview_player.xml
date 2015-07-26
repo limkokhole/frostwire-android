@@ -25,7 +25,6 @@
              android:background="@color/body_background_gray_light"
              android:orientation="vertical">
 
-
     <LinearLayout
             android:id="@+id/activity_preview_player_header"
             android:layout_width="match_parent"
@@ -63,15 +62,17 @@
         </LinearLayout>
     </LinearLayout>
 
-    <View
+    <View   android:id="@+id/activity_preview_player_divider"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@drawable/layout_divider_1_gray" />
 
-    <FrameLayout android:layout_width="match_parent"
-                 android:layout_height="match_parent"
+    <FrameLayout
+            android:id="@+id/activity_preview_player_framelayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_weight="1.0">
-        <VideoView
+        <TextureView
                 android:id="@+id/activity_preview_player_videoview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
