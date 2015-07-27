@@ -40,6 +40,9 @@ import android.widget.RelativeLayout;
 import com.andrew.apollo.IApolloService;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.MusicUtils.ServiceToken;
+import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.sdk.AppLovinAd;
+import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -56,6 +59,7 @@ import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.OfferUtils;
+import com.frostwire.android.gui.util.OfferUtils.AppLovinAdapter;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.AbstractDialog.OnDialogClickListener;
@@ -88,9 +92,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
     private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
-    private static final String DUR_TOKEN_KEY = "dur_token";
     private static final String MOBILE_CORE_STARTED_KEY = "mobile_core_started";
-    private static final String INMOBI_STARTED = "inmobi_started";
+    private static final String APPLOVIN_STARTED_KEY = "applovin_started";
+    private static final String INMOBI_STARTED_KEY = "inmobi_started";
 
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
@@ -113,10 +117,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private PlayerMenuItemView playerItem;
 
-    // not sure about this variable, quick solution for now
-    private String durToken;
-
     private boolean mobileCoreStarted = false;
+    private boolean appLovinStarted = false;
     private boolean inmobiStarted = false;
 
     private TimerSubscription playerSubscription;
@@ -261,9 +263,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         setupInitialFragment(savedInstanceState);
 
         if (savedInstanceState != null) {
-            durToken = savedInstanceState.getString(DUR_TOKEN_KEY);
             mobileCoreStarted = savedInstanceState.getBoolean(MOBILE_CORE_STARTED_KEY);
-            inmobiStarted = savedInstanceState.getBoolean(INMOBI_STARTED);
+            appLovinStarted = savedInstanceState.getBoolean(APPLOVIN_STARTED_KEY);
+            inmobiStarted = savedInstanceState.getBoolean(INMOBI_STARTED_KEY);
         }
 
         playerSubscription = TimerService.subscribe((TimerObserver) findView(R.id.activity_main_player_notifier), 1);
@@ -379,9 +381,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private void initAffiliatesAsync() {
-        // MC needs to be created in UI thread to properly set handlers
-        // otherwise we get a runtime exception and worker thread dies.
-        initializeMobileCore();
+        initializeMobileCore(); // this one needs UI thread initialization.
+        initializeAppLovin();
         initializeInMobi();
     }
 
@@ -454,6 +455,21 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
+    private void initializeAppLovin() {
+        if (!OfferUtils.isAppLovinEnabled()) {
+            return;
+        }
+
+        try {
+            if (!appLovinStarted) {
+                AppLovinSdk.initializeSdk(this.getApplicationContext());
+                appLovinStarted = true;
+            }
+        } catch (Throwable e) {
+            LOG.error(e.getMessage(), e);
+        }
+    }
+
     private void initializeInMobi() {
         if (!OfferUtils.isInMobiEnabled()) {
             return;
@@ -492,9 +508,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         saveLastFragment(outState);
         saveFragmentsStack(outState);
 
-        outState.putString(DUR_TOKEN_KEY, durToken);
         outState.putBoolean(MOBILE_CORE_STARTED_KEY, mobileCoreStarted);
-        outState.putBoolean(INMOBI_STARTED, inmobiStarted);
+        outState.putBoolean(INMOBI_STARTED_KEY, inmobiStarted);
+        outState.putBoolean(APPLOVIN_STARTED_KEY, appLovinStarted);
     }
 
     private ServiceToken mToken;
@@ -594,11 +610,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
-        boolean mobileCoreShown;
-        boolean inMobiShown = false;
         boolean interstitialShown;
 
-        mobileCoreShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
+        interstitialShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
             @Override
             public void onConfirmation(CallbackResponse.TYPE type) {
                 if (dismissAfterwards) {
@@ -610,15 +624,30 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             }
         });
 
-        if (!mobileCoreShown) {
-            inMobiShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
+        if (!interstitialShown) {
+            interstitialShown = OfferUtils.showAppLovinInterstitial(this, appLovinStarted,
+                    new AppLovinAdapter() {
+                        @Override
+                        public void adHidden(AppLovinAd appLovinAd) {
+                            if (dismissAfterwards) {
+                                finish();
+                            }
+                            if (shutdownAfterwards) {
+                                shutdown();
+                            }
+                        }
+                    });
+        }
+
+        if (!interstitialShown) {
+            // TODO: do this here, and remove those parameters from showInMobiInterstitial.
+            // inmobiListener.finishAfterDismiss = dismissAfterwards; ....
+            interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
                     inmobiInterstitial,
                     inmobiListener,
                     shutdownAfterwards,
                     dismissAfterwards);
         }
-
-        interstitialShown = mobileCoreShown || inMobiShown;
 
         // If interstitial's callbacks were not invoked because ads weren't displayed
         // then we're responsible for finish()'ing the activity or shutting down the app.

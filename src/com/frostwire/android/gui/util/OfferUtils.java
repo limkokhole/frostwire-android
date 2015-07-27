@@ -20,6 +20,11 @@ package com.frostwire.android.gui.util;
 
 import android.app.Activity;
 import android.content.Context;
+import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.adview.AppLovinInterstitialAdDialog;
+import com.applovin.sdk.AppLovinAd;
+import com.applovin.sdk.AppLovinAdDisplayListener;
+import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -207,5 +212,47 @@ public class OfferUtils {
         public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {}
         @Override
         public void onLeaveApplication(IMInterstitial imInterstitial) {}
+    }
+
+    public static boolean isAppLovinEnabled() {
+        ConfigurationManager config = null;
+        boolean isAppLovinEnabled = false;
+        try {
+            config = ConfigurationManager.instance();
+            isAppLovinEnabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_APPLOVIN));
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+        System.out.println("OfferUtils.issAppLovinEnabled() " + isAppLovinEnabled);
+        return isAppLovinEnabled;
+    }
+
+    public static boolean showAppLovinInterstitial(Activity callerActivity, boolean applovinStarted, AppLovinAdapter adapter) {
+        if (isAppLovinEnabled() && applovinStarted && AppLovinInterstitialAd.isAdReadyToDisplay(callerActivity)) {
+            try {
+                final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(callerActivity), callerActivity);
+                adDialog.setAdDisplayListener(adapter);
+                adDialog.show();
+                return true;
+            } catch (Throwable e) {
+                e.printStackTrace();
+                return false;
+            }
+        } else {
+            return false;
+        }
+    }
+
+    public static class AppLovinAdapter implements AppLovinAdDisplayListener {
+
+        @Override
+        public void adDisplayed(AppLovinAd appLovinAd) {
+            System.out.println("AppLovinAdapter.addDisplayed!");
+        }
+
+        @Override
+        public void adHidden(AppLovinAd appLovinAd) {
+            System.out.println("AppLovinAdapter.addHidden!");
+        }
     }
 }

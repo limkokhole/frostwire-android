@@ -332,6 +332,7 @@ public final class SoftwareUpdater {
         }
 
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_MOBILE_CORE, update.config.mobileCore);
+        ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_APPLOVIN, update.config.appLovin);
         ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_USE_INMOBI, update.config.inmobi);
         ConfigurationManager.instance().setInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS, update.config.interstitialOffersTransferStarts);
         ConfigurationManager.instance().setInt(Constants.PREF_KEY_GUI_INTERSTITIAL_TRANSFER_OFFERS_TIMEOUT_IN_MINUTES, update.config.interstitialTransferOffersTimeoutInMinutes);
@@ -387,6 +388,7 @@ public final class SoftwareUpdater {
         public int supportThreshold = 100;
         public Map<String, Boolean> activeSearchEngines;
         public boolean mobileCore = false;
+        public boolean appLovin = false;
         public boolean inmobi = false;
         public int interstitialOffersTransferStarts = 5;
         public int interstitialTransferOffersTimeoutInMinutes = 15;

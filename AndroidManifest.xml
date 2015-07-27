@@ -283,6 +283,14 @@
 
 		<!-- end of InMobi -->
 
+		<!-- AppLovin -->
+		<meta-data android:name="applovin.sdk.key"
+				   android:value="PDAf5nX3UvzDFSGe52hI1kez_GTHC4GcIQGOCpRghOuyr9axCGDD_sB-6kFJpWw5yBU8_wphJhd8rD32UHGT8R"  />
+
+		<activity android:name="com.applovin.adview.AppLovinInterstitialActivity" />
+		<activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
+		<!-- end of AppLovin -->
+
 		<!-- providers -->
 		<provider android:name="com.frostwire.android.core.providers.DocumentsProvider"
 			android:authorities="com.frostwire.android.core.providers.Documents" android:exported="true" />
