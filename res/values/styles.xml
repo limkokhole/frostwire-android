@@ -91,10 +91,20 @@
         <item name="android:overScrollFooter">@null</item>
     </style>
 
+	<!-- Preferences -->
+
     <style name="Preferences" parent="android:Theme.Holo.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
         <item name="android:homeAsUpIndicator">@drawable/home_as_up_padding</item>
         <item name="android:checkboxStyle">@style/PreferencesCheckboxStyle</item>
+        <item name="android:listSeparatorTextViewStyle">@style/PreferenceListHeader</item>
+		<item name="android:textColorPrimary">@color/app_text_primary</item>
+		<item name="android:textColorSecondary">@color/app_text_secondary</item>
+    </style>
+
+    <style name="PreferenceListHeader">
+		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_height">1dp</item>
     </style>
 
     <style name="PreferencesCheckboxStyle" parent="android:Widget.CompoundButton.CheckBox">
