@@ -20,7 +20,12 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.frostwire.android" android:installLocation="auto"
-	android:versionCode="1000195" android:versionName="1.5.8">
+	android:versionCode="9000196" android:versionName="1.6.0">
+	<!-- Plus android:versionCode=" 9000xyz" (always commit like this, plus!)-->
+	<!-- Basic android:versionCode="8100xyz" (don't commit like this) -->
+	<!-- Plus version example for 1.5.8  -> 9000194 -->
+	<!-- Basic version example for 1.5.8 -> 8100195 -->
+	<!-- Don't go nuts, max version number will be: 2,147,483,647 -->
 
 	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="21" />
 

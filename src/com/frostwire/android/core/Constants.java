@@ -40,11 +40,11 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "195";
+    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "196";
 
     public static final String APP_PACKAGE_NAME = "com.frostwire.android";
 
-    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 5, (byte) 8 };
+    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 6, (byte) 0 };
 
     public static final String FROSTWIRE_VERSION_STRING = FROSTWIRE_VERSION[0] + "." + FROSTWIRE_VERSION[1] + "." + FROSTWIRE_VERSION[2];
 
