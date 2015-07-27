@@ -20,6 +20,7 @@ package com.frostwire.android.gui.activities;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.*;
@@ -72,6 +73,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setIcon(android.R.color.transparent);
         }
 
         setupComponents();
