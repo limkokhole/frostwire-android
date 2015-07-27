@@ -49,8 +49,6 @@ import java.net.URL;
  * @author aldenml
  */
 public final class PreviewPlayerActivity extends AbstractActivity implements AbstractDialog.OnDialogClickListener, TextureView.SurfaceTextureListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, MediaPlayer.OnInfoListener {
-    //TODO: Make sure Main Music player is paused before we do anything here.
-    //      we don't want two audio streams being heard simultaneously.
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
     public static WeakReference<FileSearchResult> srRef;
 
@@ -86,6 +84,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         Intent i = getIntent();
         if (i == null) {
             finish();
+            return;
         }
 
         displayName = i.getStringExtra("displayName");
@@ -156,16 +155,18 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString("displayName", displayName);
-        outState.putString("source", source);
-        outState.putString("thumbnailUrl", thumbnailUrl);
-        outState.putString("streamUrl", streamUrl);
-        outState.putBoolean("hasVideo", hasVideo);
-        outState.putBoolean("audio", audio);
-        outState.putBoolean("isFullScreen", isFullScreen);
-        if (mediaPlayer!=null && mediaPlayer.isPlaying()) {
-            outState.putInt("currentPosition", mediaPlayer.getCurrentPosition());
+        if (outState != null) {
+            super.onSaveInstanceState(outState);
+            outState.putString("displayName", displayName);
+            outState.putString("source", source);
+            outState.putString("thumbnailUrl", thumbnailUrl);
+            outState.putString("streamUrl", streamUrl);
+            outState.putBoolean("hasVideo", hasVideo);
+            outState.putBoolean("audio", audio);
+            outState.putBoolean("isFullScreen", isFullScreen);
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                outState.putInt("currentPosition", mediaPlayer.getCurrentPosition());
+            }
         }
     }
 
@@ -179,7 +180,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     private void onDownloadButtonClick() {
         if (Ref.alive(srRef)) {
-            NewTransferDialog dlg = NewTransferDialog.newInstance((FileSearchResult) srRef.get(), false);
+            NewTransferDialog dlg = NewTransferDialog.newInstance(srRef.get(), false);
             dlg.show(getFragmentManager());
             //TODO: ux log new action, download from preview.
         } else {
@@ -229,9 +230,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         final Display defaultDisplay = getWindowManager().getDefaultDisplay();
         defaultDisplay.getMetrics(metrics);
         isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        FrameLayout.LayoutParams params = (FrameLayout.LayoutParams) v.getLayoutParams();
 
-        final FrameLayout frameLayout = (FrameLayout) findView(R.id.activity_preview_player_framelayout);
+        final FrameLayout frameLayout = findView(R.id.activity_preview_player_framelayout);
         LinearLayout.LayoutParams frameLayoutParams = (LinearLayout.LayoutParams) frameLayout.getLayoutParams();
 
         LinearLayout header = findView(R.id.activity_preview_player_header);
@@ -246,7 +246,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
         // Let's Go into full screen mode.
         if (!isFullScreen) {
-            bar.hide();
+            if (bar!=null) {
+                bar.hide();
+            }
             setViewsVisibility(View.GONE, header, thumbnail, divider, downloadButton, rightSide, filler);
 
             if (isPortrait) {
@@ -259,7 +261,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             isFullScreen = true;
         } else {
             // restore components back from full screen mode.
-            bar.show();
+            if (bar != null) {
+                bar.show();
+            }
             setViewsVisibility(View.VISIBLE, header, divider, downloadButton, rightSide, filler);
             v.setRotation(0);
 
@@ -275,14 +279,12 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             }
             isFullScreen = false;
         }
-        System.out.println("is fullScreen? " + isFullScreen);
-        System.out.println("========================================\n");
 
         frameLayout.setLayoutParams(frameLayoutParams);
-        changeVideoSize(frameLayoutParams.width, frameLayoutParams.height);
+        changeVideoSize();
     }
 
-    private void changeVideoSize(int width, int height) {
+    private void changeVideoSize() {
         int videoWidth = mediaPlayer.getVideoWidth();
         int videoHeight = mediaPlayer.getVideoHeight();
         final TextureView v = findView(R.id.activity_preview_player_videoview);
@@ -292,7 +294,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
         final android.widget.FrameLayout.LayoutParams params = (android.widget.FrameLayout.LayoutParams) v.getLayoutParams();
         isPortrait = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT;
-        float wRatio = (videoWidth * 1.0f) / (videoHeight * 1.0f);
         float hRatio = (videoHeight * 1.0f) / (videoWidth * 1.0f);
         float rotation = 0;
 
@@ -301,7 +302,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 params.width = metrics.heightPixels;
                 params.height = metrics.widthPixels;
                 params.gravity = Gravity.TOP | Gravity.LEFT;
-                params.setMargins(0, 0, 0, 0);
                 v.setPivotY((float) metrics.widthPixels / 2.0f);
                 rotation = 90f;
             } else {
@@ -312,11 +312,12 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         } else {
             if (isFullScreen) {
                 params.width = metrics.widthPixels;
+                params.height = metrics.heightPixels;
             } else {
-                params.width = videoWidth;
+                params.width = Math.max(videoWidth, metrics.widthPixels / 2);
+                params.height = (int) (params.width * hRatio);
+                params.gravity = Gravity.CENTER;
             }
-            params.height = params.width * (int) wRatio;
-            rotation = 0f;
         }
 
         v.setRotation(rotation);
@@ -326,6 +327,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
+        //Disable rotation once the activity has started.
         super.onConfigurationChanged(newConfig);
         if (isPortrait && newConfig.orientation != ActivityInfo.SCREEN_ORIENTATION_PORTRAIT) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
@@ -334,6 +336,11 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         }
     }
 
+    /**
+     * Utility method: change the visibility for a bunch of views. Skips null views.
+     * @param visibility
+     * @param views
+     */
     private void setViewsVisibility(int visibility, View ... views) {
         if (visibility != View.INVISIBLE && visibility != View.VISIBLE && visibility != View.GONE) {
             return; //invalid visibility constant.
@@ -358,13 +365,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     protected void onDestroy() {
-        System.out.println("onDestroy!");
         releaseMediaPlayer();
-        if (mediaPlayer != null) {
-            mediaPlayer.setSurface(null);
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
         super.onDestroy();
     }
 
@@ -400,7 +401,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
-        System.out.println("onSurfaceTextureSizeChanged! ("+width+"x"+height+")");
         if (mediaPlayer != null) {
             if (surface != null) {
                 surface.release();
@@ -412,7 +412,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        System.out.println("onSurfaceTextureDestroyed");
         if (mediaPlayer != null) {
             mediaPlayer.setSurface(null);
             this.surface.release();
@@ -423,7 +422,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     public void onSurfaceTextureUpdated(SurfaceTexture surface) {
-        //this happens all the time
     }
 
     @Override
@@ -438,20 +436,16 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     @Override
     public void onPrepared(MediaPlayer mp) {
        final ImageView img = findView(R.id.activity_preview_player_thumbnail);
-        onVideoViewPrepared(img);
-
-        if (mp != null) {
-            if (mp.getVideoHeight() > 0 && mp.getVideoWidth() > 0) {
-                changeVideoSize(mp.getVideoWidth(), mp.getVideoHeight());
-            }
-        }
+       onVideoViewPrepared(img);
+       if (mp != null) {
+           changeVideoSize();
+       }
     }
 
     @Override
     public void onVideoSizeChanged(MediaPlayer mp, int width, int height) {
         if (width > 0 && height > 0 && !videoSizeSetupDone) {
-            System.out.println("Video size has changed: " + width + "x" + height);
-            changeVideoSize(width, height);
+            changeVideoSize();
         }
     }
 
@@ -469,7 +463,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                 //LOG.warn("End of media buffering.");
-                changeVideoSize(-1,-1);
+                changeVideoSize();
                 startedPlayback = true;
                 break;
             case MediaPlayer.MEDIA_INFO_BAD_INTERLEAVING:
@@ -485,8 +479,11 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
         if (startedPlayback && !changedActionBarTitleToNonBuffering) {
             int mediaTypeStrId = audio ? R.string.audio : R.string.video;
-            getActionBar().setTitle(getString(R.string.media_preview, getString(mediaTypeStrId)));
-            changedActionBarTitleToNonBuffering = true;
+            ActionBar bar = getActionBar();
+            if (bar!=null) {
+                bar.setTitle(getString(R.string.media_preview, getString(mediaTypeStrId)));
+                changedActionBarTitleToNonBuffering = true;
+            }
         }
 
         return false;

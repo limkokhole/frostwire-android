@@ -30,20 +30,20 @@
                  android:layout_height="match_parent"
                  android:background="@drawable/default_artwork"
                  android:clickable="true"
-                 android:layout_weight="0.5"
                  android:layout_margin="0dp"
                  android:padding="0dp">
         <TextureView
                 android:id="@+id/activity_preview_player_videoview"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal|center_vertical"/>
+                android:layout_gravity="center"/>
 
         <ImageView
                 android:id="@+id/activity_preview_player_thumbnail"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center_horizontal|center_vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"
                 android:background="@color/body_background_gray_light"/>
     </FrameLayout>
 
@@ -57,7 +57,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_weight="0.49">
+            android:layout_weight="0.5">
         <LinearLayout
                 android:id="@+id/activity_preview_player_header"
                 android:layout_width="match_parent"
@@ -72,7 +72,8 @@
                     android:layout_gravity="top"
                     android:orientation="vertical"
                     android:paddingLeft="@dimen/audio_player_header_padding_left"
-                    android:paddingRight="@dimen/audio_player_header_padding_right">
+                    android:paddingRight="@dimen/audio_player_header_padding_right"
+                    android:paddingTop="10.0dip">
 
                 <com.andrew.apollo.widgets.theme.ThemeableTextView
                         android:id="@+id/activity_preview_player_track_name"
