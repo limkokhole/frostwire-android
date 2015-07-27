@@ -284,15 +284,17 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         public void onClick(Context ctx, View v) {
             StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
 
-            PreviewPlayerActivity.srRef = Ref.weak((FileSearchResult) sr);
-            Intent i = new Intent(ctx, PreviewPlayerActivity.class);
-            i.putExtra("displayName", sr.getDisplayName());
-            i.putExtra("source", sr.getSource());
-            i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
-            i.putExtra("streamUrl", sr.getStreamUrl());
-            i.putExtra("audio", isAudio(sr));
-            i.putExtra("hasVideo", hasVideo(sr));
-            ctx.startActivity(i);
+            if (sr != null) {
+                PreviewPlayerActivity.srRef = Ref.weak((FileSearchResult) sr);
+                Intent i = new Intent(ctx, PreviewPlayerActivity.class);
+                i.putExtra("displayName", sr.getDisplayName());
+                i.putExtra("source", sr.getSource());
+                i.putExtra("thumbnailUrl", sr.getThumbnailUrl());
+                i.putExtra("streamUrl", sr.getStreamUrl());
+                i.putExtra("audio", isAudio(sr));
+                i.putExtra("hasVideo", hasVideo(sr));
+                ctx.startActivity(i);
+            }
         }
 
         private boolean isAudio(StreamableSearchResult sr) {

@@ -455,11 +455,11 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         switch (what) {
             case MediaPlayer.MEDIA_INFO_VIDEO_TRACK_LAGGING:
                 //LOG.warn("Media is too complex to decode it fast enough.");
-                startedPlayback = true;
+                //startedPlayback = true;
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_START:
                 //LOG.warn("Start of media buffering.");
-                startedPlayback = true;
+                //startedPlayback = true;
                 break;
             case MediaPlayer.MEDIA_INFO_BUFFERING_END:
                 //LOG.warn("End of media buffering.");
