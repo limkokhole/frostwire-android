@@ -127,13 +127,15 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         trackName.setText(displayName);
         artistName.setText(source);
 
-        v.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                toggleFullScreen(v);
-                return false;
-            }
-        });
+        if (!audio) {
+            v.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent event) {
+                    toggleFullScreen(v);
+                    return false;
+                }
+            });
+        }
 
         if (thumbnailUrl != null) {
             ImageLoader.getInstance(this).load(Uri.parse(thumbnailUrl), img);
@@ -173,7 +175,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     private void onVideoViewPrepared(final ImageView img) {
         final ImageButton downloadButton = findView(R.id.activity_preview_player_download_button);
         downloadButton.setVisibility(View.VISIBLE);
-        if (!audio || hasVideo) {
+        if (!audio) {
             img.setVisibility(View.GONE);
         }
     }
@@ -268,7 +270,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             v.setRotation(0);
 
             // restore the thumbnail on the way back only if doing audio preview.
-            thumbnail.setVisibility((!audio || hasVideo) ? View.GONE : View.VISIBLE);
+            thumbnail.setVisibility(!audio ? View.GONE : View.VISIBLE);
 
             if (isPortrait) {
                 frameLayoutParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
@@ -382,7 +384,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 mediaPlayer= new MediaPlayer();
                 try {
                     mediaPlayer.setDataSource(previewPlayerActivity, uri);
-                    mediaPlayer.setSurface(surface);
+                    mediaPlayer.setSurface(!audio ? surface : null);
                     mediaPlayer.prepare();
                     mediaPlayer.setOnBufferingUpdateListener(previewPlayerActivity);
                     mediaPlayer.setOnCompletionListener(previewPlayerActivity);
@@ -406,7 +408,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 surface.release();
                 surface = new Surface(surfaceTexture);
             }
-            mediaPlayer.setSurface(surface);
+            mediaPlayer.setSurface(!audio ? surface : null);
         }
     }
 
