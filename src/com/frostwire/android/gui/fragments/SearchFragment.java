@@ -446,7 +446,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         UIUtils.showTransfersOnDownloadStart(ctx);
 
-        // TODO: Refactor so we can also show interstitials from PreviewPlayerActivity.
         if (ctx instanceof MainActivity) {
             showInterstitialOfferIfNecessary((MainActivity) ctx);
         }
@@ -468,7 +467,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
             ctx.showInterstitial(false, false);
             startedTransfers = 0;
             lastInterstitialShownTimestamp = System.currentTimeMillis();
-            ;
         }
     }
 

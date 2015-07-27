@@ -48,6 +48,7 @@ import com.frostwire.android.gui.SoftwareUpdater;
 import com.frostwire.android.gui.SoftwareUpdater.ConfigurationUpdateListener;
 import com.frostwire.android.gui.activities.internal.MainController;
 import com.frostwire.android.gui.activities.internal.MainMenuAdapter;
+import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.dialogs.TermsUseDialog;
 import com.frostwire.android.gui.dialogs.YesNoDialog;
 import com.frostwire.android.gui.fragments.*;
@@ -330,6 +331,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         else if (action != null && (action.equals(Intent.ACTION_SEND) || action.equals(Intent.ACTION_SEND_MULTIPLE))) {
             controller.handleSendAction(intent);
             intent.setAction(null);
+        } else if (action != null && action.equals(Constants.ACTION_START_TRANSFER_FROM_PREVIEW)) {
+            if (Ref.alive(NewTransferDialog.srRef)) {
+                SearchFragment.startDownload(this, NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
+                UXStats.instance().log(UXAction.DOWNLOAD_CLOUD_FILE_FROM_PREVIEW);
+            }
         }
 
         if (intent.hasExtra(Constants.EXTRA_DOWNLOAD_COMPLETE_NOTIFICATION)) {

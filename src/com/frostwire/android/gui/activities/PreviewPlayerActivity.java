@@ -31,6 +31,7 @@ import android.util.DisplayMetrics;
 import android.view.*;
 import android.widget.*;
 import com.frostwire.android.R;
+import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.views.AbstractActivity;
@@ -221,8 +222,10 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     public void onDialogClick(String tag, int which) {
         if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
             if (Ref.alive(NewTransferDialog.srRef)) {
-                SearchFragment.startDownload(this, NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
-                UXStats.instance().log(UXAction.DOWNLOAD_CLOUD_FILE_FROM_PREVIEW);
+                Intent i = new Intent(this, MainActivity.class);
+                i.setAction(Constants.ACTION_START_TRANSFER_FROM_PREVIEW);
+                i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                startActivity(i);
             }
             finish();
         }
