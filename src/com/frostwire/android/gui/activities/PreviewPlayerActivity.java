@@ -276,8 +276,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 frameLayoutParams.width = FrameLayout.LayoutParams.MATCH_PARENT;
                 frameLayoutParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
             } else {
-                frameLayoutParams.width = FrameLayout.LayoutParams.WRAP_CONTENT;
+                frameLayoutParams.width = 0;
                 frameLayoutParams.height = FrameLayout.LayoutParams.MATCH_PARENT;
+                frameLayoutParams.weight = 0.5f;
             }
             isFullScreen = false;
         }
