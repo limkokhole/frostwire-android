@@ -73,7 +73,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
         if (getActionBar() != null) {
             getActionBar().setDisplayHomeAsUpEnabled(true);
-            getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));
+            getActionBar().setIcon(android.R.color.transparent);
         }
 
         setupComponents();
