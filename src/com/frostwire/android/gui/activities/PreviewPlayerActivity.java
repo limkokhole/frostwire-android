@@ -39,6 +39,8 @@ import com.frostwire.android.util.ImageLoader;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.util.Ref;
+import com.frostwire.uxstats.UXAction;
+import com.frostwire.uxstats.UXStats;
 
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
@@ -184,7 +186,6 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         if (Ref.alive(srRef)) {
             NewTransferDialog dlg = NewTransferDialog.newInstance(srRef.get(), false);
             dlg.show(getFragmentManager());
-            //TODO: ux log new action, download from preview.
         } else {
             finish();
         }
@@ -221,6 +222,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
             if (Ref.alive(NewTransferDialog.srRef)) {
                 SearchFragment.startDownload(this, NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
+                UXStats.instance().log(UXAction.DOWNLOAD_CLOUD_FILE_FROM_PREVIEW);
             }
             finish();
         }
