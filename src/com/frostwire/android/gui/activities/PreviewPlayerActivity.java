@@ -385,13 +385,13 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 try {
                     mediaPlayer.setDataSource(previewPlayerActivity, uri);
                     mediaPlayer.setSurface(!audio ? surface : null);
-                    mediaPlayer.prepare();
                     mediaPlayer.setOnBufferingUpdateListener(previewPlayerActivity);
                     mediaPlayer.setOnCompletionListener(previewPlayerActivity);
                     mediaPlayer.setOnPreparedListener(previewPlayerActivity);
                     mediaPlayer.setOnVideoSizeChangedListener(previewPlayerActivity);
                     mediaPlayer.setOnInfoListener(previewPlayerActivity);
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.prepare();
                     mediaPlayer.start();
                 } catch (Throwable e) {
                     e.printStackTrace();
