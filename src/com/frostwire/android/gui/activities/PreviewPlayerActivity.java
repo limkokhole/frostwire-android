@@ -33,15 +33,12 @@ import android.widget.*;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
-import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.util.Ref;
-import com.frostwire.uxstats.UXAction;
-import com.frostwire.uxstats.UXStats;
 
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
@@ -365,6 +362,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     private void releaseMediaPlayer() {
         if (mediaPlayer != null) {
+            mediaPlayer.stop();
             mediaPlayer.setSurface(null);
             mediaPlayer.release();
             mediaPlayer = null;

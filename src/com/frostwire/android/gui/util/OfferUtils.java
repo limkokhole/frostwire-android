@@ -223,7 +223,6 @@ public class OfferUtils {
         } catch (Throwable e) {
             e.printStackTrace();
         }
-        System.out.println("OfferUtils.issAppLovinEnabled() " + isAppLovinEnabled);
         return isAppLovinEnabled;
     }
 
@@ -247,12 +246,10 @@ public class OfferUtils {
 
         @Override
         public void adDisplayed(AppLovinAd appLovinAd) {
-            System.out.println("AppLovinAdapter.addDisplayed!");
         }
 
         @Override
         public void adHidden(AppLovinAd appLovinAd) {
-            System.out.println("AppLovinAdapter.addHidden!");
         }
     }
 }
