@@ -145,7 +145,7 @@
 				  android:label="@string/about" />
 		<activity android:name="com.frostwire.android.gui.activities.PreviewPlayerActivity"
 				  android:label="@string/playing"
-                  android:configChanges="screenSize" />
+                  android:configChanges="orientation|screenSize" />
 
 	    <activity
 			android:name="com.frostwire.android.gui.activities.NoBTCWalletAvailableActivity"
