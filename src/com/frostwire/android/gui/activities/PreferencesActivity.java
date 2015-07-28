@@ -18,9 +18,9 @@
 
 package com.frostwire.android.gui.activities;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.*;
@@ -71,10 +71,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.application_preferences);
 
-        if (getActionBar() != null) {
-            getActionBar().setDisplayHomeAsUpEnabled(true);
-            getActionBar().setIcon(android.R.color.transparent);
-        }
+        hideActionBarIcon();
 
         setupComponents();
 
@@ -85,6 +82,17 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         updateConnectSwitch();
+    }
+
+    private void hideActionBarIcon() {
+        ActionBar bar = getActionBar();
+        if (bar != null) {
+            bar.setDisplayHomeAsUpEnabled(true);
+            bar.setDisplayShowHomeEnabled(false);
+            bar.setDisplayShowTitleEnabled(true);
+            bar.setLogo(android.R.color.transparent);
+            bar.setIcon(android.R.color.transparent);
+        }
     }
 
     private void setupComponents() {
