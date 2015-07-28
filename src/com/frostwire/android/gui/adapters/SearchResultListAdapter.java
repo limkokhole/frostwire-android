@@ -146,7 +146,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         }
 
         fileTypeIcon.setOnClickListener(previewClickListener);
-        if (sr instanceof StreamableSearchResult) {
+        if (sr instanceof SoundcloudSearchResult || sr instanceof YouTubeCrawledStreamableSearchResult) {
             fileTypeIcon.setTag(sr);
             fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.PREVIEW);
         } else {
