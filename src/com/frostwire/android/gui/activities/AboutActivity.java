@@ -18,7 +18,9 @@
 
 package com.frostwire.android.gui.activities;
 
+import android.app.ActionBar;
 import android.os.Bundle;
+import android.view.MenuItem;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.views.AbstractActivity;
 
@@ -30,5 +32,21 @@ public class AboutActivity extends AbstractActivity {
 
     @Override
     protected void initComponents(Bundle savedInstanceState) {
+        ActionBar bar = getActionBar();
+        if (bar != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+            getActionBar().setIcon(android.R.color.transparent);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }
