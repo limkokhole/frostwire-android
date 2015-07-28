@@ -142,7 +142,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         }
 
         if (thumbnailUrl != null) {
-            ImageLoader.getInstance(this).load(Uri.parse(thumbnailUrl), img);
+            ImageLoader.getInstance(this).load(Uri.parse(thumbnailUrl), img, R.drawable.default_artwork);
         }
 
         final ImageButton downloadButton = findView(R.id.activity_preview_player_download_button);
