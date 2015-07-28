@@ -218,6 +218,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     public void onDialogClick(String tag, int which) {
         if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
             if (Ref.alive(NewTransferDialog.srRef)) {
+                releaseMediaPlayer();
                 Intent i = new Intent(this, MainActivity.class);
                 i.setAction(Constants.ACTION_START_TRANSFER_FROM_PREVIEW);
                 i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
