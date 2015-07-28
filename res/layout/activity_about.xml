@@ -23,7 +23,7 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:background="@color/app_ligh_background">
+              android:background="@color/body_background_white">
 
     <fragment
         android:name="com.frostwire.android.gui.fragments.AboutFragment"
