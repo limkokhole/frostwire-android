@@ -203,7 +203,7 @@ public final class HttpDownload implements DownloadTransfer {
 
     @Override
     public File previewFile() {
-        return null;
+        return getSavePath();
     }
 
     int getStatusCode() {

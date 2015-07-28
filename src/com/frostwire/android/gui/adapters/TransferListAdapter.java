@@ -62,6 +62,9 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
     private final ViewOnLongClickListener viewOnLongClickListener;
     private final OpenOnClickListener playOnClickListener;
 
+    // TODO: DRY refactor
+    private static final String[] STREAMABLE_EXTENSIONS = new String[] { "mp3", "ogg", "wma", "wmv", "m4a", "aac", "flac", "mp4", "flv", "mov", "mpg", "mpeg", "3gp", "m4v", "webm" };
+
     /**
      * Keep track of all dialogs ever opened so we dismiss when we leave to avoid memleaks
      */
@@ -468,6 +471,7 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         TextView size = findView(view, R.id.view_transfer_list_item_size);
         TextView seeds = findView(view, R.id.view_transfer_list_item_seeds);
         TextView peers = findView(view, R.id.view_transfer_list_item_peers);
+        ImageButton buttonPlay = findView(view, R.id.view_transfer_list_item_button_play);
 
         seeds.setText("");
         peers.setText("");
@@ -477,6 +481,27 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
         status.setText(getStatusFromResId(download.getStatus()));
         speed.setText(UIUtils.getBytesInHuman(download.getDownloadSpeed()) + "/s");
         size.setText(UIUtils.getBytesInHuman(download.getSize()));
+
+        File previewFile = download.previewFile();
+        if (previewFile != null && isStreamable(previewFile.getName())) {
+            buttonPlay.setTag(previewFile);
+            buttonPlay.setVisibility(View.VISIBLE);
+            buttonPlay.setOnClickListener(playOnClickListener);
+        } else {
+            buttonPlay.setVisibility(View.GONE);
+        }
+    }
+
+    // TODO: DRY refactor
+    private static boolean isStreamable(String filename) {
+        String ext = FilenameUtils.getExtension(filename);
+        for (String s : STREAMABLE_EXTENSIONS) {
+            if (s.equals(ext)) {
+                return true; // fast return
+            }
+        }
+
+        return false;
     }
 
     private void populateBittorrentDownloadItem(View view, TransferItem item) {
