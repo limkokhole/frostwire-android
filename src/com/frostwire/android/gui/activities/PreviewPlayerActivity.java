@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.activities;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
@@ -33,6 +34,7 @@ import android.widget.*;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
+import com.frostwire.android.gui.MainApplication;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.AbstractDialog;
@@ -87,6 +89,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             finish();
             return;
         }
+
+        stopAnyOtherPlayers();
 
         displayName = i.getStringExtra("displayName");
         source = i.getStringExtra("source");
@@ -498,5 +502,14 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         }
 
         return false;
+    }
+
+    public void stopAnyOtherPlayers() {
+        AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        if (mAudioManager.isMusicActive()) {
+            Intent i = new Intent("com.android.music.musicservicecommand");
+            i.putExtra("command", "pause");
+            getApplication().sendBroadcast(i);
+        }
     }
 }
