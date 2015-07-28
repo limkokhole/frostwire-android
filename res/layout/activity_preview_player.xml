@@ -85,7 +85,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:background="@color/body_background_gray_light"/>
+                android:background="@drawable/default_artwork"/>
     </FrameLayout>
 
     <ImageButton android:id="@+id/activity_preview_player_download_button"

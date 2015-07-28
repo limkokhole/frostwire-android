@@ -44,7 +44,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:scaleType="fitCenter"
-                android:background="@color/body_background_gray_light"/>
+                android:background="@drawable/default_artwork"/>
     </FrameLayout>
 
     <View   android:id="@+id/activity_preview_player_divider"
