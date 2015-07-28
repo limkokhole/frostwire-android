@@ -87,10 +87,6 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
                 } else if (networkInfo.getDetailedState() == DetailedState.CONNECTED) {
                     handleConnectedNetwork(networkInfo);
                 }
-            } else if (action.equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-                if (Engine.instance().getMediaPlayer().isPlaying()) {
-                    Engine.instance().getMediaPlayer().togglePause();
-                }
             } else if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
                 Librarian.instance().syncApplicationsProvider();
             } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
@@ -110,11 +106,9 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
             CoreMediaPlayer mediaPlayer = Engine.instance().getMediaPlayer();
             if (mediaPlayer.isPlaying()) {
                 wasPlaying = true;
-                mediaPlayer.togglePause();
             } else if (wasPlaying && TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
                 mediaPlayer.seekTo(Math.max(0, mediaPlayer.getPosition() - 2000));
                 wasPlaying = false;
-                mediaPlayer.togglePause();
             }
         }
     }

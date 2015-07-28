@@ -52,10 +52,6 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
     }
 
     @Override
-    public void togglePause() {
-    }
-
-    @Override
     public void stop() {
         try {
             MusicUtils.mService.stop();

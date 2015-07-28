@@ -31,8 +31,6 @@ public interface CoreMediaPlayer {
 
     public void playNext();
 
-    public void togglePause();
-
     public void stop();
 
     public void shutdown();

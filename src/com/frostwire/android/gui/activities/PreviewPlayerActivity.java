@@ -30,6 +30,7 @@ import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.widget.*;
+import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
@@ -397,6 +398,10 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     mediaPlayer.prepare();
                     mediaPlayer.start();
+
+                    if (MusicUtils.isPlaying()) {
+                        MusicUtils.playOrPause();
+                    }
                 } catch (Throwable e) {
                     e.printStackTrace();
                 }
