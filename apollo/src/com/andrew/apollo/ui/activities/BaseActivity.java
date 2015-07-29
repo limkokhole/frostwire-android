@@ -228,7 +228,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                getBackHome(this);
                 return true;
             case R.id.menu_new_playlist:
                 CreateNewPlaylistMenuAction createPlaylistAction = new CreateNewPlaylistMenuAction(this, null);
@@ -496,6 +496,14 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
         }
     }
 
+    private static void getBackHome(Activity activity) {
+        if (activity.isTaskRoot()) {
+            UIUtils.goToFrostWireMainActivity(activity);
+        } else {
+            activity.finish();
+        }
+    }
+
     /**
      * @return The resource ID to be inflated.
      */
@@ -523,7 +531,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
 
         @Override
         public void onClick(BaseActivity owner, View v) {
-            owner.finish();
+            getBackHome(owner);
         }
     }
 }
