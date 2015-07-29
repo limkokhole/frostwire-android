@@ -1,9 +1,10 @@
-FrostWire 1.6.0 - JULY/27/2015
+FrostWire 1.6.0 - JULY/29/2015
  - Streaming Previews on search results before download.
  - Play .torrent media files while downloading.
  - Upgrade bittorrent engine to jlibtorrent 1.0
  - Updated SoundCloud search & download api.
  - Improved search suggestions.
+ - Improved transition between My Music and Home screens.
  - Multiple crash fixes in music player.
 
 FrostWire 1.5.8 - JUNE/16/2015
