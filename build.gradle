@@ -134,14 +134,15 @@ android {
 
 dependencies {
     compile 'io.reactivex:rxandroid:0.24.0'
-    compile ('com.android.support:support-v4:22.2.0') {
+    compile ('com.android.support:support-v4:22.2.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile ('com.google.android.gms:play-services-ads:7.5.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.frostwire:jlibtorrent:1.0'
+    compile 'com.frostwire:jlibtorrent:1.1.0.0'
+    compile 'com.frostwire:jlibtorrent-android:1.1.0.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
