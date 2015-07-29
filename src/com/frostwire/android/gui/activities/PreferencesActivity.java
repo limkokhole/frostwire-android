@@ -20,6 +20,7 @@ package com.frostwire.android.gui.activities;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -28,6 +29,10 @@ import android.preference.Preference.OnPreferenceChangeListener;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.widget.*;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -71,7 +76,7 @@ public class PreferencesActivity extends PreferenceActivity {
 
         addPreferencesFromResource(R.xml.application_preferences);
 
-        hideActionBarIcon();
+        hideActionBarIcon(getActionBar());
 
         setupComponents();
 
@@ -84,13 +89,11 @@ public class PreferencesActivity extends PreferenceActivity {
         updateConnectSwitch();
     }
 
-    private void hideActionBarIcon() {
-        ActionBar bar = getActionBar();
+    private void hideActionBarIcon(ActionBar bar) {
         if (bar != null) {
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowHomeEnabled(false);
             bar.setDisplayShowTitleEnabled(true);
-            bar.setLogo(android.R.color.transparent);
             bar.setIcon(android.R.color.transparent);
         }
     }
@@ -337,5 +340,52 @@ public class PreferencesActivity extends PreferenceActivity {
         };
 
         task.execute();
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+        boolean r = super.onPreferenceTreeClick(preferenceScreen, preference);
+        if (preference instanceof PreferenceScreen) {
+            initializePreferenceScreen((PreferenceScreen) preference);
+        }
+        return r;
+    }
+
+    /**
+     * HOW TO HIDE A NESTED PreferenceScreen ActionBar icon.
+     * The nested PreferenceScreens are basically Dialog instances,
+     * if we want to hide the icon on those, we need to get their dialog.getActionBar()
+     * instance, hide the icon, and then we need to set the click listeners for the
+     * dialog's laid out views. Here we do all that.
+     * @param preferenceScreen
+     */
+    private void initializePreferenceScreen(PreferenceScreen preferenceScreen) {
+        final Dialog dialog = preferenceScreen.getDialog();
+        if (dialog != null) {
+            hideActionBarIcon(dialog.getActionBar());
+            View homeButton = dialog.findViewById(android.R.id.home);
+
+            if (homeButton != null) {
+                OnClickListener dismissDialogClickListener = new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                };
+
+                ViewParent homeBtnContainer = homeButton.getParent();
+                if (homeBtnContainer instanceof FrameLayout) {
+                    ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
+
+                    if (containerParent instanceof LinearLayout) {
+                        ((LinearLayout) containerParent).setOnClickListener(dismissDialogClickListener);
+                    } else {
+                        ((FrameLayout) homeBtnContainer).setOnClickListener(dismissDialogClickListener);
+                    }
+                } else {
+                    homeButton.setOnClickListener(dismissDialogClickListener);
+                }
+            }
+        }
     }
 }
