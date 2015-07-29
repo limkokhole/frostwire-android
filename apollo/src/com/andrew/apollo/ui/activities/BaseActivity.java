@@ -228,7 +228,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                UIUtils.goToFrostWireMainActivity(this);
+                finish();
                 return true;
             case R.id.menu_new_playlist:
                 CreateNewPlaylistMenuAction createPlaylistAction = new CreateNewPlaylistMenuAction(this, null);
@@ -523,7 +523,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
 
         @Override
         public void onClick(BaseActivity owner, View v) {
-            UIUtils.goToFrostWireMainActivity(owner);
+            owner.finish();
         }
     }
 }
