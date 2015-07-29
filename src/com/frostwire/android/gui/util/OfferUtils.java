@@ -122,15 +122,9 @@ public class OfferUtils {
         return isInMobiEnabled;
     }
 
-    public static boolean showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
+    public static boolean showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener) {
         if (!inmobiStarted || !isInMobiEnabled() || imInterstitial == null) {
             return false;
-        }
-
-        if (imListener != null) {
-            //we tell the listener what to do when this interstitial will get dismissed.
-            imListener.shutdownAfterDismiss = shutdownAfterDismiss;
-            imListener.finishAfterDismiss = finishAfterDismiss;
         }
 
         if (imInterstitial.getState().equals(IMInterstitial.State.READY)) {
@@ -151,8 +145,10 @@ public class OfferUtils {
         public boolean shutdownAfterDismiss = false;
         public boolean finishAfterDismiss = false;
 
-        public InMobiListener(Activity hostActivity) {
+        public InMobiListener(Activity hostActivity, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
             activityRef = new WeakReference<Activity>(hostActivity);
+            this.shutdownAfterDismiss = shutdownAfterDismiss;
+            this.finishAfterDismiss = finishAfterDismiss;
         }
 
         @Override

@@ -193,7 +193,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             public void run() {
                 inmobiInterstitial = new IMInterstitial(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
                 // in case it fails loading, it will try again every minute once.
-                inmobiListener = new OfferUtils.InMobiListener(mainActivity);
+                inmobiListener = new OfferUtils.InMobiListener(mainActivity, false, false);
                 inmobiInterstitial.setIMInterstitialListener(inmobiListener);
                 inmobiInterstitial.loadInterstitial();
             }
@@ -642,11 +642,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (!interstitialShown) {
             // TODO: do this here, and remove those parameters from showInMobiInterstitial.
             // inmobiListener.finishAfterDismiss = dismissAfterwards; ....
+            inmobiListener.finishAfterDismiss = dismissAfterwards;
+            inmobiListener.shutdownAfterDismiss = shutdownAfterwards;
             interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
                     inmobiInterstitial,
-                    inmobiListener,
-                    shutdownAfterwards,
-                    dismissAfterwards);
+                    inmobiListener);
         }
 
         // If interstitial's callbacks were not invoked because ads weren't displayed
