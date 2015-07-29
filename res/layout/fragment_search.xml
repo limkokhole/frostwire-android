@@ -54,7 +54,7 @@
         android:id="@+id/fragment_search_deepsearch_progress"
         style="@style/ProgressBarHolo.Horizontal"
         android:layout_width="match_parent"
-        android:layout_height="4dip"
+        android:layout_height="6dip"
         android:indeterminate="true"
         android:progress="25" />
 
