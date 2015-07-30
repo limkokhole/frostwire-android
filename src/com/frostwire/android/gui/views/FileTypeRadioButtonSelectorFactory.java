@@ -21,6 +21,7 @@ package com.frostwire.android.gui.views;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.widget.RadioButton;
@@ -44,6 +45,8 @@ public final class FileTypeRadioButtonSelectorFactory {
     private Resources r;
     private LayerDrawable selectorOn;
     private LayerDrawable selectorOff;
+    private LayerDrawable selectorNoIconOn;
+    private LayerDrawable selectorNoIconOff;
     private RadioButtonContainerType containerType;
 
     public FileTypeRadioButtonSelectorFactory(byte fileType, Resources r, RadioButtonContainerType containerType) {
@@ -61,20 +64,27 @@ public final class FileTypeRadioButtonSelectorFactory {
         return selectorOff;
     }
 
+    public LayerDrawable getSelectorNoIconOn() { return selectorNoIconOn; }
+
+    public LayerDrawable getSelectorNoIconOff() { return selectorNoIconOff; }
+
     public RadioButtonContainerType getContainerType() {
         return containerType;
     }
 
     public void updateButtonBackground(RadioButton button) {
         LayerDrawable drawable = button.isChecked() ? getSelectorOn() : getSelectorOff();
+        LayerDrawable noIconDrawable = button.isChecked() ? getSelectorNoIconOn() : getSelectorNoIconOff();
+
         if (getContainerType() == RadioButtonContainerType.SEARCH) {
             // things are a bit different for the radio buttons on the search screen.
             if (button.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 // android:drawableTop
-                button.setBackgroundDrawable(null);
-                button.setCompoundDrawablesWithIntrinsicBounds(null, drawable, null, null);
+                button.setBackgroundDrawable(noIconDrawable);
+
+                button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, drawable, noIconDrawable, noIconDrawable);
             } else {
-                button.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, noIconDrawable, noIconDrawable, noIconDrawable);
                 button.setBackgroundDrawable(drawable);
             }
         } else {
@@ -130,8 +140,16 @@ public final class FileTypeRadioButtonSelectorFactory {
         final BitmapDrawable iconOn = (BitmapDrawable) r.getDrawable(selectorOnDrawableId);
         final BitmapDrawable iconOff = (BitmapDrawable) r.getDrawable(selectorOffDrawableId);
 
-        // Fix scaling.
-        iconOn.setGravity(Gravity.CENTER);
+        selectorNoIconOn = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_on);
+        selectorNoIconOff = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_off);
+        //now let's remove the image from them, so they're plain
+        Drawable transparentDrawable = r.getDrawable(R.color.transparent);
+        selectorNoIconOn.setDrawableByLayerId(R.id.search_peer_button_selector_on_bitmap, transparentDrawable);
+        selectorNoIconOff.setDrawableByLayerId(R.id.search_peer_button_selector_off_bitmap, transparentDrawable);
+
+
+                // Fix scaling.
+                iconOn.setGravity(Gravity.CENTER);
         iconOff.setGravity(Gravity.CENTER);
 
         int onBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
