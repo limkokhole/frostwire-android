@@ -206,12 +206,7 @@ public class ThemeUtils {
      * @param app The {@link Activity} used to set the theme.
      */
     public void setOverflowStyle(final Activity app) {
-        if (isActionBarDark()) {
-            app.setTheme(R.style.Apollo_Theme_Dark);
-        } else {
-            app.setTheme(R.style.Apollo_Theme_Light);
-        }
-    }
+                   app.setTheme(R.style.Apollo_Theme_Dark); }
 
     /**
      * This is used to set the color of a {@link MenuItem}. For instance, when
