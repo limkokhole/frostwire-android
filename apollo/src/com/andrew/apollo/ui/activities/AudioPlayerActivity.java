@@ -183,12 +183,12 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
 
         // Theme the action bar
         final ActionBar actionBar = getActionBar();
-        mResources.themeActionBar(actionBar, getString(R.string.frostwire), getWindow());
+        mResources.themeActionBar(actionBar, getString(R.string.frostwire_player), getWindow());
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setIcon(R.color.transparent);
 
         TextView actionBarTitleTextView = (TextView) findViewById(R.id.action_bar_title);
-        actionBarTitleTextView.setText(R.string.frostwire);
+        actionBarTitleTextView.setText(R.string.frostwire_player);
         if (actionBarTitleTextView != null) {
             actionBarTitleTextView.setOnClickListener(new ActionBarTextViewClickListener(this));
         }
