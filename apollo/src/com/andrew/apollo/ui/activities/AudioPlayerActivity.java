@@ -183,10 +183,12 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
 
         // Theme the action bar
         final ActionBar actionBar = getActionBar();
-        mResources.themeActionBar(actionBar, getString(R.string.my_music), getWindow());
+        mResources.themeActionBar(actionBar, getString(R.string.app_name), getWindow());
         actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setIcon(R.color.transparent);
 
         TextView actionBarTitleTextView = (TextView) findViewById(R.id.action_bar_title);
+        actionBarTitleTextView.setText(R.string.app_name);
         if (actionBarTitleTextView != null) {
             actionBarTitleTextView.setOnClickListener(new ActionBarTextViewClickListener(this));
         }
@@ -346,9 +348,7 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
     public boolean onOptionsItemSelected(final MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                // Go back to the music home activity
-                NavUtils.goHome(this);
-                //finish();
+                finish();
                 return true;
             case R.id.menu_shuffle:
                 // Shuffle all the songs
@@ -383,7 +383,7 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
                 } catch (Throwable e) {
                     // ignore
                 }
-                NavUtils.goHome(this);
+                finish();
                 return true;
             case R.id.menu_audio_player_delete:
                 // Delete current song
@@ -406,7 +406,7 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
     public void onDelete(long[] ids) {
         ((QueueFragment)mPagerAdapter.getFragment(0)).refreshQueue();
         if (MusicUtils.getQueue().length == 0) {
-            NavUtils.goHome(this);
+            finish();
         }
     }
 
@@ -416,7 +416,6 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        //NavUtils.goHome(this);
         finish();
     }
 
@@ -1082,9 +1081,9 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
             super(owner);
         }
 
-        @Override
+            @Override
         public void onClick(AudioPlayerActivity owner, View v) {
-            NavUtils.goHome(owner);
+            owner.finish();
         }
     }
 }
