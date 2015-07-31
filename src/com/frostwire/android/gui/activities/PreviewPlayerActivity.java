@@ -512,4 +512,10 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             getApplication().sendBroadcast(i);
         }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        releaseMediaPlayer();
+    }
 }
