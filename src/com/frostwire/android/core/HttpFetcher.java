@@ -109,6 +109,10 @@ public class HttpFetcher {
         this(uri, userAgent, DEFAULT_TIMEOUT);
     }
 
+    public HttpFetcher(String uri, String userAgent) {
+        this(convert(uri), userAgent);
+    }
+
     public HttpFetcher(URI uri, int timeout) {
         this(uri, DEFAULT_USER_AGENT, timeout);
     }
@@ -117,7 +121,7 @@ public class HttpFetcher {
         this(uri, DEFAULT_USER_AGENT);
     }
 
-    public HttpFetcher(String uri) {
+    public  HttpFetcher(String uri) {
         this(convert(uri));
     }
 

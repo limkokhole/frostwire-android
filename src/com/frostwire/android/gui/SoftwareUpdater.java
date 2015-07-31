@@ -112,7 +112,9 @@ public final class SoftwareUpdater {
             @Override
             protected Boolean doInBackground(Void... params) {
                 try {
-                    byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL).fetch();
+                    final String basicOrPlus = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "basic":"plus";
+                    final String userAgent = "FrostWire/android-"+ basicOrPlus+"/"+Constants.FROSTWIRE_VERSION;
+                    byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL, userAgent).fetch();
                     update = JsonUtils.toObject(new String(jsonBytes), Update.class);
 
                     latestVersion = update.v;
