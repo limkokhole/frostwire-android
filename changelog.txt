@@ -1,5 +1,5 @@
-FrostWire 1.6.0 - JULY/29/2015
- - Streaming Previews on search results before download.
+FrostWire 1.6.0 - AUGUST/03/2015
+ - Streaming Previews on search results before download. (FrostWire Plus only)
  - Play .torrent media files while downloading.
  - Upgrade bittorrent engine to jlibtorrent 1.0
  - Updated SoundCloud search & download api.
