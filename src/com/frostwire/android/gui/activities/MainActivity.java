@@ -459,15 +459,19 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (!OfferUtils.isAppLovinEnabled()) {
             return;
         }
-
-        try {
-            if (!appLovinStarted) {
-                AppLovinSdk.initializeSdk(this.getApplicationContext());
-                appLovinStarted = true;
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    if (!appLovinStarted) {
+                        AppLovinSdk.initializeSdk(MainActivity.this.getApplicationContext());
+                        appLovinStarted = true;
+                    }
+                } catch (Throwable e) {
+                    LOG.error(e.getMessage(), e);
+                }
             }
-        } catch (Throwable e) {
-            LOG.error(e.getMessage(), e);
-        }
+        }.start();
     }
 
     private void initializeInMobi() {
@@ -610,21 +614,23 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
-        boolean interstitialShown;
+        boolean interstitialShown = false;
 
-        interstitialShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
-            @Override
-            public void onConfirmation(CallbackResponse.TYPE type) {
-                if (dismissAfterwards) {
-                    finish();
+        if (mobileCoreStarted) {
+            interstitialShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
+                @Override
+                public void onConfirmation(CallbackResponse.TYPE type) {
+                    if (dismissAfterwards) {
+                        finish();
+                    }
+                    if (shutdownAfterwards) {
+                        shutdown();
+                    }
                 }
-                if (shutdownAfterwards) {
-                    shutdown();
-                }
-            }
-        });
+            });
+        }
 
-        if (!interstitialShown) {
+        if (!interstitialShown && appLovinStarted) {
             interstitialShown = OfferUtils.showAppLovinInterstitial(this, appLovinStarted,
                     new AppLovinAdapter() {
                         @Override
@@ -639,14 +645,14 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     });
         }
 
-        if (!interstitialShown) {
-            // TODO: do this here, and remove those parameters from showInMobiInterstitial.
-            // inmobiListener.finishAfterDismiss = dismissAfterwards; ....
-            inmobiListener.finishAfterDismiss = dismissAfterwards;
-            inmobiListener.shutdownAfterDismiss = shutdownAfterwards;
-            interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
-                    inmobiInterstitial,
-                    inmobiListener);
+        if (!interstitialShown && inmobiStarted) {
+            if (inmobiListener != null) {
+                inmobiListener.finishAfterDismiss = dismissAfterwards;
+                inmobiListener.shutdownAfterDismiss = shutdownAfterwards;
+                interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
+                        inmobiInterstitial,
+                        inmobiListener);
+            }
         }
 
         // If interstitial's callbacks were not invoked because ads weren't displayed
