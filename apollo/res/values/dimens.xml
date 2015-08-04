@@ -35,11 +35,15 @@
     <!-- List item detailed height -->
     <dimen name="list_item_detailed_height">120.0dip</dimen>
     <!-- Top margin of "line_two" -->
-    <dimen name="list_item_line_two_margin_top">8.0dip</dimen>
+    <dimen name="list_item_line_two_margin_top">4.0dip</dimen>
     <!-- Left padding in the grid text -->
     <dimen name="grid_item_padding_left">8.0dip</dimen>
     <!-- Grid and list item normal height -->
     <dimen name="item_normal_height">64.0dip</dimen>
+    <!-- Padding in simple list view -->
+	<dimen name="list_simple_horizontal_padding">15.0dip</dimen>
+	<dimen name="list_simple_vertical_padding">10.0dip</dimen>
+
 
     <!-- Bottom Action Bar -->
     <dimen name="bottom_action_bar_height">48.0dip</dimen>
