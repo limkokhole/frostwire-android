@@ -39,9 +39,9 @@
     <!-- Left padding in the grid text -->
     <dimen name="grid_item_padding_left">8.0dip</dimen>
     <!-- Grid and list item normal height -->
-    <dimen name="item_normal_height">64.0dip</dimen>
+    <dimen name="item_normal_height">68.0dip</dimen>
     <!-- Padding in simple list view -->
-	<dimen name="list_simple_horizontal_padding">15.0dip</dimen>
+	<dimen name="list_simple_horizontal_padding">12.0dip</dimen>
 	<dimen name="list_simple_vertical_padding">10.0dip</dimen>
 
 

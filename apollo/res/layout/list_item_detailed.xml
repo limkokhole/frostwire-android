@@ -41,7 +41,10 @@
         android:layout_height="@dimen/list_item_detailed_height"
         android:layout_toRightOf="@+id/image"
         android:background="@color/list_item_background"
-        android:padding="6dp" >
+        android:paddingLeft="@dimen/list_simple_horizontal_padding"
+		android:paddingRight="@dimen/list_simple_horizontal_padding"
+		android:paddingTop="@dimen/list_simple_vertical_padding"
+		android:paddingBottom="@dimen/list_simple_vertical_padding">
 
         <com.andrew.apollo.widgets.theme.ThemeableTextView
             android:id="@+id/line_one"
