@@ -31,10 +31,6 @@ buildscript {
 
 repositories {
     mavenCentral()
-
-    maven {
-        url '../frostwire-jlibtorrent/repo'
-    }
 }
 
 def manifestVersionCode() {
