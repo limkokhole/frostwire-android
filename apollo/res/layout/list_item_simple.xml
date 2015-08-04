@@ -22,6 +22,8 @@
     android:minHeight="@dimen/item_normal_height"
 	android:paddingLeft="@dimen/list_simple_horizontal_padding"
 	android:paddingRight="@dimen/list_simple_horizontal_padding"
+	android:paddingTop="@dimen/list_simple_vertical_padding"
+	android:paddingBottom="@dimen/list_simple_vertical_padding"
     android:background="@drawable/listview_item_background_selector">
 
     <com.andrew.apollo.widgets.theme.ThemeableTextView
@@ -34,8 +36,7 @@
         android:singleLine="true"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
-		android:paddingRight="@dimen/list_simple_horizontal_padding"
-        app:themeResource="line_one" />
+        app:themeResource="line_one"/>
 
     <com.andrew.apollo.widgets.theme.ThemeableTextView
         android:id="@+id/line_one_right"
@@ -44,7 +45,6 @@
         android:layout_alignParentRight="true"
 		android:gravity="center_vertical"
         android:singleLine="true"
-		android:paddingRight="@dimen/list_simple_vertical_padding"
         android:textSize="@dimen/text_size_medium"
         app:themeResource="line_one" />
 
