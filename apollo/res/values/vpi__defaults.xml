@@ -33,7 +33,7 @@
 
     <dimen name="default_title_indicator_clip_padding">4dp</dimen>
     <color name="default_title_indicator_footer_color">#FF33B5E5</color>
-    <dimen name="default_title_indicator_footer_line_height">2dp</dimen>
+    <dimen name="default_title_indicator_footer_line_height">0dp</dimen>
     <integer name="default_title_indicator_footer_indicator_style">2</integer>
     <dimen name="default_title_indicator_footer_indicator_height">6dp</dimen>
     <dimen name="default_title_indicator_footer_indicator_underline_padding">20dp</dimen>
