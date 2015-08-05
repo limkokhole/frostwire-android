@@ -36,6 +36,7 @@
         android:singleLine="true"
         android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
+		android:paddingRight="@dimen/list_simple_horizontal_padding"
         app:themeResource="line_one"/>
 
     <com.andrew.apollo.widgets.theme.ThemeableTextView
@@ -56,6 +57,7 @@
         android:layout_marginTop="@dimen/list_item_line_two_margin_top"
         android:singleLine="true"
         android:textSize="@dimen/text_size_small"
+		android:paddingRight="@dimen/list_simple_horizontal_padding"
         app:themeResource="line_two" />
 
     <com.andrew.apollo.widgets.theme.ThemeableTextView
@@ -65,6 +67,7 @@
         android:layout_alignParentBottom="true"
         android:singleLine="true"
         android:textSize="@dimen/text_size_small"
+		android:paddingRight="@dimen/list_simple_horizontal_padding"
         app:themeResource="line_three" />
 
 </RelativeLayout>

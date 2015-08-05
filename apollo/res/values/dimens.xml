@@ -115,7 +115,7 @@
     <dimen name="shadow_height">0dip</dimen>
 
     <!-- Colorstrip -->
-    <dimen name="colorstrip_height">2.0dip</dimen>
+    <dimen name="colorstrip_height">0.0dip</dimen>
 
     <!-- Drag and drop -->
     <dimen name="drag_and_drop_handle">26.0dip</dimen>
