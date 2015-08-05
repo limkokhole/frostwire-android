@@ -38,8 +38,8 @@
         android:layout_toRightOf="@+id/image"
         android:gravity="center_vertical"
         android:minHeight="@dimen/item_normal_height"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp" >
+        android:paddingLeft="@dimen/list_simple_horizontal_padding"
+        android:paddingRight="@dimen/list_simple_horizontal_padding">
 
         <com.andrew.apollo.widgets.theme.ThemeableTextView
             android:id="@+id/line_one"
