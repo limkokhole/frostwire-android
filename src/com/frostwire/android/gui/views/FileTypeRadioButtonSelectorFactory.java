@@ -80,15 +80,10 @@ public final class FileTypeRadioButtonSelectorFactory {
             // things are a bit different for the radio buttons on the search screen.
             if (button.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 // android:drawableTop
-                button.setBackgroundDrawable(noIconDrawable);
-
                 button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, drawable, noIconDrawable, noIconDrawable);
             } else {
-                button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, noIconDrawable, noIconDrawable, noIconDrawable);
-                button.setBackgroundDrawable(drawable);
+                button.setCompoundDrawablesWithIntrinsicBounds(drawable, noIconDrawable, noIconDrawable, noIconDrawable);
             }
-        } else {
-            button.setBackgroundDrawable(drawable);
         }
     }
 
@@ -148,8 +143,8 @@ public final class FileTypeRadioButtonSelectorFactory {
         selectorNoIconOff.setDrawableByLayerId(R.id.search_peer_button_selector_off_bitmap, transparentDrawable);
 
 
-                // Fix scaling.
-                iconOn.setGravity(Gravity.CENTER);
+        // Fix scaling.
+        iconOn.setGravity(Gravity.CENTER);
         iconOff.setGravity(Gravity.CENTER);
 
         int onBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?

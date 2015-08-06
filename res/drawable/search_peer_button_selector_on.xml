@@ -18,20 +18,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 -->
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item>
-        <shape>
-            <solid android:color="@color/app_dark_blue_highlight" />
-        </shape>
-    </item>
-
+	<item>
+		<shape>
+			<solid android:color="@color/app_dark_blue_highlight" />
+		</shape>
+	</item>
     <item android:id="@+id/search_peer_button_selector_on_bitmap">
         <!-- this is just a placeholder as this bitmap is replaced during runtime dynamically
              by a BitmapSelectorFactory. -->
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/browse_peer_audio_icon_selector_on" />
+        <bitmap android:src="@drawable/browse_peer_selector_on_dummy"/>
     </item>
 
 </layer-list>

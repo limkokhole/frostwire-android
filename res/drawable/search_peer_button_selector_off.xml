@@ -21,9 +21,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item android:id="@+id/search_peer_button_selector_off_bitmap">
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/browse_peer_audio_icon_selector_off" />
+		<bitmap android:src="@drawable/browse_peer_selector_on_dummy" />
     </item>
 
 </layer-list>
