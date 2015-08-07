@@ -41,7 +41,6 @@ import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.BrowseThumbnailImageButton.OverlayState;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
-import com.frostwire.util.Condition;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 
@@ -194,7 +193,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             Uri uri = Uri.withAppendedPath(ImageLoader.APPLICATION_THUMBNAILS_URI, fd.album);
             thumbnailLoader.load(uri, fileThumbnail, 96, 96);
         } else {
-            if (Condition.in(fileType, Constants.FILE_TYPE_AUDIO, Constants.FILE_TYPE_VIDEOS, Constants.FILE_TYPE_RINGTONES)) {
+            if (in(fileType, Constants.FILE_TYPE_AUDIO, Constants.FILE_TYPE_VIDEOS, Constants.FILE_TYPE_RINGTONES)) {
                 if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
                     fileThumbnail.setOverlayState(OverlayState.STOP);
                 } else {
@@ -425,6 +424,22 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         } else {
             return false;
         }
+    }
+
+    // Moved here to cleanup base code.
+    // Functional abstractions should be used instead
+    private static <T> boolean in(T needle, T... args) {
+        if (args == null) {
+            throw new IllegalArgumentException("args on in operation can't be null");
+        }
+
+        for (T t : args) {
+            if (t != null && t.equals(needle)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static class FileListFilter implements ListAdapterFilter<FileDescriptorItem> {
