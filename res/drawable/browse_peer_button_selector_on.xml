@@ -31,11 +31,9 @@
         </shape>
     </item>
 
-    <item android:id="@+id/browse_peer_button_selector_on_bitmap">
+    <item android:id="@+id/browse_peer_button_selector_on_bitmap" >
         <!-- this is just a placeholder as this bitmap is replaced during runtime dynamically
              by a BitmapSelectorFactory. -->
-        <bitmap
-            android:gravity="center"
-            android:src="@drawable/browse_peer_application_icon_selector_on"/>
+        <bitmap android:src="@drawable/browse_peer_selector_on_dummy" android:gravity="center"/>
     </item>
 </layer-list>

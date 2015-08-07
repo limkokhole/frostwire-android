@@ -82,8 +82,12 @@ public final class FileTypeRadioButtonSelectorFactory {
                 // android:drawableTop
                 button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, drawable, noIconDrawable, noIconDrawable);
             } else {
+                // android:drawableLeft
                 button.setCompoundDrawablesWithIntrinsicBounds(drawable, noIconDrawable, noIconDrawable, noIconDrawable);
             }
+        }
+        if (getContainerType() == RadioButtonContainerType.BROWSE) {
+                button.setButtonDrawable(drawable);
         }
     }
 
@@ -154,6 +158,7 @@ public final class FileTypeRadioButtonSelectorFactory {
         int offBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
                 R.id.search_peer_button_selector_off_bitmap :
                 R.id.browse_peer_button_selector_off_bitmap;
+
 
         selectorOn.setDrawableByLayerId(onBitmapId, iconOn);
         selectorOff.setDrawableByLayerId(offBitmapId, iconOff);
