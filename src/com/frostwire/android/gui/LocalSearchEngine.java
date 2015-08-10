@@ -142,7 +142,6 @@ public final class LocalSearchEngine {
     private void onFinished(long token) {
         if (token == currentSearchToken) {
             searchFinished = true;
-            subject.onCompleted();
         }
     }
 
