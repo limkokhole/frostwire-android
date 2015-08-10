@@ -1,7 +1,9 @@
-FrostWire 1.6.1 - AUGUST/07/2015
+FrostWire 1.6.1 - AUGUST/10/2015
  - Fixes TorLock search.
  - Crash fixes on libtorrent/jlibtorrent.
+ - Considerably faster search source processing.
  - Search engines maintenance fix high cpu usage.
+ - Brings back "Send to/Upload" feature. Deleted by mistake.
 
 FrostWire 1.6.0 - AUGUST/03/2015
  - Streaming Previews on search results before download. (FrostWire Plus only)

@@ -148,6 +148,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS) {
+            items.add(new SendFileMenuAction(context, fd));
             items.add(new DeleteFileMenuAction(context, this, list));
         }
 

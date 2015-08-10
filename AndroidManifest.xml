@@ -135,7 +135,8 @@
 
 			<!-- share a file sent by another app -->
 			<intent-filter>
-				<action android:name="android.intent.action.SEND" />
+				<!--this might come back if we figure out DHT messaging -->
+				<!--<action android:name="android.intent.action.SEND" />-->
 
 				<category android:name="android.intent.category.DEFAULT" />
 
