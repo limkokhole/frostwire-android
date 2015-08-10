@@ -103,6 +103,7 @@ android {
 }
 
 dependencies {
+    compile 'com.google.re2j:re2j:1.0'
     compile 'io.reactivex:rxandroid:1.0.0'
     compile ('com.android.support:support-v4:22.2.1') {
         exclude group: 'com.android.support', module: 'support-annotations'
