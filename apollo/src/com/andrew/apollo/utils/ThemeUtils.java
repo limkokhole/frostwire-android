@@ -161,13 +161,15 @@ public class ThemeUtils {
      * @return A new color from the theme resources.
      */
     public int getColor(final String resourceName) {
-        final int resourceId = mResources.getIdentifier(resourceName, "color", mThemePackage);
-        try {
-            return mResources.getColor(resourceId);
-        } catch (final Resources.NotFoundException e) {
-            // If the theme designer wants to allow the user to theme a
-            // particular object via the color picker, they just remove the
-            // resource item from the themeconfig.xml file.
+        if (mResources != null) {
+            try {
+                final int resourceId = mResources.getIdentifier(resourceName, "color", mThemePackage);
+                return mResources.getColor(resourceId);
+            } catch (final Resources.NotFoundException e) {
+                // If the theme designer wants to allow the user to theme a
+                // particular object via the color picker, they just remove the
+                // resource item from the themeconfig.xml file.
+            }
         }
         return mCurrentThemeColor;
     }
