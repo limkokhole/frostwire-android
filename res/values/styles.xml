@@ -246,7 +246,7 @@
     <!-- Transfers list end -->
 
     <style name="TransfersButton">
-        <item name="android:textColor">@color/transfers_top_button_selector</item>
+        <item name="android:textColor">@drawable/radio_button_textcolor_selector</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:paddingTop">14dp</item>
         <item name="android:paddingBottom">14dp</item>

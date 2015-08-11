@@ -85,8 +85,10 @@ public final class FileTypeRadioButtonSelectorFactory {
         } else if (getContainerType() == RadioButtonContainerType.BROWSE) {
             // only the background drawable will align to the center.
             // if we use button.setButtonDrawable it will not center the drawable as it will
-            button.setBackgroundDrawable(layerDrawable);
-            button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
+            button.setPadding(30, 70, 30, 40);
+            button.setCompoundDrawables(null, iconDrawable, null, null);
+//            button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
+            button.setCompoundDrawablePadding(0);
         }
     }
 
