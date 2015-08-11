@@ -21,18 +21,16 @@ package com.frostwire.android.gui.views;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.LayerDrawable;
 import android.view.Gravity;
 import android.widget.RadioButton;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
-import com.frostwire.logging.Logger;
 
 
 /**
- * This class uses browse_peer_button_selector.xml, browse_peer_button_selector_on.xlm and
- * browse_peer_button_selector_off.xml and dynamically sets and scales the proper bitmap
+ * This class uses radio_button_background_selector.xml, radio_button_background_selector_on.xlm and
+ * radio_button_background_selector_offr_off.xml and dynamically sets and scales the proper bitmap
  * for the radio buttons depending on the given fileType, to avoid having 3 different XML files
  * per radio button.
  */
@@ -43,10 +41,10 @@ public final class FileTypeRadioButtonSelectorFactory {
     }
     private byte fileType;
     private Resources r;
+    private BitmapDrawable iconOn;
+    private BitmapDrawable iconOff;
     private LayerDrawable selectorOn;
     private LayerDrawable selectorOff;
-    private LayerDrawable selectorNoIconOn;
-    private LayerDrawable selectorNoIconOff;
     private RadioButtonContainerType containerType;
 
     public FileTypeRadioButtonSelectorFactory(byte fileType, Resources r, RadioButtonContainerType containerType) {
@@ -64,103 +62,86 @@ public final class FileTypeRadioButtonSelectorFactory {
         return selectorOff;
     }
 
-    public LayerDrawable getSelectorNoIconOn() { return selectorNoIconOn; }
-
-    public LayerDrawable getSelectorNoIconOff() { return selectorNoIconOff; }
-
     public RadioButtonContainerType getContainerType() {
         return containerType;
     }
 
     public void updateButtonBackground(RadioButton button) {
-        LayerDrawable drawable = button.isChecked() ? getSelectorOn() : getSelectorOff();
-        LayerDrawable noIconDrawable = button.isChecked() ? getSelectorNoIconOn() : getSelectorNoIconOff();
+        LayerDrawable layerDrawable = button.isChecked() ? getSelectorOn() : getSelectorOff();
+        BitmapDrawable iconDrawable = button.isChecked() ? iconOn : iconOff;
 
         if (getContainerType() == RadioButtonContainerType.SEARCH) {
             // things are a bit different for the radio buttons on the search screen.
+            button.setBackgroundDrawable(layerDrawable);
+
             if (button.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 // android:drawableTop
-                button.setCompoundDrawablesWithIntrinsicBounds(noIconDrawable, drawable, noIconDrawable, noIconDrawable);
+                button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
             } else {
                 // android:drawableLeft
-                button.setCompoundDrawablesWithIntrinsicBounds(drawable, noIconDrawable, noIconDrawable, noIconDrawable);
+                button.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null);
             }
-        }
-        if (getContainerType() == RadioButtonContainerType.BROWSE) {
-                button.setButtonDrawable(drawable);
+        } else if (getContainerType() == RadioButtonContainerType.BROWSE) {
+            button.setBackgroundDrawable(layerDrawable);
+            button.setGravity(Gravity.CENTER);
+            button.setButtonDrawable(iconDrawable);
         }
     }
 
     private void init() {
-        // Get layer-lists to modify.
-        if (containerType == RadioButtonContainerType.BROWSE) {
-            selectorOn = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_on);
-            selectorOff = (LayerDrawable) r.getDrawable(R.drawable.browse_peer_button_selector_off);
-        } else if (containerType == RadioButtonContainerType.SEARCH) {
-            selectorOn = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_on);
-            selectorOff = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_off);
-        }
+        // Get background layer list, the selectorOn will have that light blue line at the bottom.
+        selectorOn = (LayerDrawable) r.getDrawable(R.drawable.radio_button_background_selector_on);
+        selectorOff = (LayerDrawable) r.getDrawable(R.drawable.radio_button_background_selector_off);
 
-        // Load the image we want for this file type.
-        int selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
-        int selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
-
-        switch (fileType) {
-            case Constants.FILE_TYPE_AUDIO:
-                selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_APPLICATIONS:
-                selectorOnDrawableId = R.drawable.browse_peer_application_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_application_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_DOCUMENTS:
-                selectorOnDrawableId = R.drawable.browse_peer_document_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_document_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_PICTURES:
-                selectorOnDrawableId = R.drawable.browse_peer_picture_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_picture_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_RINGTONES:
-                selectorOnDrawableId = R.drawable.browse_peer_ringtone_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_ringtone_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_TORRENTS:
-                selectorOnDrawableId = R.drawable.browse_peer_torrent_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_torrent_icon_selector_off;
-                break;
-            case Constants.FILE_TYPE_VIDEOS:
-                selectorOnDrawableId = R.drawable.browse_peer_video_icon_selector_on;
-                selectorOffDrawableId = R.drawable.browse_peer_video_icon_selector_off;
-                break;
-        }
-
-        final BitmapDrawable iconOn = (BitmapDrawable) r.getDrawable(selectorOnDrawableId);
-        final BitmapDrawable iconOff = (BitmapDrawable) r.getDrawable(selectorOffDrawableId);
-
-        selectorNoIconOn = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_on);
-        selectorNoIconOff = (LayerDrawable) r.getDrawable(R.drawable.search_peer_button_selector_off);
-        //now let's remove the image from them, so they're plain
-        Drawable transparentDrawable = r.getDrawable(R.color.transparent);
-        selectorNoIconOn.setDrawableByLayerId(R.id.search_peer_button_selector_on_bitmap, transparentDrawable);
-        selectorNoIconOff.setDrawableByLayerId(R.id.search_peer_button_selector_off_bitmap, transparentDrawable);
-
+        // Load the images we want for this file type on both states.
+        BitmapDrawablesForSelector bitmapsForSelector = new BitmapDrawablesForSelector(fileType);
+        iconOn = (BitmapDrawable) r.getDrawable(bitmapsForSelector.selectorOnDrawableId);
+        iconOff = (BitmapDrawable) r.getDrawable(bitmapsForSelector.selectorOffDrawableId);
 
         // Fix scaling.
         iconOn.setGravity(Gravity.CENTER);
         iconOff.setGravity(Gravity.CENTER);
+    }
 
-        int onBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
-                R.id.search_peer_button_selector_on_bitmap :
-                R.id.browse_peer_button_selector_on_bitmap;
+    private static class BitmapDrawablesForSelector {
+        int selectorOnDrawableId;
+        int selectorOffDrawableId;
 
-        int offBitmapId = (containerType == RadioButtonContainerType.SEARCH) ?
-                R.id.search_peer_button_selector_off_bitmap :
-                R.id.browse_peer_button_selector_off_bitmap;
+        public BitmapDrawablesForSelector(int fileType) {
+            // Load the image we want for this file type.
+            selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
+            selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
 
-
-        selectorOn.setDrawableByLayerId(onBitmapId, iconOn);
-        selectorOff.setDrawableByLayerId(offBitmapId, iconOff);
+            switch (fileType) {
+                case Constants.FILE_TYPE_AUDIO:
+                    selectorOnDrawableId = R.drawable.browse_peer_audio_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_audio_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_APPLICATIONS:
+                    selectorOnDrawableId = R.drawable.browse_peer_application_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_application_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_DOCUMENTS:
+                    selectorOnDrawableId = R.drawable.browse_peer_document_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_document_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_PICTURES:
+                    selectorOnDrawableId = R.drawable.browse_peer_picture_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_picture_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_RINGTONES:
+                    selectorOnDrawableId = R.drawable.browse_peer_ringtone_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_ringtone_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_TORRENTS:
+                    selectorOnDrawableId = R.drawable.browse_peer_torrent_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_torrent_icon_selector_off;
+                    break;
+                case Constants.FILE_TYPE_VIDEOS:
+                    selectorOnDrawableId = R.drawable.browse_peer_video_icon_selector_on;
+                    selectorOffDrawableId = R.drawable.browse_peer_video_icon_selector_off;
+                    break;
+            }
+        }
     }
 }

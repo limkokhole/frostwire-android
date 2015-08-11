@@ -32,33 +32,27 @@
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_audio"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector"/>
+            style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_ringtones"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector" />
+            style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_videos"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector" />
+            style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_pictures"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector" />
+            style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_applications"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector" />
+            style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
             android:id="@+id/fragment_browse_peer_radio_documents"
-            style="@style/BrowseFileTypeButton"
-            android:background="@drawable/browse_peer_button_selector" />
+            style="@style/BrowseFileTypeButton"/>
     </RadioGroup>
 
     <!-- Checkbox and Search Box for Browse Peer, see view_browse_peer_search_bar.xml -->
