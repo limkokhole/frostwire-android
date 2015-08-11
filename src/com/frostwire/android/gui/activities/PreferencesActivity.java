@@ -63,11 +63,16 @@ import com.frostwire.uxstats.UXStats;
 public class PreferencesActivity extends PreferenceActivity {
 
     private static final Logger LOG = Logger.getLogger(PreferencesActivity.class);
+    private static String currentPreferenceKey = null;
 
     @Override
     protected void onResume() {
         super.onResume();
         setupComponents();
+        initializePreferenceScreen(getPreferenceScreen());
+        if (currentPreferenceKey != null) {
+            onPreferenceTreeClick(getPreferenceScreen(), getPreferenceManager().findPreference(currentPreferenceKey));
+        }
     }
 
     @Override
@@ -344,9 +349,11 @@ public class PreferencesActivity extends PreferenceActivity {
 
     @Override
     public boolean onPreferenceTreeClick(PreferenceScreen preferenceScreen, Preference preference) {
+
         boolean r = super.onPreferenceTreeClick(preferenceScreen, preference);
         if (preference instanceof PreferenceScreen) {
             initializePreferenceScreen((PreferenceScreen) preference);
+            currentPreferenceKey = preference.getKey();
         }
         return r;
     }
