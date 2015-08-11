@@ -29,10 +29,11 @@ import com.frostwire.android.core.Constants;
 
 
 /**
- * This class uses radio_button_background_selector.xml, radio_button_background_selector_on.xlm and
- * radio_button_background_selector_offr_off.xml and dynamically sets and scales the proper bitmap
- * for the radio buttons depending on the given fileType, to avoid having 3 different XML files
- * per radio button.
+ * This class uses radio_button_background_selector.xml,
+ *                 radio_button_background_selector_on.xml and
+ *                 radio_button_background_selector_off.xml
+ * to prepare the backgrounds and bitmaps of the radio buttons for
+ * searching remote files and browsing local files.
  */
 public final class FileTypeRadioButtonSelectorFactory {
     public enum RadioButtonContainerType {
@@ -82,9 +83,10 @@ public final class FileTypeRadioButtonSelectorFactory {
                 button.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null);
             }
         } else if (getContainerType() == RadioButtonContainerType.BROWSE) {
+            // only the background drawable will align to the center.
+            // if we use button.setButtonDrawable it will not center the drawable as it will
             button.setBackgroundDrawable(layerDrawable);
-            button.setGravity(Gravity.CENTER);
-            button.setButtonDrawable(iconDrawable);
+            button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
         }
     }
 
