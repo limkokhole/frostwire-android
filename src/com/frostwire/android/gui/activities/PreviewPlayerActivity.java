@@ -296,6 +296,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     }
 
     private void changeVideoSize() {
+        if (androidMediaPlayer == null) {
+            return;
+        }
         int videoWidth = androidMediaPlayer.getVideoWidth();
         int videoHeight = androidMediaPlayer.getVideoHeight();
         final TextureView v = findView(R.id.activity_preview_player_videoview);
