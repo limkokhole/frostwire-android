@@ -44,7 +44,6 @@ android {
             res.srcDirs = ['res', 'apollo/res']
             aidl.srcDirs = ['src', 'apollo/src']
             assets.srcDirs = ['assets']
-            jniLibs.srcDir 'libs'
             java {
                 srcDir "../frostwire-common/apache"
                 srcDir "../frostwire-common/core"
@@ -67,7 +66,6 @@ android {
     }
 
     lintOptions {
-        //checkReleaseBuilds false
         abortOnError false
     }
 
@@ -91,15 +89,6 @@ android {
             signingConfig signingConfigs.release
         }
     }
-
-    splits {
-        abi {
-            enable false
-            reset()
-            include 'armeabi-v7a', 'x86'
-            universalApk true
-        }
-    }
 }
 
 dependencies {
@@ -112,8 +101,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.frostwire:jlibtorrent:1.1.0.3'
-    compile 'com.frostwire:jlibtorrent-android:1.1.0.3'
+    compile 'com.frostwire:jlibtorrent:1.1.0.4'
+    compile 'com.frostwire:jlibtorrent-android:1.1.0.4'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
