@@ -495,7 +495,11 @@ public class ProfileActivity extends BaseActivity implements OnPageChangeListene
     @Override
     public void onScrollChanged(final int l, final int t, final int oldl, final int oldt) {
         if (mViewPager.isFakeDragging()) {
-            mViewPager.fakeDragBy(oldl - l);
+            try {
+                mViewPager.fakeDragBy(oldl - l);
+            } catch (Throwable e) {
+                // ignore possible NPE on .fakeDragBy near line 2452
+            }
         }
     }
 
