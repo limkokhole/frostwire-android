@@ -191,11 +191,16 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                inmobiInterstitial = new IMInterstitial(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                // in case it fails loading, it will try again every minute once.
-                inmobiListener = new OfferUtils.InMobiListener(mainActivity, false, false);
-                inmobiInterstitial.setIMInterstitialListener(inmobiListener);
-                inmobiInterstitial.loadInterstitial();
+                try {
+                    inmobiInterstitial = new IMInterstitial(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                    // in case it fails loading, it will try again every minute once.
+                    inmobiListener = new OfferUtils.InMobiListener(mainActivity, false, false);
+                    inmobiInterstitial.setIMInterstitialListener(inmobiListener);
+                    inmobiInterstitial.loadInterstitial();
+                } catch (Throwable t) {
+                    // don't crash, keep going.
+                    // possible android.util.AndroidRuntimeException: android.content.pm.PackageManager$NameNotFoundException: com.google.android.webview
+                }
             }
         });
     }
