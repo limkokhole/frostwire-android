@@ -77,16 +77,21 @@ public final class FileTypeRadioButtonSelectorFactory {
 
             if (button.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                 // android:drawableTop
+                button.setPadding(0, 0, 0, 25);
                 button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
+                button.setCompoundDrawablePadding(-15);
             } else {
                 // android:drawableLeft
+                button.setPadding(40, 0, 0, 0);
                 button.setCompoundDrawablesWithIntrinsicBounds(iconDrawable, null, null, null);
+                button.setCompoundDrawablePadding(-10);
             }
         } else if (getContainerType() == RadioButtonContainerType.BROWSE) {
             // only the background drawable will align to the center.
             // if we use button.setButtonDrawable it will not center the drawable as it will
-            button.setBackgroundDrawable(layerDrawable);
+            button.setPadding(0, 5, 0, -25);
             button.setCompoundDrawablesWithIntrinsicBounds(null, iconDrawable, null, null);
+            button.setCompoundDrawablePadding(0);
         }
     }
 
