@@ -230,9 +230,14 @@ public class NowPlayingCursor extends AbstractCursor {
         }
         selection.append(")");
 
-        mQueueCursor = mContext.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, PROJECTION, selection.toString(),
-                null, MediaStore.Audio.Media._ID);
+        try {
+            mQueueCursor = mContext.getContentResolver().query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, PROJECTION, selection.toString(),
+                    null, MediaStore.Audio.Media._ID);
+        } catch (Throwable e) {
+            // possible android.database.sqlite.SQLiteDiskIOException (Runtime Exception)
+            mQueueCursor = null;
+        }
 
         if (mQueueCursor == null) {
             mSize = 0;
