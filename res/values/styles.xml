@@ -56,8 +56,8 @@
         <item name="android:textColor">@drawable/radio_button_textcolor_selector</item>
         <item name="android:textSize">10sp</item>
         <item name="android:gravity">center_horizontal</item>
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
     </style>
 
     <style name="SearchInputFileTypeButtonLand" parent="android:Widget.CompoundButton.RadioButton">

@@ -12,25 +12,19 @@
 package com.andrew.apollo.ui.fragments.profile;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
-import android.view.ContextMenu;
+import android.view.*;
 import android.view.ContextMenu.ContextMenuInfo;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.SubMenu;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.AdapterView.OnItemClickListener;
-
 import com.andrew.apollo.Config;
-import com.frostwire.android.R;
 import com.andrew.apollo.adapters.ProfileSongAdapter;
 import com.andrew.apollo.dragdrop.DragSortListView;
 import com.andrew.apollo.dragdrop.DragSortListView.DragScrollProfile;
@@ -47,6 +41,7 @@ import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.NavUtils;
 import com.andrew.apollo.widgets.ProfileTabCarousel;
 import com.andrew.apollo.widgets.VerticalScrollListener;
+import com.frostwire.android.R;
 
 import java.util.List;
 
@@ -401,17 +396,22 @@ public class PlaylistSongFragment extends Fragment implements LoaderCallbacks<Li
      */
     @Override
     public void drop(final int from, final int to) {
-        if (from == 0 || to == 0) {
+        if (from == 0 || to == 0 || from == to) {
             mAdapter.notifyDataSetChanged();
             return;
         }
-        final int realFrom = from - 1;
-        final int realTo = to - 1;
-        mSong = mAdapter.getItem(realFrom);
-        mAdapter.remove(mSong);
-        mAdapter.insert(mSong, realTo);
-        mAdapter.notifyDataSetChanged();
-        MediaStore.Audio.Playlists.Members.moveItem(getActivity().getContentResolver(),
-                mPlaylistId, realFrom, realTo);
+
+        int realFrom = from - 1;
+        int realTo = to - 1;
+
+        try {
+            mSong = mAdapter.getItem(realFrom);
+            mAdapter.remove(mSong);
+            mAdapter.insert(mSong, realTo);
+            mAdapter.notifyDataSetChanged();
+            final ContentResolver resolver = getActivity().getContentResolver();
+            MediaStore.Audio.Playlists.Members.moveItem(resolver, mPlaylistId, realFrom, realTo);
+        } catch (Throwable t) {
+        }
     }
 }
