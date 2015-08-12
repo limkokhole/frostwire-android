@@ -1166,13 +1166,14 @@ public class MusicPlaybackService extends Service {
                 skip = mShuffler.nextInt(numUnplayed);
             }
             int cnt = -1;
-            while (true) {
-                while (tracks[++cnt] < 0) {
-                    ;
-                }
-                skip--;
-                if (skip < 0) {
-                    break;
+            if (numTracks > 0) {
+                while (true) {
+                    while (cnt < tracks.length && tracks[++cnt] < 0) {
+                    }
+                    skip--;
+                    if (skip < 0) {
+                        break;
+                    }
                 }
             }
             return cnt;
@@ -2148,8 +2149,8 @@ public class MusicPlaybackService extends Service {
     /**
      * Moves an item in the queue from one position to another
      *
-     * @param from The position the item is currently at
-     * @param to The position the item is being moved to
+     * @param index1 The position the item is currently at
+     * @param index2 The position the item is being moved to
      */
     public void moveQueueItem(int index1, int index2) {
         synchronized (this) {
