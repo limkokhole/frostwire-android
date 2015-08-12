@@ -24,6 +24,14 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <ProgressBar
+            android:id="@+id/fragment_search_deepsearch_progress"
+            style="@style/ProgressBarHolo.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dip"
+            android:indeterminate="true"
+            android:progress="25" />
+
     <com.frostwire.android.gui.views.SearchInputView
         android:id="@+id/fragment_search_input"
         android:layout_width="match_parent"
@@ -49,14 +57,6 @@
         android:background="@android:color/black"
         android:orientation="horizontal" >
     </LinearLayout>
-
-    <ProgressBar
-        android:id="@+id/fragment_search_deepsearch_progress"
-        style="@style/ProgressBarHolo.Horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="6dip"
-        android:indeterminate="true"
-        android:progress="25" />
 
     <FrameLayout
         android:id="@+id/fragment_search_framelayout"
