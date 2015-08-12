@@ -34,8 +34,9 @@ import android.widget.*;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.MainApplication;
+import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
+import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.util.ImageLoader;
@@ -55,7 +56,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
     public static WeakReference<FileSearchResult> srRef;
 
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer androidMediaPlayer;
     private Surface surface;
     private String displayName;
     private String source;
@@ -170,8 +171,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             outState.putBoolean("hasVideo", hasVideo);
             outState.putBoolean("audio", audio);
             outState.putBoolean("isFullScreen", isFullScreen);
-            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                outState.putInt("currentPosition", mediaPlayer.getCurrentPosition());
+            if (androidMediaPlayer != null && androidMediaPlayer.isPlaying()) {
+                outState.putInt("currentPosition", androidMediaPlayer.getCurrentPosition());
             }
         }
     }
@@ -295,8 +296,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     }
 
     private void changeVideoSize() {
-        int videoWidth = mediaPlayer.getVideoWidth();
-        int videoHeight = mediaPlayer.getVideoHeight();
+        int videoWidth = androidMediaPlayer.getVideoWidth();
+        int videoHeight = androidMediaPlayer.getVideoHeight();
         final TextureView v = findView(R.id.activity_preview_player_videoview);
         DisplayMetrics metrics = new DisplayMetrics();
         final Display defaultDisplay = getWindowManager().getDefaultDisplay();
@@ -366,18 +367,12 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     }
 
     private void releaseMediaPlayer() {
-        if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.setSurface(null);
-            mediaPlayer.release();
-            mediaPlayer = null;
+        if (androidMediaPlayer != null) {
+            androidMediaPlayer.stop();
+            androidMediaPlayer.setSurface(null);
+            androidMediaPlayer.release();
+            androidMediaPlayer = null;
         }
-    }
-
-    @Override
-    protected void onDestroy() {
-        releaseMediaPlayer();
-        super.onDestroy();
     }
 
     @Override
@@ -390,18 +385,18 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             public void run() {
                 final String url = getFinalUrl(streamUrl);
                 final Uri uri = Uri.parse(url);
-                mediaPlayer= new MediaPlayer();
+                androidMediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource(previewPlayerActivity, uri);
-                    mediaPlayer.setSurface(!audio ? surface : null);
-                    mediaPlayer.setOnBufferingUpdateListener(previewPlayerActivity);
-                    mediaPlayer.setOnCompletionListener(previewPlayerActivity);
-                    mediaPlayer.setOnPreparedListener(previewPlayerActivity);
-                    mediaPlayer.setOnVideoSizeChangedListener(previewPlayerActivity);
-                    mediaPlayer.setOnInfoListener(previewPlayerActivity);
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.prepare();
-                    mediaPlayer.start();
+                    androidMediaPlayer.setDataSource(previewPlayerActivity, uri);
+                    androidMediaPlayer.setSurface(!audio ? surface : null);
+                    androidMediaPlayer.setOnBufferingUpdateListener(previewPlayerActivity);
+                    androidMediaPlayer.setOnCompletionListener(previewPlayerActivity);
+                    androidMediaPlayer.setOnPreparedListener(previewPlayerActivity);
+                    androidMediaPlayer.setOnVideoSizeChangedListener(previewPlayerActivity);
+                    androidMediaPlayer.setOnInfoListener(previewPlayerActivity);
+                    androidMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    androidMediaPlayer.prepare();
+                    androidMediaPlayer.start();
 
                     if (MusicUtils.isPlaying()) {
                         MusicUtils.playOrPause();
@@ -416,19 +411,19 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     public void onSurfaceTextureSizeChanged(SurfaceTexture surfaceTexture, int width, int height) {
-        if (mediaPlayer != null) {
+        if (androidMediaPlayer != null) {
             if (surface != null) {
                 surface.release();
                 surface = new Surface(surfaceTexture);
             }
-            mediaPlayer.setSurface(!audio ? surface : null);
+            androidMediaPlayer.setSurface(!audio ? surface : null);
         }
     }
 
     @Override
     public boolean onSurfaceTextureDestroyed(SurfaceTexture surface) {
-        if (mediaPlayer != null) {
-            mediaPlayer.setSurface(null);
+        if (androidMediaPlayer != null) {
+            androidMediaPlayer.setSurface(null);
             this.surface.release();
             this.surface = null;
         }
@@ -505,6 +500,13 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     }
 
     public void stopAnyOtherPlayers() {
+        try {
+            final CoreMediaPlayer mediaPlayer = Engine.instance().getMediaPlayer();
+            if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                mediaPlayer.stop();
+            }
+        } catch (Throwable t) {}
+
         AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (mAudioManager.isMusicActive()) {
             Intent i = new Intent("com.android.music.musicservicecommand");
@@ -514,8 +516,15 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     }
 
     @Override
+    protected void onDestroy() {
+        stopAnyOtherPlayers();
+        releaseMediaPlayer();
+        super.onDestroy();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
-        releaseMediaPlayer();
+        changedActionBarTitleToNonBuffering = false;
     }
 }
