@@ -520,9 +520,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
 
     @Override
     protected void onDestroy() {
+        super.onDestroy();
         stopAnyOtherPlayers();
         releaseMediaPlayer();
-        super.onDestroy();
     }
 
     @Override
