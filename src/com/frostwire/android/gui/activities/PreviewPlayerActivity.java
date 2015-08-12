@@ -52,7 +52,7 @@ import java.net.URL;
  * @author gubatron
  * @author aldenml
  */
-public final class PreviewPlayerActivity extends AbstractActivity implements AbstractDialog.OnDialogClickListener, TextureView.SurfaceTextureListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, MediaPlayer.OnInfoListener {
+public final class PreviewPlayerActivity extends AbstractActivity implements AbstractDialog.OnDialogClickListener, TextureView.SurfaceTextureListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener {
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
     public static WeakReference<FileSearchResult> srRef;
 
@@ -370,7 +370,11 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
         if (androidMediaPlayer != null) {
             androidMediaPlayer.stop();
             androidMediaPlayer.setSurface(null);
-            androidMediaPlayer.release();
+            try {
+                androidMediaPlayer.release();
+            } catch (Throwable t) {
+                //there could be a runtime exception thrown inside stayAwake()
+            }
             androidMediaPlayer = null;
         }
     }
@@ -378,8 +382,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
         surface = new Surface(surfaceTexture);
-        final PreviewPlayerActivity previewPlayerActivity = this;
-
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(PreviewPlayerActivity.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -387,17 +391,16 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
                 final Uri uri = Uri.parse(url);
                 androidMediaPlayer = new MediaPlayer();
                 try {
-                    androidMediaPlayer.setDataSource(previewPlayerActivity, uri);
+                    androidMediaPlayer.setDataSource(PreviewPlayerActivity.this, uri);
                     androidMediaPlayer.setSurface(!audio ? surface : null);
-                    androidMediaPlayer.setOnBufferingUpdateListener(previewPlayerActivity);
-                    androidMediaPlayer.setOnCompletionListener(previewPlayerActivity);
-                    androidMediaPlayer.setOnPreparedListener(previewPlayerActivity);
-                    androidMediaPlayer.setOnVideoSizeChangedListener(previewPlayerActivity);
-                    androidMediaPlayer.setOnInfoListener(previewPlayerActivity);
+                    androidMediaPlayer.setOnBufferingUpdateListener(PreviewPlayerActivity.this);
+                    androidMediaPlayer.setOnCompletionListener(PreviewPlayerActivity.this);
+                    androidMediaPlayer.setOnPreparedListener(PreviewPlayerActivity.this);
+                    androidMediaPlayer.setOnVideoSizeChangedListener(PreviewPlayerActivity.this);
+                    androidMediaPlayer.setOnInfoListener(PreviewPlayerActivity.this);
                     androidMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     androidMediaPlayer.prepare();
                     androidMediaPlayer.start();
-
                     if (MusicUtils.isPlaying()) {
                         MusicUtils.playOrPause();
                     }
@@ -526,5 +529,12 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     protected void onStop() {
         super.onStop();
         changedActionBarTitleToNonBuffering = false;
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+            releaseMediaPlayer();
+        }
     }
 }
