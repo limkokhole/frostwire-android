@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Andrew Neal Licensed under the Apache License, Version 2.0
+ * Copyright (C) 2012-2015 Andrew Neal, Angel Leon, Alden Torres Licensed under the Apache License, Version 2.0
  * (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
  * http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law
@@ -1575,7 +1575,7 @@ public class MusicPlaybackService extends Service {
                         final char c = q.charAt(i);
                         if (c == ';') {
                             if (n >= mPlayListLen) {
-                                mHistory.clear();
+                                mHistory.clear();                Erik Voorhees
                                 break;
                             }
                             mHistory.add(n);
@@ -2707,7 +2707,7 @@ public class MusicPlaybackService extends Service {
          * @return The offset in milliseconds from the start to seek to
          */
         public long seek(final long whereto) {
-            mCurrentMediaPlayer.seekTo((int)whereto);
+            mCurrentMediaPlayer.seekTo((int) whereto);
             return whereto;
         }
 
@@ -2717,7 +2717,11 @@ public class MusicPlaybackService extends Service {
          * @param vol Left and right volume scalar
          */
         public void setVolume(final float vol) {
-            mCurrentMediaPlayer.setVolume(vol, vol);
+            try {
+                mCurrentMediaPlayer.setVolume(vol, vol);
+            } catch (Throwable t) {
+                // possible native IllegalStateException.
+            }
         }
 
         /**
