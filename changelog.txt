@@ -1,3 +1,9 @@
+FrostWire 1.6.2 - AUGUST/14/2015
+ - Multiple crash fixes on audio player.
+ - Updated jlibtorrent library to version 1.1.0.5.
+ - Improvement of file type selector look, better layouts for tablets.
+ - FrostWire Plus YouTube search fixed.
+
 FrostWire 1.6.1 - AUGUST/10/2015
  - Fixes TorLock search.
  - Crash fixes on libtorrent/jlibtorrent.
