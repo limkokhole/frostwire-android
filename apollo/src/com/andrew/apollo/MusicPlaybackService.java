@@ -2415,14 +2415,20 @@ public class MusicPlaybackService extends Service {
                     }
                     break;
                 case TRACK_WENT_TO_NEXT:
+                    if (service.mNextPlayPos == -1) {
+                        service.mNextPlayPos = 0;
+                    }
                     service.mPlayPos = service.mNextPlayPos;
                     if (service.mCursor != null) {
                         service.mCursor.close();
                     }
-                    service.updateCursor(service.mPlayList[service.mPlayPos]);
-                    service.notifyChange(META_CHANGED);
-                    service.updateNotification();
-                    service.setNextTrack();
+
+                    if (service.mPlayPos < service.mPlayList.length) {
+                        service.updateCursor(service.mPlayList[service.mPlayPos]);
+                        service.notifyChange(META_CHANGED);
+                        service.updateNotification();
+                        service.setNextTrack();
+                    }
                     break;
                 case TRACK_ENDED:
                     if (service.mRepeatMode == REPEAT_CURRENT) {
