@@ -1575,7 +1575,7 @@ public class MusicPlaybackService extends Service {
                         final char c = q.charAt(i);
                         if (c == ';') {
                             if (n >= mPlayListLen) {
-                                mHistory.clear();                Erik Voorhees
+                                mHistory.clear();
                                 break;
                             }
                             mHistory.add(n);
@@ -2694,7 +2694,11 @@ public class MusicPlaybackService extends Service {
          * @return The duration in milliseconds
          */
         public long duration() {
-            return mCurrentMediaPlayer.getDuration();
+            try {
+                return mCurrentMediaPlayer.getDuration();
+            } catch (Throwable t) {
+                return 0;
+            }
         }
 
         /**
