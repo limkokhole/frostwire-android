@@ -2626,7 +2626,13 @@ public class MusicPlaybackService extends Service {
             }
             mNextMediaPlayer = new com.frostwire.android.CompatMediaPlayer();
             mNextMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
-            mNextMediaPlayer.setAudioSessionId(getAudioSessionId());
+
+            try {
+                mNextMediaPlayer.setAudioSessionId(getAudioSessionId());
+            } catch (Throwable e) {
+                Log.e(TAG, "Media player Illegal State exception", e);
+            }
+
             if (setDataSourceImpl(mNextMediaPlayer, path)) {
                 try {
                     mCurrentMediaPlayer.setNextMediaPlayerSupport(mNextMediaPlayer);
