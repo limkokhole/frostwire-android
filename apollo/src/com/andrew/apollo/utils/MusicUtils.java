@@ -1407,6 +1407,9 @@ public final class MusicUtils {
      * @param list The item(s) to delete.
      */
     public static void deleteTracks(final Context context, final long[] list) {
+        if (list == null) {
+            return;
+        }
         final String[] projection = new String[] {
                 BaseColumns._ID, MediaColumns.DATA, AudioColumns.ALBUM_ID
         };
