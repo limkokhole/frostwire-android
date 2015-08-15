@@ -2669,8 +2669,12 @@ public class MusicPlaybackService extends Service {
          * Resets the MediaPlayer to its uninitialized state.
          */
         public void stop() {
-            mCurrentMediaPlayer.reset();
-            mIsInitialized = false;
+            try {
+                mCurrentMediaPlayer.reset();
+                mIsInitialized = false;
+            } catch (Throwable t) {
+              // recover from possible IllegalStateException caused by native _reset() method.
+            }
         }
 
         /**
