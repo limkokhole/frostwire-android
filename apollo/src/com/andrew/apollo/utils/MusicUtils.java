@@ -627,7 +627,7 @@ public final class MusicUtils {
      */
     public static void playAll(final Context context, final long[] list, int position,
             final boolean forceShuffle) {
-        if (list.length == 0 || mService == null) {
+        if (list == null || list.length == 0 || mService == null) {
             return;
         }
         try {
