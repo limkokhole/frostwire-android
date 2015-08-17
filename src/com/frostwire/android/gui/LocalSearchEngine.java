@@ -54,6 +54,8 @@ public final class LocalSearchEngine {
 
     private static LocalSearchEngine instance;
 
+    private final HashSet<Integer> openedSearchResults;
+
     public synchronized static void create() {
         if (instance != null) {
             return;
@@ -81,6 +83,8 @@ public final class LocalSearchEngine {
 
         // TODO: review the logic behind putting this in a preference
         this.MIN_SEEDS_TORRENT_RESULT = 10;//ConfigurationManager.instance().getInt(Constants.PREF_KEY_SEARCH_MIN_SEEDS_FOR_TORRENT_RESULT);
+
+        this.openedSearchResults = new HashSet<Integer>();
     }
 
     public Observable<List<SearchResult>> observable() {
@@ -127,6 +131,14 @@ public final class LocalSearchEngine {
 
     public long getCacheSize() {
         return CrawlPagedWebSearchPerformer.getCacheSize();
+    }
+
+    public boolean hasBeenOpened(SearchResult sr) {
+        return openedSearchResults.contains(sr.uid());
+    }
+
+    public void markOpened(SearchResult sr) {
+        openedSearchResults.add(sr.uid());
     }
 
     private void onResults(long token, List<? extends SearchResult> results) {
