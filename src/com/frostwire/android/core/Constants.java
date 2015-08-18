@@ -18,6 +18,7 @@
 
 package com.frostwire.android.core;
 
+import com.frostwire.android.BuildConfig;
 import com.frostwire.core.CommonConstants;
 
 /**
@@ -32,7 +33,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = false; // true -> FrostWire Basic, false -> FrostWire Plus.
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = BuildConfig.FLAVOR.equals("basic");
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
@@ -40,13 +41,11 @@ public final class Constants {
 
     /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
      * needing to pass the Android app context to obtain the PackageManager instance.  */
-    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + "200";
+    public static final String FROSTWIRE_BUILD = BUILD_PREFIX + (BuildConfig.VERSION_CODE % 1000);
 
     public static final String APP_PACKAGE_NAME = "com.frostwire.android";
 
-    public static final byte[] FROSTWIRE_VERSION = { (byte) 1, (byte) 6, (byte) 2 };
-
-    public static final String FROSTWIRE_VERSION_STRING = FROSTWIRE_VERSION[0] + "." + FROSTWIRE_VERSION[1] + "." + FROSTWIRE_VERSION[2];
+    public static final String FROSTWIRE_VERSION_STRING = BuildConfig.VERSION_NAME;
 
     // preference keys
     public static final String PREF_KEY_CORE_UUID = "frostwire.prefs.core.uuid";

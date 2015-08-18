@@ -33,6 +33,27 @@ repositories {
     mavenCentral()
 }
 
+def manifestVersionCode() {
+    def manifestFile = file(project.projectDir.absolutePath + '/AndroidManifest.xml')
+
+    def ns = new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
+    def xml = new XmlParser().parse(manifestFile)
+
+    return Integer.parseInt(xml.attributes()[ns.versionCode].toString())
+}
+
+def manifestVersionName() {
+    def manifestFile = file(project.projectDir.absolutePath + '/AndroidManifest.xml')
+
+    def ns = new groovy.xml.Namespace("http://schemas.android.com/apk/res/android", "android")
+    def xml = new XmlParser().parse(manifestFile)
+
+    return xml.attributes()[ns.versionName].toString()
+}
+
+project.ext.versionCode = manifestVersionCode()
+project.ext.versionName = manifestVersionName()
+
 android {
 
     compileSdkVersion 15
@@ -83,6 +104,19 @@ android {
 
         release {
             signingConfig signingConfigs.release
+        }
+    }
+
+    productFlavors {
+        plus {
+            applicationId 'com.frostwire.android.plus'
+            versionCode 9000000 + project.ext.versionCode
+            versionName project.ext.versionName
+        }
+        basic {
+            applicationId 'com.frostwire.android'
+            versionCode 8100000 + project.ext.versionCode
+            versionName project.ext.versionName
         }
     }
 }

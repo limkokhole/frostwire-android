@@ -124,7 +124,7 @@ public final class SoftwareUpdater {
                     byte[] lv = new byte[] { Byte.valueOf(latestVersionArr[0]), Byte.valueOf(latestVersionArr[1]), Byte.valueOf(latestVersionArr[2]) };
 
                     // mv = my version
-                    byte[] mv = Constants.FROSTWIRE_VERSION;
+                    byte[] mv = buildVersion(Constants.FROSTWIRE_VERSION_STRING);
 
                     oldVersion = isFrostWireOld(mv, lv);
 
@@ -136,6 +136,16 @@ public final class SoftwareUpdater {
                 }
 
                 return false;
+            }
+
+            private byte[] buildVersion(String v) {
+                try {
+                    String[] arr = v.split("\\.");
+                    return new byte[]{Byte.parseByte(arr[0]), Byte.parseByte(arr[1]), Byte.parseByte(arr[2])};
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                return new byte[]{0, 0, 0};
             }
 
             @Override

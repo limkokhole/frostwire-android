@@ -20,14 +20,15 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.frostwire.android" android:installLocation="auto"
-	android:versionCode="9000200" android:versionName="1.6.2">
+	android:versionCode="200" android:versionName="1.6.2">
+	<!-- IMPORTANT!! Ignore these, just use as a reference, now it's handle with gradle -->
 	<!-- Plus android:versionCode=" 9000xyz" (always commit like this, plus!)-->
 	<!-- Basic android:versionCode="8100xyz" (don't commit like this) -->
 	<!-- Plus version example  for 1.5.8 build 194  -> 9000194 -->
 	<!-- Basic version example for 1.5.8 build 194  -> 8100195 -->
 	<!-- Don't go nuts, max version number will be: 2,147,483,647 -->
 
-	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="21" />
+	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
