@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,25 +18,25 @@
 
 package com.frostwire.android.util;
 
-import java.io.BufferedOutputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FilterInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
 import com.frostwire.logging.Logger;
 import com.squareup.okhttp.internal.DiskLruCache;
 import com.squareup.okhttp.internal.DiskLruCache.Editor;
 import com.squareup.okhttp.internal.DiskLruCache.Snapshot;
 import com.squareup.okhttp.internal.Util;
+import com.squareup.okhttp.internal.io.FileSystem;
+import okio.BufferedSink;
+import okio.BufferedSource;
+import okio.Okio;
+import okio.Source;
+
+import java.io.Closeable;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- *
  */
 public final class DiskCache {
 
@@ -44,16 +44,21 @@ public final class DiskCache {
 
     private static final int APP_VERSION = 1;
     private static final int VALUE_COUNT = 1;
-    private static final int IO_BUFFER_SIZE = 4 * 1024;
 
     private final DiskLruCache cache;
 
     public DiskCache(File directory, long size) throws IOException {
-        this.cache = DiskLruCache.open(directory, APP_VERSION, VALUE_COUNT, size);
+        this.cache = DiskLruCache.create(FileSystem.SYSTEM, directory, APP_VERSION, VALUE_COUNT, size);
     }
 
     public boolean containsKey(String key) {
-        return cache.containsKey(encodeKey(key));
+        try {
+            return cache.get(encodeKey(key)) != null;
+        } catch (IOException e) {
+            LOG.warn("Error testing if the cache contains a key", e);
+        }
+
+        return false;
     }
 
     public Entry get(String key) {
@@ -127,7 +132,13 @@ public final class DiskCache {
     }
 
     public long size() {
-        return cache.size();
+        try {
+            return cache.size();
+        } catch (IOException e) {
+            LOG.warn("Error getting disk cache size", e);
+        }
+
+        return 0;
     }
 
     public long maxSize() {
@@ -139,7 +150,7 @@ public final class DiskCache {
     }
 
     private void writeTo(Editor editor, byte[] data) throws IOException {
-        OutputStream out = new BufferedOutputStream(editor.newOutputStream(0), IO_BUFFER_SIZE);
+        BufferedSink out = Okio.buffer(editor.newSink(0));
         try {
             out.write(data);
         } finally {
@@ -148,16 +159,17 @@ public final class DiskCache {
     }
 
     private void writeTo(Editor editor, InputStream in) throws IOException {
-        OutputStream out = new BufferedOutputStream(editor.newOutputStream(0), IO_BUFFER_SIZE);
+        BufferedSink out = Okio.buffer(editor.newSink(0));
+        Source source = Okio.source(in);
         try {
-            Util.copy(in, out); // using Util from okhttp only for consistency.
+            out.writeAll(source);
         } finally {
             out.close();
         }
     }
 
     private String encodeKey(String key) {
-        return Util.hash(key);
+        return Util.md5Hex(key);
     }
 
     public static final class Entry implements Closeable {
@@ -169,7 +181,7 @@ public final class DiskCache {
         }
 
         public InputStream getInputStream() {
-            return new SnapshotInputStream(snapshot);
+            return new SnapshotInputStream(snapshot.getSource(0));
         }
 
         @Override
@@ -178,19 +190,17 @@ public final class DiskCache {
         }
     }
 
-    private static final class SnapshotInputStream extends FilterInputStream {
+    private static final class SnapshotInputStream extends InputStream {
 
-        private final Snapshot snapshot;
+        private final BufferedSource source;
 
-        public SnapshotInputStream(Snapshot snapshot) {
-            super(snapshot.getInputStream(0));
-            this.snapshot = snapshot;
+        public SnapshotInputStream(Source source) {
+            this.source = Okio.buffer(source);
         }
 
         @Override
-        public void close() throws IOException {
-            snapshot.close();
-            super.close();
+        public int read() throws IOException {
+            return source.readByte();
         }
     }
 }

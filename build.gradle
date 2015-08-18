@@ -49,12 +49,9 @@ android {
                 srcDir "../frostwire-common/core"
                 srcDir "../frostwire-common/jdownloader"
                 srcDir "../frostwire-common/mp4parser"
-                srcDir "../frostwire-common/okhttp"
 
                 srcDir 'apollo/src'
                 srcDir 'src'
-
-                exclude '**/LocalPeerManagerImpl.java'
             }
             resources {
                 srcDir "../frostwire-common/mp4parser"
@@ -93,6 +90,7 @@ android {
 dependencies {
     compile 'com.google.re2j:re2j:1.0'
     compile 'com.google.code.gson:gson:2.3.1'
+    compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.reactivex:rxandroid:1.0.1'
     compile ('com.android.support:support-v4:23.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
