@@ -59,6 +59,10 @@ android {
     compileSdkVersion 15
     buildToolsVersion '23'
 
+    defaultConfig {
+        versionName project.ext.versionName
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -111,12 +115,10 @@ android {
         basic {
             applicationId 'com.frostwire.android'
             versionCode 8100000 + project.ext.versionCode
-            versionName project.ext.versionName
         }
-        plus {
+        plus1 {
             applicationId 'com.frostwire.android.plus'
             versionCode 9000000 + project.ext.versionCode
-            versionName project.ext.versionName
         }
     }
 }
