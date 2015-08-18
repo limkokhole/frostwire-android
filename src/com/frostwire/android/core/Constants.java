@@ -33,7 +33,7 @@ public final class Constants {
     private Constants() {
     }
 
-    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = BuildConfig.FLAVOR.equals("basic");
+    public static final boolean IS_GOOGLE_PLAY_DISTRIBUTION = BuildConfig.FLAVOR.equals("basic") && !BuildConfig.DEBUG;
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
