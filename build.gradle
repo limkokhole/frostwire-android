@@ -51,6 +51,25 @@ def manifestVersionName() {
     return xml.attributes()[ns.versionName].toString()
 }
 
+def changeApkOutput(variant) {
+    def flavor = 'unknown'
+    if (variant.productFlavors[0].name.equals("basic")) {
+        flavor = 'basic'
+    } else if (variant.productFlavors[0].name.equals("plus1")) {
+        flavor = 'plus'
+    }
+    def suffix = project.ext.versionName + '-b' + project.ext.versionCode + '-' + flavor
+    def name = "$project.buildDir/frostwire-android-" + variant.buildType.name + '-' + suffix
+
+    variant.outputs.each { output ->
+        if (output.zipAlign) {
+            output.outputFile = file(name + '.apk')
+        }
+
+        output.packageApplication.outputFile = file(name + '-unaligned.apk')
+    }
+}
+
 project.ext.versionCode = manifestVersionCode()
 project.ext.versionName = manifestVersionName()
 
@@ -121,6 +140,10 @@ android {
             versionCode 9000000 + project.ext.versionCode
         }
     }
+
+    applicationVariants.all { variant ->
+        changeApkOutput(variant)
+    }
 }
 
 dependencies {
@@ -128,10 +151,10 @@ dependencies {
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'io.reactivex:rxandroid:1.0.1'
-    compile ('com.android.support:support-v4:23.0.0') {
+    compile('com.android.support:support-v4:23.0.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile ('com.google.android.gms:play-services-ads:7.8.0') {
+    compile('com.google.android.gms:play-services-ads:7.8.0') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
