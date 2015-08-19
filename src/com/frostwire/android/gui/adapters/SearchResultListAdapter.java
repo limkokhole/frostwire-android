@@ -50,7 +50,6 @@ import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
 
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -107,11 +106,21 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             populateYouTubePart(view, (YouTubeCrawledSearchResult) sr);
         }
 
-        if (LocalSearchEngine.instance().hasBeenOpened(sr)) {
-            RelativeLayout relativeLayout = findView(view, R.id.view_bittorrent_search_result_list_item_details_relative_layout);
-            relativeLayout.setBackgroundColor(R.color.app_list_cell_line);
-        }
+        populateBackgroundAndDownloadButton(view, sr);
         populateThumbnail(view, sr);
+    }
+
+    protected void populateBackgroundAndDownloadButton(View view, SearchResult sr) {
+        int downloadButtonDrawableId = R.drawable.download_icon;
+        int layoutBackgroundColorId = R.drawable.listview_item_press_background_selector_on;
+        if (LocalSearchEngine.instance().hasBeenOpened(sr)) {
+            layoutBackgroundColorId = R.color.all_list_cell_background_visited;
+            downloadButtonDrawableId = R.drawable.download_clicked_icon;
+        }
+        RelativeLayout relativeLayout = findView(view, R.id.view_bittorrent_search_result_list_item_details_relative_layout);
+        relativeLayout.setBackgroundColor(layoutBackgroundColorId);
+        ImageView downloadButton = findView(view, R.id.view_bittorrent_search_result_list_item_download_icon);
+        downloadButton.setImageResource(downloadButtonDrawableId);
     }
 
     protected void populateFilePart(View view, FileSearchResult sr) {

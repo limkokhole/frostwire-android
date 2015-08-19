@@ -29,7 +29,7 @@
         android:left="1px"
         android:right="1px">
         <shape>
-            <solid android:color="#ffe9eef3" />
+            <solid android:color="@color/all_list_cell_background_visited" />
         </shape>
     </item>
 

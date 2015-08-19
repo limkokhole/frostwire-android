@@ -58,6 +58,7 @@
     <color name="app_light_icons">#ffe7ebee</color>
     <color name="app_highlight_text">#ff33b5e5</color>
     <color name="app_list_cell_line">#ffdae2e9</color>
+    <color name="all_list_cell_background_visited">#ffe9eef3</color>
     <color name="app_menu_item_pressed">#ff314c61</color>
     <color name="app_menu_item_line">#ff1d2934</color>
     <color name="app_light_gray_text">#ffbfcfdc</color>
