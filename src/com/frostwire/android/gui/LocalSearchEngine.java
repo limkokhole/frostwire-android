@@ -43,16 +43,14 @@ public final class LocalSearchEngine {
     private final PublishSubject<List<SearchResult>> subject;
 
     // filter constants
+    private static final int KAT_MIN_SEEDS_TORRENT_RESULT = 2;
     private final int MIN_SEEDS_TORRENT_RESULT;
 
-    private static final int KAT_MIN_SEEDS_TORRENT_RESULT = 2;
-
+    private static LocalSearchEngine instance;
+    private final HashSet<Integer> opened = new HashSet<Integer>();
     private long currentSearchToken;
     private List<String> currentSearchTokens;
-
     private boolean searchFinished;
-
-    private static LocalSearchEngine instance;
 
     public synchronized static void create() {
         if (instance != null) {
@@ -127,6 +125,17 @@ public final class LocalSearchEngine {
 
     public long getCacheSize() {
         return CrawlPagedWebSearchPerformer.getCacheSize();
+    }
+
+    public void markOpened(SearchResult sr) {
+        opened.add(sr.uid());
+    }
+
+    public boolean hasBeenOpened(SearchResult sr) {
+        if (sr == null) {
+            return false;
+        }
+        return opened.contains(sr.uid());
     }
 
     private void onResults(long token, List<? extends SearchResult> results) {

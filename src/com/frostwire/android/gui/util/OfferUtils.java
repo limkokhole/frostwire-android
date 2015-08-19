@@ -20,10 +20,12 @@ package com.frostwire.android.gui.util;
 
 import android.app.Activity;
 import android.content.Context;
+import com.andrew.apollo.utils.MusicUtils;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdDisplayListener;
+import com.applovin.sdk.AppLovinAdLoadListener;
 import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -40,6 +42,7 @@ import com.ironsource.mobilcore.MobileCore;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class OfferUtils {
@@ -227,6 +230,14 @@ public class OfferUtils {
             try {
                 final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(callerActivity), callerActivity);
                 adDialog.setAdDisplayListener(adapter);
+                adDialog.setAdLoadListener(adapter);
+
+                adapter.getOnReadyLatch().await(1, TimeUnit.SECONDS);
+
+                if (!adapter.receivedAd || (adapter.isVideoAd && MusicUtils.isPlaying())) {
+                    return false;
+                }
+
                 adDialog.show();
                 return true;
             } catch (Throwable e) {
@@ -238,7 +249,10 @@ public class OfferUtils {
         }
     }
 
-    public static class AppLovinAdapter implements AppLovinAdDisplayListener {
+    public static class AppLovinAdapter implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
+        private boolean isVideoAd = false;
+        private boolean receivedAd = false;
+        private final CountDownLatch onReadyLatch = new CountDownLatch(1);
 
         @Override
         public void adDisplayed(AppLovinAd appLovinAd) {
@@ -246,6 +260,29 @@ public class OfferUtils {
 
         @Override
         public void adHidden(AppLovinAd appLovinAd) {
+        }
+
+        @Override
+        public void adReceived(AppLovinAd appLovinAd) {
+            if (appLovinAd != null) {
+                receivedAd = true;
+                isVideoAd = appLovinAd.isVideoAd();
+                onReadyLatch.countDown();
+            }
+        }
+
+        @Override
+        public void failedToReceiveAd(int i) {
+            receivedAd = false;
+            onReadyLatch.countDown();
+        }
+
+        public CountDownLatch getOnReadyLatch() {
+            return onReadyLatch;
+        }
+
+        public boolean adFailed() {
+            return !receivedAd;
         }
     }
 }

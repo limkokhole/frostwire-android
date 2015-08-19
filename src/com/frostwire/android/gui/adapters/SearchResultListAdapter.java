@@ -25,10 +25,12 @@ import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
+import com.frostwire.android.gui.LocalSearchEngine;
 import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
@@ -104,6 +106,11 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         if (sr instanceof YouTubeCrawledSearchResult) {
             populateYouTubePart(view, (YouTubeCrawledSearchResult) sr);
         }
+
+        if (LocalSearchEngine.instance().hasBeenOpened(sr)) {
+            RelativeLayout relativeLayout = findView(view, R.id.view_bittorrent_search_result_list_item_details_relative_layout);
+            relativeLayout.setBackgroundColor(R.color.app_list_cell_line);
+        }
         populateThumbnail(view, sr);
     }
 
@@ -172,6 +179,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     @Override
     protected void onItemClicked(View v) {
         SearchResult sr = (SearchResult) v.getTag();
+        LocalSearchEngine.instance().markOpened(sr);
         searchResultClicked(sr);
     }
 

@@ -18,6 +18,7 @@
 
 package com.frostwire.frostclick;
 
+import com.frostwire.util.Digests;
 import org.apache.commons.io.FilenameUtils;
 
 import com.frostwire.licences.License;
@@ -31,7 +32,7 @@ import com.frostwire.search.torrent.TorrentSearchResult;
 public class TorrentPromotionSearchResult implements TorrentSearchResult {
 
     private static final String FROSTCLICK_VENDOR = "FrostClick";
-
+    private int uid = -1;
     private final Slide slide;
     private final long creationTime;
 
@@ -92,5 +93,18 @@ public class TorrentPromotionSearchResult implements TorrentSearchResult {
     @Override
     public String getThumbnailUrl() {
         return null;
+    }
+
+    @Override
+    public int uid() {
+        if (uid == -1) {
+            StringBuilder key = new StringBuilder();
+            key.append(getDisplayName());
+            key.append(getDetailsUrl());
+            key.append(getSource());
+            key.append(getHash());
+            uid = Digests.fnvhash32(key.toString().getBytes());
+        }
+        return uid;
     }
 }
