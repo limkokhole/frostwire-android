@@ -1,3 +1,10 @@
+FrostWire 1.6.3 - AUGUST/20/2015
+ - Upgraded Picasso library for image caching.
+ - Code/library cleanup.
+ - Clicked search results are marked as visited and remembered during session.
+ - jlibtorrent update, rebuilt with new swig library.
+ - Multiple crash fixes on audio player.
+
 FrostWire 1.6.2 - AUGUST/14/2015
  - Multiple crash fixes on audio player.
  - Updated jlibtorrent library to version 1.1.0.5.
