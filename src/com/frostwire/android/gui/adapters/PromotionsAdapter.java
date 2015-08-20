@@ -59,7 +59,10 @@ public class PromotionsAdapter extends AbstractAdapter<Slide> {
         GridView gridView = (GridView) parent;
         int promoWidth = getColumnWidth(gridView); //hack
         int promoHeight = (int) (promoWidth * PROMO_HEIGHT_TO_WIDTH_RATIO);
-        imageLoader.load(Uri.parse(viewItem.imageSrc), imageView, promoWidth, promoHeight);
+
+        if (promoWidth > 0 && promoHeight > 0) {
+            imageLoader.load(Uri.parse(viewItem.imageSrc), imageView, promoWidth, promoHeight);
+        }
      }
 
     @Override
