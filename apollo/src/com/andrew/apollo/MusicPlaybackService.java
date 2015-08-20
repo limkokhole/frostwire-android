@@ -2668,7 +2668,11 @@ public class MusicPlaybackService extends Service {
          * Starts or resumes playback.
          */
         public void start() {
-            mCurrentMediaPlayer.start();
+            try {
+                mCurrentMediaPlayer.start();
+            } catch (Throwable t) {
+
+            }
         }
 
         /**
@@ -2688,14 +2692,22 @@ public class MusicPlaybackService extends Service {
          */
         public void release() {
             stop();
-            mCurrentMediaPlayer.release();
+            try {
+                mCurrentMediaPlayer.release();
+            } catch (Throwable t) {
+
+            }
         }
 
         /**
          * Pauses playback. Call start() to resume.
          */
         public void pause() {
-            mCurrentMediaPlayer.pause();
+            try {
+                mCurrentMediaPlayer.pause();
+            } catch (Throwable t) {
+
+            }
         }
 
         /**
@@ -2717,7 +2729,12 @@ public class MusicPlaybackService extends Service {
          * @return The current position in milliseconds
          */
         public long position() {
-            return mCurrentMediaPlayer.getCurrentPosition();
+            long result = 0;
+            try {
+                result = mCurrentMediaPlayer.getCurrentPosition();
+            } catch (Throwable t) {
+            }
+            return result;
         }
 
         /**
@@ -2727,7 +2744,11 @@ public class MusicPlaybackService extends Service {
          * @return The offset in milliseconds from the start to seek to
          */
         public long seek(final long whereto) {
-            mCurrentMediaPlayer.seekTo((int) whereto);
+            try {
+                mCurrentMediaPlayer.seekTo((int) whereto);
+            } catch (Throwable t) {
+
+            }
             return whereto;
         }
 
@@ -2750,7 +2771,10 @@ public class MusicPlaybackService extends Service {
          * @param sessionId The audio session ID
          */
         public void setAudioSessionId(final int sessionId) {
-            mCurrentMediaPlayer.setAudioSessionId(sessionId);
+            try {
+                mCurrentMediaPlayer.setAudioSessionId(sessionId);
+            } catch (Throwable t) {
+            }
         }
 
         /**
@@ -2759,7 +2783,12 @@ public class MusicPlaybackService extends Service {
          * @return The current audio session ID.
          */
         public int getAudioSessionId() {
-            return mCurrentMediaPlayer.getAudioSessionId();
+            int result = 0;
+            try {
+                result = mCurrentMediaPlayer.getAudioSessionId();
+            } catch (Throwable t) {
+            }
+            return result;
         }
 
         /**
@@ -2769,11 +2798,14 @@ public class MusicPlaybackService extends Service {
         public boolean onError(final MediaPlayer mp, final int what, final int extra) {
             switch (what) {
                 case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                    mIsInitialized = false;
-                    mCurrentMediaPlayer.release();
-                    mCurrentMediaPlayer = new com.frostwire.android.CompatMediaPlayer();
-                    mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
-                    mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);
+                    try {
+                        mIsInitialized = false;
+                        mCurrentMediaPlayer.release();
+                        mCurrentMediaPlayer = new com.frostwire.android.CompatMediaPlayer();
+                        mCurrentMediaPlayer.setWakeMode(mService.get(), PowerManager.PARTIAL_WAKE_LOCK);
+                        mHandler.sendMessageDelayed(mHandler.obtainMessage(SERVER_DIED), 2000);
+                    } catch (Throwable t) {
+                    }
                     return true;
                 default:
                     break;
@@ -2786,15 +2818,19 @@ public class MusicPlaybackService extends Service {
          */
         @Override
         public void onCompletion(final MediaPlayer mp) {
-            if (mp == mCurrentMediaPlayer && mNextMediaPlayer != null) {
-                mCurrentMediaPlayer.release();
-                mCurrentMediaPlayer = mNextMediaPlayer;
-                mNextMediaPlayer = null;
-                mHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT);
-            } else {
-                mService.get().mWakeLock.acquire(30000);
-                mHandler.sendEmptyMessage(TRACK_ENDED);
-                mHandler.sendEmptyMessage(RELEASE_WAKELOCK);
+            try {
+                if (mp == mCurrentMediaPlayer && mNextMediaPlayer != null) {
+                    mCurrentMediaPlayer.release();
+                    mCurrentMediaPlayer = mNextMediaPlayer;
+                    mNextMediaPlayer = null;
+                    mHandler.sendEmptyMessage(TRACK_WENT_TO_NEXT);
+                } else {
+                    mService.get().mWakeLock.acquire(30000);
+                    mHandler.sendEmptyMessage(TRACK_ENDED);
+                    mHandler.sendEmptyMessage(RELEASE_WAKELOCK);
+                }
+            } catch (Throwable t) {
+
             }
         }
     }
