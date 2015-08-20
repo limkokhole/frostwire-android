@@ -122,26 +122,30 @@ public class FavoritesStore extends SQLiteOpenHelper {
             return null;
         }
 
-        final SQLiteDatabase database = getReadableDatabase();
-        final String[] projection = new String[] {
-                FavoriteColumns.ID, FavoriteColumns.SONGNAME, FavoriteColumns.ALBUMNAME,
-                FavoriteColumns.ARTISTNAME, FavoriteColumns.PLAYCOUNT
-        };
-        final String selection = FavoriteColumns.ID + "=?";
-        final String[] having = new String[] {
-            String.valueOf(songId)
-        };
-        Cursor cursor = database.query(FavoriteColumns.NAME, projection, selection, having, null,
-                null, null, null);
-        if (cursor != null && cursor.moveToFirst()) {
-            final Long id = cursor.getLong(cursor.getColumnIndexOrThrow(FavoriteColumns.ID));
-            cursor.close();
-            cursor = null;
-            return id;
-        }
-        if (cursor != null) {
-            cursor.close();
-            cursor = null;
+        try {
+            final SQLiteDatabase database = getReadableDatabase();
+            final String[] projection = new String[]{
+                    FavoriteColumns.ID, FavoriteColumns.SONGNAME, FavoriteColumns.ALBUMNAME,
+                    FavoriteColumns.ARTISTNAME, FavoriteColumns.PLAYCOUNT
+            };
+            final String selection = FavoriteColumns.ID + "=?";
+            final String[] having = new String[]{
+                    String.valueOf(songId)
+            };
+            Cursor cursor = database.query(FavoriteColumns.NAME, projection, selection, having, null,
+                    null, null, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                final Long id = cursor.getLong(cursor.getColumnIndexOrThrow(FavoriteColumns.ID));
+                cursor.close();
+                cursor = null;
+                return id;
+            }
+            if (cursor != null) {
+                cursor.close();
+                cursor = null;
+            }
+        } catch (Throwable e) {
+            return null;
         }
         return null;
     }
