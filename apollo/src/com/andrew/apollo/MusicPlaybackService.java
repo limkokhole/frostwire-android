@@ -1071,12 +1071,14 @@ public class MusicPlaybackService extends Service {
         synchronized (this) {
             closeCursor();
 
-            if (mPlayListLen == 0) {
+            if (mPlayListLen == 0 || mPlayList == null) {
                 return;
             }
             stop(false);
 
+            mPlayPos = Math.min(mPlayPos, mPlayList.length - 1);
             updateCursor(mPlayList[mPlayPos]);
+
             while (true) {
                 if (mCursor != null && !mCursor.isClosed()
                         && openFile(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI + "/"
