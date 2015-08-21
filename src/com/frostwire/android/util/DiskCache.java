@@ -24,8 +24,8 @@ import com.squareup.okhttp.internal.DiskLruCache.Editor;
 import com.squareup.okhttp.internal.DiskLruCache.Snapshot;
 import com.squareup.okhttp.internal.Util;
 import com.squareup.okhttp.internal.io.FileSystem;
+import okio.Buffer;
 import okio.BufferedSink;
-import okio.BufferedSource;
 import okio.Okio;
 import okio.Source;
 
@@ -63,8 +63,7 @@ public final class DiskCache {
 
     public Entry get(String key) {
         Entry entry = null;
-        Snapshot snapshot = null;
-
+        Snapshot snapshot;
         try {
             snapshot = cache.get(encodeKey(key));
 
@@ -181,26 +180,16 @@ public final class DiskCache {
         }
 
         public InputStream getInputStream() {
-            return new SnapshotInputStream(snapshot.getSource(0));
+            final Source source = snapshot.getSource(0);
+            if (source == null) {
+                return null;
+            }
+            return ((Buffer) source).inputStream();
         }
 
         @Override
         public void close() {
             snapshot.close();
-        }
-    }
-
-    private static final class SnapshotInputStream extends InputStream {
-
-        private final BufferedSource source;
-
-        public SnapshotInputStream(Source source) {
-            this.source = Okio.buffer(source);
-        }
-
-        @Override
-        public int read() throws IOException {
-            return source.readByte();
         }
     }
 }
