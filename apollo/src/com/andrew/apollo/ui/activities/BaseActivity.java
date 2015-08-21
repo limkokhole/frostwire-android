@@ -59,7 +59,7 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
 public abstract class BaseActivity extends FragmentActivity implements ServiceConnection {
 
     /**
-     * Playstate and meta change listener
+     * Play state and meta change listener
      */
     private final ArrayList<MusicStateListener> mMusicStateListener = Lists.newArrayList();
 
@@ -104,11 +104,6 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     private PlaybackStatus mPlaybackStatus;
 
     /**
-     * Keeps track of the back button being used
-     */
-    private boolean mIsBackPressed = false;
-
-    /**
      * Theme resources
      */
     protected ThemeUtils mResources;
@@ -119,46 +114,40 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Initialze the theme resources
+        // Initialize the theme resources
         mResources = new ThemeUtils(this);
-
         // Set the overflow style
         mResources.setOverflowStyle(this);
-
         // Fade it in
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-
         // Control the media volume
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
         // Bind Apollo's service
         mToken = MusicUtils.bindToService(this, this);
-
         // Initialize the broadcast receiver
         mPlaybackStatus = new PlaybackStatus(this);
+        prepareActionBar();
+        // Set the layout
+        setContentView(setContentView());
+        // Initialize the bottom action bar
+        initBottomActionBar();
+    }
 
-        // Theme the action bar
+    private void prepareActionBar() {
         final ActionBar actionBar = getActionBar();
-        mResources.themeActionBar(actionBar, getString(R.string.app_name), getWindow());
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayShowHomeEnabled(false);
-        actionBar.setIcon(R.color.transparent);
-        actionBar.setDisplayShowTitleEnabled(false);
-
+        if (actionBar != null) {
+            mResources.themeActionBar(actionBar, getString(R.string.app_name), getWindow());
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(false);
+            actionBar.setIcon(R.color.transparent);
+            actionBar.setDisplayShowTitleEnabled(false);
+        }
 
         TextView actionBarTitleTextView = (TextView) findViewById(R.id.action_bar_title);
         if (actionBarTitleTextView != null) {
             actionBarTitleTextView.setOnClickListener(new ActionBarTextViewClickListener(this));
         }
-
-        // Set the layout
-        setContentView(setContentView());
-
-        // Initialize the bottom action bar
-        initBottomActionBar();
     }
 
     /**
@@ -247,6 +236,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     protected void onResume() {
         super.onResume();
         // Set the playback drawables
+        initBottomActionBar();
         updatePlaybackControls();
         // Current info
         updateBottomActionBarInfo();
@@ -310,14 +300,14 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        mIsBackPressed = true;
     }
 
     /**
      * Initializes the items in the bottom action bar.
      */
     private void initBottomActionBar() {
-        if (!MusicUtils.isStopped()) {
+        boolean isPlaying = !MusicUtils.isStopped();
+        if (isPlaying) {
             // Play and pause button
             mPlayPauseButton = (PlayPauseButton) findViewById(R.id.action_button_play);
             mPlayPauseButton.setPlayDrawable(R.drawable.btn_playback_play_bottom);
@@ -348,9 +338,8 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
 
             //new StopListener(this, false)
             mPlayPauseButton.setOnLongClickListener(new StopAndHideBottomActionBarListener(this, false));
-        } else {
-            hideBottomActionBar();
         }
+        setBottomActionBarVisible(isPlaying);
     }
 
     /**
@@ -367,28 +356,25 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
         }
     }
 
-    /**
-     * Hides the bottom action bar container, the little player down there.
-     */
-    private void hideBottomActionBar() {
+    private void setBottomActionBarVisible(boolean visible) {
         final BottomActionBar bottomActionBar = (BottomActionBar) findViewById(R.id.bottom_action_bar_parent);
-        bottomActionBar.setVisibility(View.GONE);
+        bottomActionBar.setVisibility(visible ? View.VISIBLE : View.GONE);
     }
 
     /**
      * Sets the correct drawable states for the playback controls.
      */
     private void updatePlaybackControls() {
-        if (!MusicUtils.isStopped() && mPlayPauseButton != null && mShuffleButton != null && mRepeatButton != null) {
+        boolean showControls = !MusicUtils.isStopped() && mPlayPauseButton != null && mShuffleButton != null && mRepeatButton != null;
+        if (showControls) {
             // Set the play and pause image
             mPlayPauseButton.updateState();
             // Set the shuffle image
             mShuffleButton.updateShuffleState();
             // Set the repeat image
             mRepeatButton.updateRepeatState();
-        } else {
-            hideBottomActionBar();
         }
+        setBottomActionBarVisible(!MusicUtils.isStopped());
     }
 
     /**
@@ -456,7 +442,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
                 mReference.get().updateBottomActionBarInfo();
                 // Update the favorites icon
                 mReference.get().invalidateOptionsMenu();
-                // Let the listener know to the meta chnaged
+                // Let the listener know to the meta changed
                 for (final MusicStateListener listener : mReference.get().mMusicStateListener) {
                     if (listener != null) {
                         listener.onMetaChanged();
@@ -518,7 +504,7 @@ public abstract class BaseActivity extends FragmentActivity implements ServiceCo
         @Override
         public boolean onLongClick(View v) {
             super.onLongClick(v);
-            hideBottomActionBar();
+            setBottomActionBarVisible(false);
             return true;
         }
     }
