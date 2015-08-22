@@ -225,19 +225,16 @@ public class OfferUtils {
         return isAppLovinEnabled;
     }
 
-    public static boolean showAppLovinInterstitial(Activity callerActivity, boolean applovinStarted, AppLovinAdapter adapter) {
-        if (isAppLovinEnabled() && applovinStarted && AppLovinInterstitialAd.isAdReadyToDisplay(callerActivity)) {
+    public static boolean showAppLovinInterstitial(boolean applovinStarted,
+                                                   FWAppLovinInterstitialAdDialog adDialog) {
+        if (isAppLovinEnabled() && applovinStarted) {
             try {
-                final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(callerActivity), callerActivity);
-                adDialog.setAdDisplayListener(adapter);
-                adDialog.setAdLoadListener(adapter);
-
-                adapter.getOnReadyLatch().await(1, TimeUnit.SECONDS);
-
-                if (!adapter.receivedAd || (adapter.isVideoAd && MusicUtils.isPlaying())) {
+                if (adDialog.isVideoAd && MusicUtils.isPlaying()) {
                     return false;
                 }
-
+                if (!adDialog.isAdReadyToDisplay()) {
+                    return false;
+                }
                 adDialog.show();
                 return true;
             } catch (Throwable e) {
@@ -249,10 +246,35 @@ public class OfferUtils {
         }
     }
 
-    public static class AppLovinAdapter implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
+    public static class FWAppLovinInterstitialAdDialog implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
+        private final AppLovinInterstitialAdDialog ad;
+        private final WeakReference<Activity> activityRef;
+
+        private boolean dismissAfter = false;
+        private boolean shutdownAfter = false;
         private boolean isVideoAd = false;
-        private boolean receivedAd = false;
-        private final CountDownLatch onReadyLatch = new CountDownLatch(1);
+
+        public FWAppLovinInterstitialAdDialog(AppLovinInterstitialAdDialog ad, Activity parentActivity) {
+            this.ad = ad;
+            this.activityRef = Ref.weak(parentActivity);
+            ad.setAdDisplayListener(this);
+            ad.setAdLoadListener(this);
+        }
+
+        public Activity getActivity() {
+            if (!Ref.alive(activityRef)) {
+                return null;
+            }
+            return activityRef.get();
+        }
+
+        public void dismissActivityAfterwards(boolean dismiss) {
+            dismissAfter = dismiss;
+        }
+
+        public void shutdownAppAfter(boolean shutdown) {
+            shutdownAfter = shutdown;
+        }
 
         @Override
         public void adDisplayed(AppLovinAd appLovinAd) {
@@ -260,29 +282,39 @@ public class OfferUtils {
 
         @Override
         public void adHidden(AppLovinAd appLovinAd) {
+            if (Ref.alive(activityRef)) {
+                Activity callerActivity = activityRef.get();
+
+                if (dismissAfter) {
+                    callerActivity.finish();
+                }
+                if (shutdownAfter) {
+                    if (callerActivity instanceof MainActivity) {
+                        ((MainActivity) callerActivity).shutdown();
+                    }
+                }
+            }
         }
 
         @Override
         public void adReceived(AppLovinAd appLovinAd) {
             if (appLovinAd != null) {
-                receivedAd = true;
                 isVideoAd = appLovinAd.isVideoAd();
-                onReadyLatch.countDown();
             }
         }
 
         @Override
         public void failedToReceiveAd(int i) {
-            receivedAd = false;
-            onReadyLatch.countDown();
         }
 
-        public CountDownLatch getOnReadyLatch() {
-            return onReadyLatch;
+        public boolean isAdReadyToDisplay() {
+            return ad != null && ad.isAdReadyToDisplay();
         }
 
-        public boolean adFailed() {
-            return !receivedAd;
+        public void show() {
+            if (ad!=null) {
+                ad.show();
+            }
         }
     }
 }

@@ -41,7 +41,6 @@ import com.andrew.apollo.IApolloService;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.MusicUtils.ServiceToken;
 import com.applovin.adview.AppLovinInterstitialAd;
-import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -54,12 +53,14 @@ import com.frostwire.android.gui.activities.internal.MainMenuAdapter;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.dialogs.TermsUseDialog;
 import com.frostwire.android.gui.dialogs.YesNoDialog;
-import com.frostwire.android.gui.fragments.*;
+import com.frostwire.android.gui.fragments.BrowsePeerFragment;
+import com.frostwire.android.gui.fragments.MainFragment;
+import com.frostwire.android.gui.fragments.SearchFragment;
+import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.OfferUtils;
-import com.frostwire.android.gui.util.OfferUtils.AppLovinAdapter;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.AbstractDialog.OnDialogClickListener;
@@ -104,7 +105,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private MainController controller;
 
     private DrawerLayout drawerLayout;
+
+    @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle drawerToggle;
+
     private View leftDrawer;
     private ListView listMenu;
 
@@ -127,6 +131,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private IMInterstitial inmobiInterstitial = null;
     private OfferUtils.InMobiListener inmobiListener = null;
+    private OfferUtils.FWAppLovinInterstitialAdDialog adDialog;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -134,9 +139,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         this.fragmentsStack = new Stack<Integer>();
     }
 
+    /**
     public void showMyFiles() {
         controller.showMyFiles();
-    }
+    }*/
 
     public void switchFragment(int itemId) {
         controller.switchFragment(itemId);
@@ -313,7 +319,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
              * the UI thread.
              * 
              * b) Pass a "listener" to the transfer manager, once the transfer manager has the torrent
-             * it can notify us and wait for the user to decide wether or not to continue with the transfer
+             * it can notify us and wait for the user to decide whether or not to continue with the transfer
              * 
              * c) Forget about showing that dialog, and just start the download, the user can cancel it.
              */
@@ -470,6 +476,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 try {
                     if (!appLovinStarted) {
                         AppLovinSdk.initializeSdk(MainActivity.this.getApplicationContext());
+                        adDialog = new OfferUtils.FWAppLovinInterstitialAdDialog(AppLovinInterstitialAd.create(AppLovinSdk.getInstance(MainActivity.this), MainActivity.this), MainActivity.this);
                         appLovinStarted = true;
                     }
                 } catch (Throwable e) {
@@ -490,7 +497,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 @Override
                 public void run() {
                     try {
-                        // this initialize call is very expensive, this is why we should be in voked in a thread.
+                        // this initialize call is very expensive, this is why we should be invoked in a thread.
                         //LOG.info("InMobi.initialize()...");
                         //InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
                         InMobi.initialize(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
@@ -504,22 +511,20 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     }
                 }
             }.start();
-        } else {
-            // everytime, we refresh the next interstitial, reusing
-            // old ads "may result in unpredictable behaviour" -inmobi docs.
-            //loadNewInmobiInterstitial();
         }
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        saveLastFragment(outState);
-        saveFragmentsStack(outState);
+        if (outState != null) {
+            super.onSaveInstanceState(outState);
+            saveLastFragment(outState);
+            saveFragmentsStack(outState);
 
-        outState.putBoolean(MOBILE_CORE_STARTED_KEY, mobileCoreStarted);
-        outState.putBoolean(INMOBI_STARTED_KEY, inmobiStarted);
-        outState.putBoolean(APPLOVIN_STARTED_KEY, appLovinStarted);
+            outState.putBoolean(MOBILE_CORE_STARTED_KEY, mobileCoreStarted);
+            outState.putBoolean(INMOBI_STARTED_KEY, inmobiStarted);
+            outState.putBoolean(APPLOVIN_STARTED_KEY, appLovinStarted);
+        }
     }
 
     private ServiceToken mToken;
@@ -622,32 +627,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         boolean interstitialShown = false;
 
         if (mobileCoreStarted) {
-            interstitialShown = OfferUtils.showMobileCoreInterstitial(this, mobileCoreStarted, new CallbackResponse() {
-                @Override
-                public void onConfirmation(CallbackResponse.TYPE type) {
-                    if (dismissAfterwards) {
-                        finish();
-                    }
-                    if (shutdownAfterwards) {
-                        shutdown();
-                    }
-                }
-            });
+            interstitialShown = showMobileCoreInsterstitial(shutdownAfterwards, dismissAfterwards);
         }
 
-        if (!interstitialShown && appLovinStarted) {
-            interstitialShown = OfferUtils.showAppLovinInterstitial(this, appLovinStarted,
-                    new AppLovinAdapter() {
-                        @Override
-                        public void adHidden(AppLovinAd appLovinAd) {
-                            if (dismissAfterwards) {
-                                finish();
-                            }
-                            if (shutdownAfterwards) {
-                                shutdown();
-                            }
-                        }
-                    });
+        if (!interstitialShown && appLovinStarted && adDialog != null) {
+            adDialog.shutdownAppAfter(shutdownAfterwards);
+            adDialog.dismissActivityAfterwards(dismissAfterwards);
+            interstitialShown = OfferUtils.showAppLovinInterstitial(appLovinStarted, adDialog);
         }
 
         if (!interstitialShown && inmobiStarted) {
@@ -670,6 +656,20 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 shutdown();
             }
         }
+    }
+
+    private boolean showMobileCoreInsterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
+        return OfferUtils.showMobileCoreInterstitial(this, true, new CallbackResponse() {
+            @Override
+            public void onConfirmation(TYPE type) {
+                if (dismissAfterwards) {
+                    finish();
+                }
+                if (shutdownAfterwards) {
+                    shutdown();
+                }
+            }
+        });
     }
 
     private void onLastDialogButtonPositive() {
