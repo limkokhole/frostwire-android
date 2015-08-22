@@ -106,21 +106,15 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             populateYouTubePart(view, (YouTubeCrawledSearchResult) sr);
         }
 
-        populateBackgroundAndDownloadButton(view, sr);
+        maybeMarkTitleOpened(view, sr);
         populateThumbnail(view, sr);
     }
 
-    protected void populateBackgroundAndDownloadButton(View view, SearchResult sr) {
-        int downloadButtonDrawableId = R.drawable.download_icon;
-        int layoutBackgroundColorId = R.drawable.listview_item_press_background_selector_on;
-        if (LocalSearchEngine.instance().hasBeenOpened(sr)) {
-            layoutBackgroundColorId = R.color.all_list_cell_background_visited;
-            downloadButtonDrawableId = R.drawable.download_clicked_icon;
-        }
-        RelativeLayout relativeLayout = findView(view, R.id.view_bittorrent_search_result_list_item_details_relative_layout);
-        relativeLayout.setBackgroundColor(layoutBackgroundColorId);
-        ImageView downloadButton = findView(view, R.id.view_bittorrent_search_result_list_item_download_icon);
-        downloadButton.setImageResource(downloadButtonDrawableId);
+    protected void maybeMarkTitleOpened(View view, SearchResult sr) {
+        int clickedColor = getContext().getResources().getColor(R.color.browse_peer_listview_item_inactive_foreground);
+        int unclickedColor = getContext().getResources().getColor(R.color.basic_blue);
+        TextView title = findView(view, R.id.view_bittorrent_search_result_list_item_title);
+        title.setTextColor(LocalSearchEngine.instance().hasBeenOpened(sr) ? clickedColor : unclickedColor);
     }
 
     protected void populateFilePart(View view, FileSearchResult sr) {
@@ -188,7 +182,6 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     @Override
     protected void onItemClicked(View v) {
         SearchResult sr = (SearchResult) v.getTag();
-        LocalSearchEngine.instance().markOpened(sr);
         searchResultClicked(sr);
     }
 

@@ -46,12 +46,11 @@
         android:src="@drawable/download_icon" />
 
     <RelativeLayout
-        android:id="@+id/view_bittorrent_search_result_list_item_details_relative_layout"
         android:layout_width="0dip"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:background="@drawable/listview_item_press_background_selector"
-        android:padding="5dp" >
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/view_bittorrent_search_result_list_item_title"

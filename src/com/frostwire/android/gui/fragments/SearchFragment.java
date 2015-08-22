@@ -159,7 +159,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         if (this.localSearchSubscription != null) {
             try {
                 this.localSearchSubscription.unsubscribe();
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
 
             }
         }
@@ -284,7 +284,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 @Override
                 public void onNext(final List<SearchResult> results) {
                     @SuppressWarnings("unchecked")
-                    FilteredSearchResults fsr = adapter.filter((List<SearchResult>) results);
+                    FilteredSearchResults fsr = adapter.filter(results);
                     final List<SearchResult> filteredList = fsr.filtered;
 
                     fileTypeCounter.add(fsr);
@@ -419,6 +419,8 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
             if (Ref.alive(NewTransferDialog.srRef)) {
                 startDownload(this.getActivity(), NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
+                LocalSearchEngine.instance().markOpened(NewTransferDialog.srRef.get());
+                adapter.notifyDataSetChanged();
             }
         }
     }
@@ -516,7 +518,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 intent.setData(Uri.parse("market://details?id=" + Constants.APP_PACKAGE_NAME));
                 try {
                     startActivity(intent);
-                } catch (Throwable t) {
+                } catch (Throwable ignored) {
                 }
             }
         };
