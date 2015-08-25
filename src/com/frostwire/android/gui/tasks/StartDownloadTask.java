@@ -21,15 +21,13 @@ package com.frostwire.android.gui.tasks;
 import android.content.Context;
 
 import com.frostwire.android.R;
-import com.frostwire.android.gui.transfers.BittorrentDownload;
-import com.frostwire.android.gui.transfers.DownloadTransfer;
-import com.frostwire.android.gui.transfers.ExistingDownload;
-import com.frostwire.android.gui.transfers.InvalidTransfer;
-import com.frostwire.android.gui.transfers.TransferManager;
+import com.frostwire.android.gui.transfers.*;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.ContextTask;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.SearchResult;
+
+import java.util.List;
 
 /**
  * 
@@ -73,6 +71,7 @@ public class StartDownloadTask extends ContextTask<DownloadTransfer> {
                 TransferManager tm = TransferManager.instance();
                 if (tm.isBittorrentDownloadAndMobileDataSavingsOn(transfer)) {
                     UIUtils.showLongMessage(ctx, R.string.torrent_transfer_enqueued_on_mobile_data);
+                    ((BittorrentDownload) transfer).pause();
                 } else {
                     if (tm.isBittorrentDownloadAndMobileDataSavingsOff(transfer)) {
                         UIUtils.showLongMessage(ctx, R.string.torrent_transfer_consuming_mobile_data);

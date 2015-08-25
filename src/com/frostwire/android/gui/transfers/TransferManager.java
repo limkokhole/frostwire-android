@@ -18,25 +18,13 @@
 
 package com.frostwire.android.gui.transfers;
 
-import java.io.File;
-import java.net.URI;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArrayList;
-
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.NetworkManager;
-import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.bittorrent.BTDownload;
 import com.frostwire.bittorrent.BTEngine;
 import com.frostwire.bittorrent.BTEngineAdapter;
@@ -48,9 +36,12 @@ import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
-import com.frostwire.util.StringUtils;
-import com.frostwire.uxstats.UXAction;
-import com.frostwire.uxstats.UXStats;
+
+import java.io.File;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 /**
  * @author gubatron
@@ -139,7 +130,11 @@ public final class TransferManager {
     
     public DownloadTransfer download(SearchResult sr) {
         DownloadTransfer transfer = null;
-        
+
+        if (isBittorrentSearchResultAndMobileDataSavingsOn(sr)) {
+           return new InvalidBittorrentDownload(R.string.torrent_transfer_aborted_on_mobile_data);
+        }
+
         if (alreadyDownloading(sr.getDetailsUrl())) {
             transfer = new ExistingDownload();
         }
@@ -385,8 +380,15 @@ public final class TransferManager {
         return transfer instanceof UIBittorrentDownload || transfer instanceof TorrentFetcherDownload;
     }
 
+    public boolean isBittorrentSearchResultAndMobileDataSavingsOn(SearchResult sr) {
+        return sr instanceof TorrentSearchResult &&
+                NetworkManager.instance().isDataMobileUp() &&
+                !ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA);
+    }
+
+
     public boolean isBittorrentDownloadAndMobileDataSavingsOn(DownloadTransfer transfer) {
-        return isBittorrentDownload(transfer) && 
+        return isBittorrentDownload(transfer) &&
                 NetworkManager.instance().isDataMobileUp() && 
                 !ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA);
     }

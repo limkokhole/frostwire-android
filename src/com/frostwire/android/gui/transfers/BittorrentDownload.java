@@ -20,8 +20,6 @@ package com.frostwire.android.gui.transfers;
 
 import com.frostwire.bittorrent.PaymentOptions;
 
-import java.util.List;
-
 /**
  * @author gubatron
  * @author aldenml
@@ -29,23 +27,23 @@ import java.util.List;
  */
 public interface BittorrentDownload extends DownloadTransfer {
 
-    public String getHash();
+    String getHash();
 
-    public String getPeers();
+    String getPeers();
 
-    public String getSeeds();
+    String getSeeds();
 
-    public boolean isResumable();
+    boolean isResumable();
 
-    public boolean isPausable();
+    boolean isPausable();
 
-    public boolean isSeeding();
+    boolean isSeeding();
 
-    public void pause();
+    void pause();
 
-    public void resume();
+    void resume();
 
-    public boolean hasPaymentOptions();
+    boolean hasPaymentOptions();
 
-    public PaymentOptions getPaymentOptions();
+    PaymentOptions getPaymentOptions();
 }
