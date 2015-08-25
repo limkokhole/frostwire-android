@@ -158,14 +158,20 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
                         public void run() {
                             Engine.instance().startServices();
 
-                            if (!ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS) || (!NetworkManager.instance().isDataWIFIUp() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY))) {
+                            if (shouldStopSeeding()) {
                                 TransferManager.instance().stopSeedingTorrents();
                             }
                         }
                     });
+                } else if (shouldStopSeeding()) {
+                    TransferManager.instance().stopSeedingTorrents();
                 }
             }
         }
+    }
+
+    private boolean shouldStopSeeding() {
+        return !ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS) || (!NetworkManager.instance().isDataWIFIUp() && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY));
     }
 
     private void handleMediaMounted(final Context context, Intent intent) {
