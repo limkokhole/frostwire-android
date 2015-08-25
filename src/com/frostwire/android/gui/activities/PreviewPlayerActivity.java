@@ -28,6 +28,8 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.widget.*;
@@ -158,6 +160,20 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
             isFullScreen = false; //so it will make it full screen on what was an orientation change.
             toggleFullScreen(v);
         }
+
+        initPhoneRingListener();
+    }
+
+    private void initPhoneRingListener() {
+        final PhoneStateListener phoneListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                super.onCallStateChanged(state, incomingNumber);
+                PreviewPlayerActivity.this.finish();
+            }
+        };
+        final TelephonyManager phone = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        phone.listen(phoneListener,TelephonyManager.CALL_STATE_RINGING | TelephonyManager.CALL_STATE_OFFHOOK);
     }
 
     @Override
