@@ -68,5 +68,6 @@
     <color name="browse_peer_listview_item_inactive_foreground">#ffb1b1b1</color>
 
     <color name="tpi_unselected_text_color">@color/basic_white</color>
+    <color name="warning_red">#ffff0000</color>
 
 </resources>
