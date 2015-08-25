@@ -3,6 +3,7 @@ FrostWire 1.6.3 - AUGUST/20/2015
  - Code/library cleanup.
  - Clicked search results are marked as visited and remembered during session.
  - jlibtorrent update, rebuilt with new swig library.
+ - Fixes issue where torrent downloads would start on 3g/4g disregarding setting.
  - Multiple crash fixes on audio player.
 
 FrostWire 1.6.2 - AUGUST/14/2015
