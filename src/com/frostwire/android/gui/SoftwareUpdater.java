@@ -115,20 +115,21 @@ public final class SoftwareUpdater {
                     final String basicOrPlus = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "basic":"plus";
                     final String userAgent = "FrostWire/android-"+ basicOrPlus+"/"+Constants.FROSTWIRE_VERSION_STRING;
                     byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL, userAgent).fetch();
-                    update = JsonUtils.toObject(new String(jsonBytes), Update.class);
 
-                    latestVersion = update.v;
-                    String[] latestVersionArr = latestVersion.split("\\.");
+                    if (jsonBytes != null) {
+                        update = JsonUtils.toObject(new String(jsonBytes), Update.class);
+                        latestVersion = update.v;
+                        String[] latestVersionArr = latestVersion.split("\\.");
 
-                    // lv = latest version
-                    byte[] lv = new byte[] { Byte.valueOf(latestVersionArr[0]), Byte.valueOf(latestVersionArr[1]), Byte.valueOf(latestVersionArr[2]) };
+                        // lv = latest version
+                        byte[] lv = new byte[]{Byte.valueOf(latestVersionArr[0]), Byte.valueOf(latestVersionArr[1]), Byte.valueOf(latestVersionArr[2])};
 
-                    // mv = my version
-                    byte[] mv = buildVersion(Constants.FROSTWIRE_VERSION_STRING);
+                        // mv = my version
+                        byte[] mv = buildVersion(Constants.FROSTWIRE_VERSION_STRING);
 
-                    oldVersion = isFrostWireOld(mv, lv);
-
-                    updateConfiguration(update);
+                        oldVersion = isFrostWireOld(mv, lv);
+                        updateConfiguration(update);
+                    }
 
                     return handleOTAUpdate();
                 } catch (Throwable e) {
