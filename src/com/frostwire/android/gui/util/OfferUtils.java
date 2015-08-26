@@ -308,12 +308,17 @@ public class OfferUtils {
         }
 
         public boolean show() {
+            boolean result = false;
             if (ad!=null && Ref.alive(activityRef)) {
-                // need a way to display the AppLovinAd.
-                // can't find a default implementer of AppLovinInterstitialAdDialog
-                return true;
+                try {
+                    final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activityRef.get()), activityRef.get());
+                    adDialog.showAndRender(ad);
+                    result = true;
+                } catch (Throwable t) {
+                    result = false;
+                }
             }
-            return false;
+            return result;
         }
     }
 }
