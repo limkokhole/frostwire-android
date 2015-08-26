@@ -21,10 +21,10 @@ package com.frostwire.android.gui.util;
 import android.app.Activity;
 import android.content.Context;
 import com.andrew.apollo.utils.MusicUtils;
+import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdDisplayListener;
-import com.applovin.sdk.AppLovinAdLoadListener;
+import com.applovin.impl.adview.af;
+import com.applovin.sdk.*;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -246,7 +246,7 @@ public class OfferUtils {
     public static class FWAppLovinInterstitialAdapter implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
         private static final Logger LOG = Logger.getLogger(FWAppLovinInterstitialAdapter.class);
         private final WeakReference<Activity> activityRef;
-        private AppLovinInterstitialAdDialog ad;
+        private AppLovinAd ad;
 
         private boolean dismissAfter = false;
         private boolean shutdownAfter = false;
@@ -294,12 +294,7 @@ public class OfferUtils {
         @Override
         public void adReceived(AppLovinAd appLovinAd) {
             if (appLovinAd != null) {
-                if (appLovinAd instanceof AppLovinInterstitialAdDialog) {
-                    ad = (AppLovinInterstitialAdDialog) appLovinAd;
-                    ad.setAdDisplayListener(this);
-                    ad.setAdLoadListener(this);
-                    isVideoAd = appLovinAd.isVideoAd();
-                }
+                isVideoAd = appLovinAd.isVideoAd();
             }
         }
 
@@ -309,12 +304,13 @@ public class OfferUtils {
         }
 
         public boolean isAdReadyToDisplay() {
-            return ad != null && ad.isAdReadyToDisplay();
+            return ad != null && Ref.alive(activityRef) && AppLovinInterstitialAd.isAdReadyToDisplay(activityRef.get());
         }
 
         public void show() {
-            if (ad!=null) {
-                ad.show();
+            if (ad!=null && Ref.alive(activityRef)) {
+                // need a way to display the AppLovinAd.
+                // can't find a default implementer of AppLovinInterstitialAdDialog
             }
         }
     }
