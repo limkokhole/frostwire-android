@@ -21,12 +21,10 @@ package com.frostwire.android.gui.util;
 import android.app.Activity;
 import android.content.Context;
 import com.andrew.apollo.utils.MusicUtils;
-import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
 import com.applovin.sdk.AppLovinAd;
 import com.applovin.sdk.AppLovinAdDisplayListener;
 import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -42,7 +40,6 @@ import com.ironsource.mobilcore.MobileCore;
 
 import java.lang.ref.WeakReference;
 import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 public class OfferUtils {
@@ -226,7 +223,7 @@ public class OfferUtils {
     }
 
     public static boolean showAppLovinInterstitial(boolean applovinStarted,
-                                                   FWAppLovinInterstitialAdDialog adDialog) {
+                                                   FWAppLovinInterstitialAdapter adDialog) {
         if (isAppLovinEnabled() && applovinStarted) {
             try {
                 if (adDialog.isVideoAd && MusicUtils.isPlaying()) {
@@ -246,19 +243,17 @@ public class OfferUtils {
         }
     }
 
-    public static class FWAppLovinInterstitialAdDialog implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
-        private final AppLovinInterstitialAdDialog ad;
+    public static class FWAppLovinInterstitialAdapter implements AppLovinAdDisplayListener, AppLovinAdLoadListener {
+        private static final Logger LOG = Logger.getLogger(FWAppLovinInterstitialAdapter.class);
         private final WeakReference<Activity> activityRef;
+        private AppLovinInterstitialAdDialog ad;
 
         private boolean dismissAfter = false;
         private boolean shutdownAfter = false;
         private boolean isVideoAd = false;
 
-        public FWAppLovinInterstitialAdDialog(AppLovinInterstitialAdDialog ad, Activity parentActivity) {
-            this.ad = ad;
+        public FWAppLovinInterstitialAdapter(Activity parentActivity) {
             this.activityRef = Ref.weak(parentActivity);
-            ad.setAdDisplayListener(this);
-            ad.setAdLoadListener(this);
         }
 
         public Activity getActivity() {
@@ -299,12 +294,18 @@ public class OfferUtils {
         @Override
         public void adReceived(AppLovinAd appLovinAd) {
             if (appLovinAd != null) {
-                isVideoAd = appLovinAd.isVideoAd();
+                if (appLovinAd instanceof AppLovinInterstitialAdDialog) {
+                    ad = (AppLovinInterstitialAdDialog) appLovinAd;
+                    ad.setAdDisplayListener(this);
+                    ad.setAdLoadListener(this);
+                    isVideoAd = appLovinAd.isVideoAd();
+                }
             }
         }
 
         @Override
         public void failedToReceiveAd(int i) {
+            LOG.warn("failed to receive ad ("+ i +")");
         }
 
         public boolean isAdReadyToDisplay() {

@@ -40,7 +40,7 @@ import android.widget.RelativeLayout;
 import com.andrew.apollo.IApolloService;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.MusicUtils.ServiceToken;
-import com.applovin.adview.AppLovinInterstitialAd;
+import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -82,7 +82,7 @@ import java.util.Stack;
 import static com.andrew.apollo.utils.MusicUtils.mService;
 
 /**
- * 
+ *
  * @author gubatron
  * @author aldenml
  *
@@ -126,12 +126,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private boolean inmobiStarted = false;
 
     private TimerSubscription playerSubscription;
-    
+
     private BroadcastReceiver mainBroadcastReceiver;
 
     private IMInterstitial inmobiInterstitial = null;
     private OfferUtils.InMobiListener inmobiListener = null;
-    private OfferUtils.FWAppLovinInterstitialAdDialog adDialog;
+    private OfferUtils.FWAppLovinInterstitialAdapter appLovinInterstitialAdapter = null;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -309,18 +309,18 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
              * TODO: Ask @aldenml the best way to plug in NewTransferDialog.
              * I've refactored this dialog so that it is forced (no matter if the setting
              * to not show it again has been used) and when that happens the checkbox is hidden.
-             * 
+             *
              * However that dialog requires some data about the download, data which is not
              * obtained until we have instantiated the Torrent object.
-             * 
+             *
              * I'm thinking that we can either:
              * a) Pass a parameter to the transfer manager, but this would probably
              * not be cool since the transfer manager (I think) should work independently from
              * the UI thread.
-             * 
+             *
              * b) Pass a "listener" to the transfer manager, once the transfer manager has the torrent
              * it can notify us and wait for the user to decide whether or not to continue with the transfer
-             * 
+             *
              * c) Forget about showing that dialog, and just start the download, the user can cancel it.
              */
 
@@ -400,7 +400,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     @Override
     protected void onPause() {
         super.onPause();
-        
+
         if (mainBroadcastReceiver != null) {
             try {
                 unregisterReceiver(mainBroadcastReceiver);
@@ -476,7 +476,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 try {
                     if (!appLovinStarted) {
                         AppLovinSdk.initializeSdk(MainActivity.this.getApplicationContext());
-                        adDialog = new OfferUtils.FWAppLovinInterstitialAdDialog(AppLovinInterstitialAd.create(AppLovinSdk.getInstance(MainActivity.this), MainActivity.this), MainActivity.this);
+                        appLovinInterstitialAdapter = new OfferUtils.FWAppLovinInterstitialAdapter(MainActivity.this);
+                        AppLovinSdk.getInstance(MainActivity.this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, appLovinInterstitialAdapter);
                         appLovinStarted = true;
                     }
                 } catch (Throwable e) {
@@ -630,10 +631,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             interstitialShown = showMobileCoreInsterstitial(shutdownAfterwards, dismissAfterwards);
         }
 
-        if (!interstitialShown && appLovinStarted && adDialog != null) {
-            adDialog.shutdownAppAfter(shutdownAfterwards);
-            adDialog.dismissActivityAfterwards(dismissAfterwards);
-            interstitialShown = OfferUtils.showAppLovinInterstitial(appLovinStarted, adDialog);
+        if (!interstitialShown && appLovinStarted && appLovinInterstitialAdapter != null) {
+            appLovinInterstitialAdapter.shutdownAppAfter(shutdownAfterwards);
+            appLovinInterstitialAdapter.dismissActivityAfterwards(dismissAfterwards);
+            interstitialShown = OfferUtils.showAppLovinInterstitial(appLovinStarted, appLovinInterstitialAdapter);
         }
 
         if (!interstitialShown && inmobiStarted) {
@@ -873,9 +874,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private void setupActionBar() {
         ActionBar bar = getActionBar();
-
         bar.setCustomView(R.layout.view_custom_actionbar);
-
         bar.setDisplayShowCustomEnabled(true);
         bar.setDisplayHomeAsUpEnabled(true);
         bar.setHomeButtonEnabled(true);
