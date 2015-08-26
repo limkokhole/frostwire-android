@@ -116,7 +116,7 @@ public class ThemeUtils {
         try {
             // Find the theme resources
             mResources = mPackageManager.getResourcesForApplication(mThemePackage);
-        } catch (final Exception e) {
+        } catch (Throwable e) {
             // If the user isn't using a theme, then the resources should be
             // Apollo's.
             setThemePackageName(APOLLO_PACKAGE);
@@ -182,11 +182,13 @@ public class ThemeUtils {
      * @return A new color from the theme resources.
      */
     public Drawable getDrawable(final String resourceName) {
-        final int resourceId = mResources.getIdentifier(resourceName, "drawable", mThemePackage);
-        try {
-            return mResources.getDrawable(resourceId);
-        } catch (final Resources.NotFoundException e) {
-            //$FALL-THROUGH$
+        if (mResources != null) {
+            final int resourceId = mResources.getIdentifier(resourceName, "drawable", mThemePackage);
+            try {
+                return mResources.getDrawable(resourceId);
+            } catch (final Resources.NotFoundException e) {
+                //$FALL-THROUGH$
+            }
         }
         return null;
     }

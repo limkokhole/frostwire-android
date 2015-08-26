@@ -232,8 +232,8 @@ public class OfferUtils {
                 if (!adDialog.isAdReadyToDisplay()) {
                     return false;
                 }
-                adDialog.show();
-                return true;
+
+                return adDialog.show();
             } catch (Throwable e) {
                 e.printStackTrace();
                 return false;
@@ -307,11 +307,13 @@ public class OfferUtils {
             return ad != null && Ref.alive(activityRef) && AppLovinInterstitialAd.isAdReadyToDisplay(activityRef.get());
         }
 
-        public void show() {
+        public boolean show() {
             if (ad!=null && Ref.alive(activityRef)) {
                 // need a way to display the AppLovinAd.
                 // can't find a default implementer of AppLovinInterstitialAdDialog
+                return true;
             }
+            return false;
         }
     }
 }
