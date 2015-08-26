@@ -648,8 +648,10 @@ public final class MusicUtils {
             if (position < 0) {
                 position = 0;
             }
+
             mService.open(list, forceShuffle ? -1 : position);
             mService.play();
+
         } catch (final RemoteException ignored) {
         }
     }
@@ -689,8 +691,11 @@ public final class MusicUtils {
                     return;
                 }
             }
-            mService.open(mTrackList, -1);
-            mService.play();
+
+            if (mTrackList != null && mTrackList.length > 0) {
+                mService.open(mTrackList, -1);
+                mService.play();
+            }
             cursor.close();
             cursor = null;
         } catch (final RemoteException ignored) {

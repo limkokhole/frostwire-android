@@ -2858,7 +2858,9 @@ public class MusicPlaybackService extends Service {
          */
         @Override
         public void open(final long[] list, final int position) throws RemoteException {
-            mService.get().open(list, position);
+            if (list != null) {
+                mService.get().open(list, position);
+            }
         }
 
         /**
