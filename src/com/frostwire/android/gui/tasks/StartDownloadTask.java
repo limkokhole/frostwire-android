@@ -86,7 +86,7 @@ public class StartDownloadTask extends ContextTask<DownloadTransfer> {
                     //nothing happens here, the user should just see the transfer
                     //manager and we avoid adding the same transfer twice.
                 } else {
-                    UIUtils.showShortMessage(ctx, ((InvalidTransfer) transfer).getReasonResId());
+                    UIUtils.showLongMessage(ctx, ((InvalidTransfer) transfer).getReasonResId());
                 }
             }
         }
