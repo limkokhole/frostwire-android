@@ -20,10 +20,10 @@ package com.frostwire.android.gui.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import com.andrew.apollo.utils.MusicUtils;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
-import com.applovin.impl.adview.af;
 import com.applovin.sdk.*;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -32,9 +32,11 @@ import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import com.inmobi.commons.InMobi;
 import com.inmobi.monetization.IMErrorCode;
 import com.inmobi.monetization.IMInterstitial;
 import com.inmobi.monetization.IMInterstitialListener;
+import com.ironsource.mobilcore.AdUnitEventListener;
 import com.ironsource.mobilcore.CallbackResponse;
 import com.ironsource.mobilcore.MobileCore;
 
@@ -47,13 +49,41 @@ public class OfferUtils {
     private static final Logger LOG = Logger.getLogger(OfferUtils.class);
     public static boolean MOBILE_CORE_NATIVE_ADS_READY = false;
 
+    private static boolean mobileCoreStarted = false;
+    private static boolean appLovinStarted = false;
+    private static boolean inmobiStarted = false;
+
+    private static IMInterstitial inmobiInterstitial = null;
+    private static OfferUtils.InMobiListener inmobiListener = null;
+    private static OfferUtils.FWAppLovinInterstitialAdapter appLovinInterstitialAdapter = null;
+
+    public static void initAffiliatesAsync(Activity activity) {
+        initializeMobileCore(activity); // this one needs UI thread initialization.
+        initializeAppLovin(activity);
+        initializeInMobi(activity);
+    }
+
+    public static void stopAffiliateServices(Context context) {
+        // Stop MobileCore if you have to.
+        if (mobileCoreStarted) {
+            try {
+                context.stopService(new Intent(context.getApplicationContext(),
+                        com.ironsource.mobilcore.MobileCoreReport.class));
+            } catch (Throwable t) {
+                t.printStackTrace();
+            }
+        }
+
+        // TODO: See if other SDKs leave any service running and stop them the same way if possible.
+    }
+
     /**
      * True if user has enabled support for frostwire, Appia is enabled and it's not an Amazon distribution build.
      *
      * @return
      */
     public static boolean isfreeAppsEnabled() {
-        ConfigurationManager config = null;
+        ConfigurationManager config;
         boolean isFreeAppsEnabled = false;
         try {
             config = ConfigurationManager.instance();
@@ -111,7 +141,7 @@ public class OfferUtils {
     }
 
     public static boolean isInMobiEnabled() {
-        ConfigurationManager config = null;
+        ConfigurationManager config;
         boolean isInMobiEnabled = false;
         try {
             config = ConfigurationManager.instance();
@@ -122,13 +152,38 @@ public class OfferUtils {
         return isInMobiEnabled;
     }
 
+    public static void loadNewInmobiInterstitial(final Activity activity) {
+        if (!inmobiStarted) {
+            return; //not ready
+        }
+
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    inmobiInterstitial = new IMInterstitial(activity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                    // in case it fails loading, it will try again every minute once.
+                    inmobiListener = new OfferUtils.InMobiListener(activity, false, false);
+                    inmobiInterstitial.setIMInterstitialListener(inmobiListener);
+                    inmobiInterstitial.loadInterstitial();
+                } catch (Throwable t) {
+                    // don't crash, keep going.
+                    // possible android.util.AndroidRuntimeException: android.content.pm.PackageManager$NameNotFoundException: com.google.android.webview
+                }
+            }
+        });
+    }
+
     public static boolean showInMobiInterstitial(boolean inmobiStarted, final IMInterstitial imInterstitial, final InMobiListener imListener) {
         if (!inmobiStarted || !isInMobiEnabled() || imInterstitial == null) {
             return false;
         }
 
+        imInterstitial.setIMInterstitialListener(imListener);
+
         if (imInterstitial.getState().equals(IMInterstitial.State.READY)) {
             try {
+
                 imInterstitial.show();
                 return true;
             } catch (Throwable e) {
@@ -189,8 +244,7 @@ public class OfferUtils {
                         if (Ref.alive(activityRef)) {
                             Activity activity = activityRef.get();
                             if (activity instanceof MainActivity) {
-                                MainActivity mainActivity = (MainActivity) activity;
-                                mainActivity.loadNewInmobiInterstitial();
+                                loadNewInmobiInterstitial(activity);
                             }
                         }
                     } catch (InterruptedException e) {
@@ -320,5 +374,135 @@ public class OfferUtils {
             }
             return result;
         }
+    }
+
+    private static void initializeMobileCore(Activity activity) {
+        if (!mobileCoreStarted && OfferUtils.isMobileCoreEnabled()) {
+            try {
+                MobileCore.init(activity, Constants.MOBILE_CORE_DEVHASH, MobileCore.LOG_TYPE.DEBUG, MobileCore.AD_UNITS.INTERSTITIAL, MobileCore.AD_UNITS.DIRECT_TO_MARKET);
+                MobileCore.setNativeAdsBannerSupport(true);
+                MobileCore.setAdUnitEventListener(new AdUnitEventListener() {
+                    @Override
+                    public void onAdUnitEvent(MobileCore.AD_UNITS ad_units, EVENT_TYPE event_type) {
+                        if (event_type.equals(EVENT_TYPE.AD_UNIT_READY) && ad_units.equals(MobileCore.AD_UNITS.NATIVE_ADS)) {
+                            OfferUtils.MOBILE_CORE_NATIVE_ADS_READY = true;
+
+                        }
+                    }
+                });
+                mobileCoreStarted = true;
+            } catch (Throwable e) {
+                e.printStackTrace();
+                mobileCoreStarted = false;
+            }
+        } else if (mobileCoreStarted && OfferUtils.isMobileCoreEnabled()) {
+            try {
+                MobileCore.refreshOffers();
+            } catch (Throwable e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    private static void initializeAppLovin(final Activity activity) {
+        if (!OfferUtils.isAppLovinEnabled()) {
+            return;
+        }
+        new Thread() {
+            @Override
+            public void run() {
+                try {
+                    if (!appLovinStarted) {
+                        AppLovinSdk.initializeSdk(activity.getApplicationContext());
+                        appLovinInterstitialAdapter = new OfferUtils.FWAppLovinInterstitialAdapter(activity);
+                        AppLovinSdk.getInstance(activity).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, appLovinInterstitialAdapter);
+                        appLovinStarted = true;
+                    }
+                } catch (Throwable e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
+        }.start();
+    }
+
+    private static void initializeInMobi(final Activity activity) {
+        if (!OfferUtils.isInMobiEnabled()) {
+            return;
+        }
+
+        if (!inmobiStarted) {
+            new Thread() {
+                @Override
+                public void run() {
+                    try {
+                        // this initialize call is very expensive, this is why we should be invoked in a thread.
+                        //LOG.info("InMobi.initialize()...");
+                        InMobi.initialize(activity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
+                        //InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
+                        //LOG.info("InMobi.initialized.");
+                        inmobiStarted = true;
+                        //LOG.info("Load InmobiInterstitial.");
+                        loadNewInmobiInterstitial(activity);
+                    } catch (Throwable t) {
+                        t.printStackTrace();
+                        inmobiStarted = false;
+                    }
+                }
+            }.start();
+        }
+    }
+
+    public static void showInterstitial(final Activity activity,
+                                        final boolean shutdownAfterwards,
+                                        final boolean dismissAfterwards) {
+        boolean interstitialShown = false;
+
+        if (mobileCoreStarted) {
+            interstitialShown = showMobileCoreInsterstitial(activity, shutdownAfterwards, dismissAfterwards);
+        }
+
+        if (!interstitialShown && appLovinStarted && appLovinInterstitialAdapter != null) {
+            appLovinInterstitialAdapter.shutdownAppAfter(shutdownAfterwards);
+            appLovinInterstitialAdapter.dismissActivityAfterwards(dismissAfterwards);
+            interstitialShown = OfferUtils.showAppLovinInterstitial(appLovinStarted, appLovinInterstitialAdapter);
+        }
+
+        if (!interstitialShown && inmobiStarted) {
+            if (inmobiListener != null) {
+                inmobiListener.finishAfterDismiss = dismissAfterwards;
+                inmobiListener.shutdownAfterDismiss = shutdownAfterwards;
+                interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
+                        inmobiInterstitial,
+                        inmobiListener);
+            }
+        }
+
+        // If interstitial's callbacks were not invoked because ads weren't displayed
+        // then we're responsible for finish()'ing the activity or shutting down the app.
+        if (!interstitialShown) {
+            if (dismissAfterwards) {
+                activity.finish();
+            }
+            if (shutdownAfterwards && activity instanceof MainActivity) {
+                ((MainActivity) activity).shutdown();
+            }
+        }
+    }
+
+    private static boolean showMobileCoreInsterstitial(final Activity activity,
+                                                final boolean shutdownAfterwards,
+                                                final boolean dismissAfterwards) {
+        return OfferUtils.showMobileCoreInterstitial(activity, true, new CallbackResponse() {
+            @Override
+            public void onConfirmation(TYPE type) {
+                if (dismissAfterwards) {
+                    activity.finish();
+                }
+                if (shutdownAfterwards && activity instanceof MainActivity) {
+                    ((MainActivity) activity).shutdown();
+                }
+            }
+        });
     }
 }

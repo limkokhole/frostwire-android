@@ -40,8 +40,6 @@ import android.widget.RelativeLayout;
 import com.andrew.apollo.IApolloService;
 import com.andrew.apollo.utils.MusicUtils;
 import com.andrew.apollo.utils.MusicUtils.ServiceToken;
-import com.applovin.sdk.AppLovinAdSize;
-import com.applovin.sdk.AppLovinSdk;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -69,11 +67,6 @@ import com.frostwire.util.Ref;
 import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
-import com.inmobi.commons.InMobi;
-import com.inmobi.monetization.IMInterstitial;
-import com.ironsource.mobilcore.AdUnitEventListener;
-import com.ironsource.mobilcore.CallbackResponse;
-import com.ironsource.mobilcore.MobileCore;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -93,9 +86,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
     private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
-    private static final String MOBILE_CORE_STARTED_KEY = "mobile_core_started";
-    private static final String APPLOVIN_STARTED_KEY = "applovin_started";
-    private static final String INMOBI_STARTED_KEY = "inmobi_started";
+//    private static final String MOBILE_CORE_STARTED_KEY = "mobile_core_started";
+//    private static final String APPLOVIN_STARTED_KEY = "applovin_started";
+//    private static final String INMOBI_STARTED_KEY = "inmobi_started";
 
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
@@ -121,17 +114,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private PlayerMenuItemView playerItem;
 
-    private boolean mobileCoreStarted = false;
-    private boolean appLovinStarted = false;
-    private boolean inmobiStarted = false;
-
     private TimerSubscription playerSubscription;
 
     private BroadcastReceiver mainBroadcastReceiver;
-
-    private IMInterstitial inmobiInterstitial = null;
-    private OfferUtils.InMobiListener inmobiListener = null;
-    private OfferUtils.FWAppLovinInterstitialAdapter appLovinInterstitialAdapter = null;
 
     public MainActivity() {
         super(R.layout.activity_main);
@@ -188,31 +173,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         setupMenuItems();
     }
 
-    public void loadNewInmobiInterstitial() {
-        if (!inmobiStarted) {
-            return; //not ready
-        }
-
-        final MainActivity mainActivity = this;
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    inmobiInterstitial = new IMInterstitial(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                    // in case it fails loading, it will try again every minute once.
-                    inmobiListener = new OfferUtils.InMobiListener(mainActivity, false, false);
-                    inmobiInterstitial.setIMInterstitialListener(inmobiListener);
-                    inmobiInterstitial.loadInterstitial();
-                } catch (Throwable t) {
-                    // don't crash, keep going.
-                    // possible android.util.AndroidRuntimeException: android.content.pm.PackageManager$NameNotFoundException: com.google.android.webview
-                }
-            }
-        });
-    }
-
     public void shutdown() {
-        stopMobileCoreServices();
+        OfferUtils.stopAffiliateServices(this);
         finish();
         Engine.instance().shutdown();
     }
@@ -272,12 +234,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         setupFragments();
         setupMenuItems();
         setupInitialFragment(savedInstanceState);
-
-        if (savedInstanceState != null) {
-            mobileCoreStarted = savedInstanceState.getBoolean(MOBILE_CORE_STARTED_KEY);
-            appLovinStarted = savedInstanceState.getBoolean(APPLOVIN_STARTED_KEY);
-            inmobiStarted = savedInstanceState.getBoolean(INMOBI_STARTED_KEY);
-        }
 
         playerSubscription = TimerService.subscribe((TimerObserver) findView(R.id.activity_main_player_notifier), 1);
 
@@ -378,7 +334,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
             if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_INITIAL_SETTINGS_COMPLETE)) {
                 mainResume();
-                initAffiliatesAsync();
+                OfferUtils.initAffiliatesAsync(this);
             } else {
                 controller.startWizardActivity();
             }
@@ -389,12 +345,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         checkLastSeenVersion();
         registerMainBroadcastReceiver();
-    }
-
-    private void initAffiliatesAsync() {
-        initializeMobileCore(); // this one needs UI thread initialization.
-        initializeAppLovin();
-        initializeInMobi();
     }
 
     @Override
@@ -426,105 +376,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         registerReceiver(mainBroadcastReceiver, bf);
     }
 
-    private void initializeMobileCore() {
-        if (!mobileCoreStarted && OfferUtils.isMobileCoreEnabled()) {
-            try {
-                MobileCore.init(this,Constants.MOBILE_CORE_DEVHASH, MobileCore.LOG_TYPE.DEBUG, MobileCore.AD_UNITS.INTERSTITIAL, MobileCore.AD_UNITS.DIRECT_TO_MARKET);
-                MobileCore.setNativeAdsBannerSupport(true);
-                MobileCore.setAdUnitEventListener(new AdUnitEventListener() {
-                    @Override
-                    public void onAdUnitEvent(MobileCore.AD_UNITS ad_units, EVENT_TYPE event_type) {
-                        if (event_type.equals(EVENT_TYPE.AD_UNIT_READY) && ad_units.equals(MobileCore.AD_UNITS.NATIVE_ADS)) {
-                            OfferUtils.MOBILE_CORE_NATIVE_ADS_READY = true;
-
-                        }
-                    }
-                });
-                mobileCoreStarted = true;
-            } catch (Throwable e) {
-                e.printStackTrace();
-                mobileCoreStarted = false;
-            }
-        } else if (mobileCoreStarted && OfferUtils.isMobileCoreEnabled()) {
-            try {
-                MobileCore.refreshOffers();
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    /**
-     * Hack to stop mobile core service and broadcast receiver.
-     */
-    private void stopMobileCoreServices() {
-        try {
-            stopService(new Intent(this.getApplicationContext(),
-                    com.ironsource.mobilcore.MobileCoreReport.class));
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-    }
-
-    private void initializeAppLovin() {
-        if (!OfferUtils.isAppLovinEnabled()) {
-            return;
-        }
-        new Thread() {
-            @Override
-            public void run() {
-                try {
-                    if (!appLovinStarted) {
-                        AppLovinSdk.initializeSdk(MainActivity.this.getApplicationContext());
-                        appLovinInterstitialAdapter = new OfferUtils.FWAppLovinInterstitialAdapter(MainActivity.this);
-                        AppLovinSdk.getInstance(MainActivity.this).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, appLovinInterstitialAdapter);
-                        appLovinStarted = true;
-                    }
-                } catch (Throwable e) {
-                    LOG.error(e.getMessage(), e);
-                }
-            }
-        }.start();
-    }
-
-    private void initializeInMobi() {
-        if (!OfferUtils.isInMobiEnabled()) {
-            return;
-        }
-
-        if (!inmobiStarted) {
-            final MainActivity mainActivity = this;
-            new Thread() {
-                @Override
-                public void run() {
-                    try {
-                        // this initialize call is very expensive, this is why we should be invoked in a thread.
-                        //LOG.info("InMobi.initialize()...");
-                        //InMobi.setLogLevel(InMobi.LOG_LEVEL.DEBUG);
-                        InMobi.initialize(mainActivity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                        //LOG.info("InMobi.initialized.");
-                        inmobiStarted = true;
-                        //LOG.info("Load InmobiInterstitial.");
-                        loadNewInmobiInterstitial();
-                    } catch (Throwable t) {
-                        t.printStackTrace();
-                        inmobiStarted = false;
-                    }
-                }
-            }.start();
-        }
-    }
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (outState != null) {
             super.onSaveInstanceState(outState);
             saveLastFragment(outState);
             saveFragmentsStack(outState);
-
-            outState.putBoolean(MOBILE_CORE_STARTED_KEY, mobileCoreStarted);
-            outState.putBoolean(INMOBI_STARTED_KEY, inmobiStarted);
-            outState.putBoolean(APPLOVIN_STARTED_KEY, appLovinStarted);
         }
     }
 
@@ -624,61 +481,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
-    public void showInterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
-        boolean interstitialShown = false;
-
-        if (mobileCoreStarted) {
-            interstitialShown = showMobileCoreInsterstitial(shutdownAfterwards, dismissAfterwards);
-        }
-
-        if (!interstitialShown && appLovinStarted && appLovinInterstitialAdapter != null) {
-            appLovinInterstitialAdapter.shutdownAppAfter(shutdownAfterwards);
-            appLovinInterstitialAdapter.dismissActivityAfterwards(dismissAfterwards);
-            interstitialShown = OfferUtils.showAppLovinInterstitial(appLovinStarted, appLovinInterstitialAdapter);
-        }
-
-        if (!interstitialShown && inmobiStarted) {
-            if (inmobiListener != null) {
-                inmobiListener.finishAfterDismiss = dismissAfterwards;
-                inmobiListener.shutdownAfterDismiss = shutdownAfterwards;
-                interstitialShown = OfferUtils.showInMobiInterstitial(inmobiStarted,
-                        inmobiInterstitial,
-                        inmobiListener);
-            }
-        }
-
-        // If interstitial's callbacks were not invoked because ads weren't displayed
-        // then we're responsible for finish()'ing the activity or shutting down the app.
-        if (!interstitialShown) {
-            if (dismissAfterwards) {
-                finish();
-            }
-            if (shutdownAfterwards) {
-                shutdown();
-            }
-        }
-    }
-
-    private boolean showMobileCoreInsterstitial(final boolean shutdownAfterwards, final boolean dismissAfterwards) {
-        return OfferUtils.showMobileCoreInterstitial(this, true, new CallbackResponse() {
-            @Override
-            public void onConfirmation(TYPE type) {
-                if (dismissAfterwards) {
-                    finish();
-                }
-                if (shutdownAfterwards) {
-                    shutdown();
-                }
-            }
-        });
-    }
-
     private void onLastDialogButtonPositive() {
-        showInterstitial(false, true);
+        OfferUtils.showInterstitial(this, false, true);
     }
 
     private void onShutdownDialogButtonPositive() {
-        showInterstitial(true, false);
+        OfferUtils.showInterstitial(this, true, false);
     }
 
     private void syncSlideMenu() {
