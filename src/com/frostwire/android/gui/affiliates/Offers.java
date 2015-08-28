@@ -28,6 +28,8 @@ import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 import java.lang.ref.WeakReference;
+import java.util.Arrays;
+import java.util.List;
 
 public class Offers {
 
@@ -38,10 +40,13 @@ public class Offers {
     private final static MobileCoreAffiliate MOBILE_CORE = new MobileCoreAffiliate();
     private final static InMobiAffiliate IN_MOBI = new InMobiAffiliate();
 
-    public static void initAffiliatesAsync(Activity activity) {
-        MOBILE_CORE.initialize(activity); // this one needs UI thread initialization.
-        APP_LOVIN.initialize(activity);
-        IN_MOBI.initialize(activity);
+    private static List<Affiliate> AFFILIATES;
+
+    public static void initAffiliates(Activity activity) {
+        AFFILIATES = Arrays.asList(new Affiliate[]{APP_LOVIN, IN_MOBI, MOBILE_CORE});
+        for (Affiliate affiliate : AFFILIATES) {
+            affiliate.initialize(activity);
+        }
     }
 
     public static void stopAffiliateServices(Context context) {
@@ -58,7 +63,7 @@ public class Offers {
         // TODO: See if other SDKs leave any service running and stop them the same way if possible.
     }
 
-    public static boolean isfreeAppsEnabled() {
+    public static boolean isFreeAppsEnabled() {
         ConfigurationManager config;
         boolean isFreeAppsEnabled = false;
         try {
@@ -70,7 +75,7 @@ public class Offers {
     }
 
     public static void onFreeAppsClick(Context context) {
-        if (isfreeAppsEnabled() && MOBILE_CORE.started() && MOBILE_CORE.isDirectToMarketReady()) {
+        if (isFreeAppsEnabled() && MOBILE_CORE.started() && MOBILE_CORE.isDirectToMarketReady()) {
             try {
                 LOG.debug("onFreeAppsClick");
                 MOBILE_CORE.directToMarket((Activity) context);
@@ -85,23 +90,12 @@ public class Offers {
                                         final boolean shutdownAfterwards,
                                         final boolean dismissAfterwards) {
         boolean interstitialShown = false;
-
         final WeakReference<Activity> activityRef = Ref.weak(activity);
-
-        if (MOBILE_CORE.started()) {
-            interstitialShown = MOBILE_CORE.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
+        for (Affiliate affiliate : AFFILIATES) {
+            if (!interstitialShown && affiliate.started()) {
+                interstitialShown = affiliate.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
+            }
         }
-
-        if (!interstitialShown && APP_LOVIN.started()) {
-            interstitialShown = APP_LOVIN.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
-        }
-
-        if (!interstitialShown && IN_MOBI.started()) {
-            interstitialShown = IN_MOBI.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
-        }
-
-        // If interstitial's callbacks were not invoked because ads weren't displayed
-        // then we're responsible for finish()'ing the activity or shutting down the app.
         if (!interstitialShown) {
             if (dismissAfterwards) {
                 activity.finish();

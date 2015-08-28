@@ -40,11 +40,9 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
     private boolean finishAfterDismiss = false;
     private boolean ready;
 
-    public InMobiListener(Activity hostActivity, InMobiAffiliate inmobiAffiliate, boolean shutdownAfterDismiss, boolean finishAfterDismiss) {
+    public InMobiListener(Activity hostActivity, InMobiAffiliate inmobiAffiliate) {
         activityRef = new WeakReference<Activity>(hostActivity);
         this.inmobiAffiliate = inmobiAffiliate;
-        this.shutdownAfterDismiss = shutdownAfterDismiss;
-        this.finishAfterDismiss = finishAfterDismiss;
     }
 
     @Override
@@ -56,10 +54,9 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
             if (callerActivity != null && callerActivity instanceof MainActivity) {
                 MainActivity mainActivity = (MainActivity) callerActivity;
                 mainActivity.shutdown();
-            }
-            else if (callerActivity != null) {
+            } else if (callerActivity != null) {
                 //MIGHT DO: there's a way to shutdown, by sending a shutdown-<GUID> enabled Intent to MainActivity.
-                LOG.warn("Couldn't shutdown because listener didn't have a MainActivity reference, had another kind ("+callerActivity.getClass().getName()+")");
+                LOG.warn("Couldn't shutdown because listener didn't have a MainActivity reference, had another kind (" + callerActivity.getClass().getName() + ")");
             }
         }
 
@@ -82,7 +79,7 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
         LOG.error(imErrorCode.name());
         LOG.error(imErrorCode.toString());
 
-        new Thread("OfferUtils.onInterstitialFailed") {
+        new Thread("InMobiListener.onInterstitialFailed") {
             @Override
             public void run() {
                 try {
@@ -90,7 +87,7 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
                     if (Ref.alive(activityRef)) {
                         Activity activity = activityRef.get();
                         if (activity instanceof MainActivity) {
-                            inmobiAffiliate.loadNewInmobiInterstitial(activity);
+                            inmobiAffiliate.loadNewInterstitial(activity);
                         }
                     }
                 } catch (InterruptedException e) {
@@ -101,13 +98,21 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
     }
 
     @Override
-    public void onInterstitialLoaded(IMInterstitial imInterstitial) { ready = true; }
+    public void onInterstitialLoaded(IMInterstitial imInterstitial) {
+        ready = true;
+    }
+
     @Override
-    public void onShowInterstitialScreen(IMInterstitial imInterstitial) {}
+    public void onShowInterstitialScreen(IMInterstitial imInterstitial) {
+    }
+
     @Override
-    public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {}
+    public void onInterstitialInteraction(IMInterstitial imInterstitial, Map<String, String> map) {
+    }
+
     @Override
-    public void onLeaveApplication(IMInterstitial imInterstitial) {}
+    public void onLeaveApplication(IMInterstitial imInterstitial) {
+    }
 
     @Override
     public boolean isAdReadyToDisplay() {

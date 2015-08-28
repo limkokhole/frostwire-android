@@ -334,7 +334,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
             if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_INITIAL_SETTINGS_COMPLETE)) {
                 mainResume();
-                Offers.initAffiliatesAsync(this);
+                Offers.initAffiliates(this);
             } else {
                 controller.startWizardActivity();
             }

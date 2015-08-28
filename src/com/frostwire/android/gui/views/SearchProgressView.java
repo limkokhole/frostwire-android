@@ -174,7 +174,7 @@ public class SearchProgressView extends LinearLayout {
         progressbar.setVisibility(View.GONE);
         buttonCancel.setText(R.string.retry_search);
         textNoResults.setVisibility(View.VISIBLE);
-        buttonFreeApps.setVisibility(Offers.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
+        buttonFreeApps.setVisibility(Offers.isFreeAppsEnabled() ? View.VISIBLE : View.GONE);
 
         if (currentQueryReporter.getCurrentQuery() != null) {
             textTryOtherKeywords.setVisibility(View.VISIBLE);

@@ -121,6 +121,10 @@ public class MobileCoreAffiliate implements Affiliate {
         }
     }
 
+    @Override
+    public void loadNewInterstitial(Activity activity) {
+    }
+
     public boolean isDirectToMarketReady() {
         return MobileCore.isDirectToMarketReady();
     }

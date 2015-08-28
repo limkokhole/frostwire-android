@@ -52,7 +52,7 @@ public class InMobiAffiliate implements Affiliate {
                         //LOG.info("InMobi.initialized.");
                         started = true;
                         //LOG.info("Load InmobiInterstitial.");
-                        loadNewInmobiInterstitial(activity);
+                        loadNewInterstitial(activity);
                     } catch (Throwable t) {
                         t.printStackTrace();
                         started = false;
@@ -89,7 +89,7 @@ public class InMobiAffiliate implements Affiliate {
                 inmobiInterstitial.show();
 
                 if (Ref.alive(activityWeakReference)) {
-                    loadNewInmobiInterstitial(activityWeakReference.get());
+                    loadNewInterstitial(activityWeakReference.get());
                 }
 
                 LOG.info("InMobi Interstitial shown.");
@@ -107,7 +107,8 @@ public class InMobiAffiliate implements Affiliate {
         return started;
     }
 
-    public void loadNewInmobiInterstitial(final Activity activity) {
+    @Override
+    public void loadNewInterstitial(final Activity activity) {
         if (!started) {
             return; //not ready
         }
@@ -117,8 +118,7 @@ public class InMobiAffiliate implements Affiliate {
             public void run() {
                 try {
                     inmobiInterstitial = new IMInterstitial(activity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                    // in case it fails loading, it will try again every minute once.
-                    inmobiListener = new InMobiListener(activity, InMobiAffiliate.this, false, false);
+                    inmobiListener = new InMobiListener(activity, InMobiAffiliate.this);
                     inmobiInterstitial.setIMInterstitialListener(inmobiListener);
                     inmobiInterstitial.loadInterstitial();
                 } catch (Throwable t) {

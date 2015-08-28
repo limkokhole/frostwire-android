@@ -21,15 +21,13 @@ package com.frostwire.android.gui.affiliates;
 import android.app.Activity;
 import com.applovin.adview.AppLovinInterstitialAd;
 import com.applovin.adview.AppLovinInterstitialAdDialog;
-import com.applovin.sdk.AppLovinAd;
-import com.applovin.sdk.AppLovinAdDisplayListener;
-import com.applovin.sdk.AppLovinAdLoadListener;
-import com.applovin.sdk.AppLovinSdk;
+import com.applovin.sdk.*;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 import java.lang.ref.WeakReference;
+import java.util.concurrent.TimeUnit;
 
 public class AppLovinInterstitialAdapter implements InterstitialListener, AppLovinAdDisplayListener, AppLovinAdLoadListener {
     private static final Logger LOG = Logger.getLogger(AppLovinInterstitialAdapter.class);
@@ -126,5 +124,24 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
     @Override
     public void failedToReceiveAd(int i) {
         LOG.warn("failed to receive ad ("+ i +")");
+        if (AppLovinErrorCodes.NO_FILL == i) {
+            new Thread("AppLovinInterstitialAdapter.onInterstitialFailed") {
+                @Override
+                public void run() {
+                    try {
+                        TimeUnit.MINUTES.sleep(30);
+                        if (Ref.alive(activityRef)) {
+                            Activity activity = activityRef.get();
+                            if (activity instanceof MainActivity) {
+                                appLovinAffiliate.loadNewInterstitial(activity);
+                            }
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }.start();
+
+        }
     }
 }

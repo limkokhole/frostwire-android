@@ -29,4 +29,5 @@ public interface Affiliate {
     boolean showInterstitial(final WeakReference<Activity> activityRef,
                              final boolean shutdownActivityAfterwards,
                              final boolean dismissActivityAfterward);
+    void loadNewInterstitial(Activity activity);
 }
