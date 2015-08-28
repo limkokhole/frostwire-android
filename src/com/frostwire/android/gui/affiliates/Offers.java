@@ -92,7 +92,7 @@ public class Offers {
         }
 
         if (!interstitialShown && IN_MOBI.started()) {
-            IN_MOBI.showInterstitial(shutdownAfterwards, dismissAfterwards);
+            interstitialShown = IN_MOBI.showInterstitial(shutdownAfterwards, dismissAfterwards);
         }
 
         // If interstitial's callbacks were not invoked because ads weren't displayed

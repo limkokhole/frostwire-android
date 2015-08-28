@@ -69,7 +69,7 @@ public class AppLovinAffiliate implements Affiliate {
             config = ConfigurationManager.instance();
             enabled = (config.getBoolean(Constants.PREF_KEY_GUI_SUPPORT_FROSTWIRE) && config.getBoolean(Constants.PREF_KEY_GUI_USE_APPLOVIN));
         } catch (Throwable e) {
-            e.printStackTrace();
+            LOG.error(e.getMessage(), e);
         }
         return enabled;
     }

@@ -82,6 +82,7 @@ public class InMobiAffiliate implements Affiliate {
         if (inmobiInterstitial.getState().equals(IMInterstitial.State.READY)) {
             try {
                 inmobiInterstitial.show();
+                LOG.info("InMobi Interstitial shown.");
                 return true;
             } catch (Throwable e) {
                 LOG.error("InMobi Interstitial failed on .show()!", e);
