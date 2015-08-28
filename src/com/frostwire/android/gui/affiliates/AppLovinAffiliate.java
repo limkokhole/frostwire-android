@@ -43,8 +43,7 @@ public class AppLovinAffiliate implements Affiliate {
                 try {
                     if (!started) {
                         AppLovinSdk.initializeSdk(activity.getApplicationContext());
-                        interstitialAdapter = new AppLovinInterstitialAdapter(activity);
-                        AppLovinSdk.getInstance(activity).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, interstitialAdapter);
+                        loadNewInterstitial(activity);
                         started = true;
                     }
                 } catch (Throwable e) {
@@ -52,6 +51,11 @@ public class AppLovinAffiliate implements Affiliate {
                 }
             }
         }.start();
+    }
+
+    public void loadNewInterstitial(Activity activity) {
+        interstitialAdapter = new AppLovinInterstitialAdapter(activity, this);
+        AppLovinSdk.getInstance(activity).getAdService().loadNextAd(AppLovinAdSize.INTERSTITIAL, interstitialAdapter);
     }
 
     public boolean started() {

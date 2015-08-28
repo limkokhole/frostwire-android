@@ -34,14 +34,16 @@ import java.lang.ref.WeakReference;
 public class AppLovinInterstitialAdapter implements InterstitialListener, AppLovinAdDisplayListener, AppLovinAdLoadListener {
     private static final Logger LOG = Logger.getLogger(AppLovinInterstitialAdapter.class);
     private final WeakReference<Activity> activityRef;
+    private AppLovinAffiliate appLovinAffiliate;
     private AppLovinAd ad;
 
     private boolean dismissAfter = false;
     private boolean shutdownAfter = false;
     private boolean isVideoAd = false;
 
-    public AppLovinInterstitialAdapter(Activity parentActivity) {
+    public AppLovinInterstitialAdapter(Activity parentActivity, AppLovinAffiliate appLovinAffiliate) {
         this.activityRef = Ref.weak(parentActivity);
+        this.appLovinAffiliate = appLovinAffiliate;
     }
 
     public boolean isAdReadyToDisplay() {
@@ -77,6 +79,23 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
 
     @Override
     public void adDisplayed(AppLovinAd appLovinAd) {
+        // Free the ad, load a new one.
+        if (appLovinAd!=null) {
+            ad = null;
+
+            if (Ref.alive(activityRef)) {
+                new Thread() {
+                    @Override
+                    public void run() {
+                        try {
+                            appLovinAffiliate.loadNewInterstitial(activityRef.get());
+                        } catch (Throwable e) {
+                            LOG.error(e.getMessage(), e);
+                        }
+                    }
+                }.start();
+            }
+        }
     }
 
     @Override
