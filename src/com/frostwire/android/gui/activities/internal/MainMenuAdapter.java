@@ -24,10 +24,6 @@ import android.widget.Checkable;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.frostwire.android.R;
-import com.frostwire.android.core.ConfigurationManager;
-import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.util.OSUtils;
-import com.frostwire.android.gui.util.OfferUtils;
 import com.frostwire.android.gui.views.AbstractAdapter;
 import com.frostwire.android.gui.views.menu.MenuBuilder;
 

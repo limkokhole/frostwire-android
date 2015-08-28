@@ -24,7 +24,6 @@ import android.content.Intent;
 import android.net.Uri;
 import com.andrew.apollo.ui.activities.AudioPlayerActivity;
 import com.frostwire.android.R;
-import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -35,8 +34,7 @@ import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
-import com.frostwire.android.gui.util.OfferUtils;
-import com.frostwire.logging.Logger;
+import com.frostwire.android.gui.affiliates.Offers;
 
 /**
  * 
@@ -73,7 +71,7 @@ public final class MainController {
     }
 
     public void showFreeApps(Context context) {
-        OfferUtils.onFreeAppsClick(context);
+        Offers.onFreeAppsClick(context);
     }
 
     public void launchMyMusic() {

@@ -58,7 +58,7 @@ import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
-import com.frostwire.android.gui.util.OfferUtils;
+import com.frostwire.android.gui.affiliates.Offers;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.AbstractDialog.OnDialogClickListener;
@@ -174,7 +174,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void shutdown() {
-        OfferUtils.stopAffiliateServices(this);
+        Offers.stopAffiliateServices(this);
         finish();
         Engine.instance().shutdown();
     }
@@ -334,7 +334,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
             if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_INITIAL_SETTINGS_COMPLETE)) {
                 mainResume();
-                OfferUtils.initAffiliatesAsync(this);
+                Offers.initAffiliatesAsync(this);
             } else {
                 controller.startWizardActivity();
             }
@@ -482,11 +482,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private void onLastDialogButtonPositive() {
-        OfferUtils.showInterstitial(this, false, true);
+        Offers.showInterstitial(this, false, true);
     }
 
     private void onShutdownDialogButtonPositive() {
-        OfferUtils.showInterstitial(this, true, false);
+        Offers.showInterstitial(this, true, false);
     }
 
     private void syncSlideMenu() {

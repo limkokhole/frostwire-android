@@ -29,7 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.fragments.SearchFragment;
-import com.frostwire.android.gui.util.OfferUtils;
+import com.frostwire.android.gui.affiliates.Offers;
 
 /**
  * @author gubatron
@@ -174,7 +174,7 @@ public class SearchProgressView extends LinearLayout {
         progressbar.setVisibility(View.GONE);
         buttonCancel.setText(R.string.retry_search);
         textNoResults.setVisibility(View.VISIBLE);
-        buttonFreeApps.setVisibility(OfferUtils.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
+        buttonFreeApps.setVisibility(Offers.isfreeAppsEnabled() ? View.VISIBLE : View.GONE);
 
         if (currentQueryReporter.getCurrentQuery() != null) {
             textTryOtherKeywords.setVisibility(View.VISIBLE);
@@ -195,7 +195,7 @@ public class SearchProgressView extends LinearLayout {
 
         @Override
         public void onClick(View owner, View v) {
-            OfferUtils.onFreeAppsClick(v.getContext());
+            Offers.onFreeAppsClick(v.getContext());
         }
     }
 

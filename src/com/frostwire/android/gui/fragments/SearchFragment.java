@@ -41,6 +41,7 @@ import com.frostwire.android.gui.LocalSearchEngine;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter.FilteredSearchResults;
+import com.frostwire.android.gui.affiliates.Offers;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.tasks.DownloadSoundcloudFromUrlTask;
@@ -448,12 +449,12 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         }
         UIUtils.showTransfersOnDownloadStart(ctx);
 
-        if (ctx instanceof MainActivity) {
-            showInterstitialOfferIfNecessary((MainActivity) ctx);
+        if (ctx instanceof Activity) {
+            showInterstitialOfferIfNecessary((Activity) ctx);
         }
     }
 
-    public static void showInterstitialOfferIfNecessary(MainActivity ctx) {
+    public static void showInterstitialOfferIfNecessary(Activity ctx) {
         startedTransfers++;
         ConfigurationManager CM = ConfigurationManager.instance();
         final int INTERSTITIAL_OFFERS_TRANSFER_STARTS = CM.getInt(Constants.PREF_KEY_GUI_INTERSTITIAL_OFFERS_TRANSFER_STARTS);
@@ -466,7 +467,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         boolean shouldDisplayFirstOne = (lastInterstitialShownTimestamp == -1 && startedEnoughTransfers);
 
         if (shouldDisplayFirstOne || (itsBeenLongEnough && startedEnoughTransfers)) {
-            ctx.showInterstitial(false, false);
+            Offers.showInterstitial(ctx, false, false);
             startedTransfers = 0;
             lastInterstitialShownTimestamp = System.currentTimeMillis();
         }
