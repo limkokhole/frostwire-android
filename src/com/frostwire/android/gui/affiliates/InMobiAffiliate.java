@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.affiliates;
 
 import android.app.Activity;
+import android.content.Context;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.logging.Logger;
@@ -60,6 +61,10 @@ public class InMobiAffiliate implements Affiliate {
                 }
             }.start();
         }
+    }
+
+    @Override
+    public void stop(Context context) {
     }
 
     public boolean enabled() {

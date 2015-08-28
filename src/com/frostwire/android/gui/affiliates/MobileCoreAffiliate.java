@@ -19,6 +19,8 @@
 package com.frostwire.android.gui.affiliates;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -63,6 +65,16 @@ public class MobileCoreAffiliate implements Affiliate {
             } catch (Throwable e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public void stop(Context context) {
+        try {
+            context.stopService(new Intent(context.getApplicationContext(),
+                    com.ironsource.mobilcore.MobileCoreReport.class));
+        } catch (Throwable t) {
+            t.printStackTrace();
         }
     }
 

@@ -19,11 +19,13 @@
 package com.frostwire.android.gui.affiliates;
 
 import android.app.Activity;
+import android.content.Context;
 
 import java.lang.ref.WeakReference;
 
 public interface Affiliate {
     void initialize(final Activity activity);
+    void stop(Context context);
     boolean enabled();
     boolean started();
     boolean showInterstitial(final WeakReference<Activity> activityRef,

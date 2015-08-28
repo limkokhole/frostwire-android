@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.affiliates;
 
 import android.app.Activity;
+import android.content.Context;
 import com.andrew.apollo.utils.MusicUtils;
 import com.applovin.sdk.AppLovinAdSize;
 import com.applovin.sdk.AppLovinSdk;
@@ -53,6 +54,11 @@ public class AppLovinAffiliate implements Affiliate {
                 }
             }
         }.start();
+    }
+
+    @Override
+    public void stop(Context context) {
+
     }
 
     public void loadNewInterstitial(Activity activity) {

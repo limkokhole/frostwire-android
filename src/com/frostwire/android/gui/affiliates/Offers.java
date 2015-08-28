@@ -49,18 +49,12 @@ public class Offers {
         }
     }
 
-    public static void stopAffiliateServices(Context context) {
-        // Stop MobileCore if you have to.
-        if (MOBILE_CORE.started()) {
-            try {
-                context.stopService(new Intent(context.getApplicationContext(),
-                        com.ironsource.mobilcore.MobileCoreReport.class));
-            } catch (Throwable t) {
-                t.printStackTrace();
+    public static void stopAffiliates(Context context) {
+        for (Affiliate affiliate : AFFILIATES) {
+            if (affiliate.started()) {
+                affiliate.stop(context);
             }
         }
-
-        // TODO: See if other SDKs leave any service running and stop them the same way if possible.
     }
 
     public static boolean isFreeAppsEnabled() {

@@ -174,7 +174,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void shutdown() {
-        Offers.stopAffiliateServices(this);
+        Offers.stopAffiliates(this);
         finish();
         Engine.instance().shutdown();
     }
