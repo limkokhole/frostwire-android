@@ -26,6 +26,8 @@ import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.logging.Logger;
 
+import java.lang.ref.WeakReference;
+
 public class AppLovinAffiliate implements Affiliate {
     private static final Logger LOG = Logger.getLogger(AppLovinAffiliate.class);
     private AppLovinInterstitialAdapter interstitialAdapter = null;
@@ -74,7 +76,8 @@ public class AppLovinAffiliate implements Affiliate {
         return enabled;
     }
 
-    public boolean showInterstitial(final boolean shutdownAfterwards,
+    public boolean showInterstitial(final WeakReference<Activity> activityWeakReference,
+                                    final boolean shutdownAfterwards,
                                     final boolean dismissAfterward) {
         if (enabled() && started) {
             interstitialAdapter.shutdownAppAfter(shutdownAfterwards);
@@ -83,7 +86,7 @@ public class AppLovinAffiliate implements Affiliate {
                 if (interstitialAdapter.isVideoAd() && MusicUtils.isPlaying()) {
                     return false;
                 }
-                return interstitialAdapter.isAdReadyToDisplay() && interstitialAdapter.show();
+                return interstitialAdapter.isAdReadyToDisplay() && interstitialAdapter.show(activityWeakReference);
             } catch (Throwable e) {
                 e.printStackTrace();
                 return false;

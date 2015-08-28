@@ -25,6 +25,9 @@ import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.logging.Logger;
+import com.frostwire.util.Ref;
+
+import java.lang.ref.WeakReference;
 
 public class Offers {
 
@@ -83,16 +86,18 @@ public class Offers {
                                         final boolean dismissAfterwards) {
         boolean interstitialShown = false;
 
+        final WeakReference<Activity> activityRef = Ref.weak(activity);
+
         if (MOBILE_CORE.started()) {
-            interstitialShown = MOBILE_CORE.showInterstitial(shutdownAfterwards, dismissAfterwards);
+            interstitialShown = MOBILE_CORE.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
         }
 
         if (!interstitialShown && APP_LOVIN.started()) {
-            interstitialShown = APP_LOVIN.showInterstitial(shutdownAfterwards, dismissAfterwards);
+            interstitialShown = APP_LOVIN.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
         }
 
         if (!interstitialShown && IN_MOBI.started()) {
-            interstitialShown = IN_MOBI.showInterstitial(shutdownAfterwards, dismissAfterwards);
+            interstitialShown = IN_MOBI.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
         }
 
         // If interstitial's callbacks were not invoked because ads weren't displayed

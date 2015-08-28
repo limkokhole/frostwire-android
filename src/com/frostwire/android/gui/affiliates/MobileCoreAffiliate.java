@@ -85,7 +85,13 @@ public class MobileCoreAffiliate implements Affiliate {
     }
 
     @Override
-    public boolean showInterstitial(final boolean shutdownActivityAfterwards, final boolean dismissActivityAfterward) {
+    public boolean showInterstitial(final WeakReference<Activity> activityWeakReference,
+                                    final boolean shutdownActivityAfterwards,
+                                    final boolean dismissActivityAfterward) {
+        if (Ref.alive(activityWeakReference)) {
+            activityRef = activityWeakReference;
+        }
+
         if (enabled() && started && Ref.alive(activityRef) && MobileCore.isInterstitialReady()) {
             try {
                 MobileCore.showInterstitial(activityRef.get(), new CallbackResponse() {

@@ -120,7 +120,7 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
     }
 
     @Override
-    public boolean show() {
+    public boolean show(WeakReference<Activity> activityWeakReference) {
         //unused.
         return false;
     }

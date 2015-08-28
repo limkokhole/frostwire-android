@@ -33,7 +33,7 @@ import java.lang.ref.WeakReference;
 
 public class AppLovinInterstitialAdapter implements InterstitialListener, AppLovinAdDisplayListener, AppLovinAdLoadListener {
     private static final Logger LOG = Logger.getLogger(AppLovinInterstitialAdapter.class);
-    private final WeakReference<Activity> activityRef;
+    private WeakReference<Activity> activityRef;
     private AppLovinAffiliate appLovinAffiliate;
     private AppLovinAd ad;
 
@@ -55,10 +55,11 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
         return isVideoAd;
     }
 
-    public boolean show() {
+    public boolean show(WeakReference<Activity> activityWeakReference) {
         boolean result = false;
-        if (ad!=null && Ref.alive(activityRef)) {
+        if (ad!=null && Ref.alive(activityWeakReference)) {
             try {
+                this.activityRef = activityWeakReference;
                 final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activityRef.get()), activityRef.get());
                 adDialog.showAndRender(ad);
                 result = true;

@@ -22,7 +22,10 @@ import android.app.Activity;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.logging.Logger;
+import com.frostwire.util.Ref;
 import com.inmobi.monetization.IMInterstitial;
+
+import java.lang.ref.WeakReference;
 
 public class InMobiAffiliate implements Affiliate {
     private static final Logger LOG = Logger.getLogger(InMobiAffiliate.class);
@@ -71,7 +74,9 @@ public class InMobiAffiliate implements Affiliate {
         return isInMobiEnabled;
     }
 
-    public boolean showInterstitial(boolean shutdownActivityAfterwards, boolean dismissActivityAfterward) {
+    public boolean showInterstitial(final WeakReference<Activity> activityWeakReference,
+                                    boolean shutdownActivityAfterwards,
+                                    boolean dismissActivityAfterward) {
         if (!started || !enabled() || inmobiInterstitial == null || inmobiListener == null) {
             return false;
         }
@@ -82,6 +87,11 @@ public class InMobiAffiliate implements Affiliate {
         if (inmobiInterstitial.getState().equals(IMInterstitial.State.READY)) {
             try {
                 inmobiInterstitial.show();
+
+                if (Ref.alive(activityWeakReference)) {
+                    loadNewInmobiInterstitial(activityWeakReference.get());
+                }
+
                 LOG.info("InMobi Interstitial shown.");
                 return true;
             } catch (Throwable e) {

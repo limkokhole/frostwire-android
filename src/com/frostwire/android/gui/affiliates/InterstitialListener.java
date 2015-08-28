@@ -18,10 +18,14 @@
 
 package com.frostwire.android.gui.affiliates;
 
+import android.app.Activity;
+
+import java.lang.ref.WeakReference;
+
 public interface InterstitialListener {
     boolean isAdReadyToDisplay();
     boolean isVideoAd();
-    boolean show();
+    boolean show(WeakReference<Activity> activityWeakReference);
     void shutdownAppAfter(boolean shutdown);
     void dismissActivityAfterwards(boolean dismiss);
 }
