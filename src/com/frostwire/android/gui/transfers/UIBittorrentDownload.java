@@ -18,8 +18,15 @@
 
 package com.frostwire.android.gui.transfers;
 
+import android.content.ContentResolver;
+import android.content.Context;
+import android.provider.MediaStore;
+import android.util.Log;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
+import com.frostwire.android.core.FileDescriptor;
+import com.frostwire.android.core.providers.TableFetcher;
+import com.frostwire.android.core.providers.TableFetchers;
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.NetworkManager;
 import com.frostwire.android.gui.services.Engine;
@@ -32,12 +39,12 @@ import com.frostwire.logging.Logger;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.transfers.TransferState;
 import com.frostwire.util.DirectoryUtils;
+import com.frostwire.util.Ref;
+import com.frostwire.util.StringUtils;
 
 import java.io.File;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.lang.ref.WeakReference;
+import java.util.*;
 
 /**
  * @author gubatron
@@ -160,8 +167,37 @@ public final class UIBittorrentDownload implements BittorrentDownload {
 
     @Override
     public void cancel(boolean deleteData) {
+        cancel(null, false, deleteData);
+    }
+
+    public void cancel(WeakReference<Context> contextRef, boolean deleteTorrent, boolean deleteData) {
         manager.remove(this);
-        dl.remove(deleteData);
+
+        if (contextRef != null && Ref.alive(contextRef) && deleteData && isComplete()) {
+            // Let's remove all the file descriptors from the fetchers
+            deleteFilesFromContentResolver(contextRef.get());
+        }
+
+        dl.remove(deleteTorrent, deleteData);
+    }
+
+    private void deleteFilesFromContentResolver(Context context) {
+        final List<TransferItem> items = getItems();
+        final ContentResolver cr = context.getContentResolver();
+        for (TransferItem item : items) {
+            final List<FileDescriptor> fileDescriptors = Librarian.instance().getFiles(item.getFile().getAbsolutePath(), true);
+            for (FileDescriptor fd : fileDescriptors) {
+                File file = new File(fd.filePath);
+                if (file.isFile()) {
+                    try {
+                        TableFetcher fetcher = TableFetchers.getFetcher(fd.fileType);
+                        cr.delete(fetcher.getContentUri(), MediaStore.MediaColumns._ID + " = " + fd.id, null);
+                    } catch (Throwable e) {
+                        LOG.error("Failed to delete file from media store. (" + fd.filePath + ")", e);
+                    }
+                }
+            }
+        }
     }
 
     @Override

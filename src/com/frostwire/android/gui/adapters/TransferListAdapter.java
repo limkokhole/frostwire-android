@@ -295,6 +295,11 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
 
             items.add(new CancelMenuAction(context.get(), download, !download.isComplete()));
 
+            if (download.isComplete()) {
+                // Remove Torrent and Data action.
+                items.add(new CancelMenuAction(context.get(), download, true, true));
+            }
+
             if (download.hasPaymentOptions()) {
                 PaymentOptions po = download.getPaymentOptions();
                 if (po.bitcoin != null) {

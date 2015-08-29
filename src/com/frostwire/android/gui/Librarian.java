@@ -213,7 +213,6 @@ public final class Librarian {
             }
         }
 
-
         try {
             ContentResolver cr = context.getContentResolver();
             TableFetcher fetcher = TableFetchers.getFetcher(fileType);
