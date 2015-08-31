@@ -18,10 +18,6 @@
 
 package com.frostwire.android.gui.views;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
@@ -33,11 +29,32 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.frostwire.android.R;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class RichNotification extends LinearLayout {
+
+    private static final Typeface ROBOTO_LIGHT;
+
+    static {
+        ROBOTO_LIGHT = createRobotoLight();
+    }
+
+    private static Typeface createRobotoLight() {
+        Typeface r;
+        try {
+            r = Typeface.create("sans-serif-light", Typeface.NORMAL);
+        } catch (Throwable e) {
+            // in case of some bad behavior, default to regular roboto
+            r = Typeface.SANS_SERIF;
+        }
+        return r;
+    }
+
 	public static final List<Integer> wasDismissed = new ArrayList<Integer>();
 	private final boolean titleUnderlined;
 	private final String title;
@@ -129,12 +146,8 @@ public class RichNotification extends LinearLayout {
 		TextView textViewTitle = updateTextViewText(R.id.view_rich_notification_title, (titleUnderlined) ? Html.fromHtml(title) : title, onClickNotificationListener);
 		TextView textViewDescription = updateTextViewText(R.id.view_rich_notification_description, description, onClickNotificationListener);
 		
-		//the limited android XML api won't allow android:fontFamily in XML
-		//and the allowed values for android:typeFace don't include Roboto (just sans | serif...
-		//font downloaded at http://developer.android.com/design/style/typography.html
-		Typeface mFont = Typeface.createFromAsset(getContext().getAssets(), "fonts/Roboto-Light.ttf");
-		textViewTitle.setTypeface(mFont,Typeface.BOLD);
-		textViewDescription.setTypeface(mFont, Typeface.NORMAL);
+		textViewTitle.setTypeface(ROBOTO_LIGHT, Typeface.BOLD);
+		textViewDescription.setTypeface(ROBOTO_LIGHT, Typeface.NORMAL);
 		
 		ImageButton dismissButton = (ImageButton) findViewById(R.id.view_rich_notification_close_button);
 		dismissButton.setOnClickListener(new OnClickListener() {
