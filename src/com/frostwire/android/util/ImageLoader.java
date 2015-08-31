@@ -27,9 +27,9 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.widget.ImageView;
-import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.logging.Logger;
 import com.squareup.picasso.Picasso;
@@ -241,7 +241,7 @@ public final class ImageLoader {
 
         private Result loadFirstArtistAlbum(Uri uri) throws IOException {
             String artistName = uri.getLastPathSegment();
-            long albumId = MusicUtils.getFirstAlbumIdForArtist(context, artistName);
+            long albumId = getFirstAlbumIdForArtist(context, artistName);
 
             if (albumId == -1) {
                 return null;
@@ -249,6 +249,38 @@ public final class ImageLoader {
 
             Bitmap bitmap = getAlbumArt(context, String.valueOf(albumId));
             return (bitmap != null) ? new Result(bitmap, Picasso.LoadedFrom.DISK) : null;
+        }
+
+        /**
+         * Returns the ID for the first album given an artist name.
+         *
+         * @param context    The {@link Context} to use.
+         * @param artistName The name of the artist
+         * @return The ID for an album.
+         */
+        private static final long getFirstAlbumIdForArtist(final Context context, final String artistName) {
+            int id = -1;
+            try {
+                Cursor cursor = context.getContentResolver().query(
+                        MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, new String[]{
+                                BaseColumns._ID
+                        }, MediaStore.Audio.AlbumColumns.ARTIST + "=?", new String[]{
+                                artistName
+                        }, BaseColumns._ID);
+
+                if (cursor != null) {
+                    cursor.moveToFirst();
+                    if (!cursor.isAfterLast()) {
+                        id = cursor.getInt(0);
+                    }
+                    cursor.close();
+                    cursor = null;
+                }
+            } catch (Throwable e) {
+                LOG.error("Error getting first album id for artist: " + artistName, e);
+            }
+
+            return id;
         }
     }
 }
