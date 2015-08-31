@@ -109,7 +109,7 @@ public final class YouTubeDownload implements DownloadTransfer {
         httpClient = HttpClientFactory.newInstance();
         httpClient.setListener(httpClientListener);
 
-        if (SystemUtils.isCurrentMountAlmostFull()) {
+        if (TransferManager.isCurrentMountAlmostFull()) {
             this.status = STATUS_ERROR_DISK_FULL;
         }
     }

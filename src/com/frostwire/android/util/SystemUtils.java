@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,13 +18,6 @@
 
 package com.frostwire.android.util;
 
-import static android.content.Context.ACTIVITY_SERVICE;
-import static android.content.pm.ApplicationInfo.FLAG_LARGE_HEAP;
-
-import java.io.File;
-import java.util.LinkedList;
-import java.util.List;
-
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Build;
@@ -32,22 +25,23 @@ import android.os.Environment;
 import android.os.StatFs;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.os.EnvironmentCompat;
-
-import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.logging.Logger;
 
+import java.io.File;
+import java.util.LinkedList;
+import java.util.List;
+
+import static android.content.Context.ACTIVITY_SERVICE;
+import static android.content.pm.ApplicationInfo.FLAG_LARGE_HEAP;
+
 /**
- * 
  * @author gubatron
  * @author aldenml
- *
  */
 public final class SystemUtils {
 
     private static final Logger LOG = Logger.getLogger(SystemUtils.class);
 
-    private static final int VERSION_CODE_JELLY_BEAN = 16;
-    private static final int VERSION_CODE_JELLY_BEAN_MR2 = 18;
     private static final int VERSION_CODE_KITKAT = 19;
 
     private SystemUtils() {
@@ -151,9 +145,8 @@ public final class SystemUtils {
     }
 
     /**
-     * 
      * Use this instead ContextCompat
-     * 
+     *
      * @param context
      * @return
      */
@@ -194,46 +187,13 @@ public final class SystemUtils {
     }
 
     /**
-     * Used to determine if the device is running Jelly Bean or greater
-     * 
-     * @return True if the device is running Jelly Bean or greater, false
-     *         otherwise
-     */
-    public static final boolean hasJellyBean() {
-        return hasSdk(VERSION_CODE_JELLY_BEAN);
-    }
-
-    /**
-     * Used to determine if the device is running
-     * Jelly Bean MR2 (Android 4.3) or greater
-     *
-     * @return True if the device is running Jelly Bean MR2 or greater,
-     *         false otherwise
-     */
-    public static final boolean hasJellyBeanMR2() {
-        return hasSdk(VERSION_CODE_JELLY_BEAN_MR2);
-    }
-
-    /**
      * Used to determine if the device is running
      * KitKat (Android 4.4) or greater
      *
      * @return True if the device is running KitKat or greater,
-     *         false otherwise
+     * false otherwise
      */
     public static final boolean hasKitKat() {
         return hasSdk(VERSION_CODE_KITKAT);
-    }
-
-    public static long getCurrentMountAvailableBytes() {
-        StatFs stat = new StatFs(ConfigurationManager.instance().getStoragePath());
-        return ((long)stat.getBlockSize() * (long)stat.getAvailableBlocks());
-    }
-
-    /**
-     * @return true if less than 10MB available
-     */
-    public static boolean isCurrentMountAlmostFull() {
-        return getCurrentMountAvailableBytes() < 10000000;
     }
 }

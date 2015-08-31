@@ -20,11 +20,13 @@ package com.frostwire.android.gui.transfers;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.os.StatFs;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.NetworkManager;
 import com.frostwire.android.gui.services.Engine;
+import com.frostwire.android.util.SystemUtils;
 import com.frostwire.bittorrent.BTDownload;
 import com.frostwire.bittorrent.BTEngine;
 import com.frostwire.bittorrent.BTEngineAdapter;
@@ -436,6 +438,18 @@ public final class TransferManager {
                 }
             }
         }
+    }
+
+    /**
+     * @return true if less than 10MB available
+     */
+    static boolean isCurrentMountAlmostFull() {
+        return getCurrentMountAvailableBytes() < 10000000;
+    }
+
+    static long getCurrentMountAvailableBytes() {
+        StatFs stat = new StatFs(ConfigurationManager.instance().getStoragePath());
+        return ((long)stat.getBlockSize() * (long)stat.getAvailableBlocks());
     }
 
     private void registerPreferencesChangeListener() {
