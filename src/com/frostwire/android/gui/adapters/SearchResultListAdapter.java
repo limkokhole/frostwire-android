@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
@@ -35,6 +34,7 @@ import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.android.gui.views.ClickAdapter;
+import com.frostwire.android.gui.views.MediaThumbnailImage;
 import com.frostwire.android.gui.views.SearchThumbnailImageView;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.licences.License;
@@ -158,10 +158,10 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         fileTypeIcon.setOnClickListener(previewClickListener);
         if (sr instanceof SoundcloudSearchResult || sr instanceof YouTubeCrawledStreamableSearchResult) {
             fileTypeIcon.setTag(sr);
-            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.PREVIEW);
+            fileTypeIcon.setOverlayState(MediaThumbnailImage.OverlayState.PREVIEW);
         } else {
             fileTypeIcon.setTag(null);
-            fileTypeIcon.setOverlayState(SearchThumbnailImageView.OverlayState.NONE);
+            fileTypeIcon.setOverlayState(MediaThumbnailImage.OverlayState.NONE);
         }
     }
 

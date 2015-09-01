@@ -38,7 +38,6 @@ import com.frostwire.android.gui.adapters.menu.*;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
-import com.frostwire.android.gui.views.BrowseThumbnailImageButton.OverlayState;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
 import com.frostwire.uxstats.UXAction;
@@ -196,9 +195,9 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         } else {
             if (in(fileType, Constants.FILE_TYPE_AUDIO, Constants.FILE_TYPE_VIDEOS, Constants.FILE_TYPE_RINGTONES)) {
                 if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
-                    fileThumbnail.setOverlayState(OverlayState.STOP);
+                    fileThumbnail.setOverlayState(MediaThumbnailImage.OverlayState.STOP);
                 } else {
-                    fileThumbnail.setOverlayState(OverlayState.PLAY);
+                    fileThumbnail.setOverlayState(MediaThumbnailImage.OverlayState.PLAY);
                 }
             }
 
@@ -256,9 +255,9 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         BrowseThumbnailImageButton downloadButton = findView(view, R.id.view_browse_peer_list_item_download);
 
         if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
-            downloadButton.setOverlayState(OverlayState.STOP);
+            downloadButton.setOverlayState(MediaThumbnailImage.OverlayState.STOP);
         } else {
-            downloadButton.setOverlayState(OverlayState.PLAY);
+            downloadButton.setOverlayState(MediaThumbnailImage.OverlayState.PLAY);
         }
 
         downloadButton.setTag(fd);
