@@ -32,21 +32,21 @@ import java.lang.ref.WeakReference;
  * @author marcelinkaaa
  */
 public final class SearchThumbnailImageView extends ImageView {
-    private final MediaPlaybackOverlay mediaThumbnail;
+    private final MediaPlaybackOverlay overlay;
 
     public SearchThumbnailImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mediaThumbnail = new MediaPlaybackOverlay(new WeakReference<View>(this));
+        overlay = new MediaPlaybackOverlay(new WeakReference<View>(this));
     }
 
     public void setOverlayState(MediaPlaybackOverlay.MediaPlaybackState state) {
-        mediaThumbnail.setOverlayState(state);
+        overlay.setOverlayState(state);
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mediaThumbnail.drawOverlay(canvas);
+        overlay.drawOverlay(canvas);
     }
 }
