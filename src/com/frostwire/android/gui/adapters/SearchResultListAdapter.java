@@ -34,7 +34,7 @@ import com.frostwire.android.gui.activities.PreviewPlayerActivity;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.android.gui.views.ClickAdapter;
-import com.frostwire.android.gui.views.MediaThumbnailImage;
+import com.frostwire.android.gui.views.MediaPlaybackOverlay;
 import com.frostwire.android.gui.views.SearchThumbnailImageView;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.licences.License;
@@ -158,10 +158,10 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
         fileTypeIcon.setOnClickListener(previewClickListener);
         if (sr instanceof SoundcloudSearchResult || sr instanceof YouTubeCrawledStreamableSearchResult) {
             fileTypeIcon.setTag(sr);
-            fileTypeIcon.setOverlayState(MediaThumbnailImage.OverlayState.PREVIEW);
+            fileTypeIcon.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.PREVIEW);
         } else {
             fileTypeIcon.setTag(null);
-            fileTypeIcon.setOverlayState(MediaThumbnailImage.OverlayState.NONE);
+            fileTypeIcon.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.NONE);
         }
     }
 

@@ -195,9 +195,9 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         } else {
             if (in(fileType, Constants.FILE_TYPE_AUDIO, Constants.FILE_TYPE_VIDEOS, Constants.FILE_TYPE_RINGTONES)) {
                 if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
-                    fileThumbnail.setOverlayState(MediaThumbnailImage.OverlayState.STOP);
+                    fileThumbnail.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.STOP);
                 } else {
-                    fileThumbnail.setOverlayState(MediaThumbnailImage.OverlayState.PLAY);
+                    fileThumbnail.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.PLAY);
                 }
             }
 
@@ -255,9 +255,9 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         BrowseThumbnailImageButton downloadButton = findView(view, R.id.view_browse_peer_list_item_download);
 
         if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
-            downloadButton.setOverlayState(MediaThumbnailImage.OverlayState.STOP);
+            downloadButton.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.STOP);
         } else {
-            downloadButton.setOverlayState(MediaThumbnailImage.OverlayState.PLAY);
+            downloadButton.setOverlayState(MediaPlaybackOverlay.MediaPlaybackState.PLAY);
         }
 
         downloadButton.setTag(fd);

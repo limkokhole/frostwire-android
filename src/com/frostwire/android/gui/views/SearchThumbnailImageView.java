@@ -20,8 +20,6 @@ package com.frostwire.android.gui.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Path;
-import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -34,14 +32,14 @@ import java.lang.ref.WeakReference;
  * @author marcelinkaaa
  */
 public final class SearchThumbnailImageView extends ImageView {
-    private final MediaThumbnailImage mediaThumbnail;
+    private final MediaPlaybackOverlay mediaThumbnail;
 
     public SearchThumbnailImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mediaThumbnail = new MediaThumbnailImage(new WeakReference<View>(this));
+        mediaThumbnail = new MediaPlaybackOverlay(new WeakReference<View>(this));
     }
 
-    public void setOverlayState(MediaThumbnailImage.OverlayState state) {
+    public void setOverlayState(MediaPlaybackOverlay.MediaPlaybackState state) {
         mediaThumbnail.setOverlayState(state);
     }
 
@@ -49,6 +47,6 @@ public final class SearchThumbnailImageView extends ImageView {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mediaThumbnail.drawOverlayState(canvas);
+        mediaThumbnail.drawOverlay(canvas);
     }
 }

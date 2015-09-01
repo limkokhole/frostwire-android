@@ -29,15 +29,15 @@ import java.lang.ref.WeakReference;
  * @author aldenml
  * @author marcelinkaaa
  */
-public class MediaThumbnailImage {
-    public enum OverlayState {
+public class MediaPlaybackOverlay {
+    public enum MediaPlaybackState {
         NONE, PLAY, PREVIEW, STOP;
     }
 
     private static final Paint paintCircleFill = new Paint();
     private static final Paint paintCircleStroke = new Paint();
     private static final Paint paintShapeFill = new Paint();
-    private OverlayState state;
+    private MediaPlaybackState state;
     private final WeakReference<View> viewReference;
 
     static {
@@ -55,25 +55,25 @@ public class MediaThumbnailImage {
         paintShapeFill.setAntiAlias(true);
     }
 
-    public MediaThumbnailImage(WeakReference<View> view) {
-        this.state = OverlayState.NONE;
+    public MediaPlaybackOverlay(WeakReference<View> view) {
+        this.state = MediaPlaybackState.NONE;
         viewReference = view;
     }
 
-    private OverlayState getState() {
+    private MediaPlaybackState getState() {
         return state;
     }
 
-    public void setOverlayState(OverlayState state) {
+    public void setOverlayState(MediaPlaybackState state) {
         this.state = state;
     }
 
-    public void drawOverlayState(Canvas canvas) {
-        if (state != OverlayState.NONE) {
+    public void drawOverlay(Canvas canvas) {
+        if (state != MediaPlaybackState.NONE) {
             drawCircle(canvas);
-            if (state == OverlayState.PLAY || state == OverlayState.PREVIEW) {
+            if (state == MediaPlaybackState.PLAY || state == MediaPlaybackState.PREVIEW) {
                 drawTriangle(canvas);
-            } else if (state == OverlayState.STOP) {
+            } else if (state == MediaPlaybackState.STOP) {
                 drawSquare(canvas);
             }
         }

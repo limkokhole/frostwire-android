@@ -32,14 +32,14 @@ import java.lang.ref.WeakReference;
  * @author marcelinkaaa
  */
 public class BrowseThumbnailImageButton extends ImageButton {
-    private MediaThumbnailImage mediaThumbnail;
+    private MediaPlaybackOverlay mediaThumbnail;
 
     public BrowseThumbnailImageButton(Context context, AttributeSet attrs) {
         super(context, attrs);
-        mediaThumbnail = new MediaThumbnailImage(new WeakReference<View>(this));
+        mediaThumbnail = new MediaPlaybackOverlay(new WeakReference<View>(this));
     }
 
-    public void setOverlayState(MediaThumbnailImage.OverlayState state) {
+    public void setOverlayState(MediaPlaybackOverlay.MediaPlaybackState state) {
         mediaThumbnail.setOverlayState(state);
     }
 
@@ -47,6 +47,6 @@ public class BrowseThumbnailImageButton extends ImageButton {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        mediaThumbnail.drawOverlayState(canvas);
+        mediaThumbnail.drawOverlay(canvas);
     }
 }
