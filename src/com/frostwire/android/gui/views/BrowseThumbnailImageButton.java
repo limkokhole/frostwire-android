@@ -43,12 +43,12 @@ public class BrowseThumbnailImageButton extends ImageButton {
         paintCircleFill.setStyle(Paint.Style.FILL);
         paintCircleFill.setAntiAlias(true);
 
-        paintCircleStroke.setColor(Color.parseColor("#ff546676"));
-        paintCircleStroke.setStrokeWidth(2);
+        paintCircleStroke.setColor(Color.parseColor("#ff525254"));
+        paintCircleStroke.setStrokeWidth(5);
         paintCircleStroke.setStyle(Paint.Style.STROKE);
         paintCircleStroke.setAntiAlias(true);
 
-        paintShapeFill.setColor(Color.parseColor("#ff546676"));
+        paintShapeFill.setColor(Color.parseColor("#ff525254"));
         paintShapeFill.setStyle(Paint.Style.FILL);
         paintShapeFill.setAntiAlias(true);
     }
