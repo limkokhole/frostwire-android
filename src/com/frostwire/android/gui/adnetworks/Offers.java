@@ -38,12 +38,12 @@ public class Offers {
     static final ThreadPool THREAD_POOL = new ThreadPool("SearchManager", 1, 5, 1L, new PriorityBlockingQueue<Runnable>(), true);
     public static boolean MOBILE_CORE_NATIVE_ADS_READY = false;
     private final static AppLovinAdNetwork APP_LOVIN = new AppLovinAdNetwork();
-    private final static MobileCoreAdNetwork MOBILE_CORE = new MobileCoreAdNetwork();
+    //private final static MobileCoreAdNetwork MOBILE_CORE = new MobileCoreAdNetwork();
     private final static InMobiAdNetwork IN_MOBI = new InMobiAdNetwork();
     private static List<AdNetwork> AD_NETWORKS;
 
     public static void initAdNetworks(Activity activity) {
-        AD_NETWORKS = Arrays.asList(new AdNetwork[]{APP_LOVIN, IN_MOBI, MOBILE_CORE});
+        AD_NETWORKS = Arrays.asList(new AdNetwork[]{APP_LOVIN, IN_MOBI}); //, MOBILE_CORE});
         for (AdNetwork adNetwork : AD_NETWORKS) {
             adNetwork.initialize(activity);
         }
@@ -69,6 +69,7 @@ public class Offers {
     }
 
     public static void onFreeAppsClick(Context context) {
+        /**
         if (isFreeAppsEnabled() && MOBILE_CORE.started() && MOBILE_CORE.isDirectToMarketReady()) {
             try {
                 LOG.debug("onFreeAppsClick");
@@ -78,6 +79,7 @@ public class Offers {
                 t.printStackTrace();
             }
         }
+         */
     }
 
     public static void showInterstitial(final Activity activity,
