@@ -40,7 +40,8 @@ public class AppLovinAdNetwork implements AdNetwork {
         if (!enabled()) {
             return;
         }
-        new Thread() {
+
+        Offers.THREAD_POOL.execute(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -53,7 +54,7 @@ public class AppLovinAdNetwork implements AdNetwork {
                     LOG.error(e.getMessage(), e);
                 }
             }
-        }.start();
+        });
     }
 
     @Override

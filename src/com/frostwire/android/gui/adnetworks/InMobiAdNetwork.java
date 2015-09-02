@@ -42,7 +42,7 @@ public class InMobiAdNetwork implements AdNetwork {
         }
 
         if (!started) {
-            new Thread() {
+            Offers.THREAD_POOL.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
@@ -59,7 +59,7 @@ public class InMobiAdNetwork implements AdNetwork {
                         started = false;
                     }
                 }
-            }.start();
+            });
         }
     }
 
@@ -123,7 +123,7 @@ public class InMobiAdNetwork implements AdNetwork {
             public void run() {
                 try {
                     inmobiInterstitial = new IMInterstitial(activity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                    inmobiListener = new InMobiListener(activity, InMobiAdNetwork.this);
+                    inmobiListener = new InMobiListener(activity);
                     inmobiInterstitial.setIMInterstitialListener(inmobiListener);
                     inmobiInterstitial.loadInterstitial();
                 } catch (Throwable t) {

@@ -35,14 +35,12 @@ import java.util.concurrent.TimeUnit;
 public class InMobiListener implements InterstitialListener, IMInterstitialListener {
     private final Logger LOG = Logger.getLogger(IMInterstitialListener.class);
     private final WeakReference<Activity> activityRef;
-    private final InMobiAdNetwork inmobiAffiliate;
     private boolean shutdownAfterDismiss = false;
     private boolean finishAfterDismiss = false;
     private boolean ready;
 
-    public InMobiListener(Activity hostActivity, InMobiAdNetwork inmobiAffiliate) {
+    public InMobiListener(Activity hostActivity) {
         activityRef = new WeakReference<Activity>(hostActivity);
-        this.inmobiAffiliate = inmobiAffiliate;
     }
 
     @Override
@@ -76,25 +74,6 @@ public class InMobiListener implements InterstitialListener, IMInterstitialListe
     @Override
     public void onInterstitialFailed(IMInterstitial imInterstitial, IMErrorCode imErrorCode) {
         ready = false;
-        LOG.error(imErrorCode.name());
-        LOG.error(imErrorCode.toString());
-
-        new Thread("InMobiListener.onInterstitialFailed") {
-            @Override
-            public void run() {
-                try {
-                    TimeUnit.MINUTES.sleep(30);
-                    if (Ref.alive(activityRef)) {
-                        Activity activity = activityRef.get();
-                        if (activity instanceof MainActivity) {
-                            inmobiAffiliate.loadNewInterstitial(activity);
-                        }
-                    }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }.start();
     }
 
     @Override
