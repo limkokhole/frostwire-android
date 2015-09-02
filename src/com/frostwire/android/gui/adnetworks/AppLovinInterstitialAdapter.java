@@ -32,16 +32,16 @@ import java.util.concurrent.TimeUnit;
 public class AppLovinInterstitialAdapter implements InterstitialListener, AppLovinAdDisplayListener, AppLovinAdLoadListener {
     private static final Logger LOG = Logger.getLogger(AppLovinInterstitialAdapter.class);
     private WeakReference<Activity> activityRef;
-    private AppLovinAdNetwork appLovinAffiliate;
+    private AppLovinAdNetwork appLovinAdNetwork;
     private AppLovinAd ad;
 
     private boolean dismissAfter = false;
     private boolean shutdownAfter = false;
     private boolean isVideoAd = false;
 
-    public AppLovinInterstitialAdapter(Activity parentActivity, AppLovinAdNetwork appLovinAffiliate) {
+    public AppLovinInterstitialAdapter(Activity parentActivity, AppLovinAdNetwork appLovinAdNetwork) {
         this.activityRef = Ref.weak(parentActivity);
-        this.appLovinAffiliate = appLovinAffiliate;
+        this.appLovinAdNetwork = appLovinAdNetwork;
     }
 
     public boolean isAdReadyToDisplay() {
@@ -59,6 +59,7 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
             try {
                 this.activityRef = activityWeakReference;
                 final AppLovinInterstitialAdDialog adDialog = AppLovinInterstitialAd.create(AppLovinSdk.getInstance(activityRef.get()), activityRef.get());
+                adDialog.setAdDisplayListener(this);
                 adDialog.showAndRender(ad);
                 result = true;
             } catch (Throwable t) {
@@ -87,7 +88,7 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
                     @Override
                     public void run() {
                         try {
-                            appLovinAffiliate.loadNewInterstitial(activityRef.get());
+                            appLovinAdNetwork.loadNewInterstitial(activityRef.get());
                         } catch (Throwable e) {
                             LOG.error(e.getMessage(), e);
                         }
@@ -133,7 +134,7 @@ public class AppLovinInterstitialAdapter implements InterstitialListener, AppLov
                         if (Ref.alive(activityRef)) {
                             Activity activity = activityRef.get();
                             if (activity instanceof MainActivity) {
-                                appLovinAffiliate.loadNewInterstitial(activity);
+                                appLovinAdNetwork.loadNewInterstitial(activity);
                             }
                         }
                     } catch (InterruptedException e) {
