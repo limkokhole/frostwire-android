@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -28,13 +28,13 @@ import com.inmobi.monetization.IMInterstitial;
 
 import java.lang.ref.WeakReference;
 
-public class InMobiAffiliate implements Affiliate {
-    private static final Logger LOG = Logger.getLogger(InMobiAffiliate.class);
+public class InMobiAdNetwork implements AdNetwork {
+    private static final Logger LOG = Logger.getLogger(InMobiAdNetwork.class);
     private InMobiListener inmobiListener;
     private IMInterstitial inmobiInterstitial;
     private boolean started = false;
 
-    public InMobiAffiliate() {}
+    public InMobiAdNetwork() {}
 
     public void initialize(final Activity activity) {
         if (!enabled()) {
@@ -123,7 +123,7 @@ public class InMobiAffiliate implements Affiliate {
             public void run() {
                 try {
                     inmobiInterstitial = new IMInterstitial(activity, Constants.INMOBI_INTERSTITIAL_PROPERTY_ID);
-                    inmobiListener = new InMobiListener(activity, InMobiAffiliate.this);
+                    inmobiListener = new InMobiListener(activity, InMobiAdNetwork.this);
                     inmobiInterstitial.setIMInterstitialListener(inmobiListener);
                     inmobiInterstitial.loadInterstitial();
                 } catch (Throwable t) {

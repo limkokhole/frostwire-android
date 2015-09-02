@@ -29,7 +29,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.fragments.SearchFragment;
-import com.frostwire.android.gui.affiliates.Offers;
+import com.frostwire.android.gui.adnetworks.Offers;
 
 /**
  * @author gubatron

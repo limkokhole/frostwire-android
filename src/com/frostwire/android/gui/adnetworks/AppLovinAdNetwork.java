@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,12 +29,12 @@ import com.frostwire.logging.Logger;
 
 import java.lang.ref.WeakReference;
 
-public class AppLovinAffiliate implements Affiliate {
-    private static final Logger LOG = Logger.getLogger(AppLovinAffiliate.class);
+public class AppLovinAdNetwork implements AdNetwork {
+    private static final Logger LOG = Logger.getLogger(AppLovinAdNetwork.class);
     private AppLovinInterstitialAdapter interstitialAdapter = null;
     private boolean started = false;
 
-    public AppLovinAffiliate() {}
+    public AppLovinAdNetwork() {}
 
     public void initialize(final Activity activity) {
         if (!enabled()) {

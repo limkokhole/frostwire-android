@@ -41,7 +41,7 @@ import com.frostwire.android.gui.LocalSearchEngine;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter;
 import com.frostwire.android.gui.adapters.SearchResultListAdapter.FilteredSearchResults;
-import com.frostwire.android.gui.affiliates.Offers;
+import com.frostwire.android.gui.adnetworks.Offers;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.tasks.DownloadSoundcloudFromUrlTask;

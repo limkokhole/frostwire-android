@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
 import com.applovin.adview.AppLovinInterstitialAd;
@@ -32,14 +32,14 @@ import java.util.concurrent.TimeUnit;
 public class AppLovinInterstitialAdapter implements InterstitialListener, AppLovinAdDisplayListener, AppLovinAdLoadListener {
     private static final Logger LOG = Logger.getLogger(AppLovinInterstitialAdapter.class);
     private WeakReference<Activity> activityRef;
-    private AppLovinAffiliate appLovinAffiliate;
+    private AppLovinAdNetwork appLovinAffiliate;
     private AppLovinAd ad;
 
     private boolean dismissAfter = false;
     private boolean shutdownAfter = false;
     private boolean isVideoAd = false;
 
-    public AppLovinInterstitialAdapter(Activity parentActivity, AppLovinAffiliate appLovinAffiliate) {
+    public AppLovinInterstitialAdapter(Activity parentActivity, AppLovinAdNetwork appLovinAffiliate) {
         this.activityRef = Ref.weak(parentActivity);
         this.appLovinAffiliate = appLovinAffiliate;
     }

@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
 import android.content.Context;
@@ -34,10 +34,10 @@ import com.ironsource.mobilcore.MobileCore;
 
 import java.lang.ref.WeakReference;
 
-public class MobileCoreAffiliate implements Affiliate {
+public class MobileCoreAdNetwork implements AdNetwork {
     private boolean started;
     private WeakReference<Activity> activityRef;
-    private static final Logger LOG = Logger.getLogger(MobileCoreAffiliate.class);
+    private static final Logger LOG = Logger.getLogger(MobileCoreAdNetwork.class);
 
     public void initialize(Activity activity) {
         activityRef = Ref.weak(activity);

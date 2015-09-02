@@ -16,11 +16,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.activities.MainActivity;
@@ -36,23 +35,23 @@ public class Offers {
     private static final Logger LOG = Logger.getLogger(Offers.class);
     public static boolean MOBILE_CORE_NATIVE_ADS_READY = false;
 
-    private final static AppLovinAffiliate APP_LOVIN = new AppLovinAffiliate();
-    private final static MobileCoreAffiliate MOBILE_CORE = new MobileCoreAffiliate();
-    private final static InMobiAffiliate IN_MOBI = new InMobiAffiliate();
+    private final static AppLovinAdNetwork APP_LOVIN = new AppLovinAdNetwork();
+    private final static MobileCoreAdNetwork MOBILE_CORE = new MobileCoreAdNetwork();
+    private final static InMobiAdNetwork IN_MOBI = new InMobiAdNetwork();
 
-    private static List<Affiliate> AFFILIATES;
+    private static List<AdNetwork> AD_NETWORKS;
 
-    public static void initAffiliates(Activity activity) {
-        AFFILIATES = Arrays.asList(new Affiliate[]{APP_LOVIN, IN_MOBI, MOBILE_CORE});
-        for (Affiliate affiliate : AFFILIATES) {
-            affiliate.initialize(activity);
+    public static void initAdNetworks(Activity activity) {
+        AD_NETWORKS = Arrays.asList(new AdNetwork[]{APP_LOVIN, IN_MOBI, MOBILE_CORE});
+        for (AdNetwork adNetwork : AD_NETWORKS) {
+            adNetwork.initialize(activity);
         }
     }
 
-    public static void stopAffiliates(Context context) {
-        for (Affiliate affiliate : AFFILIATES) {
-            if (affiliate.started()) {
-                affiliate.stop(context);
+    public static void stopAdNetworks(Context context) {
+        for (AdNetwork adNetwork : AD_NETWORKS) {
+            if (adNetwork.started()) {
+                adNetwork.stop(context);
             }
         }
     }
@@ -85,9 +84,9 @@ public class Offers {
                                         final boolean dismissAfterwards) {
         boolean interstitialShown = false;
         final WeakReference<Activity> activityRef = Ref.weak(activity);
-        for (Affiliate affiliate : AFFILIATES) {
-            if (!interstitialShown && affiliate.started()) {
-                interstitialShown = affiliate.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
+        for (AdNetwork adNetwork : AD_NETWORKS) {
+            if (!interstitialShown && adNetwork.started()) {
+                interstitialShown = adNetwork.showInterstitial(activityRef, shutdownAfterwards, dismissAfterwards);
             }
         }
         if (!interstitialShown) {

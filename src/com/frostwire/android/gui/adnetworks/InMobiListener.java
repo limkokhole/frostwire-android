@@ -17,7 +17,7 @@
  */
 
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 
 import android.app.Activity;
@@ -35,12 +35,12 @@ import java.util.concurrent.TimeUnit;
 public class InMobiListener implements InterstitialListener, IMInterstitialListener {
     private final Logger LOG = Logger.getLogger(IMInterstitialListener.class);
     private final WeakReference<Activity> activityRef;
-    private final InMobiAffiliate inmobiAffiliate;
+    private final InMobiAdNetwork inmobiAffiliate;
     private boolean shutdownAfterDismiss = false;
     private boolean finishAfterDismiss = false;
     private boolean ready;
 
-    public InMobiListener(Activity hostActivity, InMobiAffiliate inmobiAffiliate) {
+    public InMobiListener(Activity hostActivity, InMobiAdNetwork inmobiAffiliate) {
         activityRef = new WeakReference<Activity>(hostActivity);
         this.inmobiAffiliate = inmobiAffiliate;
     }

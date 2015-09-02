@@ -16,16 +16,20 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.frostwire.android.gui.affiliates;
+package com.frostwire.android.gui.adnetworks;
 
 import android.app.Activity;
+import android.content.Context;
 
 import java.lang.ref.WeakReference;
 
-public interface InterstitialListener {
-    boolean isAdReadyToDisplay();
-    boolean isVideoAd();
-    boolean show(WeakReference<Activity> activityWeakReference);
-    void shutdownAppAfter(boolean shutdown);
-    void dismissActivityAfterwards(boolean dismiss);
+public interface AdNetwork {
+    void initialize(final Activity activity);
+    void stop(Context context);
+    boolean enabled();
+    boolean started();
+    boolean showInterstitial(final WeakReference<Activity> activityRef,
+                             final boolean shutdownActivityAfterwards,
+                             final boolean dismissActivityAfterward);
+    void loadNewInterstitial(Activity activity);
 }
