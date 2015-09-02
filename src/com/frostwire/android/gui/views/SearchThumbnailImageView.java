@@ -21,10 +21,7 @@ package com.frostwire.android.gui.views;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.ImageView;
-
-import java.lang.ref.WeakReference;
 
 /**
  * @author gubatron
@@ -36,7 +33,7 @@ public final class SearchThumbnailImageView extends ImageView {
 
     public SearchThumbnailImageView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        overlay = new MediaPlaybackOverlay(new WeakReference<View>(this));
+        overlay = new MediaPlaybackOverlay(this);
     }
 
     public void setOverlayState(MediaPlaybackOverlay.MediaPlaybackState state) {

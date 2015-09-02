@@ -31,7 +31,7 @@ import java.lang.ref.WeakReference;
  */
 public class MediaPlaybackOverlay {
     public enum MediaPlaybackState {
-        NONE, PLAY, PREVIEW, STOP;
+        NONE, PLAY, PREVIEW, STOP
     }
 
     private static final Paint paintCircleFill = new Paint();
@@ -55,13 +55,9 @@ public class MediaPlaybackOverlay {
         paintShapeFill.setAntiAlias(true);
     }
 
-    public MediaPlaybackOverlay(WeakReference<View> view) {
+    public MediaPlaybackOverlay(View view) {
         this.state = MediaPlaybackState.NONE;
-        viewReference = view;
-    }
-
-    private MediaPlaybackState getState() {
-        return state;
+        viewReference = Ref.weak(view);
     }
 
     public void setOverlayState(MediaPlaybackState state) {
