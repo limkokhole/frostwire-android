@@ -30,12 +30,12 @@ import com.frostwire.util.ThreadPool;
 import java.lang.ref.WeakReference;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.PriorityBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Offers {
 
     private static final Logger LOG = Logger.getLogger(Offers.class);
-    static final ThreadPool THREAD_POOL = new ThreadPool("SearchManager", 1, 5, 1L, new PriorityBlockingQueue<Runnable>(), true);
+    static final ThreadPool THREAD_POOL = new ThreadPool("SearchManager", 1, 5, 1L, new LinkedBlockingQueue<Runnable>(), true);
     public static boolean MOBILE_CORE_NATIVE_ADS_READY = false;
     private final static AppLovinAdNetwork APP_LOVIN = new AppLovinAdNetwork();
     //private final static MobileCoreAdNetwork MOBILE_CORE = new MobileCoreAdNetwork();
