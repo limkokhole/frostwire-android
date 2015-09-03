@@ -105,6 +105,8 @@ android {
                 exclude "**/*.java"
             }
         }
+
+        plus1.res.srcDirs = ['res-plus1']
     }
 
     lintOptions {
