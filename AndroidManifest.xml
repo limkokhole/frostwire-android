@@ -300,9 +300,9 @@
 
 		<!-- providers -->
 		<provider android:name="com.frostwire.android.core.providers.DocumentsProvider"
-			android:authorities="com.frostwire.android.core.providers.Documents" android:exported="true" />
+			android:authorities="com.frostwire.android.core.providers.Documents" android:exported="false" />
 		<provider android:name="com.frostwire.android.core.providers.ApplicationsProvider"
-			android:authorities="com.frostwire.android.core.providers.Applications" android:exported="true" />
+			android:authorities="com.frostwire.android.core.providers.Applications" android:exported="false" />
 
 		<!-- services -->
 
