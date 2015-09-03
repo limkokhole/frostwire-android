@@ -26,11 +26,9 @@ import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.view.*;
-import android.widget.ImageButton;
 import android.widget.TextView;
+import com.frostwire.android.BuildConfig;
 import com.frostwire.android.R;
-
-import java.util.ArrayList;
 
 /**
  * In order to implement the theme chooser for Apollo, this class returns a
@@ -57,7 +55,7 @@ public class ThemeUtils {
     /**
      * Default package name.
      */
-    public static final String APOLLO_PACKAGE = "com.frostwire.android";
+    public static final String APOLLO_PACKAGE = BuildConfig.APPLICATION_ID;
 
     /**
      * Current theme package name.
