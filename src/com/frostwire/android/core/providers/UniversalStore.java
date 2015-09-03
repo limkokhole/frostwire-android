@@ -21,6 +21,7 @@ package com.frostwire.android.core.providers;
 import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.MediaColumns;
+import com.frostwire.android.BuildConfig;
 
 /**
  * The Media provider contains meta data for all available media on both
@@ -32,8 +33,8 @@ import android.provider.MediaStore.MediaColumns;
  */
 public final class UniversalStore {
 
-    public static final String UNIVERSAL_APPLICATIONS_AUTHORITY = "com.frostwire.android.core.providers.Applications";
-    public static final String UNIVERSAL_DOCUMENTS_AUTHORITY = "com.frostwire.android.core.providers.Documents";
+    public static final String UNIVERSAL_APPLICATIONS_AUTHORITY = BuildConfig.APPLICATION_ID + ".core.providers.Applications";
+    public static final String UNIVERSAL_DOCUMENTS_AUTHORITY = BuildConfig.APPLICATION_ID + ".core.providers.Documents";
 
     public static final String CONTENT_UNIVERSAL_DOCUMENTS_AUTHORITY_SLASH = "content://" + UNIVERSAL_DOCUMENTS_AUTHORITY + "/";
     public static final String CONTENT_UNIVERSAL_APPLICATIONS_AUTHORITY_SLASH = "content://" + UNIVERSAL_APPLICATIONS_AUTHORITY + "/";
