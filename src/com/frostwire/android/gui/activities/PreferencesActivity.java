@@ -22,6 +22,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.*;
@@ -110,6 +111,7 @@ public class PreferencesActivity extends PreferenceActivity {
         setupClearIndex();
         setupSearchEngines();
         setupUXStatsOption();
+        setupAbout();
     }
 
     @Override
@@ -297,6 +299,11 @@ public class PreferencesActivity extends PreferenceActivity {
                 }
             });
         }
+    }
+
+    private void setupAbout() {
+        Preference p = findPreference(Constants.PREF_KEY_SHOW_ABOUT);
+        p.setIntent(new Intent(this, AboutActivity.class));
     }
 
     private void connect() {

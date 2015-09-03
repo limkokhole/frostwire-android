@@ -189,6 +189,7 @@
     </PreferenceScreen>
 
     <Preference
+        android:key="frostwire.prefs.show_about"
         android:title="@string/about">
         <intent
             android:action="android.intent.action.VIEW"
