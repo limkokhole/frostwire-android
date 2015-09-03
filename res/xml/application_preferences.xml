@@ -120,10 +120,12 @@
                 android:key="frostwire.prefs.search.use_extratorrent"
                 android:summary="@string/use_extratorrent"
                 android:title="@string/use_extratorrent" />
+<!--
         <CheckBoxPreference
                 android:key="frostwire.prefs.search.use_eztv"
                 android:summary="@string/use_eztv"
                 android:title="@string/use_eztv" />
+                -->
         <CheckBoxPreference
                 android:key="frostwire.prefs.search.use_frostclick"
                 android:summary="@string/use_frostclick"
