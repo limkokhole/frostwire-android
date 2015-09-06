@@ -164,7 +164,7 @@ public abstract class SearchEngine {
     public static final SearchEngine EZTV = new SearchEngine("Eztv", Constants.PREF_KEY_SEARCH_USE_EZTV) {
         @Override
         public SearchPerformer getPerformer(long token, String keywords) {
-            return new EztvSearchPerformer("eztv.ch", token, keywords, DEFAULT_TIMEOUT);
+            return new EztvSearchPerformer("eztv.ag", token, keywords, DEFAULT_TIMEOUT);
         }
     };
 
@@ -234,5 +234,5 @@ public abstract class SearchEngine {
         }
     };
 
-    private static final List<SearchEngine> ALL_ENGINES = Arrays.asList(EXTRATORRENT, KAT, YIFY, YOUTUBE, FROSTCLICK, MONOVA, MININOVA, BTJUNKIE, TPB, SOUNCLOUD, ARCHIVE, TORLOCK, BITSNOOP); //EZTV
+    private static final List<SearchEngine> ALL_ENGINES = Arrays.asList(EXTRATORRENT, KAT, YIFY, YOUTUBE, FROSTCLICK, MONOVA, MININOVA, BTJUNKIE, TPB, SOUNCLOUD, ARCHIVE, TORLOCK, BITSNOOP, EZTV);
 }
