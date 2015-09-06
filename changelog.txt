@@ -1,9 +1,10 @@
-FrostWire 1.6.3 - SEPTEMBER/02/2015
+FrostWire 1.6.3 - SEPTEMBER/06/2015
  - Upgraded Picasso library for image caching.
  - Code/library cleanup.
  - New 'Remove Torrent and Data' action on finished torrent transfers.
  - Clicked search results are marked as visited and remembered during session.
  - jlibtorrent update 1.1.0.7, rebuilt with new swig library, memory optimizations, crashes fixed.
+ - Fixes EZTV, BtJunkie search.
  - Fixes issue where torrent downloads would start on 3g/4g disregarding setting.
  - Multiple crash fixes on audio player.
 
