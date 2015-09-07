@@ -61,16 +61,6 @@ public final class ApolloUtils {
     }
 
     /**
-     * Used to determine if the device is running Jelly Bean or greater
-     * 
-     * @return True if the device is running Jelly Bean or greater, false
-     *         otherwise
-     */
-    public static final boolean hasJellyBean() {
-        return Build.VERSION.SDK_INT >= 16;//Build.VERSION_CODES.JELLY_BEAN;
-    }
-
-    /**
      * Used to determine if the device is running
      * Jelly Bean MR2 (Android 4.3) or greater
      *
@@ -79,17 +69,6 @@ public final class ApolloUtils {
      */
     public static final boolean hasJellyBeanMR2() {
         return Build.VERSION.SDK_INT >= 18;//Build.VERSION_CODES.JELLY_BEAN_MR2;
-    }
-
-    /**
-     * Used to determine if the device is a tablet or not
-     * 
-     * @param context The {@link Context} to use.
-     * @return True if the device is a tablet, false otherwise.
-     */
-    public static final boolean isTablet(final Context context) {
-        final int layout = context.getResources().getConfiguration().screenLayout;
-        return (layout & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
     /**

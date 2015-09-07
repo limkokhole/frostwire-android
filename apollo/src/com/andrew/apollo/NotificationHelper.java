@@ -111,16 +111,14 @@ public class NotificationHelper {
         }
         // Control playback from the notification
         initPlaybackActions(isPlaying);
-        if (ApolloUtils.hasJellyBean()) {
-            // Expanded notifiction style
-            mExpandedView = new RemoteViews(mService.getPackageName(),
-                    R.layout.notification_template_expanded_base);
-            setBigContentView(mNotification, mExpandedView);
-            // Control playback from the notification
-            initExpandedPlaybackActions(isPlaying);
-            // Set up the expanded content view
-            initExpandedLayout(trackName, albumName, artistName, albumArt);
-        }
+        // Expanded notifiction style
+        mExpandedView = new RemoteViews(mService.getPackageName(),
+                R.layout.notification_template_expanded_base);
+        mNotification.bigContentView = mExpandedView;
+        // Control playback from the notification
+        initExpandedPlaybackActions(isPlaying);
+        // Set up the expanded content view
+        initExpandedLayout(trackName, albumName, artistName, albumArt);
         // d7fa67cc74 NotificationHelper.java:102
         if (mNotification != null) { //it can happen
             mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
@@ -153,7 +151,7 @@ public class NotificationHelper {
                     isPlaying ? R.drawable.btn_notification_playback_pause : R.drawable.btn_notification_playback_play);
         }
 
-        if (ApolloUtils.hasJellyBean() && mExpandedView != null) {
+        if (mExpandedView != null) {
             mExpandedView.setImageViewResource(R.id.notification_expanded_base_play,
                     isPlaying ? R.drawable.btn_notification_playback_pause : R.drawable.btn_notification_playback_play);
         }
@@ -288,15 +286,6 @@ public class NotificationHelper {
         // Album art
         if (albumArt != null) {
             mExpandedView.setImageViewBitmap(R.id.notification_expanded_base_image, albumArt);
-        }
-    }
-
-    private static void setBigContentView(Notification notification, RemoteViews view) {
-        try {
-            java.lang.reflect.Field f = Notification.class.getDeclaredField("bigContentView");
-            f.set(notification, view);
-        } catch (Throwable e) {
-            // unable to set the big view version
         }
     }
 }

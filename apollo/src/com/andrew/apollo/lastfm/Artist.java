@@ -52,7 +52,7 @@ public class Artist extends MusicEntry {
      * @return detailed artist info
      */
     public final static Artist getInfo(final Context context, final String artistOrMbid) {
-        return getInfo(context, artistOrMbid, Locale.getDefault(), Config.LASTFM_API_KEY);
+        return getInfo(context, artistOrMbid, Locale.getDefault(), "<key>");
     }
 
     /**
@@ -87,7 +87,7 @@ public class Artist extends MusicEntry {
         Result result = null;
         try {
             result = Caller.getInstance(context).call("artist.getCorrection",
-                    Config.LASTFM_API_KEY, "artist", artist);
+                    "<key>", "artist", artist);
             if (!result.isSuccessful()) {
                 return null;
             }

@@ -59,7 +59,7 @@ public class Album extends MusicEntry {
      */
     public final static Album getInfo(final Context context, final String artist,
             final String albumOrMbid) {
-        return getInfo(context, artist, albumOrMbid, null, Config.LASTFM_API_KEY);
+        return getInfo(context, artist, albumOrMbid, null, "<key>");
     }
 
     /**
