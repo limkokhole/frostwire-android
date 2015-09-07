@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -31,7 +31,6 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.HttpFetcher;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.android.gui.util.OSUtils;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.ByteUtils;
@@ -352,7 +351,7 @@ public final class SoftwareUpdater {
 
         if (update.config.uxEnabled && ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_UXSTATS_ENABLED)) {
             String url = "http://ux.frostwire.com/aux";
-            String os = OSUtils.getOSVersionString();
+            String os = SearchEngine.getOSVersionString();
             String fwversion = Constants.FROSTWIRE_VERSION_STRING;
             String fwbuild = Constants.FROSTWIRE_BUILD;
             int period = update.config.uxPeriod;
