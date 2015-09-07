@@ -28,7 +28,7 @@
 	<!-- Basic version example for 1.5.8 build 194  -> 8100195 -->
 	<!-- Don't go nuts, max version number will be: 2,147,483,647 -->
 
-	<uses-sdk android:minSdkVersion="15" android:targetSdkVersion="23" />
+	<uses-sdk android:minSdkVersion="16" android:targetSdkVersion="23" />
 
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />

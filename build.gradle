@@ -75,7 +75,7 @@ project.ext.versionName = manifestVersionName()
 
 android {
 
-    compileSdkVersion 15
+    compileSdkVersion 16
     buildToolsVersion '23'
 
     defaultConfig {
