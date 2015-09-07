@@ -29,10 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.frostwire.android.core.SystemPaths;
-import com.frostwire.android.gui.fragments.TransfersFragment;
-import com.frostwire.android.util.SystemUtils;
 import com.frostwire.transfers.TransferItem;
-import com.frostwire.util.OSUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import android.os.SystemClock;
