@@ -22,7 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
 import com.frostwire.android.R;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.StringUtils;
 import org.json.JSONArray;

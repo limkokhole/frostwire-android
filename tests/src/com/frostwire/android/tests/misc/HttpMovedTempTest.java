@@ -22,7 +22,7 @@ import java.io.ByteArrayInputStream;
 import com.frostwire.torrent.TOTorrent;
 import com.frostwire.torrent.TOTorrentException;
 import com.frostwire.torrent.TorrentUtils;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 
 import junit.framework.TestCase;

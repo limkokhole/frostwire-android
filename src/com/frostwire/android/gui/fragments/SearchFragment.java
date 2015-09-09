@@ -63,6 +63,7 @@ import com.frostwire.search.SearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
 import com.frostwire.util.*;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import rx.Observer;

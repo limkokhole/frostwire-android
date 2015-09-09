@@ -38,7 +38,7 @@ import com.frostwire.logging.Logger;
 import com.frostwire.torrent.TOTorrent;
 import com.frostwire.torrent.TOTorrentException;
 import com.frostwire.torrent.TorrentUtils;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.vuze.VuzeConfiguration;
 import com.frostwire.vuze.VuzeDownloadFactory;

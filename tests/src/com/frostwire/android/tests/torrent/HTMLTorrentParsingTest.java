@@ -24,7 +24,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import com.frostwire.torrent.TOTorrentException;
 import com.frostwire.torrent.TorrentUtils;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.UserAgentGenerator;
 
