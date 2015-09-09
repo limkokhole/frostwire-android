@@ -2908,7 +2908,9 @@ public class MusicPlaybackService extends Service {
          */
         @Override
         public void enqueue(final long[] list, final int action) throws RemoteException {
-            mService.get().enqueue(list, action);
+            if (list != null) {
+                mService.get().enqueue(list, action);
+            }
         }
 
         /**

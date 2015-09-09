@@ -660,7 +660,7 @@ public final class MusicUtils {
      * @param list The list to enqueue.
      */
     public static void playNext(final long[] list) {
-        if (mService == null) {
+        if (mService == null || list == null) {
             return;
         }
         try {
@@ -958,7 +958,7 @@ public final class MusicUtils {
      * @param list The list to enqueue.
      */
     public static void addToQueue(final Context context, final long[] list) {
-        if (mService == null) {
+        if (mService == null || list == null) {
             return;
         }
         try {
