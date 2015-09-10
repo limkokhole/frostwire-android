@@ -18,6 +18,17 @@
 
 package com.frostwire.android.gui.transfers;
 
+import android.util.Log;
+import com.frostwire.android.R;
+import com.frostwire.android.core.SystemPaths;
+import com.frostwire.android.gui.Librarian;
+import com.frostwire.android.gui.services.Engine;
+import com.frostwire.transfers.TransferItem;
+import com.frostwire.util.HttpClientFactory;
+import com.frostwire.util.ZipUtils;
+import com.frostwire.util.http.HttpClient;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -26,22 +37,6 @@ import java.net.URLConnection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-
-import com.frostwire.android.core.SystemPaths;
-import com.frostwire.transfers.TransferItem;
-import org.apache.commons.io.FilenameUtils;
-
-import android.os.SystemClock;
-import android.util.Log;
-
-import com.frostwire.android.R;
-import com.frostwire.android.core.Constants;
-import com.frostwire.android.core.HttpFetcher;
-import com.frostwire.android.core.HttpFetcherListener;
-import com.frostwire.android.gui.Librarian;
-import com.frostwire.android.gui.services.Engine;
-import com.frostwire.util.ZipUtils;
 
 /**
  * @author gubatron
@@ -194,10 +189,6 @@ public final class HttpDownload implements DownloadTransfer {
         manager.remove(this);
     }
 
-    public void start() {
-        start(0, 0);
-    }
-
     @Override
     public File previewFile() {
         return getSavePath();
@@ -207,12 +198,7 @@ public final class HttpDownload implements DownloadTransfer {
         return status;
     }
 
-    /**
-     * 
-     * @param delay in seconds.
-     * @param retry
-     */
-    private void start(final int delay, final int retry) {
+    public void start() {
         if (status == STATUS_SAVE_DIR_ERROR || status == STATUS_ERROR_DISK_FULL || status == STATUS_ERROR) {
             return;
         }
@@ -220,12 +206,11 @@ public final class HttpDownload implements DownloadTransfer {
         Engine.instance().getThreadPool().execute(new Thread(getDisplayName()) {
             public void run() {
                 try {
-                    status = STATUS_WAITING;
-                    SystemClock.sleep(delay * 1000);
-
                     status = STATUS_DOWNLOADING;
                     String uri = link.getUrl();
-                    new HttpFetcher(uri, 10000).save(savePath, new DownloadListener(retry));
+                    HttpClient client = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD);
+                    client.setListener(new DownloadListener());
+                    client.save(uri, savePath, false);
                     Librarian.instance().scan(savePath);
                 } catch (Throwable e) {
                     error(e);
@@ -330,15 +315,17 @@ public final class HttpDownload implements DownloadTransfer {
         }
     }
 
-    private final class DownloadListener implements HttpFetcherListener {
-
-        private final int retry;
-
-        public DownloadListener(int retry) {
-            this.retry = retry;
+    private final class DownloadListener extends HttpClient.HttpClientListenerAdapter { //HttpFetcherListener {
+        public DownloadListener() {
         }
 
-        public void onData(byte[] data, int length) {
+        @Override
+        public void onError(HttpClient client, Throwable e) {
+            error(e);
+        }
+
+        @Override
+        public void onData(HttpClient client, byte[] buffer, int offset, int length) {
             bytesReceived += length;
             updateAverageDownloadSpeed();
 
@@ -349,25 +336,9 @@ public final class HttpDownload implements DownloadTransfer {
             }
         }
 
-        public void onSuccess(byte[] body) {
+        @Override
+        public void onComplete(HttpClient client) {
             complete();
-        }
-
-        public void onError(Throwable e, int statusCode, Map<String, String> headers) {
-            try {
-                if (statusCode == 503 && headers.containsKey("Retry-After") && retry < Constants.MAX_PEER_HTTP_DOWNLOAD_RETRIES) {
-                    int delay = Integer.parseInt(headers.get("Retry-After"));
-                    if (delay > 0) {
-                        start(delay, retry + 1);
-                    } else {
-                        error(e);
-                    }
-                } else {
-                    error(e);
-                }
-            } catch (Throwable tr) {
-                error(tr);
-            }
         }
     }
 
