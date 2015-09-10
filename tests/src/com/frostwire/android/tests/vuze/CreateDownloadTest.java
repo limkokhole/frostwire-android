@@ -28,7 +28,7 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.frostwire.android.gui.util.SystemUtils;
 import com.frostwire.android.tests.TestUtils;
 import com.frostwire.android.tests.TorrentUrls;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.vuze.VuzeDownloadFactory;
 import com.frostwire.vuze.VuzeDownloadListener;
@@ -46,7 +46,7 @@ public class CreateDownloadTest extends TestCase {
     @LargeTest
     public void testDownload1() throws IOException {
 
-        HttpClient c = HttpClientFactory.newInstance();
+        HttpClient c = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
 
         File torrentFile = new File(SystemUtils.getTorrentsDirectory(), "create_download_test1.torrent");
         File saveDir = SystemUtils.getTorrentDataDirectory();

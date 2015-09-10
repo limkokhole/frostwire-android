@@ -23,12 +23,11 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.android.util.SystemUtils;
 import com.frostwire.search.extractors.YouTubeExtractor.LinkInfo;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.transfers.TransferItem;
-import com.frostwire.util.HttpClient;
-import com.frostwire.util.HttpClient.HttpClientListener;
+import com.frostwire.util.http.HttpClient;
+import com.frostwire.util.http.HttpClient.HttpClientListener;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.MP4Muxer;
 import com.frostwire.util.MP4Muxer.MP4Metadata;
@@ -106,7 +105,7 @@ public final class YouTubeDownload implements DownloadTransfer {
 
         httpClientListener = new HttpDownloadListenerImpl();
 
-        httpClient = HttpClientFactory.newInstance();
+        httpClient = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD);
         httpClient.setListener(httpClientListener);
 
         if (TransferManager.isCurrentMountAlmostFull()) {
@@ -508,7 +507,7 @@ public final class YouTubeDownload implements DownloadTransfer {
             jpgUrl = sr.getAudio() != null ? sr.getAudio().thumbnails.normal : null;
         }
 
-        byte[] jpg = jpgUrl != null ? HttpClientFactory.newInstance().getBytes(jpgUrl) : null;
+        byte[] jpg = jpgUrl != null ? HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD).getBytes(jpgUrl) : null;
 
         return new MP4Metadata(title, author, source, jpg);
     }

@@ -22,7 +22,7 @@ import java.io.ByteArrayInputStream;
 import com.frostwire.torrent.TOTorrent;
 import com.frostwire.torrent.TOTorrentException;
 import com.frostwire.torrent.TorrentUtils;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 
 import junit.framework.TestCase;
@@ -37,7 +37,7 @@ public class HttpMovedTempTest extends TestCase{
     
 
     public void testFWClientOnMovedTempTest() {
-        HttpClient client = HttpClientFactory.newInstance();
+        HttpClient client = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
         byte[] result = client.getBytes("http://extratorrent.com/download/-------/",5000,"Internet Xploder",null);
         assertNotNull(result);
         assertTrue(result.length > 0);

@@ -22,7 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.SimpleCursorAdapter;
 import com.frostwire.android.R;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.StringUtils;
 import org.json.JSONArray;
@@ -45,7 +45,7 @@ class SuggestionsAdapter extends SimpleCursorAdapter {
 
     public SuggestionsAdapter(Context context) {
         super(context, R.layout.view_suggestion_item, null, new String[]{SuggestionsCursor.COLUMN_SUGGESTION}, new int[]{R.id.view_suggestion_item_text}, 0);
-        this.client = HttpClientFactory.newInstance();
+        this.client = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
     }
 
     @Override

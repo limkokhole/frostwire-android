@@ -47,6 +47,7 @@ import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.JsonUtils;
 import com.frostwire.util.Ref;
 import com.frostwire.util.StringUtils;
+import com.frostwire.util.http.HttpClient;
 
 /*
  * @author aldenml
@@ -143,7 +144,8 @@ public final class DownloadSoundcloudFromUrlTask extends ContextTask<List<Soundc
             final String resolveURL = "http://api.soundcloud.com/resolve.json?url="+url+"&client_id="+clientId+"&app_version="+appVersion;;
             //LOG.debug("DownloadSoundcloudFromUrlTask.resolveURL: " + resolveURL);
             //LOG.debug("DownloadSoundcloudFromUrlTask.json >> ");
-            final String json = HttpClientFactory.newInstance().get(resolveURL,10000);
+            final String json = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD).
+                    get(resolveURL, 10000);
             //LOG.debug(json);
             //LOG.debug("EOF DownloadSoundcloudFromUrlTask.json");
             
@@ -151,7 +153,7 @@ public final class DownloadSoundcloudFromUrlTask extends ContextTask<List<Soundc
                 try {
                     System.out.println("Soundcloud Redirection! >> " + json);
                     final SoundCloudRedirectResponse redirectResponse = JsonUtils.toObject(json, SoundCloudRedirectResponse.class);
-                    final String redirectedJson = HttpClientFactory.newInstance().get(redirectResponse.location,10000);
+                    final String redirectedJson = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD).get(redirectResponse.location, 10000);
                     //System.out.println(redirectedJson);
                     downloadSetOrTrack(scResults, clientId, appVersion, redirectedJson);
                 } catch (Throwable t) {

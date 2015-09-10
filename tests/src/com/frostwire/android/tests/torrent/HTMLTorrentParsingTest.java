@@ -24,7 +24,7 @@ import android.test.suitebuilder.annotation.MediumTest;
 
 import com.frostwire.torrent.TOTorrentException;
 import com.frostwire.torrent.TorrentUtils;
-import com.frostwire.util.HttpClient;
+import com.frostwire.util.http.HttpClient;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.UserAgentGenerator;
 
@@ -52,7 +52,7 @@ public class HTMLTorrentParsingTest extends TestCase {
     }
 
     private void testDownloadFrom(String url) {
-        HttpClient c = HttpClientFactory.newInstance();
+        HttpClient c = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
         byte[] data = c.getBytes(url, 10000, UserAgentGenerator.getUserAgent(), null);
         ByteArrayInputStream is = new ByteArrayInputStream(data);
         try {
