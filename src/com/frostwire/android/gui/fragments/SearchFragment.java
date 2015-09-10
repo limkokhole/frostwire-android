@@ -628,7 +628,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         @Override
         protected List<Slide> doInBackground(Void... params) {
             try {
-                HttpClient http = HttpClientFactory.newInstance();
+                HttpClient http = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.SEARCH);
                 String url = String.format("%s?from=android&fw=%s&sdk=%s", Constants.SERVER_PROMOTIONS_URL, Constants.FROSTWIRE_VERSION_STRING, Build.VERSION.SDK_INT);
                 String json = http.get(url);
                 SlideList slides = JsonUtils.toObject(json, SlideList.class);

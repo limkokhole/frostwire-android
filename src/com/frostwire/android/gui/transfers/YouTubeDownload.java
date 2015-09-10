@@ -105,7 +105,7 @@ public final class YouTubeDownload implements DownloadTransfer {
 
         httpClientListener = new HttpDownloadListenerImpl();
 
-        httpClient = HttpClientFactory.newInstance();
+        httpClient = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD);
         httpClient.setListener(httpClientListener);
 
         if (TransferManager.isCurrentMountAlmostFull()) {
@@ -507,7 +507,7 @@ public final class YouTubeDownload implements DownloadTransfer {
             jpgUrl = sr.getAudio() != null ? sr.getAudio().thumbnails.normal : null;
         }
 
-        byte[] jpg = jpgUrl != null ? HttpClientFactory.newInstance().getBytes(jpgUrl) : null;
+        byte[] jpg = jpgUrl != null ? HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD).getBytes(jpgUrl) : null;
 
         return new MP4Metadata(title, author, source, jpg);
     }

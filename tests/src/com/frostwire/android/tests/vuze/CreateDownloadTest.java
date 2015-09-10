@@ -46,7 +46,7 @@ public class CreateDownloadTest extends TestCase {
     @LargeTest
     public void testDownload1() throws IOException {
 
-        HttpClient c = HttpClientFactory.newInstance();
+        HttpClient c = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
 
         File torrentFile = new File(SystemUtils.getTorrentsDirectory(), "create_download_test1.torrent");
         File saveDir = SystemUtils.getTorrentDataDirectory();

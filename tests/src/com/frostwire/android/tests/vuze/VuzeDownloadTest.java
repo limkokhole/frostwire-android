@@ -80,7 +80,7 @@ public class VuzeDownloadTest extends ApplicationTestCase<MockApplication> {
     @LargeTest
     public void testDownload1() throws IOException, TOTorrentException {
 
-        HttpClient c = HttpClientFactory.newInstance();
+        HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC);
 
         File torrentFile = new File(SystemUtils.getTorrentsDirectory(), "download_test1.torrent");
         File saveDir = SystemUtils.getTorrentDataDirectory();
