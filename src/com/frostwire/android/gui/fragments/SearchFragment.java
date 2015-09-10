@@ -430,8 +430,14 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
     private void startTransfer(final SearchResult sr, final String toastMessage) {
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_SHOW_NEW_TRANSFER_DIALOG)) {
             if (sr instanceof FileSearchResult) {
-                NewTransferDialog dlg = NewTransferDialog.newInstance((FileSearchResult) sr, false);
-                dlg.show(getFragmentManager());
+                try {
+                    NewTransferDialog dlg = NewTransferDialog.newInstance((FileSearchResult) sr, false);
+                    dlg.show(getFragmentManager());
+                } catch (IllegalStateException e) {
+                    // android.app.FragmentManagerImpl.checkStateLoss:1323 -> java.lang.IllegalStateException: Can not perform this action after onSaveInstanceState
+                    // just start the download then if the dialog crapped out.
+                    onDialogClick(NewTransferDialog.TAG, AbstractDialog.BUTTON_POSITIVE);
+                }
             }
         } else {
             if (isVisible()) {
