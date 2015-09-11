@@ -1,3 +1,6 @@
+FrostWire 1.6.4 - SEPTEMBER/11/2015
+ - New http engine based on okhttp, uses pooled connections, less threads, less memory.
+
 FrostWire 1.6.3 - SEPTEMBER/06/2015
  - Upgraded Picasso library for image caching.
  - Code/library cleanup.
