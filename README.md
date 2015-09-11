@@ -2,9 +2,9 @@
 
 **A file sharing client, media player and simple file manager for your Android devices.**
 
-FrostWire for Android lets you search and download files from the BitTorrent network and several popular cloud services and it also lets you share files with other FrostWire for Android devices on the same local network (via WiFi).
+FrostWire for Android lets you search and download files from the BitTorrent network and several popular cloud services.
 
-The local sharing happens through a simple JSON/HTTP protocol (this is still to be documented but you can look at how it works on the code for now, very very simple).
+All the BitTorrent functionality is done using FrostWire's [jlibtorrent](https://github.com/frostwire/frostwire-jlibtorrent) library, a set of high level [libtorrent](https://github.com/arvidn/libtorrent) wrappers. The FrostWire team is an active contributor to libtorrent and jlibtorrent always tries to stay on par with the latest libtorrent release.
 
 ![](http://i.imgur.com/U20h8cL.png)
 - - -
