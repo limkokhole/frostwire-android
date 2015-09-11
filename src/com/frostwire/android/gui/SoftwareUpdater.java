@@ -28,12 +28,12 @@ import android.util.Log;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.core.HttpFetcher;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.ByteUtils;
+import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.JsonUtils;
 import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXStats;
@@ -113,7 +113,8 @@ public final class SoftwareUpdater {
                 try {
                     final String basicOrPlus = Constants.IS_GOOGLE_PLAY_DISTRIBUTION ? "basic":"plus";
                     final String userAgent = "FrostWire/android-"+ basicOrPlus+"/"+Constants.FROSTWIRE_VERSION_STRING;
-                    byte[] jsonBytes = new HttpFetcher(Constants.SERVER_UPDATE_URL, userAgent).fetch();
+                    byte[] jsonBytes = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC).
+                            getBytes(Constants.SERVER_UPDATE_URL, 5000, userAgent, null);
 
                     if (jsonBytes != null) {
                         update = JsonUtils.toObject(new String(jsonBytes), Update.class);
@@ -198,7 +199,7 @@ public final class SoftwareUpdater {
                         apkDirectory.mkdirs();
                     }
 
-                    new HttpFetcher(update.u).save(SystemPaths.getUpdateApk());
+                    HttpClientFactory.getInstance(HttpClientFactory.HttpContext.MISC).save(update.u, SystemPaths.getUpdateApk());
 
                     if (downloadedLatestFrostWire(update.md5)) {
                         return true;

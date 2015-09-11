@@ -315,7 +315,7 @@ public final class HttpDownload implements DownloadTransfer {
         }
     }
 
-    private final class DownloadListener extends HttpClient.HttpClientListenerAdapter { //HttpFetcherListener {
+    private final class DownloadListener extends HttpClient.HttpClientListenerAdapter {
         public DownloadListener() {
         }
 
