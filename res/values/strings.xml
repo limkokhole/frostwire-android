@@ -523,7 +523,7 @@
     <string name="basic">Basic</string>
     <string name="plus">Plus</string>
     <string name="try_other_keywords">Try less/other keywords</string>
-    <string name="try_frostwire_plus_for_more_results">Try FrostWire Plus for more results</string>
+    <string name="try_frostwire_plus_for_more_results"><u>Try FrostWire Plus for more results</u></string>
     <string name="action_menu_overflow_description">More options</string>
     <string name="rate_our_app">Rate our App</string>
     <string name="rating_reminder_description">If you love FrostWire please take a moment to rate us.</string>

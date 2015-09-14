@@ -42,11 +42,15 @@
                   android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
                   android:text="@string/try_other_keywords" android:textSize="20sp" android:textStyle="bold"
                   android:layout_marginTop="20dp" android:layout_marginBottom="10dp"
+                  android:singleLine="true"
                   android:visibility="gone"/>
 
-        <TextView android:id="@+id/view_search_progress_try_frostwire_plus" android:layout_width="wrap_content"
-                  android:layout_height="wrap_content" android:layout_gravity="center_horizontal"
-                  android:text="@string/try_frostwire_plus_for_more_results" android:textSize="20sp"
+        <TextView android:id="@+id/view_search_progress_try_frostwire_plus"
+                  android:text="@string/try_frostwire_plus_for_more_results"
+                  style="@style/NoSearchResultsLink"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_gravity="center_horizontal"
                   android:layout_marginBottom="10dp"
                   android:visibility="gone"/>
 

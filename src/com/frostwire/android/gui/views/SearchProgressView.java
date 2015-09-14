@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.adnetworks.Offers;
+import com.frostwire.android.gui.util.UIUtils;
 
 /**
  * @author gubatron
@@ -112,7 +113,20 @@ public class SearchProgressView extends LinearLayout {
         textTryOtherKeywords = (TextView) findViewById(R.id.view_search_progress_try_other_keywords);
         textTryFrostWirePlus = (TextView) findViewById(R.id.view_search_progress_try_frostwire_plus);
 
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION && textTryFrostWirePlus != null) {
+            initTryFrostWirePlusListener();
+        }
+
         initButtonFreeApps();
+    }
+
+    private void initTryFrostWirePlusListener() {
+        textTryFrostWirePlus.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtils.openURL(getContext(), Constants.FROSTWIRE_PLUS_URL + "&context=retryNoSearchResults");
+            }
+        });
     }
 
     private void initButtonFreeApps() {
