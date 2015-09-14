@@ -26,7 +26,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -62,7 +61,9 @@ import com.frostwire.search.HttpSearchResult;
 import com.frostwire.search.SearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
-import com.frostwire.util.*;
+import com.frostwire.util.HttpClientFactory;
+import com.frostwire.util.JsonUtils;
+import com.frostwire.util.Ref;
 import com.frostwire.util.http.HttpClient;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
@@ -70,7 +71,6 @@ import rx.Observer;
 import rx.Subscription;
 
 import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
@@ -272,7 +272,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                         @Override
                         public void run() {
                             searchProgress.setProgressEnabled(false);
-                            setupRetrySuggestions();
                             deepSearchProgress.setVisibility(View.GONE);
                         }
                     });
@@ -365,43 +364,6 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
 
         boolean searchFinished = LocalSearchEngine.instance().isSearchFinished();
         searchProgress.setProgressEnabled(!searchFinished);
-        if (searchFinished) {
-            setupRetrySuggestions();
-        }
-    }
-
-    public void setupRetrySuggestions() {
-        try {
-            searchProgress.setupRetrySuggestions(buildSuggestions(), new SearchProgressView.OnRetryListener() {
-                public void onRetry(SearchProgressView v, String keywords) {
-                    searchInput.setText(keywords);
-                    if (adapter != null) {
-                        performSearch(keywords, adapter.getFileType());
-                    }
-                }
-            });
-        } catch (Throwable e) {
-            LOG.error("Error setting up search suggestions", e);
-            searchProgress.hideRetryViews();
-        }
-    }
-
-    private String[] buildSuggestions() {
-        final String searchText = searchInput.getText().trim();
-        if (searchText.isEmpty()) {
-            return new String[0];
-        }
-        final String[] split = StringUtils.removeDoubleSpaces(searchText).split(" ");
-
-        if (split.length == 1) {
-            return new String[0];
-        }
-
-        final String[] suggestions = new String[Math.min(split.length - 1, 4)];
-        for (int i = 0; i < suggestions.length; i++) {
-            suggestions[i] = TextUtils.join(" ", Arrays.copyOfRange(split, 0, suggestions.length - i));
-        }
-        return suggestions;
     }
 
     private void switchView(View v, int id) {

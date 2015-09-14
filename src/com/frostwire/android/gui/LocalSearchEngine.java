@@ -19,7 +19,6 @@
 package com.frostwire.android.gui;
 
 import android.text.Html;
-import com.frostwire.logging.Logger;
 import com.frostwire.search.*;
 import com.frostwire.search.extratorrent.ExtratorrentSearchResult;
 import com.frostwire.search.kat.KATSearchResult;
@@ -132,10 +131,7 @@ public final class LocalSearchEngine {
     }
 
     public boolean hasBeenOpened(SearchResult sr) {
-        if (sr == null) {
-            return false;
-        }
-        return opened.contains(sr.uid());
+        return sr != null && opened.contains(sr.uid());
     }
 
     private void onResults(long token, List<? extends SearchResult> results) {
@@ -173,7 +169,7 @@ public final class LocalSearchEngine {
             for (SearchResult sr : results) {
                 if (sr instanceof TorrentSearchResult) {
                     if (((TorrentSearchResult) sr).getSeeds() == -1) {
-                        long creationTime = ((TorrentSearchResult) sr).getCreationTime();
+                        long creationTime = sr.getCreationTime();
                         long age = System.currentTimeMillis() - creationTime;
                         if (age > 31536000000l) {
                             continue;

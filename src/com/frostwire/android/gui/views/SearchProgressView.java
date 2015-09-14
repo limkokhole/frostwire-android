@@ -19,7 +19,6 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
-import android.content.res.Configuration;
 import android.os.Parcelable;
 import android.util.AttributeSet;
 import android.view.View;
@@ -28,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.frostwire.android.R;
-import com.frostwire.android.gui.fragments.SearchFragment;
+import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.adnetworks.Offers;
 
 /**
@@ -44,7 +43,7 @@ public class SearchProgressView extends LinearLayout {
     private Button buttonFreeApps;
     private TextView textNoResults;
     private TextView textTryOtherKeywords;
-    private Button[] retryButtons;
+    private TextView textTryFrostWirePlus;
 
     private boolean progressEnabled;
     private CurrentQueryReporter currentQueryReporter;
@@ -58,14 +57,6 @@ public class SearchProgressView extends LinearLayout {
     @Override
     protected void onRestoreInstanceState(Parcelable state) {
         super.onRestoreInstanceState(state);
-
-        if (currentQueryReporter != null && currentQueryReporter.getCurrentQuery() != null && currentQueryReporter instanceof SearchFragment) {
-            ((SearchFragment) currentQueryReporter).setupRetrySuggestions();
-        }
-    }
-
-    public boolean isProgressEnabled() {
-        return progressEnabled;
     }
 
     public void setProgressEnabled(boolean enabled) {
@@ -84,23 +75,13 @@ public class SearchProgressView extends LinearLayout {
         buttonCancel.setOnClickListener(l);
     }
 
-    public void setupRetrySuggestions(String[] keywords, OnRetryListener retryListener) {
-        try {
-            int i = 0;
-            for (; i < Math.min(keywords.length, retryButtons.length); i++) {
-                Button tv = retryButtons[i];
-                tv.setText(keywords[i]);
-                tv.setVisibility(View.VISIBLE);
-                tv.setOnClickListener(new OnRetryAdapter(this, retryListener));
-            }
-            for (; i < retryButtons.length; i++) {
-                Button tv = retryButtons[i];
-                tv.setText("");
-                tv.setVisibility(View.GONE);
-                tv.setOnClickListener(null);
-            }
-        } catch (Throwable e) {
-            e.printStackTrace();
+    public void showRetryViews() {
+        if (textTryOtherKeywords != null) {
+            textTryOtherKeywords.setVisibility(View.VISIBLE);
+        }
+
+        if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION && textTryFrostWirePlus != null) {
+            textTryFrostWirePlus.setVisibility(View.VISIBLE);
         }
     }
 
@@ -109,10 +90,8 @@ public class SearchProgressView extends LinearLayout {
             textTryOtherKeywords.setVisibility(View.GONE);
         }
 
-        if (retryButtons != null) {
-            for (Button b : retryButtons) {
-                b.setVisibility(View.GONE);
-            }
+        if (textTryFrostWirePlus != null) {
+            textTryFrostWirePlus.setVisibility(View.GONE);
         }
     }
 
@@ -131,30 +110,9 @@ public class SearchProgressView extends LinearLayout {
         buttonFreeApps = (Button) findViewById(R.id.view_search_progress_button_free_apps);
         textNoResults = (TextView) findViewById(R.id.view_search_progress_text_no_results_feedback);
         textTryOtherKeywords = (TextView) findViewById(R.id.view_search_progress_try_other_keywords);
+        textTryFrostWirePlus = (TextView) findViewById(R.id.view_search_progress_try_frostwire_plus);
 
-        initRetryTextViews();
         initButtonFreeApps();
-    }
-
-    private void initRetryTextViews() {
-        retryButtons = new Button[]{
-                (Button) findViewById(R.id.view_search_progress_retry_button_1),
-                (Button) findViewById(R.id.view_search_progress_retry_button_2),
-                (Button) findViewById(R.id.view_search_progress_retry_button_3),
-                (Button) findViewById(R.id.view_search_progress_retry_button_4),
-        };
-
-        rotateRetryButtonsLayout();
-        hideRetryViews();
-    }
-
-    private void rotateRetryButtonsLayout() {
-        try {
-            int layoutOrientation = getContext().getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? LinearLayout.HORIZONTAL : LinearLayout.VERTICAL;
-            LinearLayout retryButtonsLayout = (LinearLayout) findViewById(R.id.view_search_progress_retry_buttons_linearlayout);
-            retryButtonsLayout.setOrientation(layoutOrientation);
-        } catch (Throwable e) {
-        }
     }
 
     private void initButtonFreeApps() {
@@ -177,7 +135,7 @@ public class SearchProgressView extends LinearLayout {
         buttonFreeApps.setVisibility(Offers.isFreeAppsEnabled() ? View.VISIBLE : View.GONE);
 
         if (currentQueryReporter.getCurrentQuery() != null) {
-            textTryOtherKeywords.setVisibility(View.VISIBLE);
+            showRetryViews();
         } else {
             hideRetryViews();
         }
@@ -196,28 +154,6 @@ public class SearchProgressView extends LinearLayout {
         @Override
         public void onClick(View owner, View v) {
             Offers.onFreeAppsClick(v.getContext());
-        }
-    }
-
-    public interface OnRetryListener {
-        public void onRetry(SearchProgressView v, String keywords);
-    }
-
-    private static final class OnRetryAdapter extends ClickAdapter<SearchProgressView> {
-
-        private final OnRetryListener retryListener;
-
-        public OnRetryAdapter(SearchProgressView owner, OnRetryListener retryListener) {
-            super(owner);
-            this.retryListener = retryListener;
-        }
-
-        @Override
-        public void onClick(SearchProgressView owner, View v) {
-            Button b = (Button) v;
-            if (retryListener != null) {
-                retryListener.onRetry(owner, b.getText().toString());
-            }
         }
     }
 
