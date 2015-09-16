@@ -100,7 +100,7 @@
         android:layout_height="64sp"  
     />
 
-    <com.frostwire.android.gui.views.ExpandableListView
+    <ExpandableListView
         android:id="@+id/fragment_transfers_list"
         android:layout_width="match_parent"
         android:layout_height="0px"

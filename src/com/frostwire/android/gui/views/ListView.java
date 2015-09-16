@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +25,6 @@ import android.util.DisplayMetrics;
 /**
  * @author gubatron
  * @author aldenml
- * 
  */
 public class ListView extends android.widget.ListView {
 
@@ -35,17 +34,17 @@ public class ListView extends android.widget.ListView {
     private OverScrollListener overScrollListener = null;
 
     public ListView(Context context, AttributeSet attrs, int defStyle) {
-        super(new FWContextWrapper(context), attrs, defStyle);
+        super(context, attrs, defStyle);
         mMaxYOverscrollDistance = calculateMaxOverscrollScreenDistance(context);
     }
 
     public ListView(Context context, AttributeSet attrs) {
-        super(new FWContextWrapper(context), attrs);
+        super(context, attrs);
         mMaxYOverscrollDistance = calculateMaxOverscrollScreenDistance(context);
     }
 
     public ListView(Context context) {
-        super(new FWContextWrapper(context));
+        super(context);
         mMaxYOverscrollDistance = calculateMaxOverscrollScreenDistance(context);
     }
 
