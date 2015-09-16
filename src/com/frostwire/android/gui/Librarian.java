@@ -110,7 +110,7 @@ public final class Librarian {
 
         try {
             ContentResolver cr = context.getContentResolver();
-            c = cr.query(fetcher.getContentUri(), new String[]{BaseColumns._ID}, null, null, null);
+            c = cr.query(fetcher.getContentUri(), new String[]{BaseColumns._ID}, fetcher.where(), fetcher.whereArgs(), null);
             numFiles = c != null ? c.getCount() : 0;
         } catch (Exception e) {
             Log.e(TAG, "Failed to get num of files", e);
