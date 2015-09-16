@@ -382,7 +382,7 @@ public final class TransferManager {
                 }
             } else if (t instanceof HttpDownload) {
                 if (t.getDetailsUrl().contains("archive.org")) {
-                    if (!t.isComplete()) {
+                    if (!t.isComplete() && !((HttpDownload) t).isDownloading()) {
                         ((HttpDownload) t).start(true);
                     }
                 }
