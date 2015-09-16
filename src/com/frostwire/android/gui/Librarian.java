@@ -46,7 +46,6 @@ import com.frostwire.android.gui.util.Apk;
 import com.frostwire.localpeer.Finger;
 import com.frostwire.localpeer.ScreenMetrics;
 import com.frostwire.util.DirectoryUtils;
-import com.frostwire.util.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.xmlpull.v1.XmlPullParser;
 
@@ -455,8 +454,9 @@ public final class Librarian {
         syncMediaStore(Constants.FILE_TYPE_PICTURES, ignorableFiles);
         syncMediaStore(Constants.FILE_TYPE_VIDEOS, ignorableFiles);
         syncMediaStore(Constants.FILE_TYPE_RINGTONES, ignorableFiles);
+        syncMediaStore(Constants.FILE_TYPE_DOCUMENTS, ignorableFiles);
 
-        scan(SystemPaths.getSaveDirectory(Constants.FILE_TYPE_DOCUMENTS));
+        scan(SystemPaths.getTorrents());
     }
 
     private void syncMediaStore(byte fileType, Set<File> ignorableFiles) {
@@ -507,9 +507,9 @@ public final class Librarian {
     /**
      * Returns a list of Files.
      *
-     * @param offset     - from where (starting at 0)
-     * @param pageSize   - how many results
-     * @param fetcher    - An implementation of TableFetcher
+     * @param offset   - from where (starting at 0)
+     * @param pageSize - how many results
+     * @param fetcher  - An implementation of TableFetcher
      * @return List<FileDescriptor>
      */
     private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, String where, String[] whereArgs) {

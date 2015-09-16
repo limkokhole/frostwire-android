@@ -250,7 +250,7 @@ public final class TableFetchers {
             long dateAdded = cur.getLong(dateAddedCol);
             long dateModified = cur.getLong(dateModifiedCol);
 
-            System.out.println(mime);
+            System.out.println(mime + " - " + path);
 
             return new FileDescriptor(Integer.valueOf(id), null, title, null, null, path, Constants.FILE_TYPE_DOCUMENTS, mime, size, dateAdded, dateModified, true);
         }
@@ -284,13 +284,15 @@ public final class TableFetchers {
         @Override
         public String where() {
             return FileColumns.DATA + " NOT LIKE ? AND " +
-                    FileColumns.MEDIA_TYPE + "=" + FileColumns.MEDIA_TYPE_NONE + " AND " +
-                    FileColumns.MIME_TYPE + " IS NOT NULL";
+                    FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.MEDIA_TYPE + " = " + FileColumns.MEDIA_TYPE_NONE + " AND " +
+                    FileColumns.SIZE + " > 0";
         }
 
         @Override
         public String[] whereArgs() {
-            return new String[]{"%/data/%"};
+            return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%"};
         }
     }
 
