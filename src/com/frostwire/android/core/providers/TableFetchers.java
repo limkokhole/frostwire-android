@@ -231,7 +231,7 @@ public final class TableFetchers {
         }
     }
 
-    public static final class DocumentsTableFetcher extends AbstractTableFetcher {
+    public static abstract class AbstractFilesTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int pathCol;
@@ -280,10 +280,14 @@ public final class TableFetchers {
             dateAddedCol = cur.getColumnIndex(FileColumns.DATE_ADDED);
             dateModifiedCol = cur.getColumnIndex(FileColumns.DATE_MODIFIED);
         }
+    }
+
+    public static final class DocumentsTableFetcher extends AbstractFilesTableFetcher {
 
         @Override
         public String where() {
             return FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.MEDIA_TYPE + " = " + FileColumns.MEDIA_TYPE_NONE + " AND " +
@@ -292,7 +296,25 @@ public final class TableFetchers {
 
         @Override
         public String[] whereArgs() {
-            return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%"};
+            return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%", "%.torrent"};
+        }
+    }
+
+    public static final class TorrentsTableFetcher extends AbstractFilesTableFetcher {
+
+        @Override
+        public String where() {
+            return FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.DATA + " LIKE ? AND " +
+                    FileColumns.MEDIA_TYPE + " = " + FileColumns.MEDIA_TYPE_NONE + " AND " +
+                    FileColumns.SIZE + " > 0";
+        }
+
+        @Override
+        public String[] whereArgs() {
+            return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%", "%.torrent"};
         }
     }
 
