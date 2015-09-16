@@ -30,31 +30,31 @@ import java.util.List;
  */
 public interface Transfer {
 
-    public String getDisplayName();
+    String getDisplayName();
 
-    public String getStatus();
+    String getStatus();
 
-    public int getProgress();
+    int getProgress();
 
-    public long getSize();
+    long getSize();
 
-    public Date getDateCreated();
+    Date getDateCreated();
 
-    public long getBytesReceived();
+    long getBytesReceived();
 
-    public long getBytesSent();
+    long getBytesSent();
 
-    public long getDownloadSpeed();
+    long getDownloadSpeed();
 
-    public long getUploadSpeed();
+    long getUploadSpeed();
 
-    public long getETA();
+    long getETA();
 
-    public boolean isComplete();
+    boolean isComplete();
 
-    public List<TransferItem> getItems();
+    List<TransferItem> getItems();
 
-    public void cancel();
+    void cancel();
     
-    public String getDetailsUrl();
+    String getDetailsUrl();
 }

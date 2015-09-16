@@ -27,11 +27,11 @@ import java.io.File;
  */
 public interface DownloadTransfer extends Transfer {
 
-    public File getSavePath();
+    File getSavePath();
     
-    public boolean isDownloading();
+    boolean isDownloading();
     
-    public void cancel(boolean deleteData);
+    void cancel(boolean deleteData);
 
     File previewFile();
 }
