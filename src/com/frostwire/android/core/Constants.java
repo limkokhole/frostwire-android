@@ -131,9 +131,7 @@ public final class Constants {
 
     public static final String BROWSE_PEER_FRAGMENT_LISTVIEW_FIRST_VISIBLE_POSITION = "com.frostwire.android.BROWSE_PEER_FRAGMENT_LISTVIEW_FIRST_VISIBLE_POSITION.";
 
-    public static final int NOTIFICATION_MEDIA_PLAYING_ID = 1000;
     public static final int NOTIFICATION_DOWNLOAD_TRANSFER_FINISHED = 1001;
-    public static final int NOTIFICATION_MEDIA_PAUSED_ID = 1002;
 
     // generic file types
     public static final byte FILE_TYPE_AUDIO = CommonConstants.FILE_TYPE_AUDIO;
@@ -159,15 +157,8 @@ public final class Constants {
 
     public static final long LIBRARIAN_FILE_COUNT_CACHE_TIMEOUT = 2 * 60 * 1000; // 2 minutes
 
-    public static final int MAX_NUM_DOWNLOAD_CHECKED = 5;
-
-    public static final int MAX_PEER_HTTP_DOWNLOAD_RETRIES = 3;
-
-    public static final int DEVICE_MAJOR_TYPE_DESKTOP = CommonConstants.DEVICE_MAJOR_TYPE_DESKTOP;
     public static final int DEVICE_MAJOR_TYPE_PHONE = CommonConstants.DEVICE_MAJOR_TYPE_PHONE;
-    public static final int DEVICE_MAJOR_TYPE_TABLET = CommonConstants.DEVICE_MAJOR_TYPE_TABLET;
 
-    public static final String BITCOIN_DONATION_URI = "bitcoin:19NzEEocAWydbkm3xEEVu43Ho2JFEYf5Vr?amount=0.0104";
     public static final String MOBILE_CORE_DEVHASH = "6OJUVFECLGYH3JKYZB41VLQA4JXW5";
     public static final String INMOBI_INTERSTITIAL_PROPERTY_ID = "c1e6be702d614523b725af8b86f99e8f";
 
