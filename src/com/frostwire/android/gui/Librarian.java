@@ -81,7 +81,7 @@ public final class Librarian {
 
     private Librarian(Application context) {
         this.context = context;
-        this.cache = new FileCountCache[]{new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache()};
+        this.cache = new FileCountCache[]{new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache()};
     }
 
     public List<FileDescriptor> getFiles(byte fileType, int offset, int pageSize) {
@@ -93,37 +93,14 @@ public final class Librarian {
     }
 
     /**
-     * Returns the total number of shared files by this peer. note: each of the
-     * number of shared files (by type) is stored on _cacheNumFiles, this
-     * function returns the sum of this cache.
-     *
-     * @return
-     */
-    public int getNumFiles() {
-        int result = 0;
-
-        for (byte i = 0; i < 6; i++) {
-            //update numbers if you have to.
-            if (!cache[i].cacheValid(true)) {
-                cache[i].updateShared(getNumFiles(i, true));
-            }
-
-            result += cache[i].shared;
-        }
-
-        return result < 0 ? 0 : result;
-    }
-
-    /**
      * @param fileType
-     * @param onlyShared - If false, forces getting all files, shared or unshared.
      * @return
      */
-    public int getNumFiles(byte fileType, boolean onlyShared) {
+    public int getNumFiles(byte fileType) {
         TableFetcher fetcher = TableFetchers.getFetcher(fileType);
 
-        if (cache[fileType].cacheValid(onlyShared)) {
-            return cache[fileType].getCount(onlyShared);
+        if (cache[fileType].cacheValid()) {
+            return cache[fileType].getCount();
         }
 
         Cursor c = null;
@@ -145,7 +122,7 @@ public final class Librarian {
 
         result = numFiles;
 
-        updateCacheNumFiles(fileType, result, onlyShared);
+        cache[fileType].updateOnDisk(result);
 
         return result;
     }
@@ -226,7 +203,6 @@ public final class Librarian {
         finger.uuid = ConfigurationManager.instance().getUUIDString();
         finger.nickname = ConfigurationManager.instance().getNickname();
         finger.frostwireVersion = Constants.FROSTWIRE_VERSION_STRING;
-        finger.totalShared = getNumFiles();
 
         finger.deviceVersion = Build.VERSION.RELEASE;
         finger.deviceModel = Build.MODEL;
@@ -235,19 +211,12 @@ public final class Librarian {
         finger.deviceManufacturer = Build.MANUFACTURER;
         finger.deviceBrand = Build.BRAND;
 
-        finger.numSharedAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO, true);
-        finger.numSharedVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS, true);
-        finger.numSharedPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES, true);
-        finger.numSharedDocumentFiles = getNumFiles(Constants.FILE_TYPE_DOCUMENTS, true);
-        finger.numSharedApplicationFiles = getNumFiles(Constants.FILE_TYPE_APPLICATIONS, true);
-        finger.numSharedRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES, true);
-
-        finger.numTotalAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO, false);
-        finger.numTotalVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS, false);
-        finger.numTotalPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES, false);
-        finger.numTotalDocumentFiles = getNumFiles(Constants.FILE_TYPE_DOCUMENTS, false);
-        finger.numTotalApplicationFiles = getNumFiles(Constants.FILE_TYPE_APPLICATIONS, false);
-        finger.numTotalRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES, false);
+        finger.numTotalAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO);
+        finger.numTotalVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS);
+        finger.numTotalPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES);
+        finger.numTotalDocumentFiles = getNumFiles(Constants.FILE_TYPE_DOCUMENTS);
+        finger.numTotalTorrentFiles = getNumFiles(Constants.FILE_TYPE_TORRENTS);
+        finger.numTotalRingtoneFiles = getNumFiles(Constants.FILE_TYPE_RINGTONES);
 
         return finger;
     }
@@ -284,7 +253,6 @@ public final class Librarian {
     public void invalidateCountCache() {
         for (FileCountCache c : cache) {
             if (c != null) {
-                c.lastTimeCachedShared = 0;
                 c.lastTimeCachedOnDisk = 0;
             }
         }
@@ -295,7 +263,6 @@ public final class Librarian {
      * @param fileType
      */
     void invalidateCountCache(byte fileType) {
-        cache[fileType].lastTimeCachedShared = 0;
         cache[fileType].lastTimeCachedOnDisk = 0;
         broadcastRefreshFinger();
     }
@@ -431,19 +398,6 @@ public final class Librarian {
         return fds;
     }
 
-    /**
-     * Updates the number of files for this type.
-     *
-     * @param fileType
-     */
-    private void updateCacheNumFiles(byte fileType, int num, boolean sharedOnly) {
-        if (sharedOnly) {
-            cache[fileType].updateShared(num);
-        } else {
-            cache[fileType].updateOnDisk(num);
-        }
-    }
-
     private void scan(File file, Set<File> ignorableFiles) {
         //if we just have a single file, do it the old way
         if (file.isFile()) {
@@ -495,21 +449,12 @@ public final class Librarian {
 
     private static class FileCountCache {
 
-        public int shared;
         public int onDisk;
-        public long lastTimeCachedShared;
         public long lastTimeCachedOnDisk;
 
         public FileCountCache() {
-            shared = 0;
             onDisk = 0;
-            lastTimeCachedShared = 0;
             lastTimeCachedOnDisk = 0;
-        }
-
-        public void updateShared(int num) {
-            shared = num;
-            lastTimeCachedShared = System.currentTimeMillis();
         }
 
         public void updateOnDisk(int num) {
@@ -517,12 +462,12 @@ public final class Librarian {
             lastTimeCachedOnDisk = System.currentTimeMillis();
         }
 
-        public int getCount(boolean onlyShared) {
-            return (onlyShared) ? shared : onDisk;
+        public int getCount() {
+            return onDisk;
         }
 
-        public boolean cacheValid(boolean onlyShared) {
-            long delta = System.currentTimeMillis() - ((onlyShared) ? lastTimeCachedShared : lastTimeCachedOnDisk);
+        public boolean cacheValid() {
+            long delta = System.currentTimeMillis() - lastTimeCachedOnDisk;
             return delta < Constants.LIBRARIAN_FILE_COUNT_CACHE_TIMEOUT;
         }
     }

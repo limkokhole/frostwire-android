@@ -136,11 +136,10 @@ public final class PeerManager {
 
     private LocalPeer createLocalPeer() {
         String address = "0.0.0.0";
-        int numSharedFiles = Librarian.instance().getNumFiles();
         String nickname = ConfigurationManager.instance().getNickname();
         String clientVersion = Constants.FROSTWIRE_VERSION_STRING;
 
-        return new LocalPeer(address, 0, true, nickname, numSharedFiles, clientVersion);
+        return new LocalPeer(address, 0, true, nickname, clientVersion);
     }
 
     private void updatePeerCache2(Peer peer, boolean disconnected) {

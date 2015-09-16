@@ -312,46 +312,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         });
     }
 
-    protected void onRefreshShared(byte fileType) {
-        try {
-            if (onRefreshSharedListener != null && finger != null) {
-                int numShared = 0;
-
-                switch (fileType) {
-                    case Constants.FILE_TYPE_APPLICATIONS:
-                        numShared = finger.numSharedApplicationFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_APPLICATIONS);
-                        break;
-                    case Constants.FILE_TYPE_AUDIO:
-                        numShared = finger.numSharedAudioFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_AUDIO);
-                        break;
-                    case Constants.FILE_TYPE_DOCUMENTS:
-                        numShared = finger.numSharedDocumentFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_DOCUMENTS);
-                        break;
-                    case Constants.FILE_TYPE_PICTURES:
-                        numShared = finger.numSharedPictureFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_PICTURES);
-                        break;
-                    case Constants.FILE_TYPE_RINGTONES:
-                        numShared = finger.numSharedRingtoneFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_RINGTONES);
-                        break;
-                    case Constants.FILE_TYPE_VIDEOS:
-                        numShared = finger.numSharedVideoFiles;
-                        UXStats.instance().log(UXAction.LIBRARY_BROWSE_FILE_TYPE_VIDEOS);
-                        break;
-                }
-
-                onRefreshSharedListener.onRefresh(this, fileType, numShared);
-            }
-        } catch (Throwable e) {
-            // this catch is mostly due to the mutable nature of finger and onRefreshSharedListener 
-            LOG.error("Error notifying shared refresh", e);
-        }
-    }
-
     private void loadPeerFromIntentData() {
         if (peer != null) { // why?
             return;
@@ -434,8 +394,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         Bundle bundle = new Bundle();
         bundle.putByte("fileType", fileType);
         getLoaderManager().restartLoader(LOADER_FILES_ID, bundle, this);
-
-        onRefreshShared(fileType);
     }
 
     private void savePreviouslyCheckedFileDescriptors() {
@@ -499,8 +457,8 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             int numTotal = 0;
 
             switch (fileType) {
-                case Constants.FILE_TYPE_APPLICATIONS:
-                    numTotal = finger.numTotalApplicationFiles;
+                case Constants.FILE_TYPE_TORRENTS:
+                    numTotal = finger.numTotalTorrentFiles;
                     break;
                 case Constants.FILE_TYPE_AUDIO:
                     numTotal = finger.numTotalAudioFiles;
@@ -532,9 +490,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             }
         }
 
-        if (adapter != null) {
-            onRefreshShared(adapter.getFileType());
-        } else {
+        if (adapter == null) {
             browseFilesButtonClick(Constants.FILE_TYPE_AUDIO);
         }
 
@@ -600,21 +556,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     }
 
     private void checkNoEmptyButton(Finger f) {
-        if (f.numSharedAudioFiles > 0) {
-            buttonAudio.setChecked(true);
-        } else if (f.numSharedVideoFiles > 0) {
-            buttonVideos.setChecked(true);
-        } else if (f.numSharedPictureFiles > 0) {
-            buttonPictures.setChecked(true);
-        } else if (f.numSharedDocumentFiles > 0) {
-            buttonDocuments.setChecked(true);
-        } else if (f.numSharedApplicationFiles > 0) {
-            buttonApplications.setChecked(true);
-        } else if (f.numSharedRingtoneFiles > 0) {
-            buttonRingtones.setChecked(true);
-        } else {
-            buttonAudio.setChecked(true);
-        }
+        buttonAudio.setChecked(true);
     }
 
     private void removePeerAndFinish() {
