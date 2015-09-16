@@ -22,9 +22,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.provider.MediaStore.Files.FileColumns;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Video.VideoColumns;
-import android.provider.MediaStore.Files.FileColumns;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
@@ -32,12 +32,11 @@ import com.frostwire.android.core.providers.UniversalStore.Documents.DocumentsCo
 
 /**
  * Help yourself with TableFetchers.
- * 
+ * <p/>
  * Note: if you need to fetch files by file path(s) see Librarian.instance().getFiles(filepath,exactMatch)
- * 
+ *
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class TableFetchers {
 
@@ -63,7 +62,6 @@ public final class TableFetchers {
 
     /**
      * Default Table Fetcher for Audio Files.
-     * 
      */
     public final static class AudioTableFetcher extends AbstractTableFetcher {
 
@@ -80,7 +78,7 @@ public final class TableFetchers {
         private int albumIdCol;
 
         public String[] getColumns() {
-            return new String[] { AudioColumns._ID, AudioColumns.ARTIST, AudioColumns.TITLE, AudioColumns.ALBUM, AudioColumns.DATA, AudioColumns.YEAR, AudioColumns.MIME_TYPE, AudioColumns.SIZE, AudioColumns.DATE_ADDED, AudioColumns.DATE_MODIFIED, AudioColumns.ALBUM_ID };
+            return new String[]{AudioColumns._ID, AudioColumns.ARTIST, AudioColumns.TITLE, AudioColumns.ALBUM, AudioColumns.DATA, AudioColumns.YEAR, AudioColumns.MIME_TYPE, AudioColumns.SIZE, AudioColumns.DATE_ADDED, AudioColumns.DATE_MODIFIED, AudioColumns.ALBUM_ID};
         }
 
         public String getSortByExpression() {
@@ -120,7 +118,7 @@ public final class TableFetchers {
 
             FileDescriptor fd = new FileDescriptor(Integer.valueOf(id), artist, title, album, year, path, Constants.FILE_TYPE_AUDIO, mime, size, dateAdded, dateModified, true);
             fd.albumId = albumId;
-            
+
             return fd;
         }
 
@@ -152,7 +150,7 @@ public final class TableFetchers {
         }
 
         public String[] getColumns() {
-            return new String[] { ImageColumns._ID, ImageColumns.TITLE, ImageColumns.DATA, ImageColumns.MIME_TYPE, ImageColumns.MINI_THUMB_MAGIC, ImageColumns.SIZE , ImageColumns.DATE_ADDED, ImageColumns.DATE_MODIFIED };
+            return new String[]{ImageColumns._ID, ImageColumns.TITLE, ImageColumns.DATA, ImageColumns.MIME_TYPE, ImageColumns.MINI_THUMB_MAGIC, ImageColumns.SIZE, ImageColumns.DATE_ADDED, ImageColumns.DATE_MODIFIED};
         }
 
         public Uri getContentUri() {
@@ -200,12 +198,12 @@ public final class TableFetchers {
             int size = cur.getInt(sizeCol);
             long dateAdded = cur.getLong(dateAddedCol);
             long dateModified = cur.getLong(dateModifiedCol);
-            
+
             return new FileDescriptor(id, artist, title, album, null, path, Constants.FILE_TYPE_VIDEOS, mime, size, dateAdded, dateModified, true);
         }
 
         public String[] getColumns() {
-            return new String[] { VideoColumns._ID, VideoColumns.ARTIST, VideoColumns.TITLE, VideoColumns.ALBUM, VideoColumns.DATA, VideoColumns.MIME_TYPE, VideoColumns.MINI_THUMB_MAGIC, VideoColumns.SIZE, VideoColumns.DATE_ADDED, VideoColumns.DATE_MODIFIED };
+            return new String[]{VideoColumns._ID, VideoColumns.ARTIST, VideoColumns.TITLE, VideoColumns.ALBUM, VideoColumns.DATA, VideoColumns.MIME_TYPE, VideoColumns.MINI_THUMB_MAGIC, VideoColumns.SIZE, VideoColumns.DATE_ADDED, VideoColumns.DATE_MODIFIED};
         }
 
         public Uri getContentUri() {
@@ -251,12 +249,14 @@ public final class TableFetchers {
             int size = cur.getInt(sizeCol);
             long dateAdded = cur.getLong(dateAddedCol);
             long dateModified = cur.getLong(dateModifiedCol);
-            
+
+            System.out.println(mime);
+
             return new FileDescriptor(Integer.valueOf(id), null, title, null, null, path, Constants.FILE_TYPE_DOCUMENTS, mime, size, dateAdded, dateModified, true);
         }
 
         public String[] getColumns() {
-            return new String[] { FileColumns._ID, FileColumns.DATA, FileColumns.SIZE, FileColumns.TITLE, FileColumns.MIME_TYPE, FileColumns.DATE_ADDED, FileColumns.DATE_MODIFIED };
+            return new String[]{FileColumns._ID, FileColumns.DATA, FileColumns.SIZE, FileColumns.TITLE, FileColumns.MIME_TYPE, FileColumns.DATE_ADDED, FileColumns.DATE_MODIFIED};
         }
 
         public Uri getContentUri() {
@@ -283,7 +283,9 @@ public final class TableFetchers {
 
         @Override
         public String where() {
-            return FileColumns.DATA + " NOT LIKE ? AND " + FileColumns.MEDIA_TYPE + "="  + FileColumns.MEDIA_TYPE_NONE;
+            return FileColumns.DATA + " NOT LIKE ? AND " +
+                    FileColumns.MEDIA_TYPE + "=" + FileColumns.MEDIA_TYPE_NONE + " AND " +
+                    FileColumns.MIME_TYPE + " IS NOT NULL";
         }
 
         @Override
@@ -317,7 +319,7 @@ public final class TableFetchers {
         }
 
         public String[] getColumns() {
-            return new String[] { ApplicationsColumns._ID, ApplicationsColumns.TITLE, ApplicationsColumns.VERSION, ApplicationsColumns.DATA, ApplicationsColumns.SIZE, ApplicationsColumns.PACKAGE_NAME , ApplicationsColumns.DATE_ADDED, ApplicationsColumns.DATE_MODIFIED };
+            return new String[]{ApplicationsColumns._ID, ApplicationsColumns.TITLE, ApplicationsColumns.VERSION, ApplicationsColumns.DATA, ApplicationsColumns.SIZE, ApplicationsColumns.PACKAGE_NAME, ApplicationsColumns.DATE_ADDED, ApplicationsColumns.DATE_MODIFIED};
         }
 
         public Uri getContentUri() {
@@ -373,7 +375,7 @@ public final class TableFetchers {
         }
 
         public String[] getColumns() {
-            return new String[] { AudioColumns._ID, AudioColumns.ARTIST, AudioColumns.TITLE, AudioColumns.ALBUM, AudioColumns.DATA, AudioColumns.YEAR, AudioColumns.MIME_TYPE, AudioColumns.SIZE, AudioColumns.DATE_ADDED, AudioColumns.DATE_MODIFIED  };
+            return new String[]{AudioColumns._ID, AudioColumns.ARTIST, AudioColumns.TITLE, AudioColumns.ALBUM, AudioColumns.DATA, AudioColumns.YEAR, AudioColumns.MIME_TYPE, AudioColumns.SIZE, AudioColumns.DATE_ADDED, AudioColumns.DATE_MODIFIED};
         }
 
         public Uri getContentUri() {
@@ -404,20 +406,20 @@ public final class TableFetchers {
 
     public static TableFetcher getFetcher(byte fileType) {
         switch (fileType) {
-        case Constants.FILE_TYPE_AUDIO:
-            return AUDIO_TABLE_FETCHER;
-        case Constants.FILE_TYPE_PICTURES:
-            return PICTURES_TABLE_FETCHER;
-        case Constants.FILE_TYPE_VIDEOS:
-            return VIDEOS_TABLE_FETCHER;
-        case Constants.FILE_TYPE_DOCUMENTS:
-            return DOCUMENTS_TABLE_FETCHER;
-        case Constants.FILE_TYPE_APPLICATIONS:
-            return APPLICATIONS_TABLE_FETCHER;
-        case Constants.FILE_TYPE_RINGTONES:
-            return RINGTONES_TABLE_FETCHER;
-        default:
-            return null;
+            case Constants.FILE_TYPE_AUDIO:
+                return AUDIO_TABLE_FETCHER;
+            case Constants.FILE_TYPE_PICTURES:
+                return PICTURES_TABLE_FETCHER;
+            case Constants.FILE_TYPE_VIDEOS:
+                return VIDEOS_TABLE_FETCHER;
+            case Constants.FILE_TYPE_DOCUMENTS:
+                return DOCUMENTS_TABLE_FETCHER;
+            case Constants.FILE_TYPE_APPLICATIONS:
+                return APPLICATIONS_TABLE_FETCHER;
+            case Constants.FILE_TYPE_RINGTONES:
+                return RINGTONES_TABLE_FETCHER;
+            default:
+                return null;
         }
     }
 
