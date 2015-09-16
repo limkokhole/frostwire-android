@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AudioColumns;
 import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Video.VideoColumns;
+import android.provider.MediaStore.Files.FileColumns;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
@@ -242,11 +243,11 @@ public final class TableFetchers {
         }
 
         public String[] getColumns() {
-            return new String[] { DocumentsColumns._ID, DocumentsColumns.DATA, DocumentsColumns.SIZE, DocumentsColumns.TITLE, DocumentsColumns.MIME_TYPE, DocumentsColumns.DATE_ADDED, DocumentsColumns.DATE_MODIFIED };
+            return new String[] { FileColumns._ID, FileColumns.DATA, FileColumns.SIZE, FileColumns.TITLE, FileColumns.MIME_TYPE, FileColumns.DATE_ADDED, FileColumns.DATE_MODIFIED };
         }
 
         public Uri getContentUri() {
-            return UniversalStore.Documents.Media.CONTENT_URI;
+            return MediaStore.Files.getContentUri("external");
         }
 
         public byte getFileType() {
@@ -258,13 +259,13 @@ public final class TableFetchers {
         }
 
         public void prepare(Cursor cur) {
-            idCol = cur.getColumnIndex(DocumentsColumns._ID);
-            pathCol = cur.getColumnIndex(DocumentsColumns.DATA);
-            mimeCol = cur.getColumnIndex(DocumentsColumns.MIME_TYPE);
-            titleCol = cur.getColumnIndex(DocumentsColumns.TITLE);
-            sizeCol = cur.getColumnIndex(DocumentsColumns.SIZE);
-            dateAddedCol = cur.getColumnIndex(DocumentsColumns.DATE_ADDED);
-            dateModifiedCol = cur.getColumnIndex(DocumentsColumns.DATE_MODIFIED);
+            idCol = cur.getColumnIndex(FileColumns._ID);
+            pathCol = cur.getColumnIndex(FileColumns.DATA);
+            mimeCol = cur.getColumnIndex(FileColumns.MIME_TYPE);
+            titleCol = cur.getColumnIndex(FileColumns.TITLE);
+            sizeCol = cur.getColumnIndex(FileColumns.SIZE);
+            dateAddedCol = cur.getColumnIndex(FileColumns.DATE_ADDED);
+            dateModifiedCol = cur.getColumnIndex(FileColumns.DATE_MODIFIED);
         }
     }
 

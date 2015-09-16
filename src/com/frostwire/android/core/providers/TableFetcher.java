@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -20,25 +20,23 @@ package com.frostwire.android.core.providers;
 
 import android.database.Cursor;
 import android.net.Uri;
-
 import com.frostwire.android.core.FileDescriptor;
 
 /**
  * @author gubatron
  * @author aldenml
- *
  */
 public interface TableFetcher {
 
-    public String[] getColumns();
+    String[] getColumns();
 
-    public String getSortByExpression();
+    String getSortByExpression();
 
-    public Uri getContentUri();
+    Uri getContentUri();
 
-    public void prepare(Cursor cur);
+    void prepare(Cursor cur);
 
-    public FileDescriptor fetch(Cursor cur);
+    FileDescriptor fetch(Cursor cur);
 
-    public byte getFileType();
+    byte getFileType();
 }
