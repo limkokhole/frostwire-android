@@ -42,6 +42,7 @@ import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
+import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
 import java.util.*;
@@ -241,11 +242,12 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
         populateContainerAction(view);
 
+        TextView fileExtra = findView(view, R.id.view_browse_peer_list_item_extra_text);
         if (fd.fileType == Constants.FILE_TYPE_AUDIO || fd.fileType == Constants.FILE_TYPE_APPLICATIONS) {
-            TextView fileExtra = findView(view, R.id.view_browse_peer_list_item_extra_text);
             fileExtra.setText(fd.artist);
+        } else if (fd.fileType == Constants.FILE_TYPE_DOCUMENTS) {
+            fileExtra.setText(FilenameUtils.getExtension(fd.filePath));
         } else {
-            TextView fileExtra = findView(view, R.id.view_browse_peer_list_item_extra_text);
             fileExtra.setText(R.string.empty_string);
         }
 
