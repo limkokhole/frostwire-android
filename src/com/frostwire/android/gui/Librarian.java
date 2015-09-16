@@ -30,9 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.BaseColumns;
 import android.provider.MediaStore.MediaColumns;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.core.*;
 import com.frostwire.android.core.player.EphemeralPlaylist;
@@ -44,7 +42,6 @@ import com.frostwire.android.core.providers.UniversalStore.Applications.Applicat
 import com.frostwire.android.gui.transfers.Transfers;
 import com.frostwire.android.gui.util.Apk;
 import com.frostwire.localpeer.Finger;
-import com.frostwire.localpeer.ScreenMetrics;
 import com.frostwire.util.DirectoryUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.xmlpull.v1.XmlPullParser;
@@ -241,7 +238,6 @@ public final class Librarian {
         finger.deviceName = Build.DEVICE;
         finger.deviceManufacturer = Build.MANUFACTURER;
         finger.deviceBrand = Build.BRAND;
-        finger.deviceScreen = readScreenMetrics();
 
         finger.numSharedAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO, true);
         finger.numSharedVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS, true);
@@ -658,27 +654,6 @@ public final class Librarian {
                 new UniversalScanner(context).scan(flattenedFiles);
             }
         }
-    }
-
-    public ScreenMetrics readScreenMetrics() {
-        ScreenMetrics sm = new ScreenMetrics();
-
-        try {
-            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-            context.getResources().getDisplayMetrics();
-            DisplayMetrics dm = new DisplayMetrics();
-            wm.getDefaultDisplay().getMetrics(dm);
-
-            sm.densityDpi = dm.densityDpi;
-            sm.heightPixels = dm.heightPixels;
-            sm.widthPixels = dm.widthPixels;
-            sm.xdpi = dm.xdpi;
-            sm.ydpi = dm.ydpi;
-        } catch (Throwable e) {
-            Log.e(TAG, "Unable to get the device display dimensions", e);
-        }
-
-        return sm;
     }
 
     /**

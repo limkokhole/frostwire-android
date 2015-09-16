@@ -23,10 +23,9 @@ import com.frostwire.core.CommonConstants;
 
 /**
  * Static class containing all constants in one place.
- * 
+ *
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class Constants {
 
@@ -37,10 +36,12 @@ public final class Constants {
 
     public static final boolean IS_FREE_DISTRIBUTION = true;
 
-    public static final String BUILD_PREFIX = !IS_GOOGLE_PLAY_DISTRIBUTION ? "1000":"";
+    public static final String BUILD_PREFIX = !IS_GOOGLE_PLAY_DISTRIBUTION ? "1000" : "";
 
-    /** should manually match the manifest, here for convenience so we can ask for it from static contexts without
-     * needing to pass the Android app context to obtain the PackageManager instance.  */
+    /**
+     * should manually match the manifest, here for convenience so we can ask for it from static contexts without
+     * needing to pass the Android app context to obtain the PackageManager instance.
+     */
     public static final String FROSTWIRE_BUILD = BUILD_PREFIX + (BuildConfig.VERSION_CODE % 1000);
 
     public static final String APP_PACKAGE_NAME = "com.frostwire.android";
@@ -156,8 +157,6 @@ public final class Constants {
     public static final String SERVER_PROMOTIONS_URL = "http://update.frostwire.com/o.php?" + FROM_URL_PARAMETERS;
 
     public static final long LIBRARIAN_FILE_COUNT_CACHE_TIMEOUT = 2 * 60 * 1000; // 2 minutes
-
-    public static final int DEVICE_MAJOR_TYPE_PHONE = CommonConstants.DEVICE_MAJOR_TYPE_PHONE;
 
     public static final String MOBILE_CORE_DEVHASH = "6OJUVFECLGYH3JKYZB41VLQA4JXW5";
     public static final String INMOBI_INTERSTITIAL_PROPERTY_ID = "c1e6be702d614523b725af8b86f99e8f";

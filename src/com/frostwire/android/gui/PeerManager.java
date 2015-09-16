@@ -139,9 +139,8 @@ public final class PeerManager {
         int numSharedFiles = Librarian.instance().getNumFiles();
         String nickname = ConfigurationManager.instance().getNickname();
         String clientVersion = Constants.FROSTWIRE_VERSION_STRING;
-        int deviceType = Constants.DEVICE_MAJOR_TYPE_PHONE;
 
-        return new LocalPeer(address, 0, true, nickname, numSharedFiles, deviceType, clientVersion);
+        return new LocalPeer(address, 0, true, nickname, numSharedFiles, clientVersion);
     }
 
     private void updatePeerCache2(Peer peer, boolean disconnected) {
