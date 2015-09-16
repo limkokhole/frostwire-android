@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -21,7 +21,6 @@ package com.frostwire.android.gui;
 import android.app.Application;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import com.frostwire.android.core.CoreRuntimeException;
 
 /**
  * @author gubatron
@@ -42,7 +41,7 @@ public final class NetworkManager {
 
     public static NetworkManager instance() {
         if (instance == null) {
-            throw new CoreRuntimeException("NetworkManager not created");
+            throw new RuntimeException("NetworkManager not created");
         }
         return instance;
     }

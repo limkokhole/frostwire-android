@@ -82,7 +82,7 @@ public final class Librarian {
 
     public static Librarian instance() {
         if (instance == null) {
-            throw new CoreRuntimeException("Librarian not created");
+            throw new RuntimeException("Librarian not created");
         }
         return instance;
     }

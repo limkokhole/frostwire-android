@@ -57,7 +57,7 @@ public class ConfigurationManager {
 
     public static ConfigurationManager instance() {
         if (instance == null) {
-            throw new CoreRuntimeException("ConfigurationManager not created");
+            throw new RuntimeException("ConfigurationManager not created");
         }
         return instance;
     }

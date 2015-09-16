@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,14 +19,10 @@
 package com.frostwire.android.gui;
 
 import android.app.Application;
-import android.content.Context;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
 import android.view.ViewConfiguration;
 import com.andrew.apollo.cache.ImageCache;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.core.CoreRuntimeException;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.util.HttpResponseCache;
@@ -78,7 +74,7 @@ public class MainApplication extends Application {
             Librarian.instance().syncMediaStore();
             Librarian.instance().syncApplicationsProvider();
         } catch (Throwable e) {
-            throw new CoreRuntimeException("Unable to initialized main components", e);
+            throw new RuntimeException("Unable to initialized main components", e);
         }
     }
 
