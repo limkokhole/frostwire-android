@@ -23,8 +23,6 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.res.XmlResourceParser;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -37,19 +35,17 @@ import com.frostwire.android.core.player.EphemeralPlaylist;
 import com.frostwire.android.core.player.PlaylistItem;
 import com.frostwire.android.core.providers.TableFetcher;
 import com.frostwire.android.core.providers.TableFetchers;
-import com.frostwire.android.core.providers.UniversalStore.Applications;
-import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
 import com.frostwire.android.gui.transfers.Transfers;
-import com.frostwire.android.gui.util.Apk;
+import com.frostwire.android.util.SystemUtils;
 import com.frostwire.localpeer.Finger;
 import com.frostwire.util.DirectoryUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.xmlpull.v1.XmlPullParser;
 
 import java.io.File;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * The Librarian is in charge of:
@@ -256,23 +252,8 @@ public final class Librarian {
         return finger;
     }
 
-    public void syncApplicationsProvider() {
-        if (!isExternalStorageMounted()) {
-            return;
-        }
-
-        Thread t = new Thread(new Runnable() {
-            public void run() {
-                syncApplicationsProviderSupport();
-            }
-        });
-        t.setName("syncApplicationsProvider");
-        t.setDaemon(true);
-        t.start();
-    }
-
     public void syncMediaStore() {
-        if (!isExternalStorageMounted()) {
+        if (!SystemUtils.isPrimaryExternalStorageMounted()) {
             return;
         }
 
@@ -284,10 +265,6 @@ public final class Librarian {
         t.setName("syncMediaStore");
         t.setDaemon(true);
         t.start();
-    }
-
-    public boolean isExternalStorageMounted() {
-        return com.frostwire.android.util.SystemUtils.isPrimaryExternalStorageMounted();
     }
 
     public EphemeralPlaylist createEphemeralPlaylist(FileDescriptor fd) {
@@ -326,121 +303,6 @@ public final class Librarian {
     private void broadcastRefreshFinger() {
         context.sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINGER));
         PeerManager.instance().updateLocalPeer();
-    }
-
-    private void syncApplicationsProviderSupport() {
-        try {
-
-            List<FileDescriptor> fds = Librarian.instance().getFiles(Constants.FILE_TYPE_APPLICATIONS, 0, Integer.MAX_VALUE);
-
-            int packagesSize = fds.size();
-            String[] packages = new String[packagesSize];
-            for (int i = 0; i < packagesSize; i++) {
-                packages[i] = fds.get(i).album;
-            }
-            Arrays.sort(packages);
-
-            List<ApplicationInfo> applications = context.getPackageManager().getInstalledApplications(0);
-
-            int size = applications.size();
-
-            ArrayList<String> newPackagesList = new ArrayList<String>(size);
-
-            for (int i = 0; i < size; i++) {
-                ApplicationInfo appInfo = applications.get(i);
-
-                try {
-                    if (appInfo == null) {
-                        continue;
-                    }
-
-                    newPackagesList.add(appInfo.packageName);
-
-                    File f = new File(appInfo.sourceDir);
-                    if (!f.canRead()) {
-                        continue;
-                    }
-
-                    int index = Arrays.binarySearch(packages, appInfo.packageName);
-                    if (index >= 0) {
-                        continue;
-                    }
-
-                    String data = appInfo.sourceDir;
-                    String title = appInfo.packageName;
-                    String packageName = appInfo.packageName;
-                    String version = "";
-
-                    Apk apk = new Apk(context, appInfo.sourceDir);
-                    String[] result = parseApk(apk);
-                    if (result != null) {
-                        if (result[1] == null) {
-                            continue;
-                        }
-                        title = result[1];
-                        version = result[0];
-                    }
-
-                    ContentValues cv = new ContentValues();
-                    cv.put(ApplicationsColumns.DATA, data);
-                    cv.put(ApplicationsColumns.SIZE, f.length());
-                    cv.put(ApplicationsColumns.TITLE, title);
-                    cv.put(ApplicationsColumns.MIME_TYPE, Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE);
-                    cv.put(ApplicationsColumns.VERSION, version);
-                    cv.put(ApplicationsColumns.PACKAGE_NAME, packageName);
-
-                    ContentResolver cr = context.getContentResolver();
-
-                    Uri uri = cr.insert(Applications.Media.CONTENT_URI, cv);
-
-                    if (appInfo.icon != 0) {
-                        try {
-                            InputStream is = null;
-                            OutputStream os = null;
-
-                            try {
-                                is = apk.openRawResource(appInfo.icon);
-                                os = cr.openOutputStream(uri);
-
-                                byte[] buff = new byte[4 * 1024];
-                                int n = 0;
-                                while ((n = is.read(buff, 0, buff.length)) != -1) {
-                                    os.write(buff, 0, n);
-                                }
-
-                            } finally {
-                                if (os != null) {
-                                    os.close();
-                                }
-                                if (is != null) {
-                                    is.close();
-                                }
-                            }
-                        } catch (Throwable e) {
-                            Log.e(TAG, "Can't retrieve icon image for application " + appInfo.packageName);
-                        }
-                    }
-                } catch (Throwable e) {
-                    Log.e(TAG, "Error retrieving information for application " + appInfo.packageName);
-                }
-            }
-
-            // clean uninstalled applications
-            String[] newPackages = newPackagesList.toArray(new String[0]);
-            Arrays.sort(newPackages);
-
-            // simple way n * log(n)
-            for (int i = 0; i < packagesSize; i++) {
-                String packageName = packages[i];
-                if (Arrays.binarySearch(newPackages, packageName) < 0) {
-                    ContentResolver cr = context.getContentResolver();
-                    cr.delete(Applications.Media.CONTENT_URI, ApplicationsColumns.PACKAGE_NAME + " LIKE '%" + packageName + "%'", null);
-                }
-            }
-
-        } catch (Throwable e) {
-            Log.e(TAG, "Error performing initial applications provider synchronization with device", e);
-        }
     }
 
     private void syncMediaStoreSupport() {
@@ -579,59 +441,6 @@ public final class Librarian {
             cache[fileType].updateShared(num);
         } else {
             cache[fileType].updateOnDisk(num);
-        }
-    }
-
-    /**
-     * This function returns an array of string in the following order: version name, label
-     *
-     * @param apk
-     * @return
-     */
-    private String[] parseApk(Apk apk) {
-        try {
-            String[] result = new String[3];
-
-            XmlResourceParser parser = apk.getAndroidManifest();
-
-            boolean manifestParsed = true;
-            boolean applicationParsed = false;
-
-            while (!manifestParsed || !applicationParsed) {
-                int type = parser.next();
-
-                if (type == XmlPullParser.END_DOCUMENT) {
-                    break;
-                }
-
-                switch (type) {
-                    case XmlPullParser.START_TAG:
-                        String tagName = parser.getName();
-                        if (tagName.equals("manifest")) {
-                            String versionName = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "versionName");
-                            if (versionName != null && versionName.startsWith("@")) {
-                                versionName = apk.getString(Integer.parseInt(versionName.substring(1)));
-                            }
-                            result[0] = versionName;
-                            manifestParsed = true;
-                        }
-                        if (tagName.equals("application")) {
-                            String label = parser.getAttributeValue("http://schemas.android.com/apk/res/android", "label");
-                            if (label != null && label.startsWith("@")) {
-                                label = apk.getString(Integer.parseInt(label.substring(1)));
-                            }
-                            result[1] = label;
-                            applicationParsed = true;
-                        }
-                        break;
-                }
-            }
-
-            parser.close();
-
-            return result;
-        } catch (Throwable e) {
-            return null;
         }
     }
 

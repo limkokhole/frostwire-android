@@ -27,8 +27,6 @@ import android.provider.MediaStore.Images.ImageColumns;
 import android.provider.MediaStore.Video.VideoColumns;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
-import com.frostwire.android.core.providers.UniversalStore.Applications.ApplicationsColumns;
-import com.frostwire.android.core.providers.UniversalStore.Documents.DocumentsColumns;
 
 /**
  * Help yourself with TableFetchers.
@@ -44,7 +42,6 @@ public final class TableFetchers {
     public final static TableFetcher PICTURES_TABLE_FETCHER = new PicturesTableFetcher();
     public final static TableFetcher VIDEOS_TABLE_FETCHER = new VideosTableFetcher();
     public final static TableFetcher DOCUMENTS_TABLE_FETCHER = new DocumentsTableFetcher();
-    public final static TableFetcher APPLICATIONS_TABLE_FETCHER = new ApplicationsTableFetcher();
     public final static TableFetcher RINGTONES_TABLE_FETCHER = new RingtonesTableFetcher();
     public final static TableFetcher TORRENTS_TABLE_FETCHER = new TorrentsTableFetcher();
 
@@ -267,7 +264,7 @@ public final class TableFetchers {
         }
 
         public String getSortByExpression() {
-            return DocumentsColumns.DATE_ADDED + " DESC";
+            return FileColumns.DATE_ADDED + " DESC";
         }
 
         public void prepare(Cursor cur) {
@@ -314,58 +311,6 @@ public final class TableFetchers {
         @Override
         public String[] whereArgs() {
             return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%", "%.torrent"};
-        }
-    }
-
-    public static final class ApplicationsTableFetcher extends AbstractTableFetcher {
-
-        private int idCol;
-        private int titleCol;
-        private int verCol;
-        private int pathCol;
-        private int sizeCol;
-        private int packageNameCol;
-        private int dateAddedCol;
-        private int dateModifiedCol;
-
-        public FileDescriptor fetch(Cursor cur) {
-            int id = Integer.valueOf(cur.getString(idCol));
-            String ver = cur.getString(verCol);
-            String title = cur.getString(titleCol);
-            String packageName = cur.getString(packageNameCol);
-            String path = cur.getString(pathCol);
-            int size = Integer.valueOf(cur.getString(sizeCol));
-            long dateAdded = cur.getLong(dateAddedCol);
-            long dateModified = cur.getLong(dateModifiedCol);
-
-            return new FileDescriptor(id, ver, title, packageName, null, path, Constants.FILE_TYPE_APPLICATIONS, Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE, size, dateAdded, dateModified, true);
-        }
-
-        public String[] getColumns() {
-            return new String[]{ApplicationsColumns._ID, ApplicationsColumns.TITLE, ApplicationsColumns.VERSION, ApplicationsColumns.DATA, ApplicationsColumns.SIZE, ApplicationsColumns.PACKAGE_NAME, ApplicationsColumns.DATE_ADDED, ApplicationsColumns.DATE_MODIFIED};
-        }
-
-        public Uri getContentUri() {
-            return UniversalStore.Applications.Media.CONTENT_URI;
-        }
-
-        public byte getFileType() {
-            return Constants.FILE_TYPE_APPLICATIONS;
-        }
-
-        public String getSortByExpression() {
-            return "";
-        }
-
-        public void prepare(Cursor cur) {
-            idCol = cur.getColumnIndex(ApplicationsColumns._ID);
-            titleCol = cur.getColumnIndex(ApplicationsColumns.TITLE);
-            verCol = cur.getColumnIndex(ApplicationsColumns.VERSION);
-            pathCol = cur.getColumnIndex(ApplicationsColumns.DATA);
-            sizeCol = cur.getColumnIndex(ApplicationsColumns.SIZE);
-            packageNameCol = cur.getColumnIndex(ApplicationsColumns.PACKAGE_NAME);
-            dateAddedCol = cur.getColumnIndex(ApplicationsColumns.DATE_ADDED);
-            dateModifiedCol = cur.getColumnIndex(ApplicationsColumns.DATE_MODIFIED);
         }
     }
 
@@ -437,8 +382,6 @@ public final class TableFetchers {
                 return VIDEOS_TABLE_FETCHER;
             case Constants.FILE_TYPE_DOCUMENTS:
                 return DOCUMENTS_TABLE_FETCHER;
-            case Constants.FILE_TYPE_APPLICATIONS:
-                return APPLICATIONS_TABLE_FETCHER;
             case Constants.FILE_TYPE_RINGTONES:
                 return RINGTONES_TABLE_FETCHER;
             case Constants.FILE_TYPE_TORRENTS:
@@ -458,8 +401,8 @@ public final class TableFetchers {
             return VIDEOS_TABLE_FETCHER;
         } else if (str.startsWith(DOCUMENTS_TABLE_FETCHER.getContentUri().toString())) {
             return DOCUMENTS_TABLE_FETCHER;
-        } else if (str.startsWith(APPLICATIONS_TABLE_FETCHER.getContentUri().toString())) {
-            return APPLICATIONS_TABLE_FETCHER;
+        } else if (str.startsWith(TORRENTS_TABLE_FETCHER.getContentUri().toString())) {
+            return TORRENTS_TABLE_FETCHER;
         } else if (str.startsWith(RINGTONES_TABLE_FETCHER.getContentUri().toString())) {
             return RINGTONES_TABLE_FETCHER;
         } else {

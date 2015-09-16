@@ -42,6 +42,7 @@ import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.util.ImageLoader;
+import com.frostwire.android.util.SystemUtils;
 import com.frostwire.bittorrent.BTEngine;
 import com.frostwire.logging.Logger;
 import com.frostwire.util.ThreadPool;
@@ -154,7 +155,7 @@ public class EngineService extends Service implements IEngineService {
             return;
         }
 
-        if (!Librarian.instance().isExternalStorageMounted()) {
+        if (!SystemUtils.isPrimaryExternalStorageMounted()) {
             return;
         }
 
@@ -165,8 +166,6 @@ public class EngineService extends Service implements IEngineService {
         state = STATE_STARTING;
 
         Librarian.instance().invalidateCountCache();
-
-        //TransferManager.instance().loadTorrents();
 
         BTEngine.getInstance().resume();
 

@@ -297,18 +297,12 @@ public final class Engine implements IEngineService {
         IntentFilter connectivityFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         IntentFilter audioFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
 
-        IntentFilter packageFilter = new IntentFilter();
-        packageFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
-        packageFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
-        packageFilter.addDataScheme("package");
-
         IntentFilter telephonyFilter = new IntentFilter(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
 
         context.registerReceiver(receiver, wifiFilter);
         context.registerReceiver(receiver, fileFilter);
         context.registerReceiver(receiver, connectivityFilter);
         context.registerReceiver(receiver, audioFilter);
-        context.registerReceiver(receiver, packageFilter);
         context.registerReceiver(receiver, telephonyFilter);
     }
 

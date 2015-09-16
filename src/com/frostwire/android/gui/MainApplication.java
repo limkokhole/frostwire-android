@@ -72,7 +72,6 @@ public class MainApplication extends Application {
             cleanTemp();
 
             Librarian.instance().syncMediaStore();
-            Librarian.instance().syncApplicationsProvider();
         } catch (Throwable e) {
             throw new RuntimeException("Unable to initialized main components", e);
         }

@@ -18,6 +18,17 @@
 
 package com.frostwire.android.gui;
 
+import android.content.Context;
+import android.media.MediaScannerConnection;
+import android.media.MediaScannerConnection.MediaScannerConnectionClient;
+import android.net.Uri;
+import android.os.SystemClock;
+import com.frostwire.android.core.Constants;
+import com.frostwire.android.core.MediaType;
+import com.frostwire.logging.Logger;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
 import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -27,33 +38,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
-import android.content.ContentResolver;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.media.MediaScannerConnection;
-import android.media.MediaScannerConnection.MediaScannerConnectionClient;
-import android.net.Uri;
-import android.os.SystemClock;
-
-import com.frostwire.android.core.ConfigurationManager;
-import com.frostwire.android.core.Constants;
-import com.frostwire.android.core.FileDescriptor;
-import com.frostwire.android.core.MediaType;
-import com.frostwire.android.core.providers.UniversalStore;
-import com.frostwire.android.core.providers.UniversalStore.Documents;
-import com.frostwire.android.core.providers.UniversalStore.Documents.DocumentsColumns;
-import com.frostwire.android.gui.util.UIUtils;
-import com.frostwire.logging.Logger;
-
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public final class UniversalScanner {
 
@@ -71,50 +58,6 @@ public final class UniversalScanner {
 
     public void scan(final Collection<File> filesToScan) {
         new MultiFileAndroidScanner(filesToScan).scan();
-    }
-
-    private void scanDocument(String filePath) {
-        File file = new File(filePath);
-
-        if (documentExists(filePath, file.length())) {
-            return;
-        }
-
-        String displayName = FilenameUtils.getBaseName(file.getName());
-
-        ContentResolver cr = context.getContentResolver();
-
-        ContentValues values = new ContentValues();
-
-        values.put(DocumentsColumns.DATA, filePath);
-        values.put(DocumentsColumns.SIZE, file.length());
-        values.put(DocumentsColumns.DISPLAY_NAME, displayName);
-        values.put(DocumentsColumns.TITLE, displayName);
-        values.put(DocumentsColumns.DATE_ADDED, System.currentTimeMillis());
-        values.put(DocumentsColumns.DATE_MODIFIED, file.lastModified());
-        values.put(DocumentsColumns.MIME_TYPE, UIUtils.getMimeType(filePath));
-
-        cr.insert(Documents.Media.CONTENT_URI, values);
-    }
-
-    private boolean documentExists(String filePath, long size) {
-        boolean result = false;
-
-        Cursor c = null;
-
-        try {
-            ContentResolver cr = context.getContentResolver();
-            c = cr.query(UniversalStore.Documents.Media.CONTENT_URI, new String[] { DocumentsColumns._ID }, DocumentsColumns.DATA + "=?" + " AND " + DocumentsColumns.SIZE + "=?", new String[] { filePath, String.valueOf(size) }, null);
-            result = c != null && c.getCount() != 0;
-        } catch (Throwable e) {
-            LOG.warn("Error detecting if file exists: " + filePath, e);
-        } finally {
-            if (c != null) {
-                c.close();
-            }
-        }
-
-        return result;
     }
 
     private final class MultiFileAndroidScanner implements MediaScannerConnectionClient {
@@ -166,19 +109,19 @@ public final class UniversalScanner {
 
             if (uri != null && !path.contains("/Android/data/" + context.getPackageName())) {
                 if (mt != null && mt.getId() == Constants.FILE_TYPE_DOCUMENTS) {
-                    scanDocument(path);
+                    //scanDocument(path);
                 }
             } else {
                 if (path.endsWith(".apk")) {
                     //LOG.debug("Can't scan apk for security concerns: " + path);
                 } else if (mt != null) {
                     if (mt.getId() == Constants.FILE_TYPE_AUDIO ||
-                        mt.getId() == Constants.FILE_TYPE_VIDEOS ||
-                        mt.getId() == Constants.FILE_TYPE_PICTURES) {
+                            mt.getId() == Constants.FILE_TYPE_VIDEOS ||
+                            mt.getId() == Constants.FILE_TYPE_PICTURES) {
                         scanPrivateFile(uri, path, mt);
                     }
                 } else {
-                    scanDocument(path);
+                    //scanDocument(path);
                     //LOG.debug("Scanned new file as document: " + path);
                 }
             }
@@ -190,6 +133,7 @@ public final class UniversalScanner {
      * inside the secondary external storage path, therefore, all attempts
      * to use MediaScannerConnection to scan a media file fail. Therefore we
      * have this method to insert the file's metadata manually on the content provider.
+     *
      * @param path
      */
     private void scanPrivateFile(Uri oldUri, String filePath, MediaType mt) {
@@ -234,7 +178,7 @@ public final class UniversalScanner {
             Field mNoMediaF = mClient.getClass().getDeclaredField("mNoMedia");
             mNoMediaF.setAccessible(true);
             mNoMediaF.setBoolean(mClient, false);
-            
+
             // This is only for HTC (tested only on HTC One M8)
             try {
                 Field mFileCacheF = clazz.getDeclaredField("mFileCache");

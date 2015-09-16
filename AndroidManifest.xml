@@ -300,12 +300,6 @@
 		<activity android:name="com.applovin.adview.AppLovinConfirmationActivity" />
 		<!-- end of AppLovin -->
 
-		<!-- providers -->
-		<provider android:name=".core.providers.DocumentsProvider"
-			android:authorities="${applicationId}.core.providers.Documents" android:exported="false" />
-		<provider android:name=".core.providers.ApplicationsProvider"
-			android:authorities="${applicationId}.core.providers.Applications" android:exported="false" />
-
 		<!-- services -->
 
 		<service android:name="com.frostwire.android.gui.services.EngineService"

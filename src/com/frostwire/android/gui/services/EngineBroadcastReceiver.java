@@ -87,10 +87,6 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
                 } else if (networkInfo.getDetailedState() == DetailedState.CONNECTED) {
                     handleConnectedNetwork(networkInfo);
                 }
-            } else if (action.equals(Intent.ACTION_PACKAGE_ADDED)) {
-                Librarian.instance().syncApplicationsProvider();
-            } else if (action.equals(Intent.ACTION_PACKAGE_REMOVED)) {
-                // no sure about this case
             }
         } catch (Throwable e) {
             Log.e(TAG, "Error processing broadcast message", e);
