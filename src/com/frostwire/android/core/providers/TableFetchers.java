@@ -46,6 +46,7 @@ public final class TableFetchers {
     public final static TableFetcher DOCUMENTS_TABLE_FETCHER = new DocumentsTableFetcher();
     public final static TableFetcher APPLICATIONS_TABLE_FETCHER = new ApplicationsTableFetcher();
     public final static TableFetcher RINGTONES_TABLE_FETCHER = new RingtonesTableFetcher();
+    public final static TableFetcher TORRENTS_TABLE_FETCHER = new TorrentsTableFetcher();
 
     public static abstract class AbstractTableFetcher implements TableFetcher {
 
@@ -442,6 +443,8 @@ public final class TableFetchers {
                 return APPLICATIONS_TABLE_FETCHER;
             case Constants.FILE_TYPE_RINGTONES:
                 return RINGTONES_TABLE_FETCHER;
+            case Constants.FILE_TYPE_TORRENTS:
+                return TORRENTS_TABLE_FETCHER;
             default:
                 return null;
         }
