@@ -39,4 +39,8 @@ public interface TableFetcher {
     FileDescriptor fetch(Cursor cur);
 
     byte getFileType();
+
+    String where();
+
+    String[] whereArgs();
 }

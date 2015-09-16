@@ -524,6 +524,11 @@ public final class Librarian {
             String[] columns = fetcher.getColumns();
             String sort = fetcher.getSortByExpression();
 
+            if (where == null) {
+                where = fetcher.where();
+                whereArgs = fetcher.whereArgs();
+            }
+
             c = cr.query(fetcher.getContentUri(), columns, where, whereArgs, sort);
 
             if (c == null || !c.moveToPosition(offset)) {

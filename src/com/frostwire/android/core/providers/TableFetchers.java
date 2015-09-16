@@ -48,11 +48,24 @@ public final class TableFetchers {
     public final static TableFetcher APPLICATIONS_TABLE_FETCHER = new ApplicationsTableFetcher();
     public final static TableFetcher RINGTONES_TABLE_FETCHER = new RingtonesTableFetcher();
 
+    public static abstract class AbstractTableFetcher implements TableFetcher {
+
+        @Override
+        public String where() {
+            return null;
+        }
+
+        @Override
+        public String[] whereArgs() {
+            return new String[0];
+        }
+    }
+
     /**
      * Default Table Fetcher for Audio Files.
      * 
      */
-    public final static class AudioTableFetcher implements TableFetcher {
+    public final static class AudioTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int pathCol;
@@ -116,7 +129,7 @@ public final class TableFetchers {
         }
     }
 
-    public static class PicturesTableFetcher implements TableFetcher {
+    public static class PicturesTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int titleCol;
@@ -165,7 +178,7 @@ public final class TableFetchers {
         }
     }
 
-    public static final class VideosTableFetcher implements TableFetcher {
+    public static final class VideosTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int pathCol;
@@ -220,7 +233,7 @@ public final class TableFetchers {
         }
     }
 
-    public static final class DocumentsTableFetcher implements TableFetcher {
+    public static final class DocumentsTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int pathCol;
@@ -267,9 +280,19 @@ public final class TableFetchers {
             dateAddedCol = cur.getColumnIndex(FileColumns.DATE_ADDED);
             dateModifiedCol = cur.getColumnIndex(FileColumns.DATE_MODIFIED);
         }
+
+        @Override
+        public String where() {
+            return FileColumns.DATA + " NOT LIKE ? AND " + FileColumns.MEDIA_TYPE + "="  + FileColumns.MEDIA_TYPE_NONE;
+        }
+
+        @Override
+        public String[] whereArgs() {
+            return new String[]{"%/data/%"};
+        }
     }
 
-    public static final class ApplicationsTableFetcher implements TableFetcher {
+    public static final class ApplicationsTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int titleCol;
@@ -321,7 +344,7 @@ public final class TableFetchers {
         }
     }
 
-    public static final class RingtonesTableFetcher implements TableFetcher {
+    public static final class RingtonesTableFetcher extends AbstractTableFetcher {
 
         private int idCol;
         private int pathCol;
