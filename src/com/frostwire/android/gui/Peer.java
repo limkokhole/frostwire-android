@@ -69,7 +69,7 @@ public final class Peer {
     }
 
     public List<FileDescriptor> browse(byte fileType) {
-        return Librarian.instance().getFiles(fileType, 0, Integer.MAX_VALUE, false);
+        return Librarian.instance().getFiles(fileType, 0, Integer.MAX_VALUE);
     }
 
     @Override

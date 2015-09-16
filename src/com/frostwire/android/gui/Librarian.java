@@ -92,12 +92,12 @@ public final class Librarian {
         this.cache = new FileCountCache[]{new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache(), new FileCountCache()};
     }
 
-    public List<FileDescriptor> getFiles(byte fileType, int offset, int pageSize, boolean sharedOnly) {
-        return getFiles(offset, pageSize, TableFetchers.getFetcher(fileType), sharedOnly);
+    public List<FileDescriptor> getFiles(byte fileType, int offset, int pageSize) {
+        return getFiles(offset, pageSize, TableFetchers.getFetcher(fileType));
     }
 
     public List<FileDescriptor> getFiles(byte fileType, String where, String[] whereArgs) {
-        return getFiles(0, Integer.MAX_VALUE, TableFetchers.getFetcher(fileType), where, whereArgs, false);
+        return getFiles(0, Integer.MAX_VALUE, TableFetchers.getFetcher(fileType), where, whereArgs);
     }
 
     /**
@@ -158,8 +158,8 @@ public final class Librarian {
         return result;
     }
 
-    public FileDescriptor getFileDescriptor(byte fileType, int fileId, boolean sharedOnly) {
-        List<FileDescriptor> fds = getFiles(0, 1, TableFetchers.getFetcher(fileType), BaseColumns._ID + "=?", new String[]{String.valueOf(fileId)}, sharedOnly);
+    public FileDescriptor getFileDescriptor(byte fileType, int fileId) {
+        List<FileDescriptor> fds = getFiles(0, 1, TableFetchers.getFetcher(fileType), BaseColumns._ID + "=?", new String[]{String.valueOf(fileId)});
         if (fds.size() > 0) {
             return fds.get(0);
         } else {
@@ -216,7 +216,7 @@ public final class Librarian {
         try {
             ContentResolver cr = context.getContentResolver();
             TableFetcher fetcher = TableFetchers.getFetcher(fileType);
-            cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + StringUtils.buildSet(ids), null);
+            cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + buildSet(ids), null);
         } catch (Throwable e) {
             Log.e(TAG, "Failed to delete files from media store", e);
         }
@@ -336,7 +336,7 @@ public final class Librarian {
     private void syncApplicationsProviderSupport() {
         try {
 
-            List<FileDescriptor> fds = Librarian.instance().getFiles(Constants.FILE_TYPE_APPLICATIONS, 0, Integer.MAX_VALUE, false);
+            List<FileDescriptor> fds = Librarian.instance().getFiles(Constants.FILE_TYPE_APPLICATIONS, 0, Integer.MAX_VALUE);
 
             int packagesSize = fds.size();
             String[] packages = new String[packagesSize];
@@ -489,7 +489,7 @@ public final class Librarian {
                 }
             }
 
-            cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + StringUtils.buildSet(ids), null);
+            cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + buildSet(ids), null);
 
         } catch (Throwable e) {
             Log.e(TAG, "General failure during sync of MediaStore", e);
@@ -500,8 +500,8 @@ public final class Librarian {
         }
     }
 
-    private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, boolean sharedOnly) {
-        return getFiles(offset, pageSize, fetcher, null, null, sharedOnly);
+    private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher) {
+        return getFiles(offset, pageSize, fetcher, null, null);
     }
 
     /**
@@ -510,10 +510,9 @@ public final class Librarian {
      * @param offset     - from where (starting at 0)
      * @param pageSize   - how many results
      * @param fetcher    - An implementation of TableFetcher
-     * @param sharedOnly - if true, retrieves only the fine grained shared files.
      * @return List<FileDescriptor>
      */
-    private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, String where, String[] whereArgs, boolean sharedOnly) {
+    private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, String where, String[] whereArgs) {
         List<FileDescriptor> result = new ArrayList<FileDescriptor>();
 
         Cursor c = null;
@@ -765,7 +764,7 @@ public final class Librarian {
                     TableFetcher fetcher = TableFetchers.getFetcher(uri);
                     byte fileType = fetcher.getFileType();
                     int id = Integer.valueOf(uri.getLastPathSegment());
-                    fd = getFileDescriptor(fileType, id, false);
+                    fd = getFileDescriptor(fileType, id);
                 }
             }
         } catch (Throwable e) {
@@ -813,5 +812,19 @@ public final class Librarian {
         }
 
         return result;
+    }
+
+    private static String buildSet(List<?> list) {
+        StringBuilder sb = new StringBuilder("(");
+        int i = 0;
+        for (Object id : list) {
+            sb.append(id);
+            if (i++ < (list.size() - 1)) {
+                sb.append(",");
+            }
+        }
+        sb.append(")");
+
+        return sb.toString();
     }
 }

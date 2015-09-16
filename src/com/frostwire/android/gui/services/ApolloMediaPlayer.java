@@ -90,7 +90,7 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
             FileDescriptor fd = idMap.get(audioId);
 
             if (audioId != -1 && fd == null) {
-                fd = Librarian.instance().getFileDescriptor(Constants.FILE_TYPE_AUDIO, (int) audioId, false);
+                fd = Librarian.instance().getFileDescriptor(Constants.FILE_TYPE_AUDIO, (int) audioId);
                 if (fd != null) {
                     idMap.put(audioId, fd);
                 }
