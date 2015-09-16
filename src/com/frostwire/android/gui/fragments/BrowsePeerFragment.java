@@ -19,7 +19,6 @@
 package com.frostwire.android.gui.fragments;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.*;
 import android.content.res.Resources;
@@ -40,16 +39,14 @@ import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.adapters.FileListAdapter;
-import com.frostwire.android.gui.views.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractFragment;
 import com.frostwire.android.gui.views.BrowsePeerSearchBarView;
 import com.frostwire.android.gui.views.BrowsePeerSearchBarView.OnActionListener;
+import com.frostwire.android.gui.views.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.views.OverScrollListener;
 import com.frostwire.localpeer.Finger;
 import com.frostwire.logging.Logger;
-import com.frostwire.uxstats.UXAction;
-import com.frostwire.uxstats.UXStats;
 
 import java.util.HashSet;
 import java.util.List;
@@ -84,9 +81,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private Finger finger;
 
     private View header;
-
-    private OnRefreshSharedListener onRefreshSharedListener;
-    private OnUpdateFilesListener onUpdateFilesListener;
 
     private long lastAdapterRefresh;
 
@@ -178,64 +172,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         }
     }
 
-    private void clickBrowseFileButton(byte fileType) {
-        RadioButton button = buttonAudio;
-        switch (fileType) {
-            case Constants.FILE_TYPE_APPLICATIONS:
-                button = buttonApplications;
-                break;
-            case Constants.FILE_TYPE_DOCUMENTS:
-                button = buttonDocuments;
-                break;
-            case Constants.FILE_TYPE_PICTURES:
-                button = buttonPictures;
-                break;
-            case Constants.FILE_TYPE_VIDEOS:
-                button = buttonVideos;
-                break;
-            case Constants.FILE_TYPE_AUDIO:
-                button = buttonAudio;
-                break;
-        }
-        button.performClick();
-    }
-
-
-    private OnUpdateFilesListener createScrollToFileOnLoadFinishedListener(final FileDescriptor scrollToFileDescriptor) {
-        return new OnUpdateFilesListener() {
-            @Override
-            public void onUpdateFiles() {
-                scrollToFileDescriptor(scrollToFileDescriptor);
-                setOnUpdateFilesListener(null); //clear listener after you're done.
-            }
-        };
-    }
-
-    private void setOnUpdateFilesListener(OnUpdateFilesListener onUpdateFilesListener) {
-        this.onUpdateFilesListener = onUpdateFilesListener;
-    }
-
-    private void scrollToFileDescriptor(FileDescriptor scrollToFileDescriptor) {
-        if (adapter != null && scrollToFileDescriptor != null) {
-            List<FileListAdapter.FileDescriptorItem> files = adapter.getList();
-            if (files != null && files.size() > 0) {
-                for (int i = 0; i < files.size(); i++) {
-                    if (files.get(i).fd.id == scrollToFileDescriptor.id) {
-                        ConfigurationManager.instance().setInt(Constants.BROWSE_PEER_FRAGMENT_LISTVIEW_FIRST_VISIBLE_POSITION + scrollToFileDescriptor.fileType, i);
-                        final int position = i;
-                        getView().post(new Runnable() {
-                            @Override
-                            public void run() {
-                                list.smoothScrollToPositionFromTop(position, (getView().getHeight() - list.getHeight()) / 2, 400);
-                            }
-                        });
-                        return;
-                    }
-                }
-            }
-        }
-    }
-
     private void initBroadcastReceiver() {
         final IntentFilter filter = new IntentFilter();
         filter.addAction(Constants.ACTION_REFRESH_FINGER);
@@ -262,14 +198,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         updateHeader();
 
         return header;
-    }
-
-    public OnRefreshSharedListener getOnRefreshSharedListener() {
-        return onRefreshSharedListener;
-    }
-
-    public void setOnRefreshSharedListener(OnRefreshSharedListener l) {
-        this.onRefreshSharedListener = l;
     }
 
     @Override
@@ -537,13 +465,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             restorePreviouslyChecked();
             list.setAdapter(adapter);
 
-            if (onUpdateFilesListener != null) {
-                try {
-                    onUpdateFilesListener.onUpdateFiles();
-                } catch (Throwable t) {
-                    LOG.error(t.getMessage(), t);
-                }
-            }
         } catch (Throwable e) {
             LOG.error("Error updating files in list", e);
         }
@@ -607,14 +528,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             }
         }
-    }
-
-    public interface OnRefreshSharedListener {
-        void onRefresh(Fragment f, byte fileType, int numShared);
-    }
-
-    public interface OnUpdateFilesListener {
-        void onUpdateFiles();
     }
 
     public void refreshSelection() {
