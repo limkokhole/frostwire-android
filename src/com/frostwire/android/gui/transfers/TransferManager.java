@@ -414,7 +414,13 @@ public final class TransferManager {
                 if (bt.isResumable()) {
                     bt.resume();
                 }
-            } 
+            } else if (t instanceof HttpDownload) {
+                if (t.getDetailsUrl().contains("archive.org")) {
+                    if (!t.isComplete()) {
+                        ((HttpDownload) t).start(true);
+                    }
+                }
+            }
         }        
     }
 

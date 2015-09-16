@@ -65,12 +65,9 @@ import java.util.*;
 public class TransfersFragment extends AbstractFragment implements TimerObserver, MainFragment, OnDialogClickListener {
     private static final Logger LOG = Logger.getLogger(TransfersFragment.class);
     private static final String SELECTED_STATUS_STATE_KEY = "selected_status";
-
     private final Comparator<Transfer> transferComparator;
-
     private final ButtonAddTransferListener buttonAddTransferListener;
     private final ButtonMenuListener buttonMenuListener;
-
     private Button buttonSelectAll;
     private Button buttonSelectDownloading;
     private Button buttonSelectCompleted;
@@ -78,12 +75,8 @@ public class TransfersFragment extends AbstractFragment implements TimerObserver
     private TextView textDownloads;
     private TextView textUploads;
     private ClearableEditTextView addTransferUrlTextView;
-
     private TransferListAdapter adapter;
-    private WeakReference<ExpandableListView> expandableListViewWeakReference;
-
     private TransferStatus selectedStatus;
-
     private TimerSubscription subscription;
 
     public TransfersFragment() {

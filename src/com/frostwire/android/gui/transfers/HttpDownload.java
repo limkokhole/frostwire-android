@@ -199,6 +199,10 @@ public final class HttpDownload implements DownloadTransfer {
     }
 
     public void start() {
+        start(false);
+    }
+
+    public void start(final boolean resume) {
         if (status == STATUS_SAVE_DIR_ERROR || status == STATUS_ERROR_DISK_FULL || status == STATUS_ERROR) {
             return;
         }
@@ -210,7 +214,7 @@ public final class HttpDownload implements DownloadTransfer {
                     String uri = link.getUrl();
                     HttpClient client = HttpClientFactory.getInstance(HttpClientFactory.HttpContext.DOWNLOAD);
                     client.setListener(new DownloadListener());
-                    client.save(uri, savePath, false);
+                    client.save(uri, savePath, resume);
                     Librarian.instance().scan(savePath);
                 } catch (Throwable e) {
                     error(e);
