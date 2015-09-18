@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -36,18 +36,13 @@ import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.android.gui.views.ContextTask;
 import com.frostwire.android.util.ImageLoader;
-import com.frostwire.core.CommonConstants;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.SearchResult;
-import com.frostwire.search.soundcloud.SoundCloudRedirectResponse;
-import com.frostwire.search.soundcloud.SoundcloudItem;
-import com.frostwire.search.soundcloud.SoundcloudPlaylist;
-import com.frostwire.search.soundcloud.SoundcloudSearchResult;
+import com.frostwire.search.soundcloud.*;
 import com.frostwire.util.HttpClientFactory;
 import com.frostwire.util.JsonUtils;
 import com.frostwire.util.Ref;
 import com.frostwire.util.StringUtils;
-import com.frostwire.util.http.HttpClient;
 
 /*
  * @author aldenml
@@ -133,8 +128,8 @@ public final class DownloadSoundcloudFromUrlTask extends ContextTask<List<Soundc
         }*/
         
         //resolve track information using http://api.soundcloud.com/resolve?url=<url>&client_id=b45b1aa10f1ac2941910a7f0d10f8e28
-        final String clientId= CommonConstants.SOUNDCLOUD_CLIENTID;
-        final String appVersion=CommonConstants.SOUNDCLOUD_APP_VERSION;
+        final String clientId= SoundcloudSearchPerformer.SOUNDCLOUD_CLIENTID;
+        final String appVersion=SoundcloudSearchPerformer.SOUNDCLOUD_APP_VERSION;
         try {
             String url = soundcloudUrl;
             if (soundcloudUrl.contains("?in=")) {
