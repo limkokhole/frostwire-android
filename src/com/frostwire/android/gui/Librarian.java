@@ -37,7 +37,6 @@ import com.frostwire.android.core.providers.TableFetcher;
 import com.frostwire.android.core.providers.TableFetchers;
 import com.frostwire.android.gui.transfers.Transfers;
 import com.frostwire.android.util.SystemUtils;
-import com.frostwire.localpeer.Finger;
 import com.frostwire.util.DirectoryUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -269,7 +268,6 @@ public final class Librarian {
 
     private void broadcastRefreshFinger() {
         context.sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINGER));
-        PeerManager.instance().updateLocalPeer();
     }
 
     private void syncMediaStoreSupport() {

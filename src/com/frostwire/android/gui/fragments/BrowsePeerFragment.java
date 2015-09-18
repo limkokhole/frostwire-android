@@ -36,6 +36,7 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
+import com.frostwire.android.gui.Finger;
 import com.frostwire.android.gui.Peer;
 import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.adapters.FileListAdapter;
@@ -45,7 +46,6 @@ import com.frostwire.android.gui.views.BrowsePeerSearchBarView;
 import com.frostwire.android.gui.views.BrowsePeerSearchBarView.OnActionListener;
 import com.frostwire.android.gui.views.FileTypeRadioButtonSelectorFactory;
 import com.frostwire.android.gui.views.OverScrollListener;
-import com.frostwire.localpeer.Finger;
 import com.frostwire.logging.Logger;
 
 import java.util.HashSet;
@@ -137,7 +137,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     public void onLoadFinished(Loader<Object> loader, Object data) {
         if (data == null) {
             LOG.warn("Something wrong, data is null");
-            removePeerAndFinish();
             return;
         }
 
@@ -371,7 +370,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         if (finger == null) {
             if (peer == null) {
                 LOG.warn("Something wrong, finger  and peer are null");
-                removePeerAndFinish();
                 return;
             } else {
                 finger = peer.finger();
@@ -436,7 +434,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private void updateFiles(Object[] data) {
         if (data == null) {
             LOG.warn("Something wrong, data is null");
-            removePeerAndFinish();
             return;
         }
 
@@ -478,22 +475,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     private void checkNoEmptyButton(Finger f) {
         buttonAudio.setChecked(true);
-    }
-
-    private void removePeerAndFinish() {
-        Activity activity = getActivity();
-        if (activity != null) {
-            if (peer != null) {
-                try {
-                    UIUtils.showShortMessage(activity, R.string.is_not_responding, peer.getNickname());
-                    PeerManager.instance().removePeer(peer);
-                } catch (Throwable e) {
-                    // still possible to get an exception since peer is mutable.
-                    LOG.error("Error removing a not null peer", e);
-                }
-            }
-            activity.finish();
-        }
     }
 
     private void saveListViewVisiblePosition(byte fileType) {

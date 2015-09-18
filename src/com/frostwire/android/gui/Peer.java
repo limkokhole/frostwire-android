@@ -18,9 +18,9 @@
 
 package com.frostwire.android.gui;
 
+import com.frostwire.android.core.ConfigurationManager;
+import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
-import com.frostwire.localpeer.Finger;
-import com.frostwire.localpeer.LocalPeer;
 
 import java.util.List;
 
@@ -42,12 +42,17 @@ public final class Peer {
 
     private String key;
 
-    public Peer(LocalPeer p) {
-        this.key = p.address + ":" + p.port;
-        this.address = p.address;
+    public Peer() {
+        String address = "0.0.0.0";
+        int port = 0;
+        String nickname = ConfigurationManager.instance().getNickname();
+        String clientVersion = Constants.FROSTWIRE_VERSION_STRING;
 
-        this.nickname = p.nickname;
-        this.clientVersion = p.clientVersion;
+        this.key = address + ":" + port;
+        this.address = address;
+
+        this.nickname = nickname;
+        this.clientVersion = clientVersion;
 
         this.hashCode = key.hashCode();
     }
