@@ -38,7 +38,6 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.FileDescriptor;
 import com.frostwire.android.gui.Finger;
 import com.frostwire.android.gui.Peer;
-import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.adapters.FileListAdapter;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractFragment;
@@ -89,22 +88,8 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     public BrowsePeerFragment() {
         super(R.layout.fragment_browse_peer);
         broadcastReceiver = new LocalBroadcastReceiver();
-    }
 
-    public Peer getPeer() {
-        if (peer == null) {
-            loadPeerFromBundleData();
-        }
-
-        if (peer == null) {
-            loadPeerFromIntentData();
-        }
-
-        return peer;
-    }
-
-    public void setPeer(Peer peer) {
-        this.peer = peer;
+        this.peer = new Peer();
     }
 
     @Override
@@ -112,15 +97,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         super.onActivityCreated(savedInstanceState);
 
         setRetainInstance(true);
-
-        if (peer == null) {
-            getPeer();
-        }
-
-        if (peer == null) { // save move
-            getActivity().finish();
-            return;
-        }
     }
 
     @Override
@@ -237,45 +213,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             }
         });
-    }
-
-    private void loadPeerFromIntentData() {
-        if (peer != null) { // why?
-            return;
-        }
-
-        Intent intent = getActivity().getIntent();
-        if (intent.hasExtra(Constants.EXTRA_PEER_UUID)) {
-            String uuid = intent.getStringExtra(Constants.EXTRA_PEER_UUID);
-
-            if (uuid != null) {
-                try {
-                    peer = PeerManager.instance().findPeerByKey(uuid);
-                } catch (Throwable e) {
-                    peer = null; // weird situation reported by a strange bug.
-                }
-            }
-        }
-    }
-
-    private void loadPeerFromBundleData() {
-        if (peer != null) { // why?
-            return;
-        }
-
-        Bundle bundle = getArguments();
-
-        if (bundle != null && bundle.containsKey(Constants.EXTRA_PEER_UUID)) {
-            String uuid = bundle.getString(Constants.EXTRA_PEER_UUID);
-
-            if (uuid != null) {
-                try {
-                    peer = PeerManager.instance().findPeerByKey(uuid);
-                } catch (Throwable e) {
-                    peer = null; // weird situation reported by a strange bug.
-                }
-            }
-        }
     }
 
     private RadioButton initRadioButton(View v, int viewId, final byte fileType) {

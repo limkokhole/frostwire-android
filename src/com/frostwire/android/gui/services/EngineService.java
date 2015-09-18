@@ -38,7 +38,6 @@ import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.Librarian;
-import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.util.ImageLoader;
@@ -76,8 +75,6 @@ public class EngineService extends Service implements IEngineService {
         binder = new EngineServiceBinder();
 
         mediaPlayer = new ApolloMediaPlayer(this);
-
-        registerPreferencesChangeListener();
 
         state = STATE_DISCONNECTED;
     }
@@ -169,8 +166,6 @@ public class EngineService extends Service implements IEngineService {
 
         BTEngine.getInstance().resume();
 
-        PeerManager.instance().clear();
-
         state = STATE_STARTED;
         Log.v(TAG, "Engine started");
     }
@@ -183,14 +178,6 @@ public class EngineService extends Service implements IEngineService {
         state = STATE_STOPPING;
 
         BTEngine.getInstance().pause();
-
-        PeerManager.instance().clear();
-
-        try {
-            PeerManager.instance().stop();
-        } catch (Throwable e) {
-            LOG.error("Error stopping peer manager", e);
-        }
 
         state = disconnected ? STATE_DISCONNECTED : STATE_STOPPED;
         Log.v(TAG, "Engine stopped, state: " + state);
@@ -239,17 +226,6 @@ public class EngineService extends Service implements IEngineService {
     public void shutdown() {
         stopForeground(true);
         stopSelf();
-    }
-
-    private void registerPreferencesChangeListener() {
-        preferenceListener = new OnSharedPreferenceChangeListener() {
-            public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-                if (key.equals(Constants.PREF_KEY_GUI_NICKNAME)) {
-                    PeerManager.instance().clear();
-                }
-            }
-        };
-        ConfigurationManager.instance().registerOnPreferenceChange(preferenceListener);
     }
 
     private static long[] buildVenezuelanVibe() {

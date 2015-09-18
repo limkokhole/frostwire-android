@@ -39,7 +39,6 @@ import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.LocalSearchEngine;
 import com.frostwire.android.gui.NetworkManager;
-import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.SearchEngine;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
@@ -321,7 +320,6 @@ public class PreferencesActivity extends PreferenceActivity {
                     }
                 });
 
-                PeerManager.instance().start();
                 return null;
             }
 

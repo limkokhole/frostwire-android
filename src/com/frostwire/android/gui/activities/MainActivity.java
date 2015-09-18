@@ -43,7 +43,6 @@ import com.andrew.apollo.utils.MusicUtils.ServiceToken;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
-import com.frostwire.android.gui.PeerManager;
 import com.frostwire.android.gui.SoftwareUpdater;
 import com.frostwire.android.gui.SoftwareUpdater.ConfigurationUpdateListener;
 import com.frostwire.android.gui.activities.internal.MainController;
@@ -556,8 +555,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         transfers = (TransfersFragment) getFragmentManager().findFragmentById(R.id.activity_main_fragment_transfers);
 
         hideFragments(getFragmentManager().beginTransaction()).commit();
-
-        library.setPeer(PeerManager.instance().getLocalPeer());
     }
 
     private FragmentTransaction hideFragments(FragmentTransaction ts) {
