@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011, 2012, FrostWire(TM). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -18,11 +18,9 @@
 
 package com.frostwire.frostclick;
 
-import com.frostwire.util.Digests;
-import org.apache.commons.io.FilenameUtils;
-
 import com.frostwire.licences.License;
 import com.frostwire.search.torrent.TorrentSearchResult;
+import org.apache.commons.io.FilenameUtils;
 
 /**
  * @author gubatron
@@ -76,6 +74,11 @@ public class TorrentPromotionSearchResult implements TorrentSearchResult {
     }
 
     @Override
+    public String getReferrerUrl() {
+        return slide.url;
+    }
+
+    @Override
     public String getSource() {
         return FROSTCLICK_VENDOR;
     }
@@ -98,12 +101,8 @@ public class TorrentPromotionSearchResult implements TorrentSearchResult {
     @Override
     public int uid() {
         if (uid == -1) {
-            StringBuilder key = new StringBuilder();
-            key.append(getDisplayName());
-            key.append(getDetailsUrl());
-            key.append(getSource());
-            key.append(getHash());
-            uid = Digests.fnvhash32(key.toString().getBytes());
+            String key = getDisplayName() + getDetailsUrl() + getSource() + getHash();
+            uid = key.hashCode();
         }
         return uid;
     }
