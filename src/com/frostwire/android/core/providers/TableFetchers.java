@@ -247,7 +247,6 @@ public final class TableFetchers {
             int size = cur.getInt(sizeCol);
             long dateAdded = cur.getLong(dateAddedCol);
             long dateModified = cur.getLong(dateModifiedCol);
-
             return new FileDescriptor(Integer.valueOf(id), null, title, null, null, path, Constants.FILE_TYPE_DOCUMENTS, mime, size, dateAdded, dateModified, true);
         }
 
@@ -280,19 +279,32 @@ public final class TableFetchers {
 
     public static final class DocumentsTableFetcher extends AbstractFilesTableFetcher {
 
+        final static String extensionsWhereSubClause = getExtsWhereSubClause();
+
+        private static String getExtsWhereSubClause() {
+            final String[] exts = new String[]{"jpg", "jpeg", "gif", "backup", "ticr", "mp4", "js", "dat", "bak", "png", "mrpr", "webm", "idx", "apnx", "db", "phl", "asc", "torrent", "xlog", "3gp", "alrbackup", "bin", "gz", "db-journal"};
+            StringBuilder sb = new StringBuilder();
+            for (String ext : exts) {
+                sb.append(FileColumns.DATA + " NOT LIKE '%."+ext+"' AND ");
+            }
+            return sb.toString();
+        }
+
         @Override
         public String where() {
-            return FileColumns.DATA + " NOT LIKE ? AND " +
+            String where = FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.DATA + " NOT LIKE ? AND " +
                     FileColumns.DATA + " NOT LIKE ? AND " +
+                    extensionsWhereSubClause +
                     FileColumns.MEDIA_TYPE + " = " + FileColumns.MEDIA_TYPE_NONE + " AND " +
-                    FileColumns.SIZE + " > 0";
+                    FileColumns.SIZE + " > 0 AND " + FileColumns.SIZE + " != 4096";
+            return where;
         }
 
         @Override
         public String[] whereArgs() {
-            return new String[]{"%/cache/%", "%/.%", "%/libtorrent/%", "%.torrent"};
+            return new String[]{"%cache%", "%/.%", "%/libtorrent/%", "%com.google.%"};
         }
     }
 
