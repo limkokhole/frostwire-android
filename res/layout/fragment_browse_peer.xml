@@ -47,11 +47,11 @@
             style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
-            android:id="@+id/fragment_browse_peer_radio_applications"
+            android:id="@+id/fragment_browse_peer_radio_documents"
             style="@style/BrowseFileTypeButton"/>
 
         <RadioButton
-            android:id="@+id/fragment_browse_peer_radio_documents"
+            android:id="@+id/fragment_browse_peer_radio_torrents"
             style="@style/BrowseFileTypeButton"/>
     </RadioGroup>
 

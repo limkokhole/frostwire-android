@@ -68,7 +68,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     private RadioButton buttonRingtones;
     private RadioButton buttonVideos;
     private RadioButton buttonPictures;
-    private RadioButton buttonApplications;
+    private RadioButton buttonTorrents;
     private RadioButton buttonDocuments;
 
     private BrowsePeerSearchBarView filesBar;
@@ -177,7 +177,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     @Override
     protected void initComponents(View v) {
-        buttonApplications = initRadioButton(v, R.id.fragment_browse_peer_radio_applications, Constants.FILE_TYPE_TORRENTS);
+        buttonTorrents = initRadioButton(v, R.id.fragment_browse_peer_radio_torrents, Constants.FILE_TYPE_TORRENTS);
         buttonDocuments = initRadioButton(v, R.id.fragment_browse_peer_radio_documents, Constants.FILE_TYPE_DOCUMENTS);
         buttonPictures = initRadioButton(v, R.id.fragment_browse_peer_radio_pictures, Constants.FILE_TYPE_PICTURES);
         buttonVideos = initRadioButton(v, R.id.fragment_browse_peer_radio_videos, Constants.FILE_TYPE_VIDEOS);
