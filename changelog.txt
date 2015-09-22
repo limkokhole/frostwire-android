@@ -2,7 +2,8 @@ FrostWire 1.6.4 - SEPTEMBER/22/2015
  - New http engine based on okhttp, uses pooled connections, less threads, less memory.
  - Fixes KAT search.
  - Fixes BitSnoop search.
- - Browsing document files now reveals all saved .apk and .torrent files.
+ - Browse and manage your .torrent files.
+ - Browsing document files now reveals all saved .apk files.
  - Multiple crash fixes on audio player.
  - No more annoying yellow notification messages when removing tracks.
  - UX: My files won't forget your search filter if you overscroll for a refresh.
