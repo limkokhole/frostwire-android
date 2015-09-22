@@ -208,7 +208,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             @Override
             public void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
                 long now = SystemClock.elapsedRealtime();
-                if (clampedY && (now - lastAdapterRefresh) > 5000) {
+                if (scrollY < 0 && clampedY && (now - lastAdapterRefresh) > 5000) {
                     refreshSelection();
                 }
             }
