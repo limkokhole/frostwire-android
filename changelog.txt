@@ -4,6 +4,7 @@ FrostWire 1.6.4 - SEPTEMBER/21/2015
  - Fixes BitSnoop search.
  - Browsing document files now reveals all saved .apk and .torrent files.
  - Multiple crash fixes on audio player.
+ - No more annoying yellow notification messages when removing tracks.
 
 FrostWire 1.6.3 - SEPTEMBER/06/2015
  - Upgraded Picasso library for image caching.
