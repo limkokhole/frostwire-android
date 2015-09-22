@@ -287,7 +287,6 @@ public final class UIUtils {
                 }
                 i.setDataAndType(Uri.fromFile(new File(filePath)), mime);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(i);
 
                 if (mime != null && mime.contains("video")) {
                     if (MusicUtils.isPlaying()) {
@@ -295,6 +294,8 @@ public final class UIUtils {
                     }
                     UXStats.instance().log(UXAction.LIBRARY_VIDEO_PLAY);
                 }
+
+                context.startActivity(i);
             }
         } catch (Throwable e) {
             UIUtils.showShortMessage(context, R.string.cant_open_file);

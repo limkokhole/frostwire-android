@@ -83,7 +83,7 @@ public class MenuAdapter extends BaseAdapter {
         return items.size();
     }
 
-    public Object getItem(int position) {
+    public MenuAction getItem(int position) {
         return items.get(position);
     }
 
@@ -93,5 +93,11 @@ public class MenuAdapter extends BaseAdapter {
 
     public String getTitle() {
         return title;
+    }
+
+    public void removeItem(int position) {
+        if (items != null && !items.isEmpty() && position >= 0 && position < items.size()) {
+            items.remove(position);
+        }
     }
 }

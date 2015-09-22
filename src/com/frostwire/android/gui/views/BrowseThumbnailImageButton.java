@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2013, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,7 +29,7 @@ import android.widget.ImageButton;
  * @author marcelinkaaa
  */
 public class BrowseThumbnailImageButton extends ImageButton {
-    private MediaPlaybackOverlay overlay;
+    private final MediaPlaybackOverlay overlay;
 
     public BrowseThumbnailImageButton(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -40,10 +40,11 @@ public class BrowseThumbnailImageButton extends ImageButton {
         overlay.setOverlayState(state);
     }
 
-    @SuppressWarnings("NullableProblems")
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        overlay.drawOverlay(canvas);
+        if (canvas != null) {
+            super.onDraw(canvas);
+            overlay.drawOverlay(canvas);
+        }
     }
 }

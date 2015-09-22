@@ -282,7 +282,7 @@ public final class TableFetchers {
         final static String extensionsWhereSubClause = getExtsWhereSubClause();
 
         private static String getExtsWhereSubClause() {
-            final String[] exts = new String[]{"jpg", "jpeg", "gif", "backup", "ticr", "mp4", "js", "dat", "bak", "png", "mrpr", "webm", "idx", "apnx", "db", "phl", "asc", "torrent", "xlog", "3gp", "alrbackup", "bin", "gz", "db-journal"};
+            final String[] exts = new String[]{"jpg", "jpeg", "gif", "backup", "ticr", "aac", "mp3" , "mp4", "js", "dat", "bak", "png", "mrpr", "webm", "idx", "apnx", "db", "phl", "asc", "torrent", "xlog", "3gp", "alrbackup", "bin", "gz", "db-journal"};
             StringBuilder sb = new StringBuilder();
             for (String ext : exts) {
                 sb.append(FileColumns.DATA + " NOT LIKE '%."+ext+"' AND ");

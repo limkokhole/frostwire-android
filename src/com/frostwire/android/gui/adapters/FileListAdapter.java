@@ -40,6 +40,7 @@ import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
+import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
@@ -65,11 +66,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     public static final int FILE_LIST_FILTER_SHOW_ALL = 0;
     public static final int FILE_LIST_FILTER_SHOW_SHARED = 1;
     public static final int FILE_LIST_FILTER_SHOW_UNSHARED = 2;
-
-    private FileListFilter fileListFilter;
+    private final FileListFilter fileListFilter;
 
     public FileListAdapter(Context context, List<FileDescriptor> files, byte fileType) {
-        super(context, getViewItemId(fileType), convertFiles(files));
+        super(context, getViewItemId(fileType), convertFiles(files, fileType));
 
         setShowMenuOnClick(true);
 
@@ -158,12 +158,13 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     protected void onLocalPlay() {
     }
 
-    private void localPlay(FileDescriptor fd) {
+    private void localPlay(FileDescriptor fd, View view) {
         if (fd == null) {
             return;
         }
 
         onLocalPlay();
+        Context ctx = getContext();
 
         if (fd.mime != null && fd.mime.contains("audio")) {
             if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
@@ -173,13 +174,18 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                     UIUtils.playEphemeralPlaylist(fd);
                     UXStats.instance().log(UXAction.LIBRARY_PLAY_AUDIO_FROM_FILE);
                 } catch (RuntimeException re) {
-                    UIUtils.showShortMessage(getContext(), R.string.media_player_failed);
+                    UIUtils.showShortMessage(ctx, R.string.media_player_failed);
                 }
             }
             notifyDataSetChanged();
         } else {
             if (fd.filePath != null && fd.mime != null) {
-                UIUtils.openFile(getContext(), fd.filePath, fd.mime);
+                UIUtils.openFile(ctx, fd.filePath, fd.mime);
+            } else {
+                final MenuAdapter menuAdapter = getMenuAdapter(view);
+                menuAdapter.removeItem(0); //makes no sense to have open action if we don't know how to open
+                new MenuBuilder(menuAdapter).show();
+                UIUtils.showShortMessage(ctx, R.string.cant_open_file);
             }
         }
     }
@@ -349,7 +355,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         return list;
     }
 
-    private static ArrayList<FileDescriptorItem> convertFiles(Collection<FileDescriptor> fds) {
+    private static ArrayList<FileDescriptorItem> convertFiles(Collection<FileDescriptor> fds, byte fileType) {
         if (fds == null) {
             return new ArrayList<FileDescriptorItem>();
         }
@@ -357,12 +363,21 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         ArrayList<FileDescriptorItem> list = new ArrayList<FileDescriptorItem>(fds.size());
 
         for (FileDescriptor fd : fds) {
+            if (isDocumentWithoutExtension(fileType, fd)) continue;
+
             FileDescriptorItem item = new FileDescriptorItem();
             item.fd = fd;
             list.add(item);
         }
 
         return list;
+    }
+
+    private static boolean isDocumentWithoutExtension(byte fileType, FileDescriptor fd) {
+        if (fileType == Constants.FILE_TYPE_DOCUMENTS && StringUtils.isNullOrEmpty(FilenameUtils.getExtension(fd.filePath))) {
+            return true;
+        }
+        return false;
     }
 
     public void deleteItem(FileDescriptor fd) {
@@ -491,7 +506,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 return;
             }
 
-            localPlay(fd);
+            localPlay(fd, v);
         }
     }
 

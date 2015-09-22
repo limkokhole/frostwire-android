@@ -309,7 +309,7 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
 
     /**
      * So that results can be filtered. This discriminator should define which fields of T are the ones eligible for filtering.
-     * @param discriminator
+     * @param filter
      */
     public void setAdapterFilter(ListAdapterFilter<T> filter) {
         this.filter = filter;
@@ -330,16 +330,6 @@ public abstract class AbstractListAdapter<T> extends BaseAdapter implements Filt
 
     public void setShowMenuOnClick(boolean showMenuOnClick) {
         this.showMenuOnClick = showMenuOnClick;
-    }
-
-    public void dismissDialogs() {
-        for (Dialog dialog : dialogs) {
-            try {
-                dialog.dismiss();
-            } catch (Throwable e) {
-                Log.w(TAG, "Error dismissing dialog", e);
-            }
-        }
     }
 
     /**
