@@ -143,6 +143,7 @@ public final class Constants {
     public static final byte FILE_TYPE_TORRENTS = 0x06;
 
     public static final String MIME_TYPE_ANDROID_PACKAGE_ARCHIVE = "application/vnd.android.package-archive";
+    public static final String MIME_TYPE_BITTORRENT = "application/x-bittorrent";
 
     /**
      * URL where FrostWire checks for software updates

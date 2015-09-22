@@ -282,9 +282,6 @@ public final class UIUtils {
         try {
             if (filePath != null && !openAudioInternal(filePath)) {
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                if (filePath.endsWith(".apk")) {
-                    mime = Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE;
-                }
                 i.setDataAndType(Uri.fromFile(new File(filePath)), mime);
                 i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 

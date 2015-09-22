@@ -118,7 +118,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         List<FileDescriptor> checked = convertItems(getChecked());
-        boolean canOpenFile = fd.mime != null && (fd.mime.contains("audio") || fd.filePath != null);
+        tryFixingNullMimeType(fd);
+        boolean canOpenFile = fd.mime != null && (fd.mime.contains("audio") || fd.mime.contains("bittorrent") || fd.filePath != null);
         int numChecked = checked.size();
 
         boolean showSingleOptions = showSingleOptions(checked, fd);
@@ -169,6 +170,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         onLocalPlay();
         Context ctx = getContext();
 
+        tryFixingNullMimeType(fd);
+
         if (fd.mime != null && fd.mime.contains("audio")) {
             if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
                 Engine.instance().getMediaPlayer().stop();
@@ -189,6 +192,15 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
                 new MenuBuilder(getMenuAdapter(view)).show();
                 UIUtils.showShortMessage(ctx, R.string.cant_open_file);
             }
+        }
+    }
+
+    private void tryFixingNullMimeType(FileDescriptor fd) {
+        if (fd.filePath.endsWith(".apk")) {
+            fd.mime = Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE;
+        }
+        if (fd.filePath.endsWith(".torrent")) {
+            fd.mime = Constants.MIME_TYPE_BITTORRENT;
         }
     }
 
