@@ -40,8 +40,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import static com.frostwire.util.Digests.sha1;
-
 /**
  * @author gubatron
  * @author aldenml
@@ -339,7 +337,7 @@ public final class YouTubeDownload implements DownloadTransfer {
 
         if (completeFile.getAbsoluteFile().exists()) {
             Librarian.instance().scan(getSavePath().getAbsoluteFile());
-            String sha1 = sha1(completeFile);
+            String sha1 = Digests.sha1(completeFile);
             Engine.instance().notifyDownloadFinished(getDisplayName(), completeFile, sha1);
         } else {
             Engine.instance().notifyDownloadFinished(getDisplayName(), getSavePath());

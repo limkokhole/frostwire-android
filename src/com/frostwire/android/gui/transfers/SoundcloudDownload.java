@@ -36,8 +36,6 @@ import com.frostwire.mp3.Mp3File;
 import com.frostwire.search.soundcloud.SoundcloudSearchResult;
 import com.frostwire.transfers.TransferItem;
 
-import static com.frostwire.util.Digests.sha1;
-
 /**
  * @author gubatron
  * @author aldenml
@@ -163,7 +161,7 @@ public class SoundcloudDownload extends TemporaryDownloadTransfer<SoundcloudSear
                         moveFile(download.getSavePath(), Constants.FILE_TYPE_AUDIO);
                         scanFinalFile();
                         File savedFile = getSavePath(); //the update path after the file was moved.
-                        String sha1 = sha1(savedFile);
+                        String sha1 = Digests.sha1(savedFile);
                         Engine.instance().notifyDownloadFinished(getDisplayName(), savedFile, sha1);
                     }
                 });
