@@ -57,13 +57,9 @@ import java.util.Set;
  * @author aldenml
  */
 public class BrowsePeerFragment extends AbstractFragment implements LoaderCallbacks<Object>, MainFragment {
-
     private static final Logger LOG = Logger.getLogger(BrowsePeerFragment.class);
-
-    private static final int LOADER_FINGER_ID = 0;
-    private static final int LOADER_FILES_ID = 1;
+    private static final int LOADER_FILES_ID = 0;
     private final BroadcastReceiver broadcastReceiver;
-    private RadioButton buttonAudio;
     private BrowsePeerSearchBarView filesBar;
     private com.frostwire.android.gui.views.ListView list;
     private FileListAdapter adapter;
@@ -77,7 +73,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     public BrowsePeerFragment() {
         super(R.layout.fragment_browse_peer);
         broadcastReceiver = new LocalBroadcastReceiver();
-
         this.peer = new Peer();
     }
 
@@ -90,9 +85,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
-        if (id == LOADER_FINGER_ID) {
-            return createLoaderFinger();
-        } else if (id == LOADER_FILES_ID) {
+        if (id == LOADER_FILES_ID) {
             return createLoaderFiles(args.getByte("fileType"));
         }
         return null;
@@ -105,14 +98,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             return;
         }
 
-        if (loader.getId() == LOADER_FINGER_ID) {
-            boolean firstCheck = finger == null;
-            finger = (Finger) data;
-
-            if (firstCheck) {
-                checkNoEmptyButton();
-            }
-        } else if (loader.getId() == LOADER_FILES_ID) {
+        if (loader.getId() == LOADER_FILES_ID) {
             updateFiles((Object[]) data);
         }
 
@@ -127,8 +113,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
     public void onResume() {
         super.onResume();
         initBroadcastReceiver();
-        getLoaderManager().destroyLoader(LOADER_FINGER_ID);
-        getLoaderManager().restartLoader(LOADER_FINGER_ID, null, this);
 
         if (adapter != null) {
             restorePreviouslyChecked();
@@ -174,13 +158,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
     @Override
     protected void initComponents(View v) {
-        initRadioButton(v, R.id.fragment_browse_peer_radio_torrents, Constants.FILE_TYPE_TORRENTS);
-        initRadioButton(v, R.id.fragment_browse_peer_radio_documents, Constants.FILE_TYPE_DOCUMENTS);
-        initRadioButton(v, R.id.fragment_browse_peer_radio_pictures, Constants.FILE_TYPE_PICTURES);
-        initRadioButton(v, R.id.fragment_browse_peer_radio_videos, Constants.FILE_TYPE_VIDEOS);
-        initRadioButton(v, R.id.fragment_browse_peer_radio_ringtones, Constants.FILE_TYPE_RINGTONES);
-        buttonAudio = initRadioButton(v, R.id.fragment_browse_peer_radio_audio, Constants.FILE_TYPE_AUDIO);
-
         filesBar = findView(v, R.id.fragment_browse_peer_files_bar);
         filesBar.setOnActionListener(new OnActionListener() {
             public void onCheckAll(View v, boolean isChecked) {
@@ -210,6 +187,13 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 }
             }
         });
+
+        initRadioButton(v, R.id.fragment_browse_peer_radio_torrents, Constants.FILE_TYPE_TORRENTS);
+        initRadioButton(v, R.id.fragment_browse_peer_radio_documents, Constants.FILE_TYPE_DOCUMENTS);
+        initRadioButton(v, R.id.fragment_browse_peer_radio_pictures, Constants.FILE_TYPE_PICTURES);
+        initRadioButton(v, R.id.fragment_browse_peer_radio_videos, Constants.FILE_TYPE_VIDEOS);
+        initRadioButton(v, R.id.fragment_browse_peer_radio_ringtones, Constants.FILE_TYPE_RINGTONES);
+        initRadioButton(v, R.id.fragment_browse_peer_radio_audio, Constants.FILE_TYPE_AUDIO);
     }
 
     private RadioButton initRadioButton(View v, int viewId, final byte fileType) {
@@ -238,6 +222,8 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 fileTypeRadioButtonSelectorFactory.updateButtonBackground(button);
             }
         });
+
+        button.setChecked(fileType == Constants.FILE_TYPE_AUDIO);
         return button;
     }
 
@@ -252,6 +238,10 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         filesBar.clearCheckAll();
         filesBar.clearSearch();
 
+        reloadFiles(fileType);
+    }
+
+    private void reloadFiles(byte fileType) {
         getLoaderManager().destroyLoader(LOADER_FILES_ID);
         Bundle bundle = new Bundle();
         bundle.putByte("fileType", fileType);
@@ -273,22 +263,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 previouslyChecked = null;
             }
         }
-    }
-
-    private Loader<Object> createLoaderFinger() {
-        AsyncTaskLoader<Object> loader = new AsyncTaskLoader<Object>(getActivity()) {
-            @Override
-            public Object loadInBackground() {
-                try {
-                    return peer.finger();
-                } catch (Throwable e) {
-                    LOG.error("Error performing finger", e);
-                }
-                return null;
-            }
-        };
-        loader.forceLoad();
-        return loader;
     }
 
     private Loader<Object> createLoaderFiles(final byte fileType) {
@@ -351,10 +325,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
             title.setText(fileTypeStr);
             total.setText("(" + String.valueOf(numTotal) + ")");
-
-            if (fileType == Constants.FILE_TYPE_AUDIO) {
-                buttonAudio.setChecked(true);
-            }
         }
 
         if (adapter == null) {
@@ -415,10 +385,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         }
     }
 
-    private void checkNoEmptyButton() {
-        buttonAudio.setChecked(true);
-    }
-
     private void saveListViewVisiblePosition(byte fileType) {
         int firstVisiblePosition = list.getFirstVisiblePosition();
         ConfigurationManager.instance().setInt(Constants.BROWSE_PEER_FRAGMENT_LISTVIEW_FIRST_VISIBLE_POSITION + fileType, firstVisiblePosition);
@@ -442,12 +408,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                     ) {
                 if (adapter != null) {
                     adapter.notifyDataSetChanged();
-                }
-            } else if (intent.getAction().equals(Constants.ACTION_REFRESH_FINGER)) {
-                try {
-                    getLoaderManager().restartLoader(LOADER_FINGER_ID, null, BrowsePeerFragment.this);
-                } catch (Throwable t) {
-                    LOG.error("LocalBroadcastReceiver can't restart loader on ACTION_REFRESH_FINGER, fragment not attached?", t);
                 }
             }
         }

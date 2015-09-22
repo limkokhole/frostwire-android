@@ -22,7 +22,6 @@ import android.app.Application;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -93,7 +92,7 @@ public final class Librarian {
 
     /**
      * @param fileType
-     * @return
+     * @return int
      */
     public int getNumFiles(byte fileType) {
         TableFetcher fetcher = TableFetchers.getFetcher(fileType);
@@ -104,7 +103,7 @@ public final class Librarian {
 
         Cursor c = null;
 
-        int result = 0;
+        int result;
         int numFiles = 0;
 
         try {
@@ -170,7 +169,7 @@ public final class Librarian {
     }
 
     public void deleteFiles(byte fileType, Collection<FileDescriptor> fds, final Context context) {
-        List<Integer> ids = new ArrayList<Integer>(fds.size());
+        List<Integer> ids = new ArrayList<>(fds.size());
         final int audioMediaType = MediaType.getAudioMediaType().getId();
         for (FileDescriptor fd : fds) {
             if (new File(fd.filePath).delete()) {
@@ -255,7 +254,7 @@ public final class Librarian {
                 c.lastTimeCachedOnDisk = 0;
             }
         }
-        broadcastRefreshFinger();
+        //broadcastRefreshFinger();
     }
 
     /**
@@ -263,11 +262,6 @@ public final class Librarian {
      */
     void invalidateCountCache(byte fileType) {
         cache[fileType].lastTimeCachedOnDisk = 0;
-        broadcastRefreshFinger();
-    }
-
-    private void broadcastRefreshFinger() {
-        context.sendBroadcast(new Intent(Constants.ACTION_REFRESH_FINGER));
     }
 
     private void syncMediaStoreSupport() {
