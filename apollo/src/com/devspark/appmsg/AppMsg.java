@@ -18,13 +18,10 @@ package com.devspark.appmsg;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.widget.FrameLayout;
 import android.widget.TextView;
-
 import com.frostwire.android.R;
 
 /**
@@ -59,12 +56,6 @@ public class AppMsg {
 	 * Show the text notification for a short period of time with a positive style.
 	 */
 	public static final Style STYLE_CONFIRM = new Style(LENGTH_SHORT, R.color.confirm);
-	
-	/**
-	 * Show the text notification for a short period of time with a neutral style.
-	 */
-	public static final Style STYLE_INFO = new Style(LENGTH_SHORT, R.color.info);
-    
     private final Context mContext;
     private int mDuration = LENGTH_SHORT;
     private View mView;
@@ -90,10 +81,6 @@ public class AppMsg {
 	 *            {@link android.app.Activity} object.
 	 * @param text
 	 *            The text to show. Can be formatted text.
-	 * @param duration
-	 *            How long to display the message. Either {@link #LENGTH_SHORT}
-	 *            or {@link #LENGTH_LONG}
-	 * 
 	 */
     public static AppMsg makeText(Context context, CharSequence text, Style style) {
     	AppMsg result = new AppMsg(context);
@@ -112,28 +99,6 @@ public class AppMsg {
         return result;
     }
 
-	/**
-	 * Make a {@link AppMsg} that just contains a text view with the text from a
-	 * resource.
-	 * 
-	 * @param context
-	 *            The context to use. Usually your
-	 *            {@link android.app.Activity} object.
-	 * @param resId
-	 *            The resource id of the string resource to use. Can be
-	 *            formatted text.
-	 * @param duration
-	 *            How long to display the message. Either {@link #LENGTH_SHORT}
-	 *            or {@link #LENGTH_LONG}
-	 * 
-	 * @throws Resources.NotFoundException
-	 *             if the resource can't be found.
-	 */
-	public static AppMsg makeText(Activity context, int resId, Style style)
-			throws Resources.NotFoundException {
-		return makeText(context, context.getResources().getText(resId), style);
-	}
-    
     /**
      * Show the view for the specified duration.
      */
@@ -157,14 +122,6 @@ public class AppMsg {
     public void cancel() {
     	MsgManager.getInstance().clearMsg(this);
     }
-    
-    /**
-	 * Cancels all queued {@link AppMsg}s. If there is a {@link AppMsg}
-	 * displayed currently, it will be the last one displayed.
-	 */
-	public static void cancelAll() {
-		MsgManager.getInstance().clearAllMsg();
-	}
     
     /**
      * Return the activity.
@@ -241,27 +198,6 @@ public class AppMsg {
             mLayoutParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         }
         return mLayoutParams;
-    }
-
-    /**
-     * Sets the layout parameters which will be used to display the crouton.
-     * @param layoutParams The layout parameters to use.
-     * @return <code>this</code>, for chaining.
-     */
-    public AppMsg setLayoutParams(LayoutParams layoutParams) {
-        mLayoutParams = layoutParams;
-        return this;
-    }
-
-    /**
-     * Constructs and sets the layout parameters to have some gravity.
-     * @param gravity the gravity of the Crouton
-     * @return <code>this</code>, for chaining.
-     * @see android.view.Gravity
-     */
-    public AppMsg setLayoutGravity(int gravity) {
-        mLayoutParams = new FrameLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, gravity);
-        return this;
     }
 
 	/**

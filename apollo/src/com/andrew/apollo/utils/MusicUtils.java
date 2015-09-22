@@ -40,7 +40,6 @@ import com.andrew.apollo.provider.FavoritesStore.FavoriteColumns;
 import com.andrew.apollo.provider.RecentStore;
 import com.devspark.appmsg.AppMsg;
 import com.frostwire.android.R;
-import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.logging.Logger;
 
 import java.io.File;
@@ -124,7 +123,7 @@ public final class MusicUtils {
         /**
          * Constructor of <code>ServiceBinder</code>
          *
-         * @param context The {@link ServiceConnection} to use
+         * @param callback The {@link ServiceConnection} to use
          */
         public ServiceBinder(final ServiceConnection callback) {
             mCallback = callback;
@@ -212,10 +211,10 @@ public final class MusicUtils {
      *
      * @NOTE The AIDL isn't used here in order to properly use the previous
      *       action. When the user is shuffling, because {@link
-     *       MusicPlaybackService.#openCurrentAndNext()} is used, the user won't
+     *       MusicPlaybackService#openCurrentAndNext()} is used, the user won't
      *       be able to travel to the previously skipped track. To remedy this,
-     *       {@link MusicPlaybackService.#openCurrent()} is called in {@link
-     *       MusicPlaybackService.#prev()}. {@code #startService(Intent intent)}
+     *       {@link MusicPlaybackService#openCurrent()} is called in {@link
+     *       MusicPlaybackService#prev()}. {@code #startService(Intent intent)}
      *       is called here to specifically invoke the onStartCommand used by
      *       {@link MusicPlaybackService}, which states if the current position
      *       less than 2000 ms, start the track over, otherwise move to the
@@ -711,10 +710,10 @@ public final class MusicUtils {
      */
     public static final long getIdForPlaylist(final Context context, final String name) {
         Cursor cursor = context.getContentResolver().query(
-                MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, new String[] {
-                    BaseColumns._ID
-                }, PlaylistsColumns.NAME + "=?", new String[] {
-                    name
+                MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI, new String[]{
+                        BaseColumns._ID
+                }, PlaylistsColumns.NAME + "=?", new String[]{
+                        name
                 }, PlaylistsColumns.NAME);
         int id = -1;
         if (cursor != null) {
@@ -936,21 +935,36 @@ public final class MusicUtils {
      * @param context The {@link Context} to use.
      * @param id The id of the song to remove.
      * @param playlistId The id of the playlist being removed from.
+     * @param showNotification if true shows a notification at the top.
      */
     public static void removeFromPlaylist(final Context context, final long id,
-            final long playlistId) {
+            final long playlistId, boolean showNotification) {
         final Uri uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId);
         final ContentResolver resolver = context.getContentResolver();
-        resolver.delete(uri, Playlists.Members.AUDIO_ID + " = ? ", new String[] {
-            Long.toString(id)
+        resolver.delete(uri, Playlists.Members.AUDIO_ID + " = ? ", new String[]{
+                Long.toString(id)
         });
-        try {
-            final String message = context.getResources().getQuantityString(
-                    R.plurals.NNNtracksfromplaylist, 1, 1);
-            AppMsg.makeText((Activity) context, message, AppMsg.STYLE_CONFIRM).show();
-        } catch (Throwable t) {
-            // java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
+
+        if (showNotification) {
+            try {
+                final String message = context.getResources().getQuantityString(
+                        R.plurals.NNNtracksfromplaylist, 1, 1);
+                AppMsg.makeText(context, message, AppMsg.STYLE_CONFIRM).show();
+            } catch (Throwable t) {
+                // java.lang.RuntimeException: Can't create handler inside thread that has not called Looper.prepare()
+            }
         }
+    }
+
+    /**
+     * Removes a single track from a given playlist
+     * @param context The {@link Context} to use.
+     * @param id The id of the song to remove.
+     * @param playlistId The id of the playlist being removed from.
+     */
+    public static void removeFromPlaylist(final Context context, final long id,
+                                          final long playlistId) {
+        removeFromPlaylist(context, id, playlistId, false);
     }
 
     /**
@@ -964,7 +978,7 @@ public final class MusicUtils {
         try {
             mService.enqueue(list, MusicPlaybackService.LAST);
             final String message = makeLabel(context, R.plurals.NNNtrackstoqueue, list.length);
-            AppMsg.makeText((Activity)context, message, AppMsg.STYLE_CONFIRM).show();
+            AppMsg.makeText((Activity) context, message, AppMsg.STYLE_CONFIRM).show();
         } catch (final RemoteException ignored) {
         }
     }
@@ -998,12 +1012,11 @@ public final class MusicUtils {
                 Settings.System.putString(resolver, Settings.System.RINGTONE, uri.toString());
                 final String message = context.getString(R.string.set_as_ringtone,
                         cursor.getString(2));
-                AppMsg.makeText((Activity)context, message, AppMsg.STYLE_CONFIRM).show();
+                AppMsg.makeText(context, message, AppMsg.STYLE_CONFIRM).show();
             }
         } finally {
             if (cursor != null) {
                 cursor.close();
-                cursor = null;
             }
         }
     }
@@ -1384,7 +1397,7 @@ public final class MusicUtils {
      * @param context The {@link Context} to use.
      * @param list The item(s) to delete.
      */
-    public static void deleteTracks(final Context context, final long[] list) {
+    public static void deleteTracks(final Context context, final long[] list, boolean showNotification) {
         if (list == null) {
             return;
         }
@@ -1444,15 +1457,23 @@ public final class MusicUtils {
             c.close();
         }
 
-        final String message = makeLabel(context, R.plurals.NNNtracksdeleted, list.length);
+        if (showNotification) {
+            try {
+                final String message = makeLabel(context, R.plurals.NNNtracksdeleted, list.length);
+                AppMsg.makeText(context, message, AppMsg.STYLE_CONFIRM).show();
+            } catch (Throwable e) {}
+        }
 
-        AppMsg.makeText((Activity)context, message, AppMsg.STYLE_CONFIRM).show();
         // We deleted a number of tracks, which could affect any number of
         // things
         // in the media content domain, so update everything.
         context.getContentResolver().notifyChange(Uri.parse("content://media"), null);
         // Notify the lists to update
         refresh();
+    }
+
+    public static void deleteTracks(final Context context, final long[] list) {
+        deleteTracks(context, list, false);
     }
 
     public static void playAllFromUserItemClick(final Context context,

@@ -83,12 +83,12 @@ public class MusicPlaybackService extends Service {
     public static final String QUEUE_CHANGED = "com.andrew.apollo.queuechanged";
 
     /**
-     * Indicates the repeat mode chaned
+     * Indicates the repeat mode changed
      */
     public static final String REPEATMODE_CHANGED = "com.andrew.apollo.repeatmodechanged";
 
     /**
-     * Indicates the shuffle mode chaned
+     * Indicates the shuffle mode changed
      */
     public static final String SHUFFLEMODE_CHANGED = "com.andrew.apollo.shufflemodechanged";
 
@@ -100,7 +100,7 @@ public class MusicPlaybackService extends Service {
     public static final String MUSIC_PACKAGE_NAME = "com.android.music";
 
     /**
-     * Called to indicate a general service commmand. Used in
+     * Called to indicate a general service command. Used in
      * {@link MediaButtonIntentReceiver}
      */
     public static final String SERVICECMD = "com.andrew.apollo.musicservicecommand";
@@ -160,11 +160,6 @@ public class MusicPlaybackService extends Service {
      */
     private static final String SHUTDOWN = "com.andrew.apollo.shutdown";
 
-    /**
-     * Called to update the remote control client
-     */
-    public static final String UPDATE_LOCKSCREEN = "com.andrew.apollo.updatelockscreen";
-
     public static final String CMDNAME = "command";
 
     public static final String CMDTOGGLEPAUSE = "togglepause";
@@ -178,8 +173,6 @@ public class MusicPlaybackService extends Service {
     public static final String CMDPREVIOUS = "previous";
 
     public static final String CMDNEXT = "next";
-
-    public static final String CMDNOTIF = "buttonId";
 
     private static final int IDCOLIDX = 0;
 
