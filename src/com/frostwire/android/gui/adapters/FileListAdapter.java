@@ -118,12 +118,15 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         List<FileDescriptor> checked = convertItems(getChecked());
+        boolean canOpenFile = fd.mime != null && (fd.mime.contains("audio") || fd.filePath != null);
         int numChecked = checked.size();
 
         boolean showSingleOptions = showSingleOptions(checked, fd);
 
         if (showSingleOptions) {
-            items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
+            if (canOpenFile) {
+                items.add(new OpenMenuAction(context, fd.filePath, fd.mime));
+            }
 
             if ((fd.fileType == Constants.FILE_TYPE_RINGTONES || fd.fileType == Constants.FILE_TYPE_AUDIO) && numChecked <= 1) {
                 items.add(new SetAsRingtoneMenuAction(context, fd));
@@ -182,9 +185,8 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             if (fd.filePath != null && fd.mime != null) {
                 UIUtils.openFile(ctx, fd.filePath, fd.mime);
             } else {
-                final MenuAdapter menuAdapter = getMenuAdapter(view);
-                menuAdapter.removeItem(0); //makes no sense to have open action if we don't know how to open
-                new MenuBuilder(menuAdapter).show();
+                // it will automatically remove the 'Open' entry.
+                new MenuBuilder(getMenuAdapter(view)).show();
                 UIUtils.showShortMessage(ctx, R.string.cant_open_file);
             }
         }
@@ -357,10 +359,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private static ArrayList<FileDescriptorItem> convertFiles(Collection<FileDescriptor> fds, byte fileType) {
         if (fds == null) {
-            return new ArrayList<FileDescriptorItem>();
+            return new ArrayList<>();
         }
 
-        ArrayList<FileDescriptorItem> list = new ArrayList<FileDescriptorItem>(fds.size());
+        ArrayList<FileDescriptorItem> list = new ArrayList<>(fds.size());
 
         for (FileDescriptor fd : fds) {
             if (isDocumentWithoutExtension(fileType, fd)) continue;
@@ -374,10 +376,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
 
     private static boolean isDocumentWithoutExtension(byte fileType, FileDescriptor fd) {
-        if (fileType == Constants.FILE_TYPE_DOCUMENTS && StringUtils.isNullOrEmpty(FilenameUtils.getExtension(fd.filePath))) {
-            return true;
-        }
-        return false;
+        return fileType == Constants.FILE_TYPE_DOCUMENTS && StringUtils.isNullOrEmpty(FilenameUtils.getExtension(fd.filePath));
     }
 
     public void deleteItem(FileDescriptor fd) {
@@ -425,9 +424,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         if (fd == null || fd.filePath == null) {
             return true;
         }
-
         File f = new File(fd.filePath);
-
         if (!f.exists()) {
             if (SystemUtils.isSecondaryExternalStorageMounted(f.getAbsoluteFile())) {
                 UIUtils.showShortMessage(getContext(), R.string.file_descriptor_sd_mounted);
@@ -436,7 +433,6 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
             } else {
                 UIUtils.showShortMessage(getContext(), R.string.file_descriptor_sd_unmounted);
             }
-
             return true;
         } else {
             return false;

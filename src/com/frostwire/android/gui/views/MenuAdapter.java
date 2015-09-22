@@ -18,18 +18,17 @@
 
 package com.frostwire.android.gui.views;
 
-import java.lang.ref.WeakReference;
-import java.util.List;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
-
 import com.frostwire.android.R;
 import com.frostwire.util.Ref;
+
+import java.lang.ref.WeakReference;
+import java.util.List;
 
 /**
  * @author gubatron
@@ -93,11 +92,5 @@ public class MenuAdapter extends BaseAdapter {
 
     public String getTitle() {
         return title;
-    }
-
-    public void removeItem(int position) {
-        if (items != null && !items.isEmpty() && position >= 0 && position < items.size()) {
-            items.remove(position);
-        }
     }
 }
