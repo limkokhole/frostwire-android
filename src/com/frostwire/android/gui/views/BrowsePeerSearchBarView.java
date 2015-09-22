@@ -129,6 +129,10 @@ public class BrowsePeerSearchBarView extends RelativeLayout {
         }
     }
 
+    public void setText(String text) {
+        inputSearch.setText(text);
+    }
+
     public interface OnActionListener {
 
         public void onCheckAll(View v, boolean isChecked);
