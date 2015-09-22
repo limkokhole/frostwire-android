@@ -40,7 +40,6 @@ import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
-import com.frostwire.util.StringUtils;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
@@ -60,16 +59,11 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private final byte fileType;
     private final ImageLoader thumbnailLoader;
-
     private final DownloadButtonClickListener downloadButtonClickListener;
-
-    public static final int FILE_LIST_FILTER_SHOW_ALL = 0;
-    public static final int FILE_LIST_FILTER_SHOW_SHARED = 1;
-    public static final int FILE_LIST_FILTER_SHOW_UNSHARED = 2;
     private final FileListFilter fileListFilter;
 
     public FileListAdapter(Context context, List<FileDescriptor> files, byte fileType) {
-        super(context, getViewItemId(fileType), convertFiles(files, fileType));
+        super(context, getViewItemId(fileType), convertFiles(files));
 
         setShowMenuOnClick(true);
 
@@ -118,7 +112,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         List<FileDescriptor> checked = convertItems(getChecked());
-        tryFixingNullMimeType(fd);
+        ensureCorrectMimeType(fd);
         boolean canOpenFile = fd.mime != null && (fd.mime.contains("audio") || fd.mime.contains("bittorrent") || fd.filePath != null);
         int numChecked = checked.size();
 
@@ -170,7 +164,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         onLocalPlay();
         Context ctx = getContext();
 
-        tryFixingNullMimeType(fd);
+        ensureCorrectMimeType(fd);
 
         if (fd.mime != null && fd.mime.contains("audio")) {
             if (fd.equals(Engine.instance().getMediaPlayer().getCurrentFD())) {
@@ -195,7 +189,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
     }
 
-    private void tryFixingNullMimeType(FileDescriptor fd) {
+    private void ensureCorrectMimeType(FileDescriptor fd) {
         if (fd.filePath.endsWith(".apk")) {
             fd.mime = Constants.MIME_TYPE_ANDROID_PACKAGE_ARCHIVE;
         }
@@ -357,10 +351,10 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
     private static ArrayList<FileDescriptor> convertItems(Collection<FileDescriptorItem> items) {
         if (items == null) {
-            return new ArrayList<FileDescriptor>();
+            return new ArrayList<>();
         }
 
-        ArrayList<FileDescriptor> list = new ArrayList<FileDescriptor>(items.size());
+        ArrayList<FileDescriptor> list = new ArrayList<>(items.size());
 
         for (FileDescriptorItem item : items) {
             list.add(item.fd);
@@ -369,7 +363,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         return list;
     }
 
-    private static ArrayList<FileDescriptorItem> convertFiles(Collection<FileDescriptor> fds, byte fileType) {
+    private static ArrayList<FileDescriptorItem> convertFiles(Collection<FileDescriptor> fds) {
         if (fds == null) {
             return new ArrayList<>();
         }
@@ -377,18 +371,12 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         ArrayList<FileDescriptorItem> list = new ArrayList<>(fds.size());
 
         for (FileDescriptor fd : fds) {
-            if (isDocumentWithoutExtension(fileType, fd)) continue;
-
             FileDescriptorItem item = new FileDescriptorItem();
             item.fd = fd;
             list.add(item);
         }
 
         return list;
-    }
-
-    private static boolean isDocumentWithoutExtension(byte fileType, FileDescriptor fd) {
-        return fileType == Constants.FILE_TYPE_DOCUMENTS && StringUtils.isNullOrEmpty(FilenameUtils.getExtension(fd.filePath));
     }
 
     public void deleteItem(FileDescriptor fd) {
@@ -398,7 +386,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
 
     private void checkSDStatus() {
-        Map<String, Boolean> sds = new HashMap<String, Boolean>();
+        Map<String, Boolean> sds = new HashMap<>();
 
         String privateSubpath = "Android" + File.separator + "data";
 
@@ -468,22 +456,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
 
     private static class FileListFilter implements ListAdapterFilter<FileDescriptorItem> {
-
-        private int visibleFiles;
-
-        public void filterBySharedState(int state) {
-            this.visibleFiles = state;
-        }
-
-        public int getCurrentSharedStateShown() {
-            return visibleFiles;
-        }
-
         public boolean accept(FileDescriptorItem obj, CharSequence constraint) {
-            if (visibleFiles != FILE_LIST_FILTER_SHOW_ALL && ((obj.fd.shared && visibleFiles == FILE_LIST_FILTER_SHOW_UNSHARED) || (!obj.fd.shared && visibleFiles == FILE_LIST_FILTER_SHOW_SHARED))) {
-                return false;
-            }
-
             String keywords = constraint.toString();
 
             if (keywords == null || keywords.length() == 0) {

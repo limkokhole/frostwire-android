@@ -37,6 +37,7 @@ import com.frostwire.android.core.providers.TableFetchers;
 import com.frostwire.android.gui.transfers.Transfers;
 import com.frostwire.android.util.SystemUtils;
 import com.frostwire.util.DirectoryUtils;
+import com.frostwire.util.StringUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -136,35 +137,22 @@ public final class Librarian {
 
     public String renameFile(FileDescriptor fd, String newFileName) {
         try {
-
             String filePath = fd.filePath;
-
             File oldFile = new File(filePath);
-
             String ext = FilenameUtils.getExtension(filePath);
-
             File newFile = new File(oldFile.getParentFile(), newFileName + '.' + ext);
-
             ContentResolver cr = context.getContentResolver();
-
             ContentValues values = new ContentValues();
-
             values.put(MediaColumns.DATA, newFile.getAbsolutePath());
             values.put(MediaColumns.DISPLAY_NAME, FilenameUtils.getBaseName(newFileName));
             values.put(MediaColumns.TITLE, FilenameUtils.getBaseName(newFileName));
-
             TableFetcher fetcher = TableFetchers.getFetcher(fd.fileType);
-
             cr.update(fetcher.getContentUri(), values, BaseColumns._ID + "=?", new String[]{String.valueOf(fd.id)});
-
             oldFile.renameTo(newFile);
-
             return newFile.getAbsolutePath();
-
         } catch (Throwable e) {
             Log.e(TAG, "Failed to rename file: " + fd, e);
         }
-
         return null;
     }
 
@@ -181,13 +169,14 @@ public final class Librarian {
         }
 
         try {
-            ContentResolver cr = context.getContentResolver();
-            TableFetcher fetcher = TableFetchers.getFetcher(fileType);
-            cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + buildSet(ids), null);
+            if (context != null) {
+                ContentResolver cr = context.getContentResolver();
+                TableFetcher fetcher = TableFetchers.getFetcher(fileType);
+                cr.delete(fetcher.getContentUri(), MediaColumns._ID + " IN " + buildSet(ids), null);
+            }
         } catch (Throwable e) {
             Log.e(TAG, "Failed to delete files from media store", e);
         }
-
         invalidateCountCache(fileType);
     }
 
@@ -295,7 +284,7 @@ public final class Librarian {
             int idCol = c.getColumnIndex(MediaColumns._ID);
             int pathCol = c.getColumnIndex(MediaColumns.DATA);
 
-            List<Integer> ids = new ArrayList<Integer>();
+            List<Integer> ids = new ArrayList<>();
 
             while (c.moveToNext()) {
                 int id = Integer.valueOf(c.getString(idCol));
@@ -330,13 +319,10 @@ public final class Librarian {
      * @return List<FileDescriptor>
      */
     private List<FileDescriptor> getFiles(int offset, int pageSize, TableFetcher fetcher, String where, String[] whereArgs) {
-        List<FileDescriptor> result = new ArrayList<FileDescriptor>();
-
+        List<FileDescriptor> result = new ArrayList<>();
         Cursor c = null;
         try {
-
             ContentResolver cr = context.getContentResolver();
-
             String[] columns = fetcher.getColumns();
             String sort = fetcher.getSortByExpression();
 
@@ -346,22 +332,18 @@ public final class Librarian {
             }
 
             c = cr.query(fetcher.getContentUri(), columns, where, whereArgs, sort);
-
             if (c == null || !c.moveToPosition(offset)) {
                 return result;
             }
 
             fetcher.prepare(c);
-
             int count = 1;
-
             do {
                 FileDescriptor fd = fetcher.fetch(c);
-
-                result.add(fd);
-
+                if (!isInvalidDocument(fd)) {
+                    result.add(fd);
+                }
             } while (c.moveToNext() && count++ < pageSize);
-
         } catch (Throwable e) {
             Log.e(TAG, "General failure getting files", e);
         } finally {
@@ -369,8 +351,15 @@ public final class Librarian {
                 c.close();
             }
         }
-
         return result;
+    }
+
+    /**
+     * @param fd
+     * @return true if file is catalogued as a Document and has no .extension.
+     */
+    public static boolean isInvalidDocument(FileDescriptor fd) {
+        return fd.fileType == Constants.FILE_TYPE_DOCUMENTS && StringUtils.isNullOrEmpty(FilenameUtils.getExtension(fd.filePath));
     }
 
     public List<FileDescriptor> getFiles(String filepath, boolean exactPathMatch) {
@@ -378,6 +367,7 @@ public final class Librarian {
     }
 
     /**
+     * @param fileType
      * @param filepath
      * @param exactPathMatch - set it to false and pass an incomplete filepath prefix to get files in a folder for example.
      * @return
@@ -385,7 +375,6 @@ public final class Librarian {
     public List<FileDescriptor> getFiles(byte fileType, String filepath, boolean exactPathMatch) {
         String where = MediaColumns.DATA + " LIKE ?";
         String[] whereArgs = new String[]{(exactPathMatch) ? filepath : "%" + filepath + "%"};
-
         List<FileDescriptor> fds = Librarian.instance().getFiles(fileType, where, whereArgs);
         return fds;
     }
@@ -434,7 +423,6 @@ public final class Librarian {
                 fileDescriptor.filePath = query.getString(pathColumn);
                 fileDescriptor.fileType = (byte) MediaType.getMediaTypeForExtension(FilenameUtils.getExtension(fileDescriptor.filePath)).getId();
             } catch (Throwable t) {
-
             }
         }
     }
@@ -495,9 +483,8 @@ public final class Librarian {
         }
 
         // try to save it.
-        if (fd == null) {
+        if (fd == null && uri != null) {
             fd = new FileDescriptor();
-
             if (uri.toString().startsWith("content://")) {
                 fd.id = Integer.valueOf(uri.getLastPathSegment());
                 updateFileDescriptor(uri, fd);
@@ -515,7 +502,6 @@ public final class Librarian {
                 }
             }
         }
-
         return fd;
     }
 
