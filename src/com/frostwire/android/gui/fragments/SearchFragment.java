@@ -383,8 +383,7 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
         if (tag.equals(NewTransferDialog.TAG) && which == AbstractDialog.BUTTON_POSITIVE) {
             if (Ref.alive(NewTransferDialog.srRef)) {
                 startDownload(this.getActivity(), NewTransferDialog.srRef.get(), getString(R.string.download_added_to_queue));
-                LocalSearchEngine.instance().markOpened(NewTransferDialog.srRef.get());
-                adapter.notifyDataSetChanged();
+                LocalSearchEngine.instance().markOpened(NewTransferDialog.srRef.get(), adapter);
             }
         }
     }

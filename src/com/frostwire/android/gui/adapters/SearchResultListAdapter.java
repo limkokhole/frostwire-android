@@ -50,6 +50,7 @@ import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,12 +71,9 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     public SearchResultListAdapter(Context context) {
         super(context, R.layout.view_bittorrent_search_result_list_item);
-
         this.linkListener = new OnLinkClickListener();
-        this.previewClickListener = new PreviewClickListener(context);
-
+        this.previewClickListener = new PreviewClickListener(context, this);
         this.fileType = NO_FILE_TYPE;
-
         this.thumbLoader = ImageLoader.getInstance(context);
     }
 
@@ -195,9 +193,9 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     public FilteredSearchResults filter(List<SearchResult> results) {
         FilteredSearchResults fsr = new FilteredSearchResults();
-        ArrayList<SearchResult> l = new ArrayList<SearchResult>();
+        ArrayList<SearchResult> l = new ArrayList<>();
         for (SearchResult sr : results) {
-            MediaType mt = null;
+            MediaType mt;
             mt = MediaType.getMediaTypeForExtension(FilenameUtils.getExtension(((FileSearchResult) sr).getFilename()));
 
             if (accept(sr, mt)) {
@@ -211,13 +209,9 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
 
     private boolean accept(SearchResult sr, MediaType mt) {
         if (sr instanceof FileSearchResult) {
-            if (mt == null) {
-                return false;
-            }
-            return mt.getId() == fileType;
-        } else {
-            return false;
+            return mt != null && mt.getId() == fileType;
         }
+        return false;
     }
 
     private int getFileTypeIconId() {
@@ -285,9 +279,11 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
     }
 
     private static final class PreviewClickListener extends ClickAdapter<Context> {
+        final WeakReference<SearchResultListAdapter> adapterRef;
 
-        public PreviewClickListener(Context ctx) {
+        public PreviewClickListener(Context ctx, SearchResultListAdapter adapter) {
             super(ctx);
+            adapterRef = Ref.weak(adapter);
         }
 
         @Override
@@ -295,6 +291,7 @@ public class SearchResultListAdapter extends AbstractListAdapter<SearchResult> {
             StreamableSearchResult sr = (StreamableSearchResult) v.getTag();
 
             if (sr != null) {
+                LocalSearchEngine.instance().markOpened(sr, (Ref.alive(adapterRef)) ? adapterRef.get() : null);
                 PreviewPlayerActivity.srRef = Ref.weak((FileSearchResult) sr);
                 Intent i = new Intent(ctx, PreviewPlayerActivity.class);
                 i.putExtra("displayName", sr.getDisplayName());

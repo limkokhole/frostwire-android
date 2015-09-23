@@ -19,6 +19,7 @@
 package com.frostwire.android.gui;
 
 import android.text.Html;
+import com.frostwire.android.gui.views.AbstractListAdapter;
 import com.frostwire.search.*;
 import com.frostwire.search.extratorrent.ExtratorrentSearchResult;
 import com.frostwire.search.kat.KATSearchResult;
@@ -126,8 +127,11 @@ public final class LocalSearchEngine {
         return CrawlPagedWebSearchPerformer.getCacheSize();
     }
 
-    public void markOpened(SearchResult sr) {
+    public void markOpened(SearchResult sr, AbstractListAdapter adapter) {
         opened.add(sr.uid());
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     public boolean hasBeenOpened(SearchResult sr) {
