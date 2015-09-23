@@ -60,7 +60,7 @@ public class BrowsePeerSearchBarView extends RelativeLayout {
             }
 
             public void onClear(View v) {
-                onFilter("");
+                clearSearch();
             }
         };
     }
@@ -83,6 +83,7 @@ public class BrowsePeerSearchBarView extends RelativeLayout {
         inputSearch.setOnActionListener(null);
         inputSearch.setText("");
         inputSearch.setOnActionListener(inputSearchListener);
+        listener.onClear();
     }
     
     public String getText() {
@@ -135,8 +136,10 @@ public class BrowsePeerSearchBarView extends RelativeLayout {
 
     public interface OnActionListener {
 
-        public void onCheckAll(View v, boolean isChecked);
+        void onCheckAll(View v, boolean isChecked);
 
-        public void onFilter(View v, String str);
+        void onFilter(View v, String str);
+
+        void onClear();
     }
 }

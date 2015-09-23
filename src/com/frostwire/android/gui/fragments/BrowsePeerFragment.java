@@ -121,10 +121,37 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         }
     }
 
+    private void restorePreviouslyChecked() {
+        if (previouslyChecked != null && !previouslyChecked.isEmpty()) {
+            adapter.setChecked(previouslyChecked);
+        }
+    }
+
     private void restorePreviousFilter() {
-        if (!StringUtils.isNullOrEmpty(previousFilter)) {
+        if (previousFilter != null && filesBar != null) {
            filesBar.setText(previousFilter);
         }
+    }
+
+    private void savePreviouslyCheckedFileDescriptors() {
+        if (adapter != null) {
+            final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
+            if (checked != null && !checked.isEmpty()) {
+                previouslyChecked = new HashSet<>(checked);
+            } else {
+                previouslyChecked = null;
+            }
+        }
+    }
+
+    private void savePreviousFilter() {
+        if (!StringUtils.isNullOrEmpty(filesBar.getText())) {
+            previousFilter = filesBar.getText();
+        }
+    }
+
+    private void clearPreviousFilter() {
+        previousFilter = null;
     }
 
     private void initBroadcastReceiver() {
@@ -174,6 +201,11 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 if (adapter != null) {
                     adapter.getFilter().filter(str);
                 }
+            }
+
+            @Override
+            public void onClear() {
+                clearPreviousFilter();
             }
         });
 
@@ -234,10 +266,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
             saveListViewVisiblePosition(adapter.getFileType());
             adapter.clear();
         }
-
         filesBar.clearCheckAll();
-        filesBar.clearSearch();
-
         reloadFiles(fileType);
     }
 
@@ -246,23 +275,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
         Bundle bundle = new Bundle();
         bundle.putByte("fileType", fileType);
         getLoaderManager().restartLoader(LOADER_FILES_ID, bundle, this);
-    }
-
-    private void savePreviousFilter() {
-        if (!filesBar.getText().isEmpty()) {
-            previousFilter = filesBar.getText();
-        }
-    }
-
-    private void savePreviouslyCheckedFileDescriptors() {
-        if (adapter != null) {
-            final Set<FileListAdapter.FileDescriptorItem> checked = adapter.getChecked();
-            if (checked != null && !checked.isEmpty()) {
-                previouslyChecked = new HashSet<>(checked);
-            } else {
-                previouslyChecked = null;
-            }
-        }
     }
 
     private Loader<Object> createLoaderFiles(final byte fileType) {
@@ -376,12 +388,6 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
 
         } catch (Throwable e) {
             LOG.error("Error updating files in list", e);
-        }
-    }
-
-    private void restorePreviouslyChecked() {
-        if (previouslyChecked != null && !previouslyChecked.isEmpty()) {
-            adapter.setChecked(previouslyChecked);
         }
     }
 

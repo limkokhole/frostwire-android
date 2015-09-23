@@ -217,11 +217,11 @@ public class ClearableEditTextView extends RelativeLayout {
         }
     }
     
-    public static interface OnActionListener {
+    public interface OnActionListener {
 
-        public void onTextChanged(View v, String str);
+        void onTextChanged(View v, String str);
 
-        public void onClear(View v);
+        void onClear(View v);
     }
 
     private static class SingleLineTransformationMethod extends ReplacementTransformationMethod {
