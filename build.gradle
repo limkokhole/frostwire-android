@@ -161,8 +161,8 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.frostwire:jlibtorrent:1.1.0.8'
-    compile 'com.frostwire:jlibtorrent-android:1.1.0.8'
+    compile 'com.frostwire:jlibtorrent:1.1.0.9'
+    compile 'com.frostwire:jlibtorrent-android:1.1.0.9'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
