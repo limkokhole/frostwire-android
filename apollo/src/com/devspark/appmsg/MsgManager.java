@@ -106,7 +106,11 @@ class MsgManager extends Handler {
         final AppMsg appMsg = msgQueue.peek();
         // If the activity is null we throw away the AppMsg.
         if (appMsg.getActivity() == null) {
-            msgQueue.poll();
+            try {
+                msgQueue.poll();
+            } catch (Throwable t) {
+                // Android's LinkedList implementation can throw NoSuchElementException
+            }
         }
         final Message msg;
         if (!appMsg.isShowing()) {
@@ -131,7 +135,11 @@ class MsgManager extends Handler {
         if (parent != null) {
             appMsg.getView().startAnimation(outAnimation);
             // Remove the AppMsg from the queue.
-            msgQueue.poll();
+            try {
+                msgQueue.poll();
+            } catch (Throwable t) {
+                // Android's LinkedList implementation can throw NoSuchElementException
+            }
             // Remove the AppMsg from the view's parent.
             parent.removeView(appMsg.getView());
             Message msg = obtainMessage(MESSAGE_DISPLAY);
