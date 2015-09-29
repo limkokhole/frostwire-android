@@ -84,7 +84,7 @@ public class NotificationHelper {
             final String trackName, final Long albumId, final Bitmap albumArt,
             final boolean isPlaying) {
 
-        // Default notfication layout
+        // Default notification layout
         mNotificationTemplate = new RemoteViews(mService.getPackageName(),
                 R.layout.notification_template_base);
 
@@ -95,34 +95,28 @@ public class NotificationHelper {
         PendingIntent pendingintent = getPendingIntent();
 
         // Notification Builder
-        mNotification = new NotificationCompat.Builder(mService)
+        Notification aNotification = new NotificationCompat.Builder(mService)
                 .setSmallIcon(getNotificationIcon())
                 .setContentIntent(pendingintent)
                 .setPriority(0)//(Notification.PRIORITY_DEFAULT)
                 .setContent(mNotificationTemplate)
                 .build();
-        if (mNotification == null) {
-            throw new NullPointerException(
-                     String.format("%1$s: %2$s: (%3$s, %4$s, %5$s, %6$d, Bitmap?%7$b, %8$b) PendingIntent?%9$b",
-                     getClass().getName(), mService.getPackageName(),
-                     albumName, artistName, trackName, albumId,
-                     albumArt instanceof Bitmap, isPlaying,
-                     pendingintent instanceof PendingIntent));
-        }
         // Control playback from the notification
         initPlaybackActions(isPlaying);
-        // Expanded notifiction style
+
+        // Expanded notification style
         mExpandedView = new RemoteViews(mService.getPackageName(),
                 R.layout.notification_template_expanded_base);
-        mNotification.bigContentView = mExpandedView;
+
+        aNotification.bigContentView = mExpandedView;
+
         // Control playback from the notification
         initExpandedPlaybackActions(isPlaying);
         // Set up the expanded content view
         initExpandedLayout(trackName, albumName, artistName, albumArt);
-        // d7fa67cc74 NotificationHelper.java:102
-        if (mNotification != null) { //it can happen
-            mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
-        }
+
+        mNotification = aNotification;
+        mService.startForeground(APOLLO_MUSIC_SERVICE, mNotification);
     }
 
     private int getNotificationIcon() {
