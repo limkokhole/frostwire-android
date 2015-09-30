@@ -23,7 +23,7 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.SystemPaths;
 import com.frostwire.android.gui.Librarian;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.search.extractors.YouTubeExtractor.LinkInfo;
+import com.frostwire.search.youtube.YouTubeExtractor.LinkInfo;
 import com.frostwire.search.youtube.YouTubeCrawledSearchResult;
 import com.frostwire.transfers.TransferItem;
 import com.frostwire.util.http.HttpClient;
