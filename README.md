@@ -64,10 +64,9 @@ You can donate for development, thereby encouraging some developers or you can p
 ## Android Studio
 
 1. Make sure you have [Android Studio](https://developer.android.com/sdk/installing/studio.html) properly installed.
-2. Make sure you have `frostwire-android`, `frostwire-common` and `frostwire-jlibtorrent` repos in the same folder.
-3. Open the project in Android Studio.
-4. Wait for gradle sync and indices to update.
-5. Should work out of the box.
+2. Open the project in Android Studio.
+3. Wait for gradle sync and indices to update.
+4. Should work out of the box.
 
 Happy coding.
 
