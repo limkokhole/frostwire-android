@@ -94,7 +94,7 @@ android {
             aidl.srcDirs = ['src', 'apollo/src']
             assets.srcDirs = ['assets']
             java {
-                srcDir '../frostwire-common/src/main/java'
+                srcDir 'frostwire-common/src/main/java'
 
                 srcDir 'apollo/src'
                 srcDir 'src'
