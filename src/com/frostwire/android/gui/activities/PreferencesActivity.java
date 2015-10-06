@@ -143,8 +143,7 @@ public class PreferencesActivity extends PreferenceActivity {
                         TransferManager.instance().stopSeedingTorrents();
                         UIUtils.showShortMessage(PreferencesActivity.this, R.string.seeding_has_been_turned_off);
                     }
-                    preferenceSeedingWifiOnly.setEnabled(newVal);
-
+                    // NOTE: the wifi seeding checkbox is automatically disabled as it depends on this one, see android:depends on layout.
                     UXStats.instance().log(newVal ? UXAction.SHARING_SEEDING_ENABLED : UXAction.SHARING_SEEDING_DISABLED);
 
                     return true;
@@ -153,8 +152,6 @@ public class PreferencesActivity extends PreferenceActivity {
         }
 
         if (preferenceSeedingWifiOnly != null) {
-            preferenceSeedingWifiOnly.setEnabled(preferenceSeeding.isChecked());
-
             preferenceSeedingWifiOnly.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean newVal = (Boolean) newValue;
