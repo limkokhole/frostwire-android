@@ -68,9 +68,8 @@ class TorrentSearchResultInfo implements TorrentDownloadInfo {
 
     @Override
     public String makeMagnetUri() {
-        return sr.getHash();
+        return null;
     }
-
 
     @Override
     public String getRelativePath() {
