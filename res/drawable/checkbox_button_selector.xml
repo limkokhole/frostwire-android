@@ -26,6 +26,7 @@
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="false" android:state_pressed="true"/>
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="true" android:state_focused="true"/>
     <item android:drawable="@drawable/checkbox_button_selector_off" android:state_checked="false" android:state_focused="true"/>
+    <item android:drawable="@drawable/checkbox_button_selector_on_disabled" android:state_checked="true" android:state_enabled="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_off" android:state_checked="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="true"/>
 
