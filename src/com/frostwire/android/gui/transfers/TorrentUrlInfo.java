@@ -59,6 +59,12 @@ class TorrentUrlInfo implements TorrentDownloadInfo {
     }
 
     @Override
+    public String makeMagnetUri() {
+        return null;
+    }
+
+
+    @Override
     public String getRelativePath() {
         return null;
     }

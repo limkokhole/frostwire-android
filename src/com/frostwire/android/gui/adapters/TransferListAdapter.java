@@ -294,6 +294,8 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
             }
 
             items.add(new CancelMenuAction(context.get(), download, !download.isComplete()));
+            items.add(new CopyMagnetMenuAction(context.get(), download, R.string.transfers_context_menu_copy_magnet));
+            items.add(new CopyInfoHashMenuAction(context.get(), download, R.string.transfers_context_menu_copy_infohash));
 
             if (download.isComplete()) {
                 // Remove Torrent and Data action.

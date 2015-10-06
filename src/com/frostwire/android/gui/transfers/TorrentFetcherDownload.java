@@ -114,6 +114,11 @@ public class TorrentFetcherDownload implements BittorrentDownload {
         return info.getHash();
     }
 
+    public String makeMagnetUri() {
+        return info.makeMagnetUri();
+    }
+
+
     public String getPeers() {
         return "";
     }

@@ -107,6 +107,11 @@ final class InvalidBittorrentDownload implements BittorrentDownload, InvalidTran
     }
 
     @Override
+    public String makeMagnetUri() {
+        return null;
+    }
+
+    @Override
     public String getHash() {
         return null;
     }

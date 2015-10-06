@@ -27,6 +27,8 @@ import com.frostwire.bittorrent.PaymentOptions;
  */
 public interface BittorrentDownload extends DownloadTransfer {
 
+    String makeMagnetUri();
+
     String getHash();
 
     String getPeers();
