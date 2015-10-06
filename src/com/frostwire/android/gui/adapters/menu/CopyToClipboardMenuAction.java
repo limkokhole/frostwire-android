@@ -13,14 +13,18 @@ import com.frostwire.android.gui.views.MenuAction;
  * @author votaguz
  */
 public class CopyToClipboardMenuAction extends MenuAction {
-    private final String message;
+    private String message = null;
     private final String data;
 
-    public CopyToClipboardMenuAction(Context context, int drawable, int actionNameId,
-                                     int messageId, String data){
 
+    public CopyToClipboardMenuAction(Context context, int drawable, int actionNameId, int messageId, String data){
         super(context, drawable, actionNameId);
         this.message = context.getResources().getString(messageId);
+        this.data = data;
+    }
+
+    public CopyToClipboardMenuAction(Context context, int drawable, int actionNameId, String data){
+        super(context, drawable, actionNameId);
         this.data = data;
     }
 
@@ -32,7 +36,9 @@ public class CopyToClipboardMenuAction extends MenuAction {
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("data", this.data);
             clipboard.setPrimaryClip(clip);
-            UIUtils.showLongMessage(context, this.message);
+            if ( this.message != null) {
+                UIUtils.showLongMessage(context, this.message);
+            }
         }
     }
 }
