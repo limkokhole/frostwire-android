@@ -46,8 +46,7 @@
         <CheckBoxPreference
                 android:key="frostwire.prefs.torrent.seed_finished_torrents_wifi_only"
                 android:summary="@string/seed_finished_torrents_wifi_only_summary"
-                android:title="@string/seed_finished_torrents_wifi_only"
-				android:dependency="frostwire.prefs.torrent.seed_finished_torrents"/>
+                android:title="@string/seed_finished_torrents_wifi_only"/>
         <SwitchPreference
                 android:key="froswire.prefs.network.enable_dht"
                 android:summary="@string/enable_dht_summary"

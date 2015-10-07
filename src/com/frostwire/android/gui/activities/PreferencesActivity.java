@@ -139,13 +139,21 @@ public class PreferencesActivity extends PreferenceActivity {
             preferenceSeeding.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
                 public boolean onPreferenceChange(Preference preference, Object newValue) {
                     boolean newVal = (Boolean) newValue;
+
                     if (!newVal) { // not seeding at all
                         TransferManager.instance().stopSeedingTorrents();
                         UIUtils.showShortMessage(PreferencesActivity.this, R.string.seeding_has_been_turned_off);
                     }
-                    // NOTE: the wifi seeding checkbox is automatically disabled as it depends on this one, see android:depends on layout.
-                    UXStats.instance().log(newVal ? UXAction.SHARING_SEEDING_ENABLED : UXAction.SHARING_SEEDING_DISABLED);
 
+                    PreferenceScreen torrentPreferencesScreen = (PreferenceScreen) findPreference("frostwire.prefs.torrent.preference_category");
+                    if (!newVal && torrentPreferencesScreen != null) {
+                        torrentPreferencesScreen.removePreference(preferenceSeedingWifiOnly);
+                    } else {
+                        torrentPreferencesScreen.addPreference(preferenceSeedingWifiOnly);
+                    }
+
+
+                    UXStats.instance().log(newVal ? UXAction.SHARING_SEEDING_ENABLED : UXAction.SHARING_SEEDING_DISABLED);
                     return true;
                 }
             });
