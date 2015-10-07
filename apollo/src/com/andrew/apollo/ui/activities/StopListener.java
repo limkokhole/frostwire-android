@@ -24,7 +24,6 @@ import android.view.View;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.core.Constants;
 import com.frostwire.util.Ref;
-import com.googlecode.mp4parser.util.Logger;
 
 import java.lang.ref.WeakReference;
 
