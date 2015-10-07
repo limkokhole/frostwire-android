@@ -88,6 +88,11 @@ public final class UIBittorrentDownload implements BittorrentDownload {
     }
 
     @Override
+    public String makeMagnetUri() {
+        return dl.makeMagnetUri();
+    }
+
+    @Override
     public String getHash() {
         return dl.getInfoHash();
     }

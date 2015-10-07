@@ -25,6 +25,8 @@ package com.frostwire.android.gui.transfers;
  */
 interface TorrentDownloadInfo {
 
+    String makeMagnetUri();
+
     String getTorrentUrl();
 
     String getDetailsUrl();
