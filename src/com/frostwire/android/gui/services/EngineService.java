@@ -206,12 +206,12 @@ public class EngineService extends Service implements IEngineService {
                     .setContentText(getString(R.string.download_finished))
                     .setContentTitle(getString(R.string.download_finished))
                     .setSmallIcon(getNotificationIcon())
-                    .getNotification();
+                    .setContentIntent(pi)
+                    .build();
 
             notification.vibrate = ConfigurationManager.instance().vibrateOnFinishedDownload() ? VENEZUELAN_VIBE : null;
             notification.number = TransferManager.instance().getDownloadsToReview();
             notification.flags |= Notification.FLAG_AUTO_CANCEL;
-            notification.setLatestEventInfo(context, getString(R.string.download_finished), displayName, pi);
             manager.notify(Constants.NOTIFICATION_DOWNLOAD_TRANSFER_FINISHED, notification);
         } catch (Throwable e) {
             Log.e(TAG, "Error creating notification for download finished", e);
