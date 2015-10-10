@@ -19,7 +19,6 @@
  */
 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="true" android:state_window_focused="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_off" android:state_checked="false" android:state_window_focused="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="true" android:state_pressed="true"/>
@@ -29,5 +28,4 @@
     <item android:drawable="@drawable/checkbox_button_selector_on_disabled" android:state_checked="true" android:state_enabled="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_off" android:state_checked="false"/>
     <item android:drawable="@drawable/checkbox_button_selector_on" android:state_checked="true"/>
-
 </selector>

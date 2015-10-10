@@ -132,8 +132,12 @@ public class PreferencesActivity extends PreferenceActivity {
     }
 
     private void setupSeedingOptions() {
-        final CheckBoxPreference preferenceSeeding = (CheckBoxPreference) findPreference(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS);
-        final CheckBoxPreference preferenceSeedingWifiOnly = (CheckBoxPreference) findPreference(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY);
+        final CheckBoxPreference preferenceSeeding = (CheckBoxPreference)
+                findPreference(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS);
+
+        // our custom preference, only so that we can change its status, or hide it.
+        final com.frostwire.android.gui.views.preference.CheckBoxPreference preferenceSeedingWifiOnly = (com.frostwire.android.gui.views.preference.CheckBoxPreference)
+                findPreference(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS_WIFI_ONLY);
 
         if (preferenceSeeding != null) {
             preferenceSeeding.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
@@ -145,13 +149,9 @@ public class PreferencesActivity extends PreferenceActivity {
                         UIUtils.showShortMessage(PreferencesActivity.this, R.string.seeding_has_been_turned_off);
                     }
 
-                    PreferenceScreen torrentPreferencesScreen = (PreferenceScreen) findPreference("frostwire.prefs.torrent.preference_category");
-                    if (!newVal && torrentPreferencesScreen != null) {
-                        torrentPreferencesScreen.removePreference(preferenceSeedingWifiOnly);
-                    } else {
-                        torrentPreferencesScreen.addPreference(preferenceSeedingWifiOnly);
+                    if (preferenceSeedingWifiOnly != null) {
+                        preferenceSeedingWifiOnly.setEnabled(newVal);
                     }
-
 
                     UXStats.instance().log(newVal ? UXAction.SHARING_SEEDING_ENABLED : UXAction.SHARING_SEEDING_DISABLED);
                     return true;
@@ -165,11 +165,15 @@ public class PreferencesActivity extends PreferenceActivity {
                     boolean newVal = (Boolean) newValue;
                     if (newVal && !NetworkManager.instance().isDataWIFIUp()) { // not seeding on mobile data
                         TransferManager.instance().stopSeedingTorrents();
-                        UIUtils.showShortMessage(PreferencesActivity.this, R.string.seeding_has_been_turned_off);
+                        UIUtils.showShortMessage(PreferencesActivity.this, R.string.wifi_seeding_has_been_turned_off);
                     }
                     return true;
                 }
             });
+        }
+
+        if (preferenceSeeding != null && preferenceSeedingWifiOnly != null) {
+            preferenceSeedingWifiOnly.setEnabled(preferenceSeeding.isChecked());
         }
     }
 
@@ -395,7 +399,7 @@ public class PreferencesActivity extends PreferenceActivity {
                     ViewGroup containerParent = (ViewGroup) homeBtnContainer.getParent();
 
                     if (containerParent instanceof LinearLayout) {
-                        ((LinearLayout) containerParent).setOnClickListener(dismissDialogClickListener);
+                        containerParent.setOnClickListener(dismissDialogClickListener);
                     } else {
                         ((FrameLayout) homeBtnContainer).setOnClickListener(dismissDialogClickListener);
                     }

@@ -333,6 +333,7 @@
     <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Seeding has been turned off</string>
+    <string name="wifi_seeding_has_been_turned_off">No Wi-fi available, Seeding has been turned off</string>
     <string name="nickname_hint">Nickname</string>
     <string name="show_transers_on_download_start">Show Transfers On Download Start</string>
     <string name="dialog_new_transfer_title">Start this Download?</string>

@@ -25,17 +25,17 @@ package com.frostwire.android.gui.views;
  */
 public interface WizardPageView {
 
-    public boolean hasPrevious();
+    boolean hasPrevious();
 
-    public boolean hasNext();
+    boolean hasNext();
 
-    public void load();
+    void load();
 
-    public void finish();
+    void finish();
 
-    public void setOnCompleteListener(OnCompleteListener listener);
+    void setOnCompleteListener(OnCompleteListener listener);
 
-    public interface OnCompleteListener {
-        public void onComplete(WizardPageView pageView, boolean complete);
+    interface OnCompleteListener {
+        void onComplete(WizardPageView pageView, boolean complete);
     }
 }

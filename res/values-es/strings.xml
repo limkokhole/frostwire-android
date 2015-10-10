@@ -325,7 +325,8 @@
     <string name="seed_finished_torrents_wifi_only_summary">Compartir solo cuando se conecte a Wi-Fi y así ahorrar ancho de banda en tu plan de datos</string>
     <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
-    <string name="seeding_has_been_turned_off">Compartiendo está apagado</string>
+    <string name="seeding_has_been_turned_off">Compartir está apagado</string>
+    <string name="wifi_seeding_has_been_turned_off">No hay Wi-Fi, Compartir está apagado</string>
     <string name="nickname_hint">Nombre</string>
     <string name="show_transers_on_download_start">Mostrar Transferencias al Comienzo de la Descarga</string>
     <string name="dialog_new_transfer_title">¿Deseas comenzar esta descarga?</string>
