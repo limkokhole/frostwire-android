@@ -18,21 +18,22 @@
 
 package com.frostwire.android.gui.activities;
 
-import android.app.ActionBar;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.app.NotificationManager;
+import android.Manifest;
+import android.app.*;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -47,6 +48,7 @@ import com.frostwire.android.gui.SoftwareUpdater;
 import com.frostwire.android.gui.SoftwareUpdater.ConfigurationUpdateListener;
 import com.frostwire.android.gui.activities.internal.MainController;
 import com.frostwire.android.gui.activities.internal.MainMenuAdapter;
+import com.frostwire.android.gui.adnetworks.Offers;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.dialogs.TermsUseDialog;
 import com.frostwire.android.gui.dialogs.YesNoDialog;
@@ -57,7 +59,6 @@ import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
-import com.frostwire.android.gui.adnetworks.Offers;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.AbstractDialog.OnDialogClickListener;
@@ -79,16 +80,12 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
  * @author aldenml
  *
  */
-public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection {
+public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final Logger LOG = Logger.getLogger(MainActivity.class);
 
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
     private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
-//    private static final String MOBILE_CORE_STARTED_KEY = "mobile_core_started";
-//    private static final String APPLOVIN_STARTED_KEY = "applovin_started";
-//    private static final String INMOBI_STARTED_KEY = "inmobi_started";
-
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
 
@@ -122,11 +119,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         this.controller = new MainController(this);
         this.fragmentsStack = new Stack<Integer>();
     }
-
-    /**
-    public void showMyFiles() {
-        controller.showMyFiles();
-    }*/
 
     public void switchFragment(int itemId) {
         controller.switchFragment(itemId);
@@ -167,7 +159,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         updateHeader(getCurrentFragment());
     }
 
-    @Override
     public void onConfigurationUpdate() {
         setupMenuItems();
     }
@@ -198,37 +189,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return;
         }
 
-        drawerLayout = findView(R.id.drawer_layout);
-        drawerLayout.setDrawerListener(new SimpleDrawerListener() {
-            @Override
-            public void onDrawerStateChanged(int newState) {
-                refreshPlayerItem();
-                syncSlideMenu();
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-            }
-
-            @Override
-            public void onDrawerOpened(View drawerView) {
-            }
-
-            @Override
-            public void onDrawerClosed(View drawerView) {
-            }
-        });
+        initDrawerListener();
 
         leftDrawer = findView(R.id.activity_main_left_drawer);
         listMenu = findView(R.id.left_drawer);
 
-        playerItem = findView(R.id.slidemenu_player_menuitem);
-        playerItem.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                controller.launchPlayerActivity();
-            }
-        });
+        initPlayerItemListener();
 
         setupFragments();
         setupMenuItems();
@@ -242,8 +208,39 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         setupActionBar();
         setupDrawer();
+    }
 
-        //PlaybackService.get(this);
+    private void initPlayerItemListener() {
+        playerItem = findView(R.id.slidemenu_player_menuitem);
+        playerItem.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                controller.launchPlayerActivity();
+            }
+        });
+    }
+
+    private void initDrawerListener() {
+        drawerLayout = findView(R.id.drawer_layout);
+        drawerLayout.setDrawerListener(new SimpleDrawerListener() {
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                refreshPlayerItem();
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                syncSlideMenu();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+        });
     }
 
     @Override
@@ -254,7 +251,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
 
         String action = intent.getAction();
-        //onResumeFragments();
 
         if (action != null && action.equals(Constants.ACTION_SHOW_TRANSFERS)) {
             controller.showTransfers(TransferStatus.ALL);
@@ -328,6 +324,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     protected void onResume() {
         super.onResume();
 
+        initDrawerListener();
+        setupDrawer();
+        initPlayerItemListener();
+
         refreshPlayerItem();
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
@@ -344,6 +344,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         checkLastSeenVersion();
         registerMainBroadcastReceiver();
+        syncSlideMenu();
     }
 
     @Override
@@ -389,9 +390,39 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("We need to know if you start a phone call so we can pause the music for you and you can hear the call. We also to write/read on disk to save/open your downloads.").
+                    setTitle("Why we need these permissions?");
+            builder.create();
 
-        mToken = MusicUtils.bindToService(this, this);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, 1234567890);
+        } else {
+            mToken = MusicUtils.bindToService(this, this);
+        }
     }
+
+
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        for (int i=0; i<permissions.length; i++) {
+            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
+                if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    UIUtils.showOkCancelDialog(this, null, R.string.exit, null, null);
+                    onShutdownDialogButtonPositive();
+                    return;
+                }
+            }
+            if (permissions[i]==Manifest.permission.READ_PHONE_STATE && grantResults[i]==PackageManager.PERMISSION_GRANTED) {
+                mToken = MusicUtils.bindToService(this, this);
+            }
+        }
+
+
+    }
+
 
     private void onNotifySdCardMounted() {
         transfers.initStorageRelatedRichNotifications(null);
@@ -454,6 +485,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             drawerLayout.closeDrawer(leftDrawer);
         } else {
             drawerLayout.openDrawer(leftDrawer);
+            syncSlideMenu();
         }
 
         updateHeader(getCurrentFragment());
@@ -469,7 +501,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         dlg.show(getFragmentManager()); //see onDialogClick
     }
 
-    @Override
     public void onDialogClick(String tag, int which) {
         if (tag.equals(LAST_BACK_DIALOG_ID) && which == AbstractDialog.BUTTON_POSITIVE) {
             onLastDialogButtonPositive();
@@ -489,29 +520,43 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private void syncSlideMenu() {
+        listMenu.clearChoices();
+        invalidateOptionsMenu();
+
         Fragment fragment = getCurrentFragment();
-
+        int menuId=R.id.menu_main_search;
         if (fragment instanceof SearchFragment) {
-            setSelectedItem(R.id.menu_main_search);
+            menuId=R.id.menu_main_search;
         } else if (fragment instanceof BrowsePeerFragment) {
-            setSelectedItem(R.id.menu_main_library);
+            menuId=R.id.menu_main_library;
         } else if (fragment instanceof TransfersFragment) {
-            setSelectedItem(R.id.menu_main_transfers);
+            menuId=R.id.menu_main_transfers;
         }
-
+        setCheckedItem(menuId);
         updateHeader(getCurrentFragment());
     }
 
-    private void setSelectedItem(int id) {
+    private void setCheckedItem(int id) {
         try {
+            listMenu.clearChoices();
+            ((MainMenuAdapter) listMenu.getAdapter()).notifyDataSetChanged();
+
             int position = 0;
             MainMenuAdapter adapter = (MainMenuAdapter) listMenu.getAdapter();
             for (int i = 0; i < adapter.getCount(); i++) {
+                listMenu.setItemChecked(i, false);
                 if (adapter.getItemId(i) == id) {
                     position = i;
+                    break;
                 }
             }
-            listMenu.setItemChecked(position, true);
+
+            if (id != -1) {
+                listMenu.setItemChecked(position, true);
+            }
+
+            invalidateOptionsMenu();
+            drawerToggle.syncState();
         } catch (Throwable e) { // protecting from weird android UI engine issues
             LOG.warn("Error setting slide menu item selected", e);
         }
@@ -525,12 +570,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private void setupMenuItems() {
         listMenu.setAdapter(new MainMenuAdapter(this));
+        listMenu.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
         listMenu.setOnItemClickListener(new OnItemClickListener() {
-
-            @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                syncSlideMenu();
                 controller.closeSlideMenu();
-
                 try {
                     if (id == R.id.menu_main_preferences) {
                         controller.showPreferences();
@@ -570,7 +614,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
         if (fragment == null) {
             fragment = search;
-            setSelectedItem(R.id.menu_main_search);
+            setCheckedItem(R.id.menu_main_search);
         }
 
         switchContent(fragment);
@@ -590,14 +634,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             for (int id : stack) {
                 fragmentsStack.push(id);
             }
-        } catch (Throwable e) {
-            // silent recovering, stack is't not really important
+        } catch (Throwable ignored) {
         }
     }
 
     private void updateHeader(Fragment fragment) {
         try {
-            RelativeLayout placeholder = (RelativeLayout) getActionBar().getCustomView();//findView(R.id.activity_main_layout_header_placeholder);
+            RelativeLayout placeholder = (RelativeLayout) getActionBar().getCustomView();
             if (placeholder != null && placeholder.getChildCount() > 0) {
                 placeholder.removeAllViews();
             }
@@ -690,7 +733,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         drawerLayout.setDrawerListener(drawerToggle);
     }
 
-    @Override
     public void onServiceConnected(final ComponentName name, final IBinder service) {
         mService = IApolloService.Stub.asInterface(service);
     }
@@ -698,7 +740,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     /**
      * {@inheritDoc}
      */
-    @Override
     public void onServiceDisconnected(final ComponentName name) {
         mService = null;
     }
@@ -710,7 +751,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         public MenuDrawerToggle(MainActivity activity, DrawerLayout drawerLayout) {
             super(activity, drawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close);
 
-            // aldenml: even if the parent class hold a strong reference, I decided to keep a weak one
+            // aldenml: even if the parent class holds a strong reference, I decided to keep a weak one
             this.activityRef = Ref.weak(activity);
         }
 
@@ -718,6 +759,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         public void onDrawerClosed(View view) {
             if (Ref.alive(activityRef)) {
                 activityRef.get().invalidateOptionsMenu();
+                activityRef.get().syncSlideMenu();
             }
         }
 
@@ -726,6 +768,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             if (Ref.alive(activityRef)) {
                 UIUtils.hideKeyboardFromActivity(activityRef.get());
                 activityRef.get().invalidateOptionsMenu();
+                activityRef.get().syncSlideMenu();
             }
         }
 
