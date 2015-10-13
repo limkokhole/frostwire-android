@@ -431,8 +431,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             if (permissions[i]==Manifest.permission.READ_PHONE_STATE && grantResults[i]==PackageManager.PERMISSION_GRANTED) {
                 mToken = MusicUtils.bindToService(this, this);
             }
-
-            EngineService.EngineServiceBinder.
         }
 
 
