@@ -54,7 +54,9 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
     @Override
     public void stop() {
         try {
-            MusicUtils.mService.stop();
+            if (MusicUtils.mService != null) {
+                MusicUtils.mService.stop();
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }
@@ -63,7 +65,9 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
     @Override
     public void shutdown() {
         try {
-            MusicUtils.mService.shutdown();
+            if (MusicUtils.mService != null) {
+                MusicUtils.mService.shutdown();
+            }
         } catch (Throwable e) {
             e.printStackTrace();
         }

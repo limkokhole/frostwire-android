@@ -58,6 +58,7 @@ import com.frostwire.android.gui.fragments.SearchFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
+import com.frostwire.android.gui.services.EngineService;
 import com.frostwire.android.gui.transfers.TransferManager;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
@@ -391,14 +392,26 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We need to know if you start a phone call so we can pause the music for you and you can hear the call. We also to write/read on disk to save/open your downloads.").
-                    setTitle("Why we need these permissions?");
-            builder.create();
+            builder.setMessage("We'll need to be able to read and write files to disk when you download. \n\nWe'll need to know when you start a call so we can stop the music player and you can talk.").
+                    setTitle("Why we need phone state & storage permissions.");
+            builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    shutdown();
+                }
+            });
+            builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, 1234567890);
+                }
+            });
 
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, 1234567890);
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
         } else {
             mToken = MusicUtils.bindToService(this, this);
         }
@@ -418,6 +431,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             if (permissions[i]==Manifest.permission.READ_PHONE_STATE && grantResults[i]==PackageManager.PERMISSION_GRANTED) {
                 mToken = MusicUtils.bindToService(this, this);
             }
+
+            EngineService.EngineServiceBinder.
         }
 
 

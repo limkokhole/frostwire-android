@@ -33,6 +33,7 @@ import android.os.PowerManager.WakeLock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.support.v4.app.ServiceCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import com.andrew.apollo.appwidgets.AppWidgetLarge;
@@ -736,7 +737,8 @@ public class MusicPlaybackService extends Service {
     }
 
     private void releaseServiceUiAndStop() {
-        if (isPlaying()
+        if (mPlayerHandler == null ||
+                isPlaying()
                 || mPausedByTransientLossOfFocus
                 || mPlayerHandler.hasMessages(TRACK_ENDED)) {
             return;
