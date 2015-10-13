@@ -58,7 +58,8 @@
 		<!-- activities -->
 
 		<activity android:name="com.frostwire.android.gui.activities.MainActivity"
-			android:label="@string/application_label">
+			android:label="@string/application_label"
+			android:protectionLevel="dangerous">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN" />
 				<action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -304,7 +305,7 @@
 
 		<service android:name="com.frostwire.android.gui.services.EngineService"
 			android:exported="false" />
-		<service android:name="com.andrew.apollo.MusicPlaybackService" />
+		<service android:name="com.andrew.apollo.MusicPlaybackService" android:protectionLevel="dangerous"/>
 
 		<receiver android:name="com.frostwire.android.gui.services.EngineBroadcastReceiver">
 			<intent-filter>

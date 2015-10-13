@@ -11,12 +11,14 @@
 
 package com.andrew.apollo;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.appwidget.AppWidgetManager;
 import android.content.*;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.media.AudioManager;
@@ -31,6 +33,7 @@ import android.os.PowerManager.WakeLock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import com.andrew.apollo.appwidgets.AppWidgetLarge;
 import com.andrew.apollo.appwidgets.AppWidgetLargeAlternate;
@@ -519,6 +522,14 @@ public class MusicPlaybackService extends Service {
         if (D) Log.d(TAG, "Creating service");
         super.onCreate();
 
+        if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)) {
+            initService();
+        }
+    }
+
+    private void initService() {
         // Initialize the favorites and recents databases
         mRecentsCache = RecentStore.getInstance(this);
         mFavoritesCache = FavoritesStore.getInstance(this);
@@ -784,6 +795,10 @@ public class MusicPlaybackService extends Service {
      * Updates the notification, considering the current play and activity state
      */
     private void updateNotification() {
+        if (mNotificationHelper==null) {
+            return;
+        }
+
         if (!mAnyActivityInForeground && isPlaying()) {
             mNotificationHelper.buildNotification(getAlbumName(), getArtistName(),
                     getTrackName(), getAlbumId(), getAlbumArt(), isPlaying());
@@ -859,9 +874,13 @@ public class MusicPlaybackService extends Service {
 
     private void scheduleDelayedShutdown() {
         if (D) Log.v(TAG, "Scheduling shutdown in " + IDLE_DELAY + " ms");
-        mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                SystemClock.elapsedRealtime() + IDLE_DELAY, mShutdownIntent);
-        mShutdownScheduled = true;
+        if (mAlarmManager != null) {
+            mAlarmManager.set(AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime() + IDLE_DELAY, mShutdownIntent);
+            mShutdownScheduled = true;
+        } else {
+            mShutdownScheduled = false;
+        }
     }
 
     private void cancelShutdown() {
