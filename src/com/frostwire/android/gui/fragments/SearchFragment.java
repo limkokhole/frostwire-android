@@ -58,6 +58,7 @@ import com.frostwire.frostclick.TorrentPromotionSearchResult;
 import com.frostwire.logging.Logger;
 import com.frostwire.search.FileSearchResult;
 import com.frostwire.search.HttpSearchResult;
+import com.frostwire.search.SearchManagerSignal;
 import com.frostwire.search.SearchResult;
 import com.frostwire.search.torrent.TorrentCrawledSearchResult;
 import com.frostwire.search.torrent.TorrentSearchResult;
@@ -265,9 +266,13 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
             };
 
-            this.localSearchSubscription = LocalSearchEngine.instance().observable().subscribe(new Observer<List<SearchResult>>() {
+            this.localSearchSubscription = LocalSearchEngine.instance().observable().subscribe(new Observer<SearchManagerSignal>() {
                 @Override
                 public void onCompleted() {
+                    // IMPORTANT: This method is never called by the PublishSubject (aka "Publisher"), as the publisher
+                    // is reused by the observers and we don't want it to end. Instead the publisher sends SearchManagerSignals
+                    // and when the signal is a SearchManagerSignal.End, it's captured by the onNext() method below, which
+                    // will then invoke this one.
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -283,21 +288,26 @@ public final class SearchFragment extends AbstractFragment implements MainFragme
                 }
 
                 @Override
-                public void onNext(final List<SearchResult> results) {
-                    @SuppressWarnings("unchecked")
-                    FilteredSearchResults fsr = adapter.filter(results);
-                    final List<SearchResult> filteredList = fsr.filtered;
+                public void onNext(final SearchManagerSignal signal) {
+                    if (signal instanceof SearchManagerSignal.Results){
+                        @SuppressWarnings("unchecked")
+                        final SearchManagerSignal.Results resultsSignal = (SearchManagerSignal.Results) signal;
+                        FilteredSearchResults fsr = adapter.filter((List<SearchResult>) resultsSignal.elements);
+                        final List<SearchResult> filteredList = fsr.filtered;
 
-                    fileTypeCounter.add(fsr);
+                        fileTypeCounter.add(fsr);
 
-                    getActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            adapter.addResults(results, filteredList);
-                            showSearchView(getView());
-                            refreshFileTypeCounters(true);
-                        }
-                    });
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.addResults(resultsSignal.elements, filteredList);
+                                showSearchView(getView());
+                                refreshFileTypeCounters(true);
+                            }
+                        });
+                    } else if (signal instanceof SearchManagerSignal.End) {
+                        onCompleted();
+                    }
                 }
             });
         }
