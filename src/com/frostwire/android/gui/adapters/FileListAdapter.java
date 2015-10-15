@@ -59,6 +59,8 @@ import java.util.Map.Entry;
  */
 public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
+    private static final Logger LOG = Logger.getLogger(FileListAdapter.class);
+
     private final byte fileType;
     private final ImageLoader thumbnailLoader;
     private final DownloadButtonClickListener downloadButtonClickListener;
@@ -474,7 +476,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
 
     private static final class MagnetUriBuilder {
-        private static final Logger LOG = Logger.getLogger(MagnetUriBuilder.class);
+
         private final String torrentFilePath;
 
         public MagnetUriBuilder(String torrentFilePath) {
@@ -495,7 +497,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
     }
 
     private static final class InfoHashBuilder {
-        private static final Logger LOG = Logger.getLogger(InfoHashBuilder.class);
+
         private final String torrentFilePath;
 
         public InfoHashBuilder(String torrentFilePath) {

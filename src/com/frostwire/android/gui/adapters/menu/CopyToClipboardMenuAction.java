@@ -46,7 +46,7 @@ public class CopyToClipboardMenuAction extends MenuAction {
         ClipboardManager clipboard = (ClipboardManager)
                 context.getSystemService(Context.CLIPBOARD_SERVICE);
 
-        if (clipboard != null) {
+        if (clipboard != null && data != null) {
             ClipData clip = ClipData.newPlainText("data", this.data.toString());
             clipboard.setPrimaryClip(clip);
             UIUtils.showLongMessage(context, this.messageId);
