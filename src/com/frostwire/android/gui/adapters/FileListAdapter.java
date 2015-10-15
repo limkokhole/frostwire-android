@@ -40,6 +40,8 @@ import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.util.ImageLoader;
 import com.frostwire.android.util.SystemUtils;
+import com.frostwire.jlibtorrent.TorrentInfo;
+import com.frostwire.logging.Logger;
 import com.frostwire.uxstats.UXAction;
 import com.frostwire.uxstats.UXStats;
 import org.apache.commons.io.FilenameUtils;
@@ -133,6 +135,22 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
 
             if (fd.fileType != Constants.FILE_TYPE_APPLICATIONS && numChecked <= 1) {
                 items.add(new RenameFileMenuAction(context, this, fd));
+            }
+
+            if (fd.mime == Constants.MIME_TYPE_BITTORRENT && numChecked <= 1) {
+                items.add(new CopyToClipboardMenuAction(context,
+                        R.drawable.contextmenu_icon_magnet,
+                        R.string.transfers_context_menu_copy_magnet,
+                        R.string.transfers_context_menu_copy_magnet_copied,
+                        new MagnetUriBuilder(fd.filePath)
+                ));
+
+                items.add(new CopyToClipboardMenuAction(context,
+                        R.drawable.contextmenu_icon_copy,
+                        R.string.transfers_context_menu_copy_infohash,
+                        R.string.transfers_context_menu_copy_infohash_copied,
+                        new InfoHashBuilder(fd.filePath)
+                ));
             }
         }
 
@@ -453,6 +471,48 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         }
 
         return false;
+    }
+
+    private static final class MagnetUriBuilder {
+        private static final Logger LOG = Logger.getLogger(MagnetUriBuilder.class);
+        private final String torrentFilePath;
+
+        public MagnetUriBuilder(String torrentFilePath) {
+            this.torrentFilePath = torrentFilePath;
+        }
+
+        @Override
+        public String toString() {
+            if (this.torrentFilePath != null) {
+                try {
+                    return new TorrentInfo(new File(this.torrentFilePath)).makeMagnetUri();
+                } catch (Throwable e) {
+                    LOG.warn("Error trying to get magnet", e);
+                }
+            }
+            return super.toString();
+        }
+    }
+
+    private static final class InfoHashBuilder {
+        private static final Logger LOG = Logger.getLogger(InfoHashBuilder.class);
+        private final String torrentFilePath;
+
+        public InfoHashBuilder(String torrentFilePath) {
+            this.torrentFilePath = torrentFilePath;
+        }
+
+        @Override
+        public String toString() {
+            if (this.torrentFilePath != null) {
+                try {
+                    return new TorrentInfo(new File(this.torrentFilePath)).getInfoHash().toString();
+                } catch (Throwable e) {
+                    LOG.warn("Error trying to get infohash", e);
+                }
+            }
+            return super.toString();
+        }
     }
 
     private static class FileListFilter implements ListAdapterFilter<FileDescriptorItem> {
