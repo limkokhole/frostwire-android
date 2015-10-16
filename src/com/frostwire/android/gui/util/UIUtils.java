@@ -32,10 +32,14 @@ import android.text.method.KeyListener;
 import android.text.method.NumberKeyListener;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.Toast;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -386,24 +390,33 @@ public final class UIUtils {
 
     /**
      *
-     * @param context
+     * @param activity
      * @param showInstallationCompleteSection - true if you want to display "Your installation is now complete. Thank You" section
      * @param dismissListener - what happens when the dialog is dismissed.
      * @param referrerContextSuffix - string appended at the end of social pages click urls's ?ref=_android_ parameter.
      */
-    public static void showSocialLinksDialog(final Context context,
+    public static void showSocialLinksDialog(final Activity activity,
                                              boolean showInstallationCompleteSection,
                                              DialogInterface.OnDismissListener dismissListener,
                                              String referrerContextSuffix) {
-        final Dialog socialLinksDialog = new Dialog(context);
-        socialLinksDialog.setOnDismissListener(dismissListener);
-        socialLinksDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        socialLinksDialog.setContentView(R.layout.view_social_buttons);
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        LayoutInflater inflater = activity.getLayoutInflater();
+        View customView = inflater.inflate(R.layout.view_social_buttons, null);
+        builder.setView(customView);
+        builder.setPositiveButton(activity.getString(android.R.string.ok), new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
-        ImageButton fbButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_facebook_button);
-        ImageButton twitterButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_twitter_button);
-        ImageButton redditButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_reddit_button);
-        Button okButton = (Button) socialLinksDialog.findViewById(R.id.view_social_buttons_ok_button);
+        final AlertDialog socialLinksDialog = builder.create();
+        socialLinksDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        socialLinksDialog.setOnDismissListener(dismissListener);
+
+        ImageButton fbButton = (ImageButton) customView.findViewById(R.id.view_social_buttons_facebook_button);
+        ImageButton twitterButton = (ImageButton) customView.findViewById(R.id.view_social_buttons_twitter_button);
+        ImageButton redditButton = (ImageButton) customView.findViewById(R.id.view_social_buttons_reddit_button);
 
         final String referrerParam  = "?ref=android_" + ((referrerContextSuffix!=null) ? referrerContextSuffix.trim() : "");
 
@@ -428,18 +441,12 @@ public final class UIUtils {
             }
         });
 
-        okButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                socialLinksDialog.dismiss();
-            }
-        });
 
         if (showInstallationCompleteSection) {
             LinearLayout installationCompleteLayout =
-                    (LinearLayout) socialLinksDialog.findViewById(R.id.view_social_buttons_installation_complete_layout);
+                    (LinearLayout) customView.findViewById(R.id.view_social_buttons_installation_complete_layout);
             installationCompleteLayout.setVisibility(View.VISIBLE);
-            ImageButton dismissCheckButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_dismiss_check);
+            ImageButton dismissCheckButton = (ImageButton) customView.findViewById(R.id.view_social_buttons_dismiss_check);
             dismissCheckButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -447,8 +454,6 @@ public final class UIUtils {
                 }
             });
         }
-
-
 
         socialLinksDialog.show();
     }

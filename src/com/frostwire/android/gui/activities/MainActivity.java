@@ -346,7 +346,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         registerMainBroadcastReceiver();
         syncSlideMenu();
 
-        UIUtils.showSocialLinksDialog(this, true, null, "");
+        //uncomment to test social links dialog
+        //UIUtils.showSocialLinksDialog(this, true, null, "");
     }
 
     @Override
