@@ -299,6 +299,7 @@ public class BrowsePeerFragment extends AbstractFragment implements LoaderCallba
                 LOG.warn("Something wrong, finger  and peer are null");
                 return;
             } else {
+
                 finger = peer.finger();
             }
         }

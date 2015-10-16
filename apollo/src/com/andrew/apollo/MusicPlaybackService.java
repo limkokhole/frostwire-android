@@ -33,7 +33,6 @@ import android.os.PowerManager.WakeLock;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.AlbumColumns;
 import android.provider.MediaStore.Audio.AudioColumns;
-import android.support.v4.app.ServiceCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import com.andrew.apollo.appwidgets.AppWidgetLarge;
@@ -498,7 +497,7 @@ public class MusicPlaybackService extends Service {
             // before stopping the service, so that pause/resume isn't slow.
             // Also delay stopping the service if we're transitioning between
             // tracks.
-        } else if (mPlayListLen > 0 || mPlayerHandler.hasMessages(TRACK_ENDED)) {
+        } else if (mPlayListLen > 0 || (mPlayerHandler != null && mPlayerHandler.hasMessages(TRACK_ENDED))) {
             scheduleDelayedShutdown();
             return true;
         }
@@ -667,10 +666,14 @@ public class MusicPlaybackService extends Service {
         sendBroadcast(audioEffectsIntent);
 
         // remove any pending alarms
-        mAlarmManager.cancel(mShutdownIntent);
+        if (mAlarmManager != null) {
+            mAlarmManager.cancel(mShutdownIntent);
+        }
 
         // Remove all pending messages before kill the player
-        mPlayerHandler.removeCallbacksAndMessages(null);
+        if (mPlayerHandler != null) {
+            mPlayerHandler.removeCallbacksAndMessages(null);
+        }
 
         // Release the player
         if (mPlayer != null) {
@@ -679,12 +682,16 @@ public class MusicPlaybackService extends Service {
         }
 
         // Remove the audio focus listener and lock screen controls
-        mAudioManager.abandonAudioFocus(mAudioFocusListener);
-        mAudioManager.unregisterRemoteControlClient(mRemoteControlClient);
+        if (mAudioManager != null) {
+            mAudioManager.abandonAudioFocus(mAudioFocusListener);
+            mAudioManager.unregisterRemoteControlClient(mRemoteControlClient);
+        }
 
         // Remove any callbacks from the handler
-        mPlayerHandler.removeCallbacksAndMessages(null);
-        mPlayerHandler.getLooper().quit();
+        if (mPlayerHandler != null) {
+            mPlayerHandler.removeCallbacksAndMessages(null);
+            mPlayerHandler.getLooper().quit();
+        }
 
         // Close the cursor
         closeCursor();
@@ -697,7 +704,9 @@ public class MusicPlaybackService extends Service {
         }
 
         // Release the wake lock
-        mWakeLock.release();
+        if (mWakeLock != null) {
+            mWakeLock.release();
+        }
     }
 
     /**
@@ -1440,7 +1449,7 @@ public class MusicPlaybackService extends Service {
      * @param full True if the queue is full
      */
     private void saveQueue(final boolean full) {
-        if (!mQueueIsSaveable) {
+        if (!mQueueIsSaveable || mPreferences == null) {
             return;
         }
 
@@ -1682,6 +1691,10 @@ public class MusicPlaybackService extends Service {
      * @return The current media player audio session ID
      */
     public int getAudioSessionId() {
+        if (mPlayer == null) {
+            return -1;
+        }
+
         synchronized (this) {
             return mPlayer.getAudioSessionId();
         }

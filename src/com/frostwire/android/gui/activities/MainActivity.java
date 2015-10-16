@@ -394,11 +394,14 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_PHONE_STATE)) {
+            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We'll need to be able to read and write files to disk when you download. \n\nWe'll need to know when you start a call so we can stop the music player and you can talk.").
-                    setTitle("Why we need phone state & storage permissions.");
+            builder.setMessage("We'll need to be able to read and write files to disk when you download and play music from disk.").
+                    setTitle("Why we need storage permissions.");
+
+            //builder.setMessage("FrostWire needs to know about your phone state so that it can control the music volume in case someone calls.").
+            //        setTitle("Why we need phone state permissions.");
+
             builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -408,7 +411,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_PHONE_STATE}, 1234567890);
+                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1234567890);
                 }
             });
 
@@ -430,12 +433,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     return;
                 }
             }
-            if (permissions[i]==Manifest.permission.READ_PHONE_STATE && grantResults[i]==PackageManager.PERMISSION_GRANTED) {
-                mToken = MusicUtils.bindToService(this, this);
-            }
+            mToken = MusicUtils.bindToService(this, this);
         }
-
-
     }
 
 

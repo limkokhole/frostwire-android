@@ -22,8 +22,6 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.widget.RemoteViews;
 
-import com.andrew.apollo.utils.ApolloUtils;
-
 import com.frostwire.android.R;
 
 /**
@@ -167,19 +165,19 @@ public class NotificationHelper {
     private void initExpandedPlaybackActions(boolean isPlaying) {
         // Play and pause
         mExpandedView.setOnClickPendingIntent(R.id.notification_expanded_base_play,
-                retreivePlaybackActions(1));
+                retrievePlaybackActions(1));
 
         // Skip tracks
         mExpandedView.setOnClickPendingIntent(R.id.notification_expanded_base_next,
-                retreivePlaybackActions(2));
+                retrievePlaybackActions(2));
 
         // Previous tracks
         mExpandedView.setOnClickPendingIntent(R.id.notification_expanded_base_previous,
-                retreivePlaybackActions(3));
+                retrievePlaybackActions(3));
 
         // Stop and collapse the notification
         mExpandedView.setOnClickPendingIntent(R.id.notification_expanded_base_collapse,
-                retreivePlaybackActions(4));
+                retrievePlaybackActions(4));
 
         // Update the play button image
         mExpandedView.setImageViewResource(R.id.notification_expanded_base_play,
@@ -192,19 +190,19 @@ public class NotificationHelper {
     private void initPlaybackActions(boolean isPlaying) {
         // Play and pause
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_base_play,
-                retreivePlaybackActions(1));
+                retrievePlaybackActions(1));
 
         // Skip tracks
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_base_next,
-                retreivePlaybackActions(2));
+                retrievePlaybackActions(2));
 
         // Previous tracks
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_base_previous,
-                retreivePlaybackActions(3));
+                retrievePlaybackActions(3));
 
         // Stop and collapse the notification
         mNotificationTemplate.setOnClickPendingIntent(R.id.notification_base_collapse,
-                retreivePlaybackActions(4));
+                retrievePlaybackActions(4));
 
         // Update the play button image
         mNotificationTemplate.setImageViewResource(R.id.notification_base_play,
@@ -215,7 +213,7 @@ public class NotificationHelper {
      * @param which Which {@link PendingIntent} to return
      * @return A {@link PendingIntent} ready to control playback
      */
-    private final PendingIntent retreivePlaybackActions(final int which) {
+    private final PendingIntent retrievePlaybackActions(final int which) {
         Intent action;
         PendingIntent pendingIntent;
         final ComponentName serviceName = new ComponentName(mService, MusicPlaybackService.class);
