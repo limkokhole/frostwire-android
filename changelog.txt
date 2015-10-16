@@ -1,4 +1,4 @@
-FrostWire 1.6.5 - OCTOBER/08/2015
+FrostWire 1.6.5 - OCTOBER/16/2015
  - Fixes bug where search results that have finished didn't refresh
    user interface and users would think FrostWire was searching forever.
  - Compatible with Android 6 (Marshmallow) new permissions framework.
@@ -6,6 +6,7 @@ FrostWire 1.6.5 - OCTOBER/08/2015
  - Apk search results icon is now an Android head.
  - Fixes SoundCloud search.
  - Multiple crash fixes.
+ - New Keep In Touch dialog after the installation wizard.
  - New Copy Magnet action on transfers.
  - New Copy Infohash action on transfers.
 
