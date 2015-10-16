@@ -33,8 +33,11 @@ import android.text.method.NumberKeyListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
@@ -384,4 +387,62 @@ public final class UIUtils {
         activity.overridePendingTransition(0, 0);
     }
 
+    /**
+     *
+     * @param context
+     * @param showInstallationCompleteSection - true if you want to display "Your installation is now complete. Thank You" section
+     * @param dismissListener - what happens when the dialog is dismissed.
+     * @param referrerContextSuffix - string appended at the end of social pages click urls's ?ref=_android_ parameter.
+     */
+    public static void showSocialLinksDialog(final Context context,
+                                             boolean showInstallationCompleteSection,
+                                             DialogInterface.OnDismissListener dismissListener,
+                                             String referrerContextSuffix) {
+        final Dialog socialLinksDialog = new Dialog(context);
+        socialLinksDialog.setOnDismissListener(dismissListener);
+        socialLinksDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        socialLinksDialog.setContentView(R.layout.view_social_buttons);
+
+        ImageButton fbButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_facebook_button);
+        ImageButton twitterButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_twitter_button);
+        ImageButton redditButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_reddit_button);
+
+        final String referrerParam  = "?ref=android_" + ((referrerContextSuffix!=null) ? referrerContextSuffix.trim() : "");
+
+        fbButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtils.openURL(v.getContext(), Constants.SOCIAL_URL_FACEBOOK_PAGE + referrerParam);
+            }
+        });
+
+        twitterButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtils.openURL(v.getContext(), Constants.SOCIAL_URL_TWITTER_PAGE + referrerParam);
+            }
+        });
+
+        redditButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                UIUtils.openURL(v.getContext(), Constants.SOCIAL_URL_REDDIT_PAGE + referrerParam);
+            }
+        });
+
+        if (showInstallationCompleteSection) {
+            LinearLayout installationCompleteLayout =
+                    (LinearLayout) socialLinksDialog.findViewById(R.id.view_social_buttons_installation_complete_layout);
+            installationCompleteLayout.setVisibility(View.VISIBLE);
+            ImageButton dismissCheckButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_dismiss_check);
+            dismissCheckButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    socialLinksDialog.dismiss();
+                }
+            });
+        }
+
+        socialLinksDialog.show();
+    }
 }

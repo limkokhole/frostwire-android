@@ -163,4 +163,9 @@ public final class Constants {
 
     public static final int NOTIFIED_BLOOM_FILTER_BITSET_SIZE = 320000; //40 kilobytes
     public static final int NOTIFIED_BLOOM_FILTER_EXPECTED_ELEMENTS = 10000;
+
+    /** Social Media official URLS */
+    public static final String SOCIAL_URL_FACEBOOK_PAGE = "https://www.facebook.com/FrostwireOfficial";
+    public static final String SOCIAL_URL_TWITTER_PAGE = "https://twitter.com/frostwire";
+    public static final String SOCIAL_URL_REDDIT_PAGE = "https://reddit.com/r/frostwire";
 }

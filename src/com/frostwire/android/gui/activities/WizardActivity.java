@@ -18,19 +18,22 @@
 
 package com.frostwire.android.gui.activities;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.Window;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ViewFlipper;
-
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
+import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.WizardPageView;
 import com.frostwire.android.gui.views.WizardPageView.OnCompleteListener;
+
+import static android.content.DialogInterface.OnDismissListener;
 
 /**
  * @author gubatron
@@ -106,7 +109,12 @@ public class WizardActivity extends AbstractActivity {
             pageView.finish();
             if (!pageView.hasNext()) {
                 ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_INITIAL_SETTINGS_COMPLETE, true);
-                finish();
+                UIUtils.showSocialLinksDialog(this, true, new OnDismissListener() {
+                    @Override
+                    public void onDismiss(DialogInterface dialog) {
+                        WizardActivity.this.finish();
+                    }
+                }, "wizard");
             } else {
                 viewFlipper.showNext();
                 setupViewPage();

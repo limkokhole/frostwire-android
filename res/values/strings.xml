@@ -536,4 +536,7 @@
     <string name="send_feedback">Send Feedback</string>
     <string name="choose_email_app">Choose an Email App...</string>
     <string name="media_preview">%s preview</string>
+    <string name="your_installation_is_complete">Your installation is complete.</string>
+    <string name="thank_you">Thank you!</string>
+    <string name="keep_in_touch">Keep in touch!</string>
 </resources>
