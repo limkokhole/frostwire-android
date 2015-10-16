@@ -35,10 +35,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.Toast;
+import android.widget.*;
 import com.andrew.apollo.utils.MusicUtils;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
@@ -406,6 +403,7 @@ public final class UIUtils {
         ImageButton fbButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_facebook_button);
         ImageButton twitterButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_twitter_button);
         ImageButton redditButton = (ImageButton) socialLinksDialog.findViewById(R.id.view_social_buttons_reddit_button);
+        Button okButton = (Button) socialLinksDialog.findViewById(R.id.view_social_buttons_ok_button);
 
         final String referrerParam  = "?ref=android_" + ((referrerContextSuffix!=null) ? referrerContextSuffix.trim() : "");
 
@@ -430,6 +428,13 @@ public final class UIUtils {
             }
         });
 
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                socialLinksDialog.dismiss();
+            }
+        });
+
         if (showInstallationCompleteSection) {
             LinearLayout installationCompleteLayout =
                     (LinearLayout) socialLinksDialog.findViewById(R.id.view_social_buttons_installation_complete_layout);
@@ -442,6 +447,8 @@ public final class UIUtils {
                 }
             });
         }
+
+
 
         socialLinksDialog.show();
     }
