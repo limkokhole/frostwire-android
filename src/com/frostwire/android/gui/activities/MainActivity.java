@@ -169,6 +169,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         Engine.instance().shutdown();
     }
 
+    public void restart(int delayInMS) {
+        PendingIntent intent = PendingIntent.getActivity(this.getBaseContext(), 0, new Intent(getIntent()), getIntent().getFlags());
+        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delayInMS, intent);
+        shutdown();
+    }
+
     private boolean isShutdown(Intent intent) {
         if (intent == null) {
             return false;
@@ -357,7 +364,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         if (mainBroadcastReceiver != null) {
             try {
                 unregisterReceiver(mainBroadcastReceiver);
-            } catch (Throwable t) {
+            } catch (Throwable ignored) {
                 //oh well (the api doesn't provide a way to know if it's been registered before,
                 //seems like overkill keeping track of these ourselves.)
             }
@@ -393,15 +400,14 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE) ||
-            ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+            ActivityCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage("We'll need to be able to read and write files to disk when you download and play music from disk.").
-                    setTitle("Why we need storage permissions.");
-
-            //builder.setMessage("FrostWire needs to know about your phone state so that it can control the music volume in case someone calls.").
-            //        setTitle("Why we need phone state permissions.");
-
+            builder.setTitle(R.string.why_we_need_storage_permissions);
+            builder.setMessage(R.string.why_we_need_phone_state_permissions_summary);
             builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -428,12 +434,26 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                     permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showOkCancelDialog(this, null, R.string.exit, null, null);
-                    onShutdownDialogButtonPositive();
+                    UIUtils.showInformationDialog(this, R.string.frostwire_shutting_down_no_permissions, 0, true,
+                            new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            shutdown();
+                        }
+                    });
+
                     return;
                 }
             }
             mToken = MusicUtils.bindToService(this, this);
+
+            //RESTART!
+            UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    restart(2000);
+                }
+            });
         }
     }
 

@@ -523,8 +523,7 @@ public class MusicPlaybackService extends Service {
         super.onCreate();
 
         if (PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) &&
-            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) &&
-            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)) {
+            PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             initService();
         }
     }
@@ -697,9 +696,14 @@ public class MusicPlaybackService extends Service {
         closeCursor();
 
         // Unregister the mount listener
-        unregisterReceiver(mIntentReceiver);
+        try {
+            unregisterReceiver(mIntentReceiver);
+        } catch (Throwable ignored) { }
+
         if (mUnmountReceiver != null) {
-            unregisterReceiver(mUnmountReceiver);
+            try {
+                unregisterReceiver(mUnmountReceiver);
+            } catch (Throwable ignored) { }
             mUnmountReceiver = null;
         }
 

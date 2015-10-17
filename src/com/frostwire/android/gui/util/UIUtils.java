@@ -159,6 +159,33 @@ public final class UIUtils {
         return dialog;
     }
 
+    public static Dialog showInformationDialog(Context context, int messageId, int titleId, boolean hideTitle, final OnClickListener positiveListener) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage(messageId);
+
+        if (!hideTitle) {
+            builder.setTitle(titleId);
+        }
+
+        builder.setPositiveButton(context.getString(android.R.string.ok), new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (positiveListener != null) {
+                    try {
+                        positiveListener.onClick(dialog, which);
+                    } catch (Throwable ignored) {}
+                }
+                dialog.dismiss();
+            }
+        });
+        Dialog dialog = builder.create();
+        if (hideTitle) {
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        }
+        dialog.show();
+        return dialog;
+    }
+
     public static void showYesNoDialog(Context context, int iconId, int messageId, int titleId, OnClickListener positiveListener, OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
 
