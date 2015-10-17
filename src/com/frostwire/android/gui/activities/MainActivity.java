@@ -407,7 +407,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.why_we_need_storage_permissions);
-            builder.setMessage(R.string.why_we_need_phone_state_permissions_summary);
+            builder.setMessage(R.string.why_we_need_storage_permissions_summary);
             builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -448,12 +448,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             mToken = MusicUtils.bindToService(this, this);
 
             //RESTART!
-            UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
+            /**UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     restart(2000);
                 }
             });
+             */
         }
     }
 
