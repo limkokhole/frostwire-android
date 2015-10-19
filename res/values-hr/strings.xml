@@ -206,11 +206,11 @@
     <string name="azureus_manager_item_initializing">Počinjem</string>
     <string name="azureus_manager_item_allocating">Dodjeljujem</string>
     <string name="azureus_manager_item_checking">Provjeravam</string>
-    <string name="azureus_manager_item_finishing">Završavanje</string>
+    <string name="azureus_manager_item_finishing">Završavam</string>
     <string name="azureus_manager_item_ready">Čekam da se ostali torrenti poredaju</string>
     <string name="azureus_manager_item_downloading">Preuzimam</string>
     <string name="azureus_manager_item_seeding">Dijelim</string>
-    <string name="azureus_manager_item_superseeding">Super-dijeljenje</string>
+    <string name="azureus_manager_item_superseeding">Super-dijelim</string>
     <string name="azureus_manager_item_stopping">Zaustavljam</string>
     <string name="azureus_manager_item_stopped">Zaustavljeno</string>
     <string name="azureus_manager_item_paused">Zaustavljeno</string>
@@ -220,7 +220,7 @@
     <string name="azureus_general_view_no">Ne</string>
     <string name="pause_torrent_menu_action">Zaustavi</string>
     <string name="resume_torrent_menu_action">Nastavi</string>
-    <string name="peer_http_download_status_downloading">Preuzimanje</string>
+    <string name="peer_http_download_status_downloading">Preuzimam</string>
     <string name="peer_http_download_status_complete">Završeno</string>
     <string name="peer_http_download_status_error">Greška</string>
     <string name="peer_http_download_status_cancelled">Otkazano</string>
@@ -239,7 +239,7 @@
     <string name="clear_complete">Pročiščavanje gotovo</string>
     <string name="downloading_promotion">Preuzimam %s</string>
     <string name="dummy_hint">[Savjet]</string>
-    <string name="dummy_peer_file_count">[Peer/Brojanje datoteka]</string>
+    <string name="dummy_peer_file_count">[Peer/brojanje datoteka]</string>
     <string name="torrent_settings">Torrent postavke</string>
     <string name="dummy_summary">[Sažetak]</string>
     <string name="dummy_version">[Inačica]</string>
@@ -259,7 +259,7 @@
     <string name="seeds_n">Seedovi: %s</string>
     <string name="peers_n">Peerovi: %s</string>
     <string name="size_unknown">veličina nepoznata</string>
-    <string name="playing">Sviranje</string>
+    <string name="playing">Sviram</string>
     <string name="back">Natrag</string>
     <string name="are_you_sure">Jeste li sigurni?</string>
     <string name="dummy_media_controller_time">00:00</string>
@@ -321,8 +321,8 @@
     <string name="share_indication_dialog_title">Kako dijeliti/od-dijeliti datoteke</string>
     <string name="drawer_close">Zatvori navigacijsku ladicu</string>
     <string name="saving_to_internal_memory_description">Imate i SD karticu (%1$s dostupno)</string>
-    <string name="type_here_to_search">Pišite ovdje za traženje</string>
-    <string name="broadcast_discovery_summary">Spojite se na lokalne Wi-Fi preuzimatelje preko broadcasta (više prometa na routeru)</string>
+    <string name="type_here_to_search">Pišite ovdje kako biste počeli pretraživati</string>
+    <string name="broadcast_discovery_summary">Spojite se na lokalne Wi-Fi preuzimatelje preko broadcasta (povećati će promet na routeru)</string>
     <string name="dialog_new_transfer_text_text">Jeste li sigurni da želite preuzeti %1$s (%2$s)</string>
     <string name="add_transfer_label">Zaljepite magnet poveznicu ili torrent URL</string>
     <string name="multicast_discovery_summary">Spojite se na lokalne Wi-Fi preuzimatelje preko multicasta (preporučeno)</string>
@@ -452,8 +452,8 @@
     <string name="n_files_shared">%d datoteka su podijeljenje FrostWire uređajima na istoj Wi-Fi mreži.</string>
     <string name="install_bitcoin_wallet">Instaliraj Bitcoin lisnicu</string>
     <string name="device_storage">Spremište uređaja</string>
-    <string name="let_apos_s_set_you_up_before_we_begin_">Idemo vas postaviti prije nego što počnemo.</string>
-    <string name="use_yify_summary">Yify je baziran na magnet poveznicama i radi samo na Wi-Fiu</string>
+    <string name="let_apos_s_set_you_up_before_we_begin_">Idemo Vas postaviti prije nego što počnemo.</string>
+    <string name="use_yify_summary">Yify koristi "magnet" poveznice i radi samo putem Wi-Fija</string>
     <string name="media_type_applications">Aplikacije</string>
     <string name="clear_search_cache_summary">Očisti unose predmemorije traženja</string>
     <string name="delete_file_menu_action_count">Obriši (%s)</string>
@@ -507,7 +507,7 @@
     <string name="saving_to_sd_card">Spremam na SD karticu.</string>
     <string name="torrent_max_peers_summary">Maksimalni broj preuzimatelja</string>
     <string name="torrent_max_downloads_summary">Maksimalni broj preuzimanja</string>
-    <string name="transfers_context_menu_stop_delete_data">Zaustaviti i obrisati podatke</string>
+    <string name="transfers_context_menu_stop_delete_data">Zaustavi i obriši podatke</string>
     <string name="search_settings">Postavke traženja</string>
     <string name="media_player_failed">Media player failed</string>
     <string name="use_btjunkie">Koristi BTJunkie</string>
