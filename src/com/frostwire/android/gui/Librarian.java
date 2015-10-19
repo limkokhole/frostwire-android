@@ -187,17 +187,6 @@ public final class Librarian {
     public Finger finger() {
         Finger finger = new Finger();
 
-        finger.uuid = ConfigurationManager.instance().getUUIDString();
-        finger.nickname = ConfigurationManager.instance().getNickname();
-        finger.frostwireVersion = Constants.FROSTWIRE_VERSION_STRING;
-
-        finger.deviceVersion = Build.VERSION.RELEASE;
-        finger.deviceModel = Build.MODEL;
-        finger.deviceProduct = Build.PRODUCT;
-        finger.deviceName = Build.DEVICE;
-        finger.deviceManufacturer = Build.MANUFACTURER;
-        finger.deviceBrand = Build.BRAND;
-
         finger.numTotalAudioFiles = getNumFiles(Constants.FILE_TYPE_AUDIO);
         finger.numTotalVideoFiles = getNumFiles(Constants.FILE_TYPE_VIDEOS);
         finger.numTotalPictureFiles = getNumFiles(Constants.FILE_TYPE_PICTURES);

@@ -23,29 +23,6 @@ package com.frostwire.android.gui;
  * @author aldenml
  */
 public final class Finger {
-
-    // general data
-
-    public String uuid;
-
-    public String nickname;
-
-    public String frostwireVersion;
-
-    // device data
-
-    public String deviceVersion;
-
-    public String deviceModel;
-
-    public String deviceProduct;
-
-    public String deviceName;
-
-    public String deviceManufacturer;
-
-    public String deviceBrand;
-
     // total data
 
     public int numTotalAudioFiles;
@@ -65,15 +42,12 @@ public final class Finger {
         StringBuilder sb = new StringBuilder();
 
         sb.append("(");
-        sb.append(nickname);
-        sb.append("[");
         sb.append("aud:" + numTotalAudioFiles + ", ");
         sb.append("vid:" + numTotalVideoFiles + ", ");
         sb.append("pic:" + numTotalPictureFiles + ", ");
         sb.append("doc:" + numTotalDocumentFiles + ", ");
         sb.append("app:" + numTotalTorrentFiles + ", ");
         sb.append("rng:" + numTotalRingtoneFiles);
-        sb.append("]");
         sb.append(")");
 
         return sb.toString();

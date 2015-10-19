@@ -152,10 +152,6 @@ public class ConfigurationManager {
         setString(Constants.PREF_KEY_GUI_NICKNAME, nickname);
     }
 
-    public byte[] getUUID() {
-        return getByteArray(Constants.PREF_KEY_CORE_UUID);
-    }
-
     public String getUUIDString() {
         return getString(Constants.PREF_KEY_CORE_UUID);
     }
