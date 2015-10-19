@@ -52,8 +52,6 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
 
     private static final String TAG = "FW.EngineBroadcastReceiver";
 
-    private boolean wasPlaying;
-
     public EngineBroadcastReceiver() {
     }
 
@@ -74,7 +72,7 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
                     });
                 }
             } else if (action.equals(Intent.ACTION_MEDIA_UNMOUNTED)) {
-                handleMediaUnmounted(context, intent);
+                handleMediaUnmounted(intent);
             } else if (action.equals(TelephonyManager.ACTION_PHONE_STATE_CHANGED)) {
                 handleActionPhoneStateChanged(intent);
             } else if (action.equals(Intent.ACTION_MEDIA_SCANNER_FINISHED)) {
@@ -97,16 +95,6 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
         String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
         String msg = "Phone state changed to " + state;
         Log.v(TAG, msg);
-
-        if (TelephonyManager.EXTRA_STATE_RINGING.equals(state) || TelephonyManager.EXTRA_STATE_OFFHOOK.equals(state) || TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-            CoreMediaPlayer mediaPlayer = Engine.instance().getMediaPlayer();
-            if (mediaPlayer.isPlaying()) {
-                wasPlaying = true;
-            } else if (wasPlaying && TelephonyManager.EXTRA_STATE_IDLE.equals(state)) {
-                mediaPlayer.seekTo(Math.max(0, mediaPlayer.getPosition() - 2000));
-                wasPlaying = false;
-            }
-        }
     }
 
     private void handleDisconnectedNetwork(NetworkInfo networkInfo) {
@@ -203,10 +191,9 @@ public class EngineBroadcastReceiver extends BroadcastReceiver {
      * make sure the current save location will be the primary external if
      * the media being unmounted is the sd card.
      *
-     * @param context
      * @param intent
      */
-    private void handleMediaUnmounted(Context context, Intent intent) {
+    private void handleMediaUnmounted(Intent intent) {
         String path = intent.getDataString().replace("file://", "");
         if (!SystemUtils.isPrimaryExternalPath(new File(path)) &&
                 SystemUtils.isPrimaryExternalStorageMounted()) {

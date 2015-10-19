@@ -29,20 +29,11 @@ public interface CoreMediaPlayer {
 
     public void play(Playlist playlist);
 
-    public void playNext();
-
     public void stop();
 
     public void shutdown();
 
     public boolean isPlaying();
-    
-    public void seekTo(int position);
-    
-    /**
-     * Return -1 if player isn't ready or not playing.
-     */
-    public int getPosition();
     
     /**
      * The current file the media player is playing.
@@ -50,10 +41,4 @@ public interface CoreMediaPlayer {
      * @return
      */
     public FileDescriptor getCurrentFD();
-    
-    public Playlist getPlaylist();
-
-    public void start();
-
-    public int getDuration();
 }

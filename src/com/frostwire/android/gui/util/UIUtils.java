@@ -70,7 +70,6 @@ public final class UIUtils {
      * Localizable Number Format constant for the current default locale.
      */
     private static NumberFormat NUMBER_FORMAT0; // localized "#,##0"
-    private static NumberFormat NUMBER_FORMAT1; // localized "#,##0.0"
 
     private static String[] BYTE_UNITS = new String[]{"b", "KB", "Mb", "Gb", "Tb"};
 
@@ -81,11 +80,6 @@ public final class UIUtils {
         NUMBER_FORMAT0.setMaximumFractionDigits(0);
         NUMBER_FORMAT0.setMinimumFractionDigits(0);
         NUMBER_FORMAT0.setGroupingUsed(true);
-
-        NUMBER_FORMAT1 = NumberFormat.getNumberInstance(Locale.getDefault());
-        NUMBER_FORMAT1.setMaximumFractionDigits(1);
-        NUMBER_FORMAT1.setMinimumFractionDigits(1);
-        NUMBER_FORMAT1.setGroupingUsed(true);
     }
 
     public static void showToastMessage(Context context, String message, int duration, int gravity, int xOffset, int yOffset) {
@@ -224,27 +218,6 @@ public final class UIUtils {
                 dialog.dismiss();
             }
         });
-    }
-
-    public static EditText buildEditTextWithType(Context context, KeyListener keyListener, String text) {
-        EditText editText = new EditText(context);
-        editText.setKeyListener(keyListener);
-        editText.setText(text);
-        return editText;
-    }
-
-    public static EditText buildNumericEditText(Context context, String text) {
-        return buildEditTextWithType(context, new NumberKeyListener() {
-            @Override
-            public int getInputType() {
-                return InputType.TYPE_CLASS_NUMBER;
-            }
-
-            @Override
-            protected char[] getAcceptedChars() {
-                return new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-            }
-        }, text);
     }
 
     public static String getBytesInHuman(float size) {

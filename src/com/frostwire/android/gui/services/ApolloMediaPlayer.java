@@ -48,10 +48,6 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
     }
 
     @Override
-    public void playNext() {
-    }
-
-    @Override
     public void stop() {
         try {
             if (MusicUtils.mService != null) {
@@ -79,15 +75,6 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
     }
 
     @Override
-    public void seekTo(int position) {
-    }
-
-    @Override
-    public int getPosition() {
-        return 0;
-    }
-
-    @Override
     public FileDescriptor getCurrentFD() {
         try {
             long audioId = MusicUtils.getCurrentAudioId();
@@ -105,19 +92,5 @@ public class ApolloMediaPlayer implements CoreMediaPlayer {
         }
 
         return null;
-    }
-
-    @Override
-    public Playlist getPlaylist() {
-        return null;
-    }
-
-    @Override
-    public void start() {
-    }
-
-    @Override
-    public int getDuration() {
-        return 0;
     }
 }
