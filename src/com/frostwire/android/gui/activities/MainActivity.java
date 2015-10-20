@@ -178,22 +178,26 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     private boolean isShutdown(Intent intent) {
-        if (intent == null) {
-            return false;
-        }
-
-        if (intent.getBooleanExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), false)) {
+        boolean result = intent == null && intent.getBooleanExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), false);
+        if (result) {
             shutdown();
-            return true;
         }
+        return result;
+    }
 
-        return false;
+    private boolean isRestart(Intent intent) {
+        boolean result = intent != null && intent.getBooleanExtra("restart-" + ConfigurationManager.instance().getUUIDString(), false);
+        if (result) {
+            restart(2000);
+        }
+        return result;
     }
 
     @Override
     protected void initComponents(Bundle savedInstanceState) {
 
-        if (isShutdown(getIntent())) {
+        Intent intent = getIntent();
+        if (isRestart(intent) || isShutdown(intent)) {
             return;
         }
 
@@ -256,6 +260,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         if (isShutdown(intent)) {
             return;
+        }
+
+        if (isRestart(intent)) {
+
         }
 
         String action = intent.getAction();

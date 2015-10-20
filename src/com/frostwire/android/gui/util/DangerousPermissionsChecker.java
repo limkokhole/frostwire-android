@@ -22,9 +22,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import com.frostwire.android.R;
+import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.gui.activities.MainActivity;
 import com.frostwire.util.Ref;
 
@@ -49,11 +51,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
     public DangerousPermissionsChecker(Activity activity, PermissionCheck requestType) {
         checkType = requestType;
         this.activityRef = Ref.weak(activity);
-        if (checkType == PermissionCheck.ExternalStorage) {
-            if (!(activity instanceof MainActivity)) {
-                throw new IllegalArgumentException("ExternalStorage permission checks must be done with a reference to a MainActivity object as the context.");
-            }
-        }
     }
 
     public boolean noAccess() {
@@ -77,9 +74,9 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         if (!Ref.alive(activityRef)) {
             return true;
         }
-        MainActivity mainActivity = (MainActivity) activityRef.get();
-        return ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-                ActivityCompat.checkSelfPermission(mainActivity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
+        Activity activity = activityRef.get();
+        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+                ActivityCompat.checkSelfPermission(activity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
     }
 
     private boolean noPhoneStateAccess() {
@@ -94,21 +91,21 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         if (!Ref.alive(activityRef)) {
             return;
         }
-        final MainActivity mainActivity = (MainActivity) activityRef.get();
-        AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
+        final Activity activity = activityRef.get();
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setIcon(R.drawable.sd_card_notification);
         builder.setTitle(R.string.why_we_need_storage_permissions);
         builder.setMessage(R.string.why_we_need_storage_permissions_summary);
         builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                mainActivity.shutdown();
+                shutdown();
             }
         });
         builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(mainActivity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
+                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
             }
         });
         AlertDialog alertDialog = builder.create();
@@ -182,27 +179,47 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         if (!Ref.alive(activityRef)) {
             return;
         }
-        final MainActivity mainActivity = (MainActivity) activityRef.get();
+        final Activity activity = activityRef.get();
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                         permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showInformationDialog(mainActivity, R.string.frostwire_shutting_down_no_permissions, 0, true,
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, 0, true,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    mainActivity.shutdown();
+                                    shutdown();
                                 }
                             });
                     return;
                 }
             }
-            UIUtils.showInformationDialog(mainActivity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
+            UIUtils.showInformationDialog(activity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    mainActivity.restart(2000);
+                    restart();
                 }
             });
         }
+    }
+
+    private void shutdown() {
+        if (!Ref.alive(activityRef)) {
+            return;
+        }
+        final Activity activity = activityRef.get();
+        Intent shutdownIntent = new Intent();
+        shutdownIntent.putExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), true);
+        activity.startActivity(shutdownIntent);
+    }
+
+    private void restart() {
+        if (!Ref.alive(activityRef)) {
+            return;
+        }
+        final Activity activity = activityRef.get();
+        Intent shutdownIntent = new Intent();
+        shutdownIntent.putExtra("restart-" + ConfigurationManager.instance().getUUIDString(), true);
+        activity.startActivity(shutdownIntent);
     }
 }
