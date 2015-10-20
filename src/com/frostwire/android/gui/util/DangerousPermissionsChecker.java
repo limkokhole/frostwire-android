@@ -128,13 +128,13 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         builder.setIcon(R.drawable.device_type_type_phone);
         builder.setTitle(R.string.why_we_need_phone_state_permissions);
         builder.setMessage(R.string.why_we_need_phone_state_permissions_summary);
-        builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, 0, true, null);
             }
         });
-        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_STATE_PERMISSIONS_REQUEST_CODE);
@@ -194,7 +194,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, 0, true, null);
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.notice, false, null);
                     return;
                 }
             }

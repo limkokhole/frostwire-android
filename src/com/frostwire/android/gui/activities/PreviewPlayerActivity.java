@@ -88,6 +88,11 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
         super(R.layout.activity_preview_player);
 
         permissionsChecker = new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.PhoneState);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         if (!permissionsRequested && permissionsChecker.noAccess()) {
             permissionsChecker.showPermissionsRationale();
             permissionsRequested = true;
