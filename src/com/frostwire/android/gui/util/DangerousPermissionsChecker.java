@@ -20,14 +20,18 @@ package com.frostwire.android.gui.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
 import com.frostwire.android.R;
-import com.frostwire.android.core.ConfigurationManager;
-import com.frostwire.android.gui.activities.MainActivity;
+import com.frostwire.android.gui.adnetworks.Offers;
+import com.frostwire.android.gui.services.Engine;
+import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 import java.lang.ref.WeakReference;
@@ -45,12 +49,15 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
 
     public static final int EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE = 0xAAAA;
     public static final int PHONE_STATE_PERMISSIONS_REQUEST_CODE = 0xBBBB;
+    private static final Logger LOG = Logger.getLogger(DangerousPermissionsChecker.class);
     private final WeakReference<Activity> activityRef;
     private final PermissionCheck checkType;
 
     public DangerousPermissionsChecker(Activity activity, PermissionCheck requestType) {
-        checkType = requestType;
-        this.activityRef = Ref.weak(activity);
+        if (activity instanceof ActivityCompat.OnRequestPermissionsResultCallback) {
+            checkType = requestType;
+            this.activityRef = Ref.weak(activity);
+        } else throw new IllegalArgumentException("The activity must implement ActivityCompat.OnRequestPermissionsResultCallback");
     }
 
     public boolean noAccess() {
@@ -99,6 +106,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                LOG.info("shutting down before permissions were asked. User touched 'Exit'");
                 shutdown();
             }
         });
@@ -151,6 +159,36 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         }
     }
 
+    private void onExternalPermissionsResult(String[] permissions, int[] grantResults) {
+        if (!Ref.alive(activityRef)) {
+            return;
+        }
+        final Activity activity = activityRef.get();
+        for (int i=0; i<permissions.length; i++) {
+            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
+                if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
+                    permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, 0, true,
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    LOG.info("shutting down, permissions were denied by user.");
+                                    shutdown();
+                                }
+                            });
+                    return;
+                }
+            }
+        }
+        UIUtils.showInformationDialog(activity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                LOG.info("Restarting, user granted storage permissions.");
+                restart(1000);
+            }
+        });
+    }
+
     private void onPhoneStatePermissionsResult(String[] permissions, int[] grantResults) {
         if (!Ref.alive(activityRef)) {
             return;
@@ -175,51 +213,29 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
 
     }
 
-    private void onExternalPermissionsResult(String[] permissions, int[] grantResults) {
+
+    public void shutdown() {
         if (!Ref.alive(activityRef)) {
             return;
         }
         final Activity activity = activityRef.get();
-        for (int i=0; i<permissions.length; i++) {
-            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
-                if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                        permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, 0, true,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    shutdown();
-                                }
-                            });
-                    return;
-                }
-            }
-            UIUtils.showInformationDialog(activity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    restart();
-                }
-            });
-        }
+
+        Offers.stopAdNetworks(activity);
+        activity.finish();
+        Engine.instance().shutdown();
     }
 
-    private void shutdown() {
+    public void restart(int delayInMS) {
         if (!Ref.alive(activityRef)) {
             return;
         }
         final Activity activity = activityRef.get();
-        Intent shutdownIntent = new Intent();
-        shutdownIntent.putExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), true);
-        activity.startActivity(shutdownIntent);
-    }
-
-    private void restart() {
-        if (!Ref.alive(activityRef)) {
-            return;
-        }
-        final Activity activity = activityRef.get();
-        Intent shutdownIntent = new Intent();
-        shutdownIntent.putExtra("restart-" + ConfigurationManager.instance().getUUIDString(), true);
-        activity.startActivity(shutdownIntent);
+        PendingIntent intent = PendingIntent.getActivity(activity.getBaseContext(),
+                0,
+                new Intent(activity.getIntent()),
+                activity.getIntent().getFlags());
+        AlarmManager manager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
+        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delayInMS, intent);
+        shutdown();
     }
 }

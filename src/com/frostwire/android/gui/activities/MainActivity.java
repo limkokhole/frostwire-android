@@ -18,12 +18,16 @@
 
 package com.frostwire.android.gui.activities;
 
-import android.app.*;
+import android.app.ActionBar;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.app.NotificationManager;
 import android.content.*;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.view.KeyEvent;
@@ -78,44 +82,36 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
  * @author aldenml
  *
  */
-public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection {
+public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private static final Logger LOG = Logger.getLogger(MainActivity.class);
-
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
     private static final String CURRENT_FRAGMENT_KEY = "current_fragment";
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
-
     private static boolean firstTime = true;
-
+    private final DangerousPermissionsChecker permissionsChecker;
     private MainController controller;
-
     private DrawerLayout drawerLayout;
-
     @SuppressWarnings("deprecation")
     private ActionBarDrawerToggle drawerToggle;
-
     private View leftDrawer;
     private ListView listMenu;
-
     private SearchFragment search;
     private BrowsePeerFragment library;
     private TransfersFragment transfers;
-
     private Fragment currentFragment;
     private final Stack<Integer> fragmentsStack;
-
     private PlayerMenuItemView playerItem;
-
     private TimerSubscription playerSubscription;
-
     private BroadcastReceiver mainBroadcastReceiver;
+    private boolean permissionsRequested = false;
 
     public MainActivity() {
         super(R.layout.activity_main);
         this.controller = new MainController(this);
-        this.fragmentsStack = new Stack<Integer>();
+        this.fragmentsStack = new Stack<>();
+        this.permissionsChecker = newPermissionsChecker();
     }
 
     public void switchFragment(int itemId) {
@@ -167,17 +163,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         Engine.instance().shutdown();
     }
 
-    public void restart(int delayInMS) {
-        PendingIntent intent = PendingIntent.getActivity(this.getBaseContext(),
-                0,
-                new Intent(getIntent()),
-                getIntent().getFlags());
-        AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-        manager.set(AlarmManager.RTC, System.currentTimeMillis() + delayInMS, intent);
-        shutdown();
-    }
-
-    private boolean isShutdown(Intent intent) {
+    private boolean isShutdown() {
+        Intent intent = getIntent();
         boolean result = intent == null && intent.getBooleanExtra("shutdown-" + ConfigurationManager.instance().getUUIDString(), false);
         if (result) {
             shutdown();
@@ -185,39 +172,21 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         return result;
     }
 
-    private boolean isRestart(Intent intent) {
-        boolean result = intent != null && intent.getBooleanExtra("restart-" + ConfigurationManager.instance().getUUIDString(), false);
-        if (result) {
-            restart(2000);
-        }
-        return result;
-    }
-
     @Override
     protected void initComponents(Bundle savedInstanceState) {
-
-        Intent intent = getIntent();
-        if (isRestart(intent) || isShutdown(intent)) {
+        if (isShutdown()) {
             return;
         }
-
         initDrawerListener();
-
         leftDrawer = findView(R.id.activity_main_left_drawer);
         listMenu = findView(R.id.left_drawer);
-
         initPlayerItemListener();
-
         setupFragments();
         setupMenuItems();
         setupInitialFragment(savedInstanceState);
-
         playerSubscription = TimerService.subscribe((TimerObserver) findView(R.id.activity_main_player_notifier), 1);
-
         onNewIntent(getIntent());
-
         SoftwareUpdater.instance().addConfigurationUpdateListener(this);
-
         setupActionBar();
         setupDrawer();
     }
@@ -257,15 +226,6 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     @Override
     protected void onNewIntent(Intent intent) {
-
-        if (isShutdown(intent)) {
-            return;
-        }
-
-        if (isRestart(intent)) {
-
-        }
-
         String action = intent.getAction();
 
         if (action != null && action.equals(Constants.ACTION_SHOW_TRANSFERS)) {
@@ -366,9 +326,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         //UIUtils.showSocialLinksDialog(this, true, null, "");
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
-            DangerousPermissionsChecker permissionsChecker = newPermissionsChecker();
-            if (permissionsChecker.noAccess()) {
+            if (!permissionsRequested && permissionsChecker.noAccess()) {
                 permissionsChecker.showPermissionsRationale();
+                permissionsRequested = true;
             }
         }
     }
@@ -426,9 +386,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return;
         }
 
-        DangerousPermissionsChecker permissionsChecker = newPermissionsChecker();
-        if (permissionsChecker.noAccess()) {
+        if (isShutdown()) {
+            return;
+        }
+
+        if (!permissionsRequested && permissionsChecker.noAccess()) {
             permissionsChecker.showPermissionsRationale();
+            permissionsRequested = true;
         } else {
             mToken = MusicUtils.bindToService(this, this);
         }
@@ -750,6 +714,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
      */
     public void onServiceDisconnected(final ComponentName name) {
         mService = null;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (permissionsChecker != null) {
+            permissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
