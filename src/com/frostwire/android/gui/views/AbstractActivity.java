@@ -1,6 +1,6 @@
 /*
  * Created by Angel Leon (@gubatron), Alden Torres (aldenml)
- * Copyright (c) 2011-2014, FrostWire(R). All rights reserved.
+ * Copyright (c) 2011-2015, FrostWire(R). All rights reserved.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,14 +25,13 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
 /**
- * 
  * @author gubatron
  * @author aldenml
- * 
  */
 public abstract class AbstractActivity extends Activity {
 
@@ -41,7 +40,7 @@ public abstract class AbstractActivity extends Activity {
 
     public AbstractActivity(int layoutResId) {
         this.layoutResId = layoutResId;
-        this.fragmentTags = new ArrayList<String>();
+        this.fragmentTags = new ArrayList<>();
     }
 
     @Override
@@ -74,6 +73,19 @@ public abstract class AbstractActivity extends Activity {
 
         setContentView(layoutResId);
         initComponents(savedInstanceState);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        FragmentManager fm = getFragmentManager();
+        for (String tag : fragmentTags) {
+            Fragment f = fm.findFragmentByTag(tag);
+            if (f != null) {
+                f.onActivityResult(requestCode, resultCode, data);
+            }
+        }
     }
 
     protected abstract void initComponents(Bundle savedInstanceState);
