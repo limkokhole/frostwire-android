@@ -24,6 +24,7 @@ import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.Albums;
 import android.provider.MediaStore.Audio.Artists;
 import android.provider.MediaStore.Audio.Playlists;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.Menu;
@@ -52,6 +53,7 @@ import com.andrew.apollo.widgets.RepeatingImageButton;
 import com.andrew.apollo.widgets.ShuffleButton;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.adapters.menu.AddToPlaylistMenuAction;
+import com.frostwire.android.gui.util.DangerousPermissionsChecker;
 import com.frostwire.android.gui.views.AbstractSwipeDetector;
 import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.util.Ref;
@@ -67,8 +69,14 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
  * 
  * @author Andrew Neal (andrewdneal@gmail.com)
  */
-public class AudioPlayerActivity extends FragmentActivity implements ServiceConnection,
-        OnSeekBarChangeListener, DeleteDialog.DeleteDialogCallback {
+public class AudioPlayerActivity extends FragmentActivity implements
+        ServiceConnection,
+        OnSeekBarChangeListener,
+        DeleteDialog.DeleteDialogCallback,
+        ActivityCompat.OnRequestPermissionsResultCallback {
+
+    private boolean permissionsRequested = false;
+    private static DangerousPermissionsChecker permissionsChecker;
 
     // Message to refresh the time
     private static final int REFRESH_TIME = 1;
@@ -157,6 +165,14 @@ public class AudioPlayerActivity extends FragmentActivity implements ServiceConn
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (permissionsChecker == null) {
+            permissionsChecker = new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.PhoneState);
+        }
+
+        if (!permissionsRequested && permissionsChecker.noAccess()) {
+            permissionsChecker.showPermissionsRationale();
+            permissionsRequested = true;
+        }
 
         // Initialze the theme resources
         mResources = new ThemeUtils(this);

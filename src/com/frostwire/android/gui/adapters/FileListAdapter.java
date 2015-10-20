@@ -355,10 +355,7 @@ public class FileListAdapter extends AbstractListAdapter<FileDescriptorItem> {
         if (checked.size() > 1) {
             return false;
         }
-        if (checked.size() == 1) {
-            return checked.get(0).equals(fd);
-        }
-        return true;
+        return checked.size() != 1 || checked.get(0).equals(fd);
     }
 
     private static int getViewItemId(byte fileType) {

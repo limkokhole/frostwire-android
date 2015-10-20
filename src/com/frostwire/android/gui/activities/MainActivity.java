@@ -528,7 +528,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             }
 
             invalidateOptionsMenu();
-            drawerToggle.syncState();
+
+            if (drawerToggle != null) {
+                drawerToggle.syncState();
+            }
         } catch (Throwable e) { // protecting from weird android UI engine issues
             LOG.warn("Error setting slide menu item selected", e);
         }

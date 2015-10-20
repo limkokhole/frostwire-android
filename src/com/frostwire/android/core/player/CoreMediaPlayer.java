@@ -27,18 +27,18 @@ import com.frostwire.android.core.FileDescriptor;
  */
 public interface CoreMediaPlayer {
 
-    public void play(Playlist playlist);
+    void play(Playlist playlist);
 
-    public void stop();
+    void stop();
 
-    public void shutdown();
+    void shutdown();
 
-    public boolean isPlaying();
+    boolean isPlaying();
     
     /**
      * The current file the media player is playing.
      * 
      * @return
      */
-    public FileDescriptor getCurrentFD();
+    FileDescriptor getCurrentFD();
 }
