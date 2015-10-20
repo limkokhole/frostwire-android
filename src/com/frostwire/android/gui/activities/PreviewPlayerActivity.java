@@ -28,6 +28,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
@@ -39,6 +40,7 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.services.Engine;
+import com.frostwire.android.gui.util.DangerousPermissionsChecker;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.util.ImageLoader;
@@ -54,7 +56,16 @@ import java.net.URL;
  * @author gubatron
  * @author aldenml
  */
-public final class PreviewPlayerActivity extends AbstractActivity implements AbstractDialog.OnDialogClickListener, TextureView.SurfaceTextureListener, MediaPlayer.OnBufferingUpdateListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnPreparedListener, MediaPlayer.OnVideoSizeChangedListener, MediaPlayer.OnInfoListener, AudioManager.OnAudioFocusChangeListener {
+public final class PreviewPlayerActivity extends AbstractActivity implements
+        AbstractDialog.OnDialogClickListener,
+        TextureView.SurfaceTextureListener,
+        MediaPlayer.OnBufferingUpdateListener,
+        MediaPlayer.OnCompletionListener,
+        MediaPlayer.OnPreparedListener,
+        MediaPlayer.OnVideoSizeChangedListener,
+        MediaPlayer.OnInfoListener,
+        AudioManager.OnAudioFocusChangeListener,
+        ActivityCompat.OnRequestPermissionsResultCallback {
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
     public static WeakReference<FileSearchResult> srRef;
 
@@ -70,9 +81,17 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     private boolean isFullScreen = false;
     private boolean videoSizeSetupDone = false;
     private boolean changedActionBarTitleToNonBuffering = false;
+    private boolean permissionsRequested = false;
+    private final DangerousPermissionsChecker permissionsChecker;
 
     public PreviewPlayerActivity() {
         super(R.layout.activity_preview_player);
+
+        permissionsChecker = new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.PhoneState);
+        if (!permissionsRequested && permissionsChecker.noAccess()) {
+            permissionsChecker.showPermissionsRationale();
+            permissionsRequested = true;
+        }
     }
 
     @Override
@@ -554,6 +573,13 @@ public final class PreviewPlayerActivity extends AbstractActivity implements Abs
     public void onAudioFocusChange(int focusChange) {
         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
             releaseMediaPlayer();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (permissionsChecker != null) {
+            permissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 }
