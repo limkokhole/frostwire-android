@@ -197,7 +197,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, 0, true, null);
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.shutting_down, false, null);
                     return;
                 }
             }
