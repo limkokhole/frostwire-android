@@ -30,6 +30,7 @@
         android:id="@+id/fragment_about"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:tag="about_fragment"
         tools:layout="@layout/fragment_about"/>
 
 </LinearLayout>

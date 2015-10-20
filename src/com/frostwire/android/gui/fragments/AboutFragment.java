@@ -21,6 +21,7 @@ package com.frostwire.android.gui.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
@@ -33,6 +34,7 @@ import com.frostwire.android.R;
 import com.frostwire.android.core.Constants;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.ClickAdapter;
+import com.frostwire.android.util.Storages;
 import org.apache.commons.io.IOUtils;
 
 import java.io.IOException;
@@ -81,7 +83,13 @@ public class AboutFragment extends Fragment implements MainFragment {
     }
 
     private void onHelpTranslate() {
-        UIUtils.openURL(getActivity(), "https://github.com/frostwire/frostwire-android/wiki/Help-Translate-FrostWire");
+        Storages.openDocumentTree(getActivity());
+        //UIUtils.openURL(getActivity(), "https://github.com/frostwire/frostwire-android/wiki/Help-Translate-FrostWire");
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Storages.handleDocumentTreeResult(requestCode, resultCode, data);
     }
 
     @Override
