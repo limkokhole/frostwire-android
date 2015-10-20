@@ -21,7 +21,6 @@ package com.frostwire.android.gui.util;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.support.v4.app.ActivityCompat;
@@ -76,20 +75,18 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
 
     private boolean noExternalStorageAccess() {
         if (!Ref.alive(activityRef)) {
-            return false;
+            return true;
         }
         MainActivity mainActivity = (MainActivity) activityRef.get();
-
         return ActivityCompat.checkSelfPermission(mainActivity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
                 ActivityCompat.checkSelfPermission(mainActivity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
     }
 
     private boolean noPhoneStateAccess() {
         if (!Ref.alive(activityRef)) {
-            return false;
+            return true;
         }
         Activity activity = activityRef.get();
-
         return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED;
     }
 
@@ -98,7 +95,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             return;
         }
         final MainActivity mainActivity = (MainActivity) activityRef.get();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(mainActivity);
         builder.setIcon(R.drawable.sd_card_notification);
         builder.setTitle(R.string.why_we_need_storage_permissions);
@@ -124,7 +120,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             return;
         }
         final Activity activity = activityRef.get();
-
         AlertDialog.Builder builder = new AlertDialog.Builder(activity);
         builder.setIcon(R.drawable.device_type_type_phone);
         builder.setTitle(R.string.why_we_need_phone_state_permissions);
@@ -163,9 +158,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         if (!Ref.alive(activityRef)) {
             return;
         }
-
         final Activity activity = activityRef.get();
-
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
@@ -190,7 +183,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             return;
         }
         final MainActivity mainActivity = (MainActivity) activityRef.get();
-
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
@@ -205,7 +197,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                     return;
                 }
             }
-
             UIUtils.showInformationDialog(mainActivity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
