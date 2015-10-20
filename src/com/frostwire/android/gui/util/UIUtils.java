@@ -190,25 +190,19 @@ public final class UIUtils {
 
     public static void showYesNoDialog(Context context, String message, int titleId, OnClickListener positiveListener, OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         builder.setMessage(message).setTitle(titleId).setCancelable(false).setPositiveButton(android.R.string.yes, positiveListener).setNegativeButton(android.R.string.no, negativeListener);
-
         builder.create().show();
     }
 
     public static void showYesNoDialog(Context context, int iconId, String message, int titleId, OnClickListener positiveListener, OnClickListener negativeListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         builder.setIcon(iconId).setMessage(message).setTitle(titleId).setCancelable(false).setPositiveButton(android.R.string.yes, positiveListener).setNegativeButton(android.R.string.no, negativeListener);
-
         builder.create().show();
     }
 
     public static void showOkCancelDialog(Context context, View view, int titleId, OnClickListener okListener, OnClickListener cancelListener) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
         builder.setView(view).setTitle(titleId).setPositiveButton(android.R.string.ok, okListener).setNegativeButton(android.R.string.cancel, cancelListener);
-
         builder.create().show();
     }
 

@@ -170,7 +170,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     }
 
     public void restart(int delayInMS) {
-        PendingIntent intent = PendingIntent.getActivity(this.getBaseContext(), 0, new Intent(getIntent()), getIntent().getFlags());
+        PendingIntent intent = PendingIntent.getActivity(this.getBaseContext(),
+                0,
+                new Intent(getIntent()),
+                getIntent().getFlags());
         AlarmManager manager = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + delayInMS, intent);
         shutdown();
@@ -355,6 +358,12 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
         //uncomment to test social links dialog
         //UIUtils.showSocialLinksDialog(this, true, null, "");
+
+        if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
+            if (noExternalStorageAccess()) {
+                showPermissionsRationale();
+            }
+        }
     }
 
     @Override
@@ -401,33 +410,43 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-            ActivityCompat.checkSelfPermission(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle(R.string.why_we_need_storage_permissions);
-            builder.setMessage(R.string.why_we_need_storage_permissions_summary);
-            builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    shutdown();
-                }
-            });
-            builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ActivityCompat.requestPermissions(MainActivity.this, new String[]{ Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1234567890);
-                }
-            });
+        if (!ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
+            // we are still in the wizard.
+            return;
+        }
 
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
+        if (noExternalStorageAccess()) {
+            showPermissionsRationale();
         } else {
             mToken = MusicUtils.bindToService(this, this);
         }
     }
 
+    private boolean noExternalStorageAccess() {
+        return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
+            ActivityCompat.checkSelfPermission(this,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
+    }
+
+    private void showPermissionsRationale() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setIcon(R.drawable.sd_card_notification);
+        builder.setTitle(R.string.why_we_need_storage_permissions);
+        builder.setMessage(R.string.why_we_need_storage_permissions_summary);
+        builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                shutdown();
+            }
+        });
+        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1234567890);
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
 
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         for (int i=0; i<permissions.length; i++) {
@@ -441,23 +460,18 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                             shutdown();
                         }
                     });
-
                     return;
                 }
             }
-            mToken = MusicUtils.bindToService(this, this);
 
-            //RESTART!
-            /**UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
+            UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     restart(2000);
                 }
             });
-             */
         }
     }
-
 
     private void onNotifySdCardMounted() {
         transfers.initStorageRelatedRichNotifications(null);
@@ -493,12 +507,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private void mainResume() {
         syncSlideMenu();
-
         if (firstTime) {
             firstTime = false;
             Engine.instance().startServices(); // it's necessary for the first time after wizard
         }
-
         SoftwareUpdater.instance().checkForUpdate(this);
     }
 
