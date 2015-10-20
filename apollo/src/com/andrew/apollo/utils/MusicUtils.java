@@ -231,6 +231,7 @@ public final class MusicUtils {
      */
     public static void playOrPause() {
         try {
+            // TODO: Check for PHONE_STATE Permissions here.
             if (mService != null) {
                 if (mService.isPlaying()) {
                     mService.pause();
@@ -596,6 +597,8 @@ public final class MusicUtils {
      * @param uri The source of the file
      */
     public static void playFile(final Context context, final Uri uri) {
+        // TODO: Check for PHONE_STATE Permissions here.
+
         if (uri == null || mService == null) {
             return;
         }
@@ -626,9 +629,12 @@ public final class MusicUtils {
      */
     public static void playAll(final Context context, final long[] list, int position,
             final boolean forceShuffle) {
+        // TODO: Check for PHONE_STATE Permissions here.
+
         if (list == null || list.length == 0 || mService == null) {
             return;
         }
+
         try {
             if (forceShuffle) {
                 mService.setShuffleMode(MusicPlaybackService.SHUFFLE_NORMAL);
@@ -672,6 +678,8 @@ public final class MusicUtils {
      * @param context The {@link Context} to use.
      */
     public static void shuffleAll(final Context context) {
+        // TODO: Check for PHONE_STATE Permissions here.
+
         Cursor cursor = SongLoader.makeSongCursor(context);
         final long[] mTrackList = getSongListForCursor(cursor);
         final int position = 0;

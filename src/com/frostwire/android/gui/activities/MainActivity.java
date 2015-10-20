@@ -18,15 +18,12 @@
 
 package com.frostwire.android.gui.activities;
 
-import android.Manifest;
 import android.app.*;
 import android.content.*;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.DrawerLayout.SimpleDrawerListener;
 import android.view.KeyEvent;
@@ -59,6 +56,7 @@ import com.frostwire.android.gui.fragments.TransfersFragment;
 import com.frostwire.android.gui.fragments.TransfersFragment.TransferStatus;
 import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.TransferManager;
+import com.frostwire.android.gui.util.DangerousPermissionsChecker;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.*;
 import com.frostwire.android.gui.views.AbstractDialog.OnDialogClickListener;
@@ -80,7 +78,7 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
  * @author aldenml
  *
  */
-public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection {
 
     private static final Logger LOG = Logger.getLogger(MainActivity.class);
 
@@ -360,8 +358,9 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         //UIUtils.showSocialLinksDialog(this, true, null, "");
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
-            if (noExternalStorageAccess()) {
-                showPermissionsRationale();
+            DangerousPermissionsChecker permissionsChecker = newPermissionsChecker();
+            if (permissionsChecker.noAccess()) {
+                permissionsChecker.showPermissionsRationale();
             }
         }
     }
@@ -378,6 +377,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                 //seems like overkill keeping track of these ourselves.)
             }
         }
+    }
+
+    private DangerousPermissionsChecker newPermissionsChecker() {
+        return new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.ExternalStorage);
     }
 
     private void registerMainBroadcastReceiver() {
@@ -415,61 +418,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return;
         }
 
-        if (noExternalStorageAccess()) {
-            showPermissionsRationale();
+        DangerousPermissionsChecker permissionsChecker = newPermissionsChecker();
+        if (permissionsChecker.noAccess()) {
+            permissionsChecker.showPermissionsRationale();
         } else {
             mToken = MusicUtils.bindToService(this, this);
-        }
-    }
-
-    private boolean noExternalStorageAccess() {
-        return ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-            ActivityCompat.checkSelfPermission(this,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
-    }
-
-    private void showPermissionsRationale() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setIcon(R.drawable.sd_card_notification);
-        builder.setTitle(R.string.why_we_need_storage_permissions);
-        builder.setMessage(R.string.why_we_need_storage_permissions_summary);
-        builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                shutdown();
-            }
-        });
-        builder.setPositiveButton(R.string.accept, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1234567890);
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        for (int i=0; i<permissions.length; i++) {
-            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
-                if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
-                    permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showInformationDialog(this, R.string.frostwire_shutting_down_no_permissions, 0, true,
-                            new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            shutdown();
-                        }
-                    });
-                    return;
-                }
-            }
-
-            UIUtils.showInformationDialog(this, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    restart(2000);
-                }
-            });
         }
     }
 

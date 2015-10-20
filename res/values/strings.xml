@@ -546,4 +546,5 @@
     <string name="why_we_need_storage_permissions_summary">FrostWire is a file browser and downloader app, therefore it needs to be able to access your disk.</string>
     <string name="why_we_need_phone_state_permissions">Why we phone state permissions.</string>
     <string name="why_we_need_phone_state_permissions_summary">If somebody calls you while you are playing music FrostWire will be able to stop the music automatically so you can talk.</string>
+    <string name="frostwire_warning_no_phone_state_permissions">FrostWire won\'t be able to know if you jump on a phone call while playing music.\n\nYou will have to stop the music manually or give FrostWire Phone permissions later under Android\'s App Settings.</string>
 </resources>
