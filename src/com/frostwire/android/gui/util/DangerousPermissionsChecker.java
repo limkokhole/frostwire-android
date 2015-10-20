@@ -49,7 +49,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
 
     public static final int EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE = 0xAAAA;
     public static final int PHONE_STATE_PERMISSIONS_REQUEST_CODE = 0xBBBB;
-    private static final Logger LOG = Logger.getLogger(DangerousPermissionsChecker.class);
+    //private static final Logger LOG = Logger.getLogger(DangerousPermissionsChecker.class);
     private final WeakReference<Activity> activityRef;
     private final PermissionCheck checkType;
 
@@ -106,7 +106,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LOG.info("shutting down before permissions were asked. User touched 'Exit'");
                 shutdown();
             }
         });
@@ -168,11 +167,10 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                     permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, 0, true,
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, R.string.shutting_down, false,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    LOG.info("shutting down, permissions were denied by user.");
                                     shutdown();
                                 }
                             });
@@ -183,7 +181,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         UIUtils.showInformationDialog(activity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                LOG.info("Restarting, user granted storage permissions.");
                 restart(1000);
             }
         });
@@ -197,7 +194,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.shutting_down, false, null);
+                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, 0, true, null);
                     return;
                 }
             }

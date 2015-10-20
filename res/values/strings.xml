@@ -539,7 +539,7 @@
     <string name="your_installation_is_complete">Your installation is complete.</string>
     <string name="thank_you">Thank you!</string>
     <string name="keep_in_touch">Keep in touch!</string>
-    <string name="frostwire_shutting_down_no_permissions">Sorry, FrostWire can\'t continue without your permission to access disk. Shutting down.</string>
+    <string name="frostwire_shutting_down_no_permissions">Sorry, FrostWire can\'t continue without your permission to access disk.</string>
     <string name="restarting">Restarting...</string>
     <string name="restarting_summary">FrostWire will now restart for granted permissions to take effect</string>
     <string name="why_we_need_storage_permissions">Why we need storage permissions.</string>
