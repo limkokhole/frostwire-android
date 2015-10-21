@@ -388,14 +388,17 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
                 //there could be a runtime exception thrown inside stayAwake()
             }
             androidMediaPlayer = null;
+
+            AudioManager audioManager = (AudioManager) getSystemService(AUDIO_SERVICE);
+            if (audioManager != null) {
+                audioManager.abandonAudioFocus(this);
+            }
         }
     }
 
     @Override
     public void onSurfaceTextureAvailable(SurfaceTexture surfaceTexture, int width, int height) {
         surface = new Surface(surfaceTexture);
-        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        am.requestAudioFocus(PreviewPlayerActivity.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         Thread t = new Thread() {
             @Override
             public void run() {
@@ -460,7 +463,10 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
 
     @Override
     public void onPrepared(MediaPlayer mp) {
-       final ImageView img = findView(R.id.activity_preview_player_thumbnail);
+        AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        am.requestAudioFocus(PreviewPlayerActivity.this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+        final ImageView img = findView(R.id.activity_preview_player_thumbnail);
        onVideoViewPrepared(img);
        if (mp != null) {
            changeVideoSize();

@@ -78,14 +78,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                 ActivityCompat.checkSelfPermission(activity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
     }
 
-    private boolean noPhoneStateAccess() {
-        if (!Ref.alive(activityRef)) {
-            return true;
-        }
-        Activity activity = activityRef.get();
-        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_DENIED;
-    }
-
     private void showExternalStoragePermissionsRationale() {
         if (!Ref.alive(activityRef)) {
             return;
