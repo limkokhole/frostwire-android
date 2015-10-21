@@ -28,9 +28,6 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.view.*;
 import android.widget.*;
@@ -40,7 +37,6 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.player.CoreMediaPlayer;
 import com.frostwire.android.gui.dialogs.NewTransferDialog;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.android.gui.util.DangerousPermissionsChecker;
 import com.frostwire.android.gui.views.AbstractActivity;
 import com.frostwire.android.gui.views.AbstractDialog;
 import com.frostwire.android.util.ImageLoader;
@@ -64,8 +60,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnVideoSizeChangedListener,
         MediaPlayer.OnInfoListener,
-        AudioManager.OnAudioFocusChangeListener,
-        ActivityCompat.OnRequestPermissionsResultCallback {
+        AudioManager.OnAudioFocusChangeListener {
     private static final Logger LOG = Logger.getLogger(PreviewPlayerActivity.class);
     public static WeakReference<FileSearchResult> srRef;
 
@@ -81,22 +76,9 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
     private boolean isFullScreen = false;
     private boolean videoSizeSetupDone = false;
     private boolean changedActionBarTitleToNonBuffering = false;
-    private boolean permissionsRequested = false;
-    private final DangerousPermissionsChecker permissionsChecker;
 
     public PreviewPlayerActivity() {
         super(R.layout.activity_preview_player);
-
-        permissionsChecker = new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.PhoneState);
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (!permissionsRequested && permissionsChecker.noAccess()) {
-            permissionsChecker.showPermissionsRationale();
-            permissionsRequested = true;
-        }
     }
 
     @Override
@@ -184,21 +166,8 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
             isFullScreen = false; //so it will make it full screen on what was an orientation change.
             toggleFullScreen(v);
         }
-
-        initPhoneRingListener();
     }
 
-    private void initPhoneRingListener() {
-        final PhoneStateListener phoneListener = new PhoneStateListener() {
-            @Override
-            public void onCallStateChanged(int state, String incomingNumber) {
-                super.onCallStateChanged(state, incomingNumber);
-                PreviewPlayerActivity.this.finish();
-            }
-        };
-        final TelephonyManager phone = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        phone.listen(phoneListener,TelephonyManager.CALL_STATE_RINGING | TelephonyManager.CALL_STATE_OFFHOOK);
-    }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -551,7 +520,7 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
             if (mediaPlayer != null && mediaPlayer.isPlaying()) {
                 mediaPlayer.stop();
             }
-        } catch (Throwable t) {}
+        } catch (Throwable ignored) {}
 
         AudioManager mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
         if (mAudioManager.isMusicActive()) {
@@ -576,15 +545,14 @@ public final class PreviewPlayerActivity extends AbstractActivity implements
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-        if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
+        if (focusChange == AudioManager.AUDIOFOCUS_LOSS || focusChange == AudioManager.AUDIOFOCUS_LOSS_TRANSIENT) {
             releaseMediaPlayer();
-        }
-    }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (permissionsChecker != null) {
-            permissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
+            ActionBar ab = getActionBar();
+            if (ab != null) {
+                int mediaTypeStrId = audio ? R.string.audio : R.string.video;
+                ab.setTitle(getString(R.string.media_preview, getString(mediaTypeStrId)));
+            }
         }
     }
 }

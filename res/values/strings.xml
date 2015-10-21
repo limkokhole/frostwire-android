@@ -544,10 +544,5 @@
     <string name="restarting_summary">FrostWire will now restart for granted permissions to take effect</string>
     <string name="why_we_need_storage_permissions">Why we need storage permissions.</string>
     <string name="why_we_need_storage_permissions_summary">FrostWire is a file browser and downloader app, therefore it needs to be able to access your disk.</string>
-    <string name="why_we_need_phone_state_permissions">Why we need phone management permissions?</string>
-    <string name="why_we_need_phone_state_permissions_summary">If somebody calls you while you are playing music, FrostWire should be able to pause playback automatically so you can talk.</string>
-    <string name="frostwire_warning_no_phone_state_permissions">FrostWire won\'t be able to know if you jump on a phone call while playing music.\n\nYou will have to stop the music manually or give FrostWire Phone permissions later under Android\'s App Settings.</string>
     <string name="shutting_down">Shutting down...</string>
-    <string name="later">Later</string>
-    <string name="notice">Notice</string>
 </resources>

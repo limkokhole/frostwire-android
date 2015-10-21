@@ -53,7 +53,6 @@ import com.andrew.apollo.widgets.RepeatingImageButton;
 import com.andrew.apollo.widgets.ShuffleButton;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.adapters.menu.AddToPlaylistMenuAction;
-import com.frostwire.android.gui.util.DangerousPermissionsChecker;
 import com.frostwire.android.gui.views.AbstractSwipeDetector;
 import com.frostwire.android.gui.views.ClickAdapter;
 import com.frostwire.util.Ref;
@@ -74,9 +73,6 @@ public class AudioPlayerActivity extends FragmentActivity implements
         OnSeekBarChangeListener,
         DeleteDialog.DeleteDialogCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
-
-    private static boolean permissionsRequested = false;
-    private static DangerousPermissionsChecker permissionsChecker;
 
     // Message to refresh the time
     private static final int REFRESH_TIME = 1;
@@ -165,15 +161,6 @@ public class AudioPlayerActivity extends FragmentActivity implements
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (permissionsChecker == null) {
-            permissionsChecker = new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.PhoneState);
-        }
-
-        if (!permissionsRequested && permissionsChecker.noAccess()) {
-            permissionsChecker.showPermissionsRationale();
-            permissionsRequested = true;
-        }
-
         // Initialze the theme resources
         mResources = new ThemeUtils(this);
         // Set the overflow style

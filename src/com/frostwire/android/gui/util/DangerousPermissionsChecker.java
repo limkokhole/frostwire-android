@@ -42,13 +42,10 @@ import java.lang.ref.WeakReference;
 public final class DangerousPermissionsChecker implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     public enum PermissionCheck {
-        ExternalStorage,
-        PhoneState
+        ExternalStorage
     }
 
     public static final int EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE = 0x000A;
-    public static final int PHONE_STATE_PERMISSIONS_REQUEST_CODE = 0x000B;
-    //private static final Logger LOG = Logger.getLogger(DangerousPermissionsChecker.class);
     private final WeakReference<Activity> activityRef;
     private final PermissionCheck checkType;
 
@@ -62,8 +59,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
     public boolean noAccess() {
         if (checkType == PermissionCheck.ExternalStorage) {
             return noExternalStorageAccess();
-        } else if (checkType == PermissionCheck.PhoneState) {
-            return noPhoneStateAccess();
         }
         return false;
     }
@@ -71,8 +66,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
     public void showPermissionsRationale() {
         if (checkType == PermissionCheck.ExternalStorage) {
             showExternalStoragePermissionsRationale();
-        } else if (checkType == PermissionCheck.PhoneState) {
-            showPhoneStatePermissionsRationale();
         }
     }
 
@@ -118,39 +111,11 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         alertDialog.show();
     }
 
-    private void showPhoneStatePermissionsRationale() {
-        if (!Ref.alive(activityRef)) {
-            return;
-        }
-        final Activity activity = activityRef.get();
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setIcon(R.drawable.device_type_type_phone);
-        builder.setTitle(R.string.why_we_need_phone_state_permissions);
-        builder.setMessage(R.string.why_we_need_phone_state_permissions_summary);
-        builder.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.notice, false, null);
-            }
-        });
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_PHONE_STATE}, PHONE_STATE_PERMISSIONS_REQUEST_CODE);
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
             case EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE:
                 onExternalPermissionsResult(permissions, grantResults);
-                break;
-            case PHONE_STATE_PERMISSIONS_REQUEST_CODE:
-                onPhoneStatePermissionsResult(permissions, grantResults);
                 break;
             default:
                 break;
@@ -184,31 +149,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             }
         });
     }
-
-    private void onPhoneStatePermissionsResult(String[] permissions, int[] grantResults) {
-        if (!Ref.alive(activityRef)) {
-            return;
-        }
-        final Activity activity = activityRef.get();
-        for (int i=0; i<permissions.length; i++) {
-            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
-                if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.notice, false, null);
-                    return;
-                }
-            }
-
-// TODO: Test if we have to restart, will need a phone, or a way to trigger a fake call on emulator.
-//            UIUtils.showInformationDialog(mainActivity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
-//                @Override
-//                public void onClick(DialogInterface dialog, int which) {
-//                    mainActivity.restart(2000);
-//                }
-//            });
-        }
-
-    }
-
 
     public void shutdown() {
         if (!Ref.alive(activityRef)) {
