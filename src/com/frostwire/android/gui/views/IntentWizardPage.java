@@ -19,6 +19,7 @@
 package com.frostwire.android.gui.views;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.CheckBox;
@@ -26,6 +27,7 @@ import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 
 import com.frostwire.android.R;
+import com.frostwire.android.gui.util.UIUtils;
 
 /**
  * @author gubatron
@@ -63,6 +65,7 @@ public class IntentWizardPage extends RelativeLayout implements WizardPageView {
 
     @Override
     public void finish() {
+        UIUtils.showSocialLinksDialog(getContext(), true, null, "wizard");
     }
 
     @Override
@@ -84,6 +87,7 @@ public class IntentWizardPage extends RelativeLayout implements WizardPageView {
         if (listener != null) {
             listener.onComplete(this, complete);
         }
+
     }
 
     /**

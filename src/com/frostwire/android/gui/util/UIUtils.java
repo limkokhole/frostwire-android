@@ -389,15 +389,14 @@ public final class UIUtils {
      * @param dismissListener - what happens when the dialog is dismissed.
      * @param referrerContextSuffix - string appended at the end of social pages click urls's ?ref=_android_ parameter.
      */
-    public static void showSocialLinksDialog(final Activity activity,
+    public static void showSocialLinksDialog(final Context context,
                                              boolean showInstallationCompleteSection,
                                              DialogInterface.OnDismissListener dismissListener,
                                              String referrerContextSuffix) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        View customView = inflater.inflate(R.layout.view_social_buttons, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        View customView = View.inflate(context, R.layout.view_social_buttons, null);
         builder.setView(customView);
-        builder.setPositiveButton(activity.getString(android.R.string.ok), new OnClickListener() {
+        builder.setPositiveButton(context.getString(android.R.string.ok), new OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

@@ -109,12 +109,6 @@ public class WizardActivity extends AbstractActivity {
             pageView.finish();
             if (!pageView.hasNext()) {
                 ConfigurationManager.instance().setBoolean(Constants.PREF_KEY_GUI_INITIAL_SETTINGS_COMPLETE, true);
-                UIUtils.showSocialLinksDialog(this, true, new OnDismissListener() {
-                    @Override
-                    public void onDismiss(DialogInterface dialog) {
-                        WizardActivity.this.finish();
-                    }
-                }, "wizard");
             } else {
                 viewFlipper.showNext();
                 setupViewPage();
