@@ -31,7 +31,6 @@ import android.support.v4.app.ActivityCompat;
 import com.frostwire.android.R;
 import com.frostwire.android.gui.adnetworks.Offers;
 import com.frostwire.android.gui.services.Engine;
-import com.frostwire.logging.Logger;
 import com.frostwire.util.Ref;
 
 import java.lang.ref.WeakReference;
@@ -50,7 +49,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
     public static final int EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE = 0x000A;
     public static final int PHONE_STATE_PERMISSIONS_REQUEST_CODE = 0x000B;
     //private static final Logger LOG = Logger.getLogger(DangerousPermissionsChecker.class);
-    public static boolean keepAskingPhoneStatePermissions = true;
     private final WeakReference<Activity> activityRef;
     private final PermissionCheck checkType;
 
@@ -73,7 +71,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
     public void showPermissionsRationale() {
         if (checkType == PermissionCheck.ExternalStorage) {
             showExternalStoragePermissionsRationale();
-        } else if (keepAskingPhoneStatePermissions && checkType == PermissionCheck.PhoneState) {
+        } else if (checkType == PermissionCheck.PhoneState) {
             showPhoneStatePermissionsRationale();
         }
     }
@@ -132,7 +130,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         builder.setNegativeButton(R.string.later, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                keepAskingPhoneStatePermissions = false;
                 UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.notice, false, null);
             }
         });
@@ -196,7 +193,6 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.READ_PHONE_STATE)) {
-                    keepAskingPhoneStatePermissions = false;
                     UIUtils.showInformationDialog(activity, R.string.frostwire_warning_no_phone_state_permissions, R.string.notice, false, null);
                     return;
                 }

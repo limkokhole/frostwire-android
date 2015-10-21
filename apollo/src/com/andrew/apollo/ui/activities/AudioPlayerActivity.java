@@ -75,7 +75,7 @@ public class AudioPlayerActivity extends FragmentActivity implements
         DeleteDialog.DeleteDialogCallback,
         ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private boolean permissionsRequested = false;
+    private static boolean permissionsRequested = false;
     private static DangerousPermissionsChecker permissionsChecker;
 
     // Message to refresh the time
