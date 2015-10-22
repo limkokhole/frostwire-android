@@ -326,10 +326,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         //UIUtils.showSocialLinksDialog(this, true, null, "");
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
-            if (!permissionsRequested && permissionsChecker.noAccess()) {
-                permissionsChecker.showPermissionsRationale();
-                permissionsRequested = true;
-            }
+            checkPermissionsOrBindMusicService();
         }
     }
 
@@ -390,6 +387,10 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return;
         }
 
+        checkPermissionsOrBindMusicService();
+    }
+
+    private void checkPermissionsOrBindMusicService() {
         if (!permissionsRequested && permissionsChecker.noAccess()) {
             permissionsChecker.showPermissionsRationale();
             permissionsRequested = true;
