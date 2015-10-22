@@ -328,7 +328,7 @@
     <string name="seeding_has_been_turned_off">Compartir está apagado</string>
     <string name="wifi_seeding_has_been_turned_off">No hay Wi-Fi, Compartir está apagado</string>
     <string name="nickname_hint">Nombre</string>
-    <string name="show_transers_on_download_start">Mostrar Transferencias al Comienzo de la Descarga</string>
+    <string name="show_transfers_on_download_start">Mostrar Transferencias al Comienzo de la Descarga</string>
     <string name="dialog_new_transfer_title">¿Deseas comenzar esta descarga?</string>
     <string name="dialog_new_transfer_text_text">¿Estás seguro de que quieres descargar %1$s (%2$s)?</string>
     <string name="dialog_new_transfer_check_text">Mostrar esto la próxima vez</string>
@@ -463,7 +463,7 @@
     <string name="transfers_context_menu_stop_delete_data">Parar y borrar la Data</string>
     <string name="use_tpb_summary">TPB es basado en magnets, funciona solo con Wi-Fi</string>
     <string name="cant_open_file_does_not_exist">No puedo abrir %1$s, el archivo no existe.</string>
-    <string name="saving_to_internal_memory_description">Tambien tienes un SD Card (%1$s disp.)</string>
+    <string name="saving_to_internal_memory_description">También tienes un SD Card (%1$s disp.)</string>
     <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="dummy_author">[Autor]</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android borrará archivos descargados si FrostWire es desinstalado.</string>
@@ -479,7 +479,6 @@
     <string name="playlist">Playlist</string>
     <string name="now_playing">Reproduciendo</string>
     <string name="seed">Compartir (Seed)</string>
-    <string name="prepend_shortcut_label"></string>
     <string name="available">disponible</string>
     <string name="storage_setting_confirm_dialog_title">TARJETA SD</string>
     <string name="cant_resume_torrent_transfers"> "Conectividad"</string>
@@ -540,4 +539,16 @@
     <string name="your_installation_is_complete">Instalación completa.</string>
     <string name="thank_you">Gracias!</string>
     <string name="keep_in_touch">Mantente en contacto!</string>
+    <string name="restarting_summary">FrostWire ahora reiniciará para que los permisos tomen efecto</string>
+    <string name="why_we_need_storage_permissions_summary">FrostWire is a explorador de archivos y aplicación de descargas, por ende necesitará acceder archivos en tus dispositivos de almacenamiento.</string>
+    <string name="transfers_context_menu_copy_magnet_copied">Magnet copiado al portapapeles</string>
+    <string name="transfers_context_menu_copy_infohash_copied">Infohash copiado al portapeles</string>
+    <string name="remove_torrent_and_data">Eliminar Torrent y Archivos Descargados</string>
+    <string name="frostwire_shutting_down_no_permissions">Lo siento, FrostWire no puede continuar sin tu permiso de acceder a disco.</string>
+    <string name="shutting_down">Apagando...</string>
+    <string name="why_we_need_storage_permissions">Por que necesitamos permisos de almacenamiento.</string>
+    <string name="restarting">Reiniciando...</string>
+    <string name="torrent_transfer_aborted_on_mobile_data">Las transferencias de torrent no empezarán hasta que te conectes a una red Wi-Fi. (Verifica tus preferencias de Redes con respecto al uso de datos 3G/4G)</string>
+    <string name="transfers_context_menu_copy_magnet">Copiar Magnet</string>
+    <string name="transfers_context_menu_copy_infohash">Copiar InfoHash</string>
 </resources>
