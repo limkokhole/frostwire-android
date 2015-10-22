@@ -328,7 +328,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">A Semeadura foi desligada</string>
     <string name="nickname_hint">Apelido</string>
-    <string name="show_transers_on_download_start">Mostre as Transferências no Início do Download</string>
+    <string name="show_transfers_on_download_start">Mostre as Transferências no Início do Download</string>
     <string name="dialog_new_transfer_title">Iniciar este download?</string>
     <string name="dialog_new_transfer_text_text">Você tem certeza que deseja baixar %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Mostre isso na próxima vez</string>

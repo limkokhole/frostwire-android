@@ -326,7 +326,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Tohumlama kapatıldı</string>
     <string name="nickname_hint">Takma İsim</string>
-    <string name="show_transers_on_download_start">İndirme Başlangıcında Transferleri Göster</string>
+    <string name="show_transfers_on_download_start">İndirme Başlangıcında Transferleri Göster</string>
     <string name="dialog_new_transfer_title">Bu İndirme Başlatılsın mı?</string>
     <string name="dialog_new_transfer_text_text">Bunu indirmek istediğinize emin misiniz %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Gelecek sefer bunu göster</string>

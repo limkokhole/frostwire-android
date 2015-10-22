@@ -327,7 +327,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Seeding đã tắt</string>
     <string name="nickname_hint">Nickname</string>
-    <string name="show_transers_on_download_start">Hiển thị chi tiết ngay khi tải về bắt đầu </string>
+    <string name="show_transfers_on_download_start">Hiển thị chi tiết ngay khi tải về bắt đầu </string>
     <string name="dialog_new_transfer_title">Bắt đầu tải về?</string>
     <string name="dialog_new_transfer_text_text">Bạn có chắc chắn bạn muốn tải về %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Hiển thị hộp thoại này vào lần sau</string>

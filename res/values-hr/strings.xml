@@ -331,7 +331,7 @@
     <string name="long_press_for_batch_actions">Dodirnite bilo koji naslov datoteke za batch akcije</string>
     <string name="transfer_status_demuxing">Demuxam</string>
     <string name="hint_transfers">Koristite "menu" za skup akcija</string>
-    <string name="show_transers_on_download_start">Pokazi transfere na početku preuzimanja</string>
+    <string name="show_transfers_on_download_start">Pokazi transfere na početku preuzimanja</string>
     <string name="storage_preference_title">Odaberi lokaciju spremanja</string>
     <string name="loading_all">Učitavam sve</string>
     <string name="torrent_max_total_connections">Maksimum ukupnih konekcija</string>

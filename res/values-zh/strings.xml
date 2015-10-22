@@ -326,7 +326,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">播种被关掉</string>
     <string name="nickname_hint">昵称</string>
-    <string name="show_transers_on_download_start">在下载起始中显示传输</string>
+    <string name="show_transfers_on_download_start">在下载起始中显示传输</string>
     <string name="dialog_new_transfer_title">开始此次下载?</string>
     <string name="dialog_new_transfer_text_text">你确定想要下载 %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">下一次再显示</string>

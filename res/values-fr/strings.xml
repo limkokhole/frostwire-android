@@ -328,7 +328,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">L\'ensemencement a été arrêté </string>
     <string name="nickname_hint">Pseudo </string>
-    <string name="show_transers_on_download_start">Afficher les transferts au démarrage de téléchargement </string>
+    <string name="show_transfers_on_download_start">Afficher les transferts au démarrage de téléchargement </string>
     <string name="dialog_new_transfer_title">Démarrer ce téléchargement?</string>
     <string name="dialog_new_transfer_text_text">Voulez-vous vraiment télécharger %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Afficher ceci la prochaine fois </string>

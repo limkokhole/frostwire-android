@@ -326,7 +326,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Seedowanie zostało wyłączone</string>
     <string name="nickname_hint">Nick</string>
-    <string name="show_transers_on_download_start">Pokaż Transfery przy Starcie Pobierania</string>
+    <string name="show_transfers_on_download_start">Pokaż Transfery przy Starcie Pobierania</string>
     <string name="dialog_new_transfer_title">Rozpocząć Pobieranie?</string>
     <string name="dialog_new_transfer_text_text">Czy na pewno chcesz pobrać %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Pokaż to następnym razem</string>

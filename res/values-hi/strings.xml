@@ -327,7 +327,7 @@
     <string name="dummy_uploads_indicator"> 0 @ 0 के बी /स</string>
     <string name="seeding_has_been_turned_off">सीडिंग बंद कर दिया गया है</string>
     <string name="nickname_hint">उपनाम</string>
-    <string name="show_transers_on_download_start">डाउनलोड प्रारंभ में स्थानांतरण दिखाएँ</string>
+    <string name="show_transfers_on_download_start">डाउनलोड प्रारंभ में स्थानांतरण दिखाएँ</string>
     <string name="dialog_new_transfer_title">इस डाउनलोड को शुरू करें? शुरू </string>
     <string name="dialog_new_transfer_text_text">आप सुनिश्चित करें कि आप डाउनलोड %1$s (%2$s) करना चाहते हैं</string>
     <string name="dialog_new_transfer_check_text">यह अगली बार दिखाएँ</string>

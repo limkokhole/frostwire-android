@@ -336,7 +336,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Seeden wurde deaktiviert</string>
     <string name="nickname_hint">Nickname</string>
-    <string name="show_transers_on_download_start">Zeige Übertragungen zu Beginn des Downloads an.</string>
+    <string name="show_transfers_on_download_start">Zeige Übertragungen zu Beginn des Downloads an.</string>
     <string name="dialog_new_transfer_title">Diesen Download starten?</string>
     <string name="dialog_new_transfer_text_text">Bist du sicher, du willst %1$s (%2$s) herunterladen?</string>
     <string name="dialog_new_transfer_check_text">Das nächste Mal anzeigen</string>

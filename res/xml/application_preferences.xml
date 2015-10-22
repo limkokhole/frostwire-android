@@ -168,7 +168,7 @@
         android:persistent="false" >
         <CheckBoxPreference
                 android:key="frostwire.prefs.gui.show_transfers_on_download_start"
-                android:title="@string/show_transers_on_download_start" />
+                android:title="@string/show_transfers_on_download_start" />
         <CheckBoxPreference
                 android:key="frostwire.prefs.gui.show_new_transfer_dialog"
                 android:title="@string/show_new_transfer_dialog" />

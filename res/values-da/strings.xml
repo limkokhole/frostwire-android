@@ -326,7 +326,7 @@
     <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Føring er blevet slukket</string>
     <string name="nickname_hint">Brugernavn</string>
-    <string name="show_transers_on_download_start">is overførsler på begyndelsen af download</string>
+    <string name="show_transfers_on_download_start">is overførsler på begyndelsen af download</string>
     <string name="dialog_new_transfer_title">Begynd denne download?</string>
     <string name="dialog_new_transfer_text_text">Er du sikker at downloade %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Vis dette næste gang</string>
