@@ -496,5 +496,5 @@
     <string name="saving_to_sd_card">Enregistrement sur ​​carte SD.</string>
     <string name="transfers_context_menu_stop_delete_data">Arrêter et supprimer des données</string>
     <string name="use_tpb_summary">TPB est magnet base, ne fonctionne que sur le Wi-Fi</string>
-
+    <string name="help">Aidez-moi</string>
 </resources>

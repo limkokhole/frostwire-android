@@ -513,4 +513,5 @@
     <string name="use_btjunkie">Koristi BTJunkie</string>
     <string name="files_shared">datoteka dijeljeno</string>
     <string name="share_finished_downloads">Dijeli završena preuzimanja na Wi-Fiu</string>
+    <string name="help">Pomoć</string>
 </resources>

@@ -551,4 +551,5 @@
     <string name="torrent_transfer_aborted_on_mobile_data">Las transferencias de torrent no empezarán hasta que te conectes a una red Wi-Fi. (Verifica tus preferencias de Redes con respecto al uso de datos 3G/4G)</string>
     <string name="transfers_context_menu_copy_magnet">Copiar Magnet</string>
     <string name="transfers_context_menu_copy_infohash">Copiar InfoHash</string>
+    <string name="help">Ayuda</string>
 </resources>

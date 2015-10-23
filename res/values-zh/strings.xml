@@ -516,5 +516,5 @@
 <string name="transfers_context_menu_stop_delete_data">停止並刪除數據</string>
 <string name="use_btjunkie">使用 BTJunkie</string>
 <string name="use_tpb_summary">TPB 基於磁力，僅適用於 Wi-Fi</string>
-
+<string name="help">帮帮我</string>
 </resources>
