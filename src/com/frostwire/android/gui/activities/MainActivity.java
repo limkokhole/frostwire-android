@@ -560,8 +560,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                     } else if (id == R.id.menu_main_my_music) {
                         controller.launchMyMusic();
                     } else if (id == R.id.menu_main_support) {
-                        startActivity(new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("http://support.frostwire.com/")));
+                        UIUtils.openURL(MainActivity.this, Constants.SUPPORT_URL);
                     }
                     else {
                         listMenu.setItemChecked(position, true);
