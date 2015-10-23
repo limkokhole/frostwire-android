@@ -1,4 +1,4 @@
-FrostWire 1.6.5 - OCTOBER/16/2015
+FrostWire 1.6.5 - OCTOBER/22/2015
  - Fixes bug where search results that have finished didn't refresh
    user interface and users would think FrostWire was searching forever.
  - Compatible with Android 6 (Marshmallow) new permissions framework.
@@ -9,6 +9,7 @@ FrostWire 1.6.5 - OCTOBER/16/2015
  - New Keep In Touch dialog after the installation wizard.
  - New Copy Magnet action on transfers.
  - New Copy Infohash action on transfers.
+ - New "Help" menu entry.
 
 FrostWire 1.6.4 - SEPTEMBER/24/2015
  - New http engine based on okhttp, uses pooled connections, less threads, less memory.
