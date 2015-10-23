@@ -24,6 +24,7 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.*;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -558,7 +559,11 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
                         showShutdownDialog();
                     } else if (id == R.id.menu_main_my_music) {
                         controller.launchMyMusic();
-                    } else {
+                    } else if (id == R.id.menu_main_support) {
+                        startActivity(new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("http://support.frostwire.com/")));
+                    }
+                    else {
                         listMenu.setItemChecked(position, true);
                         controller.switchFragment((int) id);
                     }
