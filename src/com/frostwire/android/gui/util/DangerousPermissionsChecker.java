@@ -82,25 +82,14 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         if (!Ref.alive(activityRef)) {
             return;
         }
-        final Activity activity = activityRef.get();
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-        builder.setIcon(R.drawable.sd_card_notification);
-        builder.setTitle(R.string.why_we_need_storage_permissions);
-        builder.setMessage(R.string.why_we_need_storage_permissions_summary);
-        builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                shutdown();
-            }
-        });
-        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
-            }
-        });
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
+    }
+
+    public void requestPermissions() {
+        if (!Ref.alive(activityRef)) {
+            return;
+        }
+        Activity activity = activityRef.get();
+        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
     }
 
     @Override
@@ -123,13 +112,26 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                     permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-                    UIUtils.showInformationDialog(activity, R.string.frostwire_shutting_down_no_permissions, R.string.shutting_down, false,
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    shutdown();
-                                }
-                            });
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setIcon(R.drawable.sd_card_notification);
+                    builder.setTitle(R.string.why_we_need_storage_permissions);
+                    builder.setMessage(R.string.why_we_need_storage_permissions_summary);
+                    builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            shutdown();
+                            return;
+                        }
+                    });
+                    builder.setPositiveButton(R.string.request_again, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestPermissions();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
                     return;
                 }
             }
@@ -140,6 +142,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                 restart(1000);
             }
         });
+
     }
 
     public void shutdown() {

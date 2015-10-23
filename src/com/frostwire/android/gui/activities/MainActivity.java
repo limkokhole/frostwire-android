@@ -393,7 +393,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
 
     private void checkPermissionsOrBindMusicService() {
         if (!permissionsRequested && permissionsChecker.noAccess()) {
-            permissionsChecker.showPermissionsRationale();
+            permissionsChecker.requestPermissions();
             permissionsRequested = true;
         } else {
             mToken = MusicUtils.bindToService(this, this);

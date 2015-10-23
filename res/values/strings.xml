@@ -543,7 +543,8 @@
     <string name="restarting">Restarting…</string>
     <string name="restarting_summary">FrostWire will now restart for granted permissions to take effect</string>
     <string name="why_we_need_storage_permissions">Why we need storage permissions.</string>
-    <string name="why_we_need_storage_permissions_summary">FrostWire is a file browser and downloader app, therefore it needs to be able to access your disk.</string>
+    <string name="why_we_need_storage_permissions_summary">FrostWire is a file browser and downloader app, therefore it needs to be able to access your disk.\n\nWithout your permissions FrostWire cannot work.\n\nWant to try again?</string>
     <string name="shutting_down">Shutting down…</string>
     <string name="help">Help</string>
+    <string name="request_again">Request Again</string>
 </resources>
