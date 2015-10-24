@@ -24,7 +24,6 @@ import android.app.FragmentTransaction;
 import android.app.NotificationManager;
 import android.content.*;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -73,6 +72,8 @@ import com.frostwire.uxstats.UXStats;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import static com.andrew.apollo.utils.MusicUtils.mService;
@@ -83,7 +84,11 @@ import static com.andrew.apollo.utils.MusicUtils.mService;
  * @author aldenml
  *
  */
-public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener, OnDialogClickListener, ServiceConnection, ActivityCompat.OnRequestPermissionsResultCallback {
+public class MainActivity extends AbstractActivity implements ConfigurationUpdateListener,
+        OnDialogClickListener,
+        ServiceConnection,
+        ActivityCompat.OnRequestPermissionsResultCallback,
+        DangerousPermissionsChecker.PermissionsCheckerHolder {
 
     private static final Logger LOG = Logger.getLogger(MainActivity.class);
     private static final String FRAGMENTS_STACK_KEY = "fragments_stack";
@@ -91,7 +96,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private static final String LAST_BACK_DIALOG_ID = "last_back_dialog";
     private static final String SHUTDOWN_DIALOG_ID = "shutdown_dialog";
     private static boolean firstTime = true;
-    private final DangerousPermissionsChecker permissionsChecker;
+    private final Map<Integer, DangerousPermissionsChecker> permissionsCheckers;
     private MainController controller;
     private DrawerLayout drawerLayout;
     @SuppressWarnings("deprecation")
@@ -106,13 +111,13 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
     private PlayerMenuItemView playerItem;
     private TimerSubscription playerSubscription;
     private BroadcastReceiver mainBroadcastReceiver;
-    private boolean permissionsRequested = false;
+    private boolean externalStoragePermissionsRequested = false;
 
     public MainActivity() {
         super(R.layout.activity_main);
         this.controller = new MainController(this);
         this.fragmentsStack = new Stack<>();
-        this.permissionsChecker = newPermissionsChecker();
+        this.permissionsCheckers = initPermissionsCheckers();
     }
 
     public void switchFragment(int itemId) {
@@ -327,7 +332,7 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         //UIUtils.showSocialLinksDialog(this, true, null, "");
 
         if (ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_GUI_TOS_ACCEPTED)) {
-            checkPermissionsOrBindMusicService();
+            checkExternalStoragePermissionsOrBindMusicService();
         }
     }
 
@@ -345,8 +350,35 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         }
     }
 
-    private DangerousPermissionsChecker newPermissionsChecker() {
-        return new DangerousPermissionsChecker(this, DangerousPermissionsChecker.PermissionCheck.ExternalStorage);
+    private Map<Integer,DangerousPermissionsChecker> initPermissionsCheckers() {
+        Map<Integer, DangerousPermissionsChecker> checkers = new HashMap<>();
+
+        // EXTERNAL STORAGE ACCESS CHECKER.
+        final DangerousPermissionsChecker externalStorageChecker =
+                new DangerousPermissionsChecker(this, DangerousPermissionsChecker.EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
+        externalStorageChecker.setPermissionsGrantedCallback(new DangerousPermissionsChecker.OnPermissionsGrantedCallback() {
+            @Override
+            public void onPermissionsGranted() {
+                UIUtils.showInformationDialog(MainActivity.this,
+                        R.string.restarting_summary,
+                        R.string.restarting,
+                        false,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                externalStorageChecker.restartFrostWire(1000);
+                            }
+                        });
+            }
+        });
+        checkers.put(DangerousPermissionsChecker.EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE, externalStorageChecker);
+
+        // WRITE_SETTINGS (for changing Ringtones and other system settings we might be touching)
+        final DangerousPermissionsChecker settingsPermissionChecker = new DangerousPermissionsChecker(this,
+                DangerousPermissionsChecker.WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE);
+        // the callback is put lazily
+        checkers.put(DangerousPermissionsChecker.WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE, settingsPermissionChecker);
+        return checkers;
     }
 
     private void registerMainBroadcastReceiver() {
@@ -388,13 +420,14 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
             return;
         }
 
-        checkPermissionsOrBindMusicService();
+        checkExternalStoragePermissionsOrBindMusicService();
     }
 
-    private void checkPermissionsOrBindMusicService() {
-        if (!permissionsRequested && permissionsChecker.noAccess()) {
-            permissionsChecker.requestPermissions();
-            permissionsRequested = true;
+    private void checkExternalStoragePermissionsOrBindMusicService() {
+        DangerousPermissionsChecker checker = permissionsCheckers.get(DangerousPermissionsChecker.EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
+        if (!externalStoragePermissionsRequested && checker!=null && checker.noAccess()) {
+            checker.requestPermissions();
+            externalStoragePermissionsRequested = true;
         } else {
             mToken = MusicUtils.bindToService(this, this);
         }
@@ -724,15 +757,19 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         mService = null;
     }
 
+    public DangerousPermissionsChecker getPermissionsChecker(int requestCode) {
+        return permissionsCheckers.get(requestCode);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (permissionsChecker != null) {
-            permissionsChecker.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        DangerousPermissionsChecker checker = permissionsCheckers.get(requestCode);
+        if (checker != null) {
+            checker.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
     private static final class MenuDrawerToggle extends ActionBarDrawerToggle {
-
         private final WeakReference<MainActivity> activityRef;
 
         public MenuDrawerToggle(MainActivity activity, DrawerLayout drawerLayout) {

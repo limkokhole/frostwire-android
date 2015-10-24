@@ -40,33 +40,39 @@ import java.lang.ref.WeakReference;
  * @author aldenml
  */
 public final class DangerousPermissionsChecker implements ActivityCompat.OnRequestPermissionsResultCallback {
+    public interface OnPermissionsGrantedCallback {
+        void onPermissionsGranted();
+    }
 
-    public enum PermissionCheck {
-        ExternalStorage
+    public interface PermissionsCheckerHolder {
+        DangerousPermissionsChecker getPermissionsChecker(int requestCode);
     }
 
     public static final int EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE = 0x000A;
-    private final WeakReference<Activity> activityRef;
-    private final PermissionCheck checkType;
+    public static final int  WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE = 0x000B;
 
-    public DangerousPermissionsChecker(Activity activity, PermissionCheck requestType) {
+    private final WeakReference<Activity> activityRef;
+    private final int requestCode;
+    private OnPermissionsGrantedCallback onPermissionsGrantedCallback;
+
+    public DangerousPermissionsChecker(Activity activity, int requestCode) {
         if (activity instanceof ActivityCompat.OnRequestPermissionsResultCallback) {
-            checkType = requestType;
+            this.requestCode = requestCode;
             this.activityRef = Ref.weak(activity);
         } else throw new IllegalArgumentException("The activity must implement ActivityCompat.OnRequestPermissionsResultCallback");
     }
 
-    public boolean noAccess() {
-        if (checkType == PermissionCheck.ExternalStorage) {
-            return noExternalStorageAccess();
-        }
-        return false;
+    public void setPermissionsGrantedCallback(OnPermissionsGrantedCallback onPermissionsGrantedCallback) {
+        this.onPermissionsGrantedCallback = onPermissionsGrantedCallback;
     }
 
-    public void showPermissionsRationale() {
-        if (checkType == PermissionCheck.ExternalStorage) {
-            showExternalStoragePermissionsRationale();
+    public boolean noAccess() {
+        if (requestCode == EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE) {
+            return noExternalStorageAccess();
+        } else if (requestCode == WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE) {
+            return noWriteSettingsAccess();
         }
+        return false;
     }
 
     private boolean noExternalStorageAccess() {
@@ -75,13 +81,16 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         }
         Activity activity = activityRef.get();
         return ActivityCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED ||
-                ActivityCompat.checkSelfPermission(activity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
+               ActivityCompat.checkSelfPermission(activity,  Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED;
     }
 
-    private void showExternalStoragePermissionsRationale() {
+    private boolean noWriteSettingsAccess() {
         if (!Ref.alive(activityRef)) {
-            return;
+            return true;
         }
+        Activity activity = activityRef.get();
+        return ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_SETTINGS) == PackageManager.PERMISSION_DENIED;
+
     }
 
     public void requestPermissions() {
@@ -89,30 +98,53 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
             return;
         }
         Activity activity = activityRef.get();
-        ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE);
+
+
+        String[] permissions = null;
+        switch (requestCode) {
+            case EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE:
+                permissions = new String[]{
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                };
+                break;
+            case WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE:
+                permissions = new String[] { Manifest.permission.WRITE_SETTINGS };
+                break;
+        }
+
+        if (permissions != null) {
+            ActivityCompat.requestPermissions(activity, permissions, requestCode);
+        }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        boolean permissionWasGranted = false;
         switch (requestCode) {
             case EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE:
-                onExternalPermissionsResult(permissions, grantResults);
+                permissionWasGranted = onExternalPermissionsResult(permissions, grantResults);
                 break;
+            case WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE:
+                permissionWasGranted = onWriteSettingsPermissionsResult(permissions, grantResults);
             default:
                 break;
         }
+
+        if (this.onPermissionsGrantedCallback != null && permissionWasGranted) {
+            onPermissionsGrantedCallback.onPermissionsGranted();
+        }
     }
 
-    private void onExternalPermissionsResult(String[] permissions, int[] grantResults) {
+    private boolean onExternalPermissionsResult(String[] permissions, int[] grantResults) {
         if (!Ref.alive(activityRef)) {
-            return;
+            return false;
         }
         final Activity activity = activityRef.get();
         for (int i=0; i<permissions.length; i++) {
             if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
                 if (permissions[i].equals(Manifest.permission.WRITE_EXTERNAL_STORAGE) ||
                     permissions[i].equals(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-
                     AlertDialog.Builder builder = new AlertDialog.Builder(activity);
                     builder.setIcon(R.drawable.sd_card_notification);
                     builder.setTitle(R.string.why_we_need_storage_permissions);
@@ -120,8 +152,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                     builder.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            shutdown();
-                            return;
+                            shutdownFrostWire();
                         }
                     });
                     builder.setPositiveButton(R.string.request_again, new DialogInterface.OnClickListener() {
@@ -132,20 +163,46 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                     });
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
-                    return;
+                    return false;
                 }
             }
         }
-        UIUtils.showInformationDialog(activity, R.string.restarting_summary, R.string.restarting, false, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                restart(1000);
-            }
-        });
-
+        return true;
     }
 
-    public void shutdown() {
+    private boolean onWriteSettingsPermissionsResult(String[] permissions, int[] grantResults) {
+        if (!Ref.alive(activityRef)) {
+            return false;
+        }
+        final Activity activity = activityRef.get();
+        for (int i=0; i<permissions.length; i++) {
+            if (grantResults[i]== PackageManager.PERMISSION_DENIED) {
+                if (permissions[i].equals(Manifest.permission.WRITE_SETTINGS)) {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+                    builder.setTitle(R.string.why_we_need_settings_access);
+                    builder.setMessage(R.string.why_we_need_settings_access_summary);
+                    builder.setNegativeButton(R.string.deny, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            UIUtils.showLongMessage(activity, R.string.ringtone_not_set);
+                        }
+                    });
+                    builder.setPositiveButton(R.string.request_again, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            requestPermissions();
+                        }
+                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void shutdownFrostWire() {
         if (!Ref.alive(activityRef)) {
             return;
         }
@@ -156,7 +213,7 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
         Engine.instance().shutdown();
     }
 
-    public void restart(int delayInMS) {
+    public void restartFrostWire(int delayInMS) {
         if (!Ref.alive(activityRef)) {
             return;
         }
@@ -167,6 +224,20 @@ public final class DangerousPermissionsChecker implements ActivityCompat.OnReque
                 activity.getIntent().getFlags());
         AlarmManager manager = (AlarmManager) activity.getSystemService(Context.ALARM_SERVICE);
         manager.set(AlarmManager.RTC, System.currentTimeMillis() + delayInMS, intent);
-        shutdown();
+        shutdownFrostWire();
+    }
+
+    @Override
+    public int hashCode() {
+        return requestCode;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o != null &&
+                ((DangerousPermissionsChecker) o).requestCode == this.requestCode &&
+                Ref.alive(((DangerousPermissionsChecker) o).activityRef) &&
+                Ref.alive(activityRef) &&
+                ((DangerousPermissionsChecker) o).activityRef.get().equals(activityRef);
     }
 }

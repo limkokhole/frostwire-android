@@ -547,4 +547,8 @@
     <string name="shutting_down">Shutting down…</string>
     <string name="help">Help</string>
     <string name="request_again">Request Again</string>
+    <string name="why_we_need_settings_access">Why we need System Settings access</string>
+    <string name="why_we_need_settings_access_summary">Changing your ringtone requires access to your system settings.\n\nWant to try again?</string>
+    <string name="ringtone_not_set">Could not change your ringtone, not enough permissions.</string>
+    <string name="deny">Deny</string>
 </resources>

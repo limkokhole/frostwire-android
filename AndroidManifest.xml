@@ -162,14 +162,16 @@
 		<!-- Main activity -->
 		<activity
 			android:name="com.andrew.apollo.ui.activities.HomeActivity"
-			android:windowSoftInputMode="adjustPan" >
+			android:windowSoftInputMode="adjustPan"
+			android:protectionLevel="dangerous">
 		</activity>
 		<!-- Now playing -->
 		<activity
 			android:name="com.andrew.apollo.ui.activities.AudioPlayerActivity"
 			android:clearTaskOnLaunch="true"
 			android:launchMode="singleTask"
-			android:windowSoftInputMode="adjustPan" >
+			android:windowSoftInputMode="adjustPan"
+			android:protectionLevel="dangerous">
 			<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 
