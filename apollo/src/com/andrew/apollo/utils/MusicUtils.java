@@ -14,6 +14,7 @@ package com.andrew.apollo.utils;
 import android.app.Activity;
 import android.content.*;
 import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -1017,7 +1018,7 @@ public final class MusicUtils {
         try {
             if (cursor != null && cursor.getCount() == 1) {
                 cursor.moveToFirst();
-                Settings.System.putString(resolver, Settings.System.RINGTONE, uri.toString());
+                RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, uri);
                 final String message = context.getString(R.string.set_as_ringtone,
                         cursor.getString(2));
                 AppMsg.makeText(context, message, AppMsg.STYLE_CONFIRM).show();

@@ -42,7 +42,7 @@ public class MenuBuilder implements DialogInterface.OnClickListener, DialogInter
     }
 
     public void onClick(DialogInterface dialog, int which) {
-        MenuAction item = (MenuAction) adapter.getItem(which);
+        MenuAction item = adapter.getItem(which);
         item.onClick();
         cleanup();
     }

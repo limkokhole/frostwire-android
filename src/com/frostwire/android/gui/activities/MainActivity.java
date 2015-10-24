@@ -373,11 +373,8 @@ public class MainActivity extends AbstractActivity implements ConfigurationUpdat
         });
         checkers.put(DangerousPermissionsChecker.EXTERNAL_STORAGE_PERMISSIONS_REQUEST_CODE, externalStorageChecker);
 
-        // WRITE_SETTINGS (for changing Ringtones and other system settings we might be touching)
-        final DangerousPermissionsChecker settingsPermissionChecker = new DangerousPermissionsChecker(this,
-                DangerousPermissionsChecker.WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE);
-        // the callback is put lazily
-        checkers.put(DangerousPermissionsChecker.WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE, settingsPermissionChecker);
+        // add more permissions checkers if needed...
+
         return checkers;
     }
 

@@ -19,6 +19,8 @@
 package com.frostwire.android.gui.adapters.menu;
 
 import android.content.Context;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.provider.MediaStore.Audio;
 import android.provider.Settings;
 import com.frostwire.android.R;
@@ -29,6 +31,8 @@ import com.frostwire.android.gui.util.DangerousPermissionsChecker.PermissionsChe
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.MenuAction;
 
+import java.util.concurrent.CountDownLatch;
+
 /**
  * @author gubatron
  * @author aldenml
@@ -37,32 +41,14 @@ import com.frostwire.android.gui.views.MenuAction;
 public class SetAsRingtoneMenuAction extends MenuAction {
 
     private final FileDescriptor fd;
-    private final DangerousPermissionsChecker permissionChecker;
 
     public SetAsRingtoneMenuAction(final Context context, FileDescriptor fd) {
         super(context, R.drawable.contextmenu_icon_ringtone, R.string.context_menu_use_as_ringtone);
         this.fd = fd;
-
-        if (context instanceof PermissionsCheckerHolder) {
-            PermissionsCheckerHolder checkerHolder = (PermissionsCheckerHolder) context;
-            permissionChecker = checkerHolder.getPermissionsChecker(DangerousPermissionsChecker.WRITE_SETTINGS_PERMISSIONS_REQUEST_CODE);
-            permissionChecker.setPermissionsGrantedCallback(new DangerousPermissionsChecker.OnPermissionsGrantedCallback() {
-                @Override
-                public void onPermissionsGranted() {
-                    setNewRingtone(context);
-                }
-            });
-        } else {
-            permissionChecker = null;
-        }
     }
 
     @Override
     protected void onClick(Context context) {
-        if (permissionChecker != null && permissionChecker.noAccess()) {
-            permissionChecker.requestPermissions();
-            return;
-        }
         setNewRingtone(context);
     }
 
@@ -77,7 +63,8 @@ public class SetAsRingtoneMenuAction extends MenuAction {
 
         if (uri != null) {
             try {
-                Settings.System.putString(context.getContentResolver(), Settings.System.RINGTONE, uri);
+                //Settings.System.putString(context.getContentResolver(), Settings.System.RINGTONE, uri);
+                RingtoneManager.setActualDefaultRingtoneUri(context, RingtoneManager.TYPE_RINGTONE, Uri.parse(uri));
                 final String message = context.getString(R.string.set_as_ringtone, fd.title);
                 UIUtils.showLongMessage(context, message);
             } catch (Throwable t) {
