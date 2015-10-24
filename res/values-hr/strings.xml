@@ -537,4 +537,19 @@
     <string name="transfers_context_menu_copy_magnet">Kopiraj magnet poveznicu</string>
     <string name="try_other_keywords">Pokušajte manje/ostale ključne riječi</string>
     <string name="thank_you">Hvala Vam!</string>
+    <string name="restarting_summary">FrostWire će se sada ponovno pokrenuti kako bi dozvole stupile na snagu</string>
+    <string name="why_we_need_storage_permissions_summary">FrostWire je preglednik datoteka i aplikacija za preuzimanje te treba imati pristup vašem disku.\n\nBez vaše dozvole FrostWire ne može raditi.\n\nŽelite li pokušati ponovno?</string>
+    <string name="transfers_context_menu_copy_magnet_copied">Magnet kopiran u međuspremnik</string>
+    <string name="wifi_seeding_has_been_turned_off">Wi-Fi nije dostupan, dijeljenje je ugašeno</string>
+    <string name="frostwire_shutting_down_no_permissions">Oprostite, FrostWire ne može nastaviti bez vaše dozvole za pristup disku.</string>
+    <string name="use_kat_summary">KAT je baziran na magnet linkovima, radi samo putem Wi-Fia</string>
+    <string name="ringtone_not_set">Nije moguće promijeniti zvuk zvonjave, nemamo dovoljno ovlasti.</string>
+    <string name="enable_dht_summary">Koristi DHT za najavu/traženje torrent peerova</string>
+    <string name="deny">Odbij</string>
+    <string name="why_we_need_settings_access_summary">Promjena zvuka zvonjave zahtijeva pristup sistemskim postavkama.\n\nŽelite li pokušati ponovno?</string>
+    <string name="transfers_context_menu_copy_infohash_copied">Infohash je kopiran u međuspremnik</string>
+    <string name="issue_with_tip_donation_uri">Nešto nije u redu s vašom adresom za napojnice/donacije</string>
+    <string name="torrent_transfer_aborted_on_mobile_data">Torrent prijenosi se neće pokrenuti prije nego što se spojite na Wi-Fi mrežu. (provjerite vaše mrežne postavke u vezi 3G/4G potrošnje podataka)</string>
+    <string name="enable_dht">Uključi DHT</string>
+    <string name="rate_our_app">Ocijenite našu aplikaciju</string>
 </resources>
