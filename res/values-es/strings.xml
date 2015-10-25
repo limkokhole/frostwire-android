@@ -301,9 +301,7 @@
     <string name="torrent_max_uploads_summary">Cargas Máximas</string>
     <string name="torrent_max_uploads">Cargas Máximas</string>
     <string name="torrent_max_total_connections_summary">Conexiones Totales Máximas</string>
-    <string name="torrent_max_total_connections"> Conexiones Totales Máximas </string>
-    <string name="torrent_max_torrent_connection_summary"> Conexiones Máximas de Torrente </string>
-    <string name="torrent_max_torrent_connection">Conexiones Máximas de Torrente</string>
+    <string name="torrent_max_total_connections">Conexiones Totales Máximas</string>
     <string name="seed_finished_torrents">Compartir los Torrentes Terminados</string>
     <string name="seed_finished_torrents_summary">Compartir partes de los torrentes descargados con cualquier persona en internet a través de BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Compartir solo en Wi-Fi</string>
@@ -421,7 +419,6 @@
     <string name="add_transfer_label">Copia una URL de magnet o torrent</string>
     <string name="drawer_open">Abre el menu de navegación</string>
     <string name="use_monova">Usar Monova</string>
-    <string name="use_torrentsfm_summary">Torrents.fm es basado en magnets, funciona solo con Wi-Fi</string>
     <string name="cloud_downloads_coming">Lo siento: Descargas desde el cloud estarán disponibles para futuras versiones.</string>
     <string name="magnet_url_added">URL Magnet ha sido añadida a la lista de transferencias. (Los Magnets funcionan mejor con Wi-Fi)</string>
     <string name="use_monova_summary">Monova es basado en magnets, funciona solo con Wi-Fi</string>
@@ -438,16 +435,13 @@
     <string name="transfers_context_resume_all_torrent_transfers">Resumir todas las transferencias Torrent</string>
     <string name="use_yify_summary">Yify es basado en magnets, funciona solo con Wi-Fi</string>
     <string name="donate_in_btc">Dona en bitcoins</string>
-    <string name="use_torrentsfm">Usar Torrents.fm</string>
     <string name="transfers_context_menu_stop_delete_data">Parar y borrar la Data</string>
     <string name="use_tpb_summary">TPB es basado en magnets, funciona solo con Wi-Fi</string>
     <string name="cant_open_file_does_not_exist">No puedo abrir %1$s, el archivo no existe.</string>
     <string name="saving_to_internal_memory_description">También tienes un SD Card (%1$s disp.)</string>
-    <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android borrará archivos descargados si FrostWire es desinstalado.</string>
     <string name="device_memory">Memoria del dispositivo</string>
     <string name="please_check_connection_status_before_resuming_download">Por favor revise el estado de su conexión a internet antes de resumir.</string>
-    <string name="durationformatshort">%2$d:%3$02d</string>
     <string name="menu_space_shortcut_label">Espacio</string>
     <string name="confirm_download">Confirmar Descarga</string>
     <string name="sdcard_storage">Almacenamiento SD</string>
@@ -530,5 +524,5 @@
     <string name="transfers_context_menu_copy_infohash">Copiar InfoHash</string>
     <string name="help">Ayuda</string>
     <string name="request_again">Intenta Nuevamente</string>
-    <string name="ringtone_no_set">El Ringtone no pudo ser cambiado</string>
+    <string name="ringtone_not_set">El Ringtone no pudo ser cambiado</string>
 </resources>

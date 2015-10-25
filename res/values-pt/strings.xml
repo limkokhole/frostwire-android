@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Uploads Máximos</string>
     <string name="torrent_max_total_connections_summary">Máximo Total de Conexões</string>
     <string name="torrent_max_total_connections">Máximo Total de Conexões</string>
-    <string name="torrent_max_torrent_connection_summary">Máximo de Conexões Torrent</string>
-    <string name="torrent_max_torrent_connection">Máximo de Conexões Torrent</string>
     <string name="seed_finished_torrents">Sementei Torrents Terminados</string>
     <string name="seed_finished_torrents_summary">Compartilhe pedaços dos downloads torrent com qualquer pessoa na internet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Sementei somente no WiFi</string>
@@ -364,7 +362,6 @@
     <string name="support_frostwire_summary">Mostrar anúncios para apoiar o desenvolvimento deste aplicativo.</string>
     <string name="storage_preference_title">Selecione um local de armazenamento</string>
     <string name="storage_preference_summary">O local de armazenamento padrão onde os arquivos serão salvos.</string>
-    <string name="connectivity">"Conectividade"</string>
     <string name="loading">"Carregando"</string>
     <string name="wifi_sharing">"Compartilhamento Wi-Fi"</string>
     <string name="activity_mediaplayer_name">Media Player</string>
@@ -422,20 +419,17 @@
     <string name="context_menu_remove_from_recent">Remover da recente</string>
     <string name="use_torlock">Use TorLock</string>
     <string name="use_monova">Use Monova</string>
-    <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="transfer_status_demuxing">Demuxeando</string>
     <string name="cannot_be_undone">Isso não pode ser desfeita</string>
     <string name="accessibility_prev">Anterior</string>
     <string name="accessibility_shuffle">Embaralhar</string>
     <string name="context_menu_open_in_play_store">Abra em Play Store</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android vai deletar arquivos baixados se FrostWire é desinstalado.</string>
-    <string name="use_torrentsfm_summary">Torrents.fm é magnet base, só funciona em Wi-Fi</string>
     <string name="context_menu_delete">Deletar</string>
     <string name="use_eztv">Use Eztv</string>
     <string name="device_memory">Memória do dispositivo</string>
     <string name="please_check_connection_status_before_resuming_download">Por favor, verifique o estado da sua conexão com a internet antes de retomar.</string>
     <string name="page_recent">Recente</string>
-    <string name="durationformatshort">%2$d:%3$02d</string>
     <string name="cloud_downloads_coming">Desculpe: a partir de downloads nuvem daqui estará disponível em mais atualizações.</string>
     <string name="menu_space_shortcut_label">Espaço</string>
     <string name="confirm_download">Confirme Download</string>
@@ -501,7 +495,6 @@
     <string name="saving_to_internal_memory">Salvando para a memória interna</string>
     <string name="storage_setting_confirm_dialog_text">Eu entendo que todos os arquivos baixados para o cartão SD por FrostWire será deletado por ANDROID o momento da aplicação FrostWire é desinstalado a partir deste dispositivo e não vou segurar FrostWire LLC responsável por quaisquer arquivos perdidos.</string>
     <string name="cant_open_file_does_not_exist">Eu não posso abrir %1$s, o arquivo não existe.</string>
-    <string name="use_torrentsfm">Use Torrents.fm</string>
     <string name="saving_to_sd_card">Salvando para o cartão SD.</string>
     <string name="transfers_context_menu_stop_delete_data">Pare e excluir dados</string>
     <string name="add_to_playlist">Adicionar à lista</string>

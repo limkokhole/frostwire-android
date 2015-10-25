@@ -303,8 +303,6 @@
     <string name="torrent_max_uploads">अधिकतम अपलोड</string>
     <string name="torrent_max_total_connections_summary">अधिकतम कुल कनेक्शन</string>
     <string name="torrent_max_total_connections">अधिकतम कुल कनेक्शन</string>
-    <string name="torrent_max_torrent_connection_summary">अधिकतम कुल कनेक्शन</string>
-    <string name="torrent_max_torrent_connection">अधिकतम टॉरेंट कनेक्शन</string>
     <string name="seed_finished_torrents">सीड फिनिश्ड टॉरेंट्स</string>
     <string name="seed_finished_torrents_summary">टॉरेंट  डाउनलोड के  टुकड़े बीत्टोररेंट से होकर इंटरनेट पर किसी के साथ शेयर करें </string>
     <string name="seed_finished_torrents_wifi_only">वाईफ़ाई पर केवल सीड </string>

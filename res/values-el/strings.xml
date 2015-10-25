@@ -230,8 +230,6 @@
     <string name="use_clearbits">Χρήση ClearBits.net</string>
     <string name="use_tpb">Χρήση TPB</string>
     <string name="use_tpb_summary">Το TPB είναι βασισμένο σε magnet, δουλεύει μόνο σε ασύρματο δίκτυο</string>
-    <string name="use_torrentsfm">Χρήση Torrents.fm</string>
-    <string name="use_torrentsfm_summary">Το Torrents.fm είναι βασισμένο σε magnet, δουλεύει μόνο σε ασύρματο δίκτυο</string>
     <string name="use_monova">Χρήση Monova</string>
     <string name="use_monova_summary">Το Monova είναι βασισμένο σε magnet, δουλεύει μόνο σε ασύρματο δίκτυο</string>
     <string name="use_extratorrent">Χρήση ExtraTorrent.com</string>
@@ -309,8 +307,6 @@
     <string name="torrent_max_uploads">Μέγιστο Πλήθος Uploads</string>
     <string name="torrent_max_total_connections_summary">Μέγιστο Πλήθος Συνδέσεων</string>
     <string name="torrent_max_total_connections">Μέγιστο Πλήθος Συνδέσεων</string>
-    <string name="torrent_max_torrent_connection_summary">Μέγιστο Πλήθος Συνδέσεων</string>
-    <string name="torrent_max_torrent_connection">Μέγιστες Torrent Συνδέσεις</string>
     <string name="seed_finished_torrents">Μοιράσου τα ολοκληρωμένα Torrents</string>
     <string name="seed_finished_torrents_summary">Μοιράσου κομμάτια των torrent downloads με οποιονδήποτε στο internet μέσω BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Μοιράσου μόνο στο ασύρματο δίκτυο</string>

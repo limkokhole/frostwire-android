@@ -238,7 +238,6 @@
     <string name="use_eztv">Benutze Eztv</string>
     <string name="use_yify">Benutze Yify</string>
     <string name="use_bitsnoop">Benutze BitSnoop</string>
-    <string name="use_torrentsfm">Benutze Torrents.fm</string>
     <string name="use_frostclick">Benutze FrostClick</string>
     <string name="use_archiveorg">Benutze Archive.org</string>
     <string name="use_youtube">Benutze YouTube.com</string>
@@ -312,8 +311,6 @@
     <string name="torrent_max_uploads">Max. Uploads</string>
     <string name="torrent_max_total_connections_summary">Max. Gesamtverbindungen</string>
     <string name="torrent_max_total_connections">Max. Gesamtverbindungen</string>
-    <string name="torrent_max_torrent_connection_summary">Max. Torrent-Verbindungen</string>
-    <string name="torrent_max_torrent_connection">Max. Torrent-Verbindungen</string>
     <string name="seed_finished_torrents">Abgeschlossene Torrents seeden</string>
     <string name="seed_finished_torrents_summary">Teile von Torrent-Downloads für jeden im Internet via BitTorrent freigeben.</string>
     <string name="seed_finished_torrents_wifi_only">Seed nur auf WLAN</string>

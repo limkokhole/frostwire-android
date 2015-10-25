@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Tối đa tải lên</string>
     <string name="torrent_max_total_connections_summary">Tổng số kết nối tối đa</string>
     <string name="torrent_max_total_connections">Tổng số kết nối tối đa</string>
-    <string name="torrent_max_torrent_connection_summary">Tối đa kết nối Torrent</string>
-    <string name="torrent_max_torrent_connection">Tối đa kết nối Torrent</string>
     <string name="seed_finished_torrents">Torrent đã seed xong</string>
     <string name="seed_finished_torrents_summary">Chia sẻ từng phần của torrent tải về với bất cứ ai trên internet thông qua BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Chỉ Seed trên WiFi</string>

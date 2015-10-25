@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">最大上传量</string>
     <string name="torrent_max_total_connections_summary">最大总连接</string>
     <string name="torrent_max_total_connections">最大总连接</string>
-    <string name="torrent_max_torrent_connection_summary">最大种子连接</string>
-    <string name="torrent_max_torrent_connection">最大种子连接</string>
     <string name="seed_finished_torrents">播种完成</string>
     <string name="seed_finished_torrents_summary">通过比特流,与互联网上的任何人共享下载的种子文件。</string>
     <string name="seed_finished_torrents_wifi_only">仅在无线网络播种</string>

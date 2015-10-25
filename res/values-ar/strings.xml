@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">التحميلات القصوى</string>
     <string name="torrent_max_total_connections_summary">أقصى اجمالي للاتصالات</string>
     <string name="torrent_max_total_connections">أقصى اجمالي للاتصالات</string>
-    <string name="torrent_max_torrent_connection_summary">الحد الأقصى لاتصالات تورينت</string>
-    <string name="torrent_max_torrent_connection">الحد الأقصى لاتصالات تورينت</string>
     <string name="seed_finished_torrents">عدد ملفات التورينت المشاركة</string>
     <string name="seed_finished_torrents_summary">Bittorrent شارك أجزاء من ملفات التورينت مع أي شخص على الإنترنت عبر </string>
     <string name="seed_finished_torrents_wifi_only">شارك فقط على الواي فاي</string>
@@ -364,7 +362,6 @@
     <string name="support_frostwire_summary">اعرض الاعلانات لكي تدعم تطوير هذا التطبيق</string>
     <string name="storage_preference_title">اختر مكان التخزين</string>
     <string name="storage_preference_summary">مكان التخزين الافتراضي حيث تحفظ ملفات التنزيل</string>
-    <string name="connectivity">طريقة الاتصال</string>
     <string name="loading">جاري العرض</string>
     <string name="wifi_sharing">مشاركة واي فاي</string>
     <string name="activity_mediaplayer_name">مشغل الوسائط</string>

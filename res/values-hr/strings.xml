@@ -180,7 +180,6 @@
     <string name="use_clearbits">Koristi ClearBits.net</string>
     <string name="use_tpb">Koristi TPB</string>
     <string name="use_tpb_summary">TPB je baziran na magnet poveznicama i radi samo na Wi-Fiu</string>
-    <string name="use_torrentsfm">Koristi Torrents.fm</string>
     <string name="use_monova">Koristi Monova</string>
     <string name="use_extratorrent">Koristi ExtraTorrent.com</string>
     <string name="use_isohunt">Koristi ISOHunt.com</string>
@@ -190,13 +189,6 @@
     <string name="ringtone_set">Zvonjava postavljena</string>
     <string name="search">Traži</string>
     <string name="transfers">Prijenosi</string>
-    
-    
-    
-    
-    
-    
-    
     <string name="view_transfer_item_list_item_icon">Ikona za vrstu datoteke</string>
     <string name="play_image_description">Svirati</string>
     <string name="view_transfer_list_item_button_action_description">Akcija</string>
@@ -238,23 +230,12 @@
     <string name="download_finished">Preuzimanje gotovo</string>
     <string name="clear_complete">Pročiščavanje gotovo</string>
     <string name="downloading_promotion">Preuzimam %s</string>
-    
-    
     <string name="torrent_settings">Torrent postavke</string>
-    
-    
-    
-    
-    <string name="empty_string"></string>
-    
-    
     <string name="nickname_hint">Nadimak</string>
-    
     <string name="clear">Pročistiti</string>
     <string name="wizard_previous">Prijašnje</string>
     <string name="wizard_next">Sljedeće</string>
     <string name="wizard_finish">Završi</string>
-    
     <string name="seeding_settings">Postavke djeljenja</string>
     <string name="seeds_n">Seedovi: %s</string>
     <string name="peers_n">Peerovi: %s</string>
@@ -262,8 +243,6 @@
     <string name="playing">Sviram</string>
     <string name="back">Natrag</string>
     <string name="are_you_sure">Jeste li sigurni?</string>
-    
-    
     <string name="accept">Potvrdi</string>
     <string name="reject">Odbaci</string>
     <string name="block">Blokiraj</string>
@@ -352,7 +331,6 @@
     <string name="my_filetype">Moje %s</string>
     <string name="torrent_max_download_speed_summary">Maksimalna brzina preuzimanja</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android će obrisati preuzete datoteke ako je FrostWire deinstaliran.</string>
-    <string name="use_torrentsfm_summary">Torrents.fm je baziran na magnet poveznicama i radi samo na Wi-Fiu</string>
     <string name="device_memory">Memorija uređaja</string>
     <string name="wifi_sharing_settings">Wi-Fi postavke dijeljenja</string>
     <string name="app_shutdown_dlg_message">Ovo će ugasiti sve prijenose i servise u pozadini. Jeste li sigurni?</string>

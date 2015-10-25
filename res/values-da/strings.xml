@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Maks Uploads</string>
     <string name="torrent_max_total_connections_summary">Maks samlede forbindelser</string>
     <string name="torrent_max_total_connections">Maks samlede forbindelser</string>
-    <string name="torrent_max_torrent_connection_summary">Maks Torrent Forbindelser</string>
-    <string name="torrent_max_torrent_connection">Maks Torrent Forbindelser</string>
     <string name="seed_finished_torrents">Frø færdig med torrents</string>
     <string name="seed_finished_torrents_summary">Del stykker af torrent downloads med mennesker på internettet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Frø kun på WiFi</string>

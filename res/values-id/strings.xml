@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Unggahan Maksimal</string>
     <string name="torrent_max_total_connections_summary">Koneksi Total Maksimal</string>
     <string name="torrent_max_total_connections">Koneksi Total Maksimal</string>
-    <string name="torrent_max_torrent_connection_summary">Koneksi Torrent Maksimal</string>
-    <string name="torrent_max_torrent_connection">Koneksi Torrent Maksimal</string>
     <string name="seed_finished_torrents">Torrent Seed Selesai</string>
     <string name="seed_finished_torrents_summary">Berbagi bagian-bagian unduhan torrent dengan siapapun di internet melalui BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Hanya Seed di dalam Wifi</string>

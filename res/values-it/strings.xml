@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Massimo di upload</string>
     <string name="torrent_max_total_connections_summary">Massimo di connessioni totali</string>
     <string name="torrent_max_total_connections">Massimo di connessioni totali</string>
-    <string name="torrent_max_torrent_connection_summary">Massimo di connessioni a Torrent</string>
-    <string name="torrent_max_torrent_connection">Massimo di connessioni a Torrent</string>
     <string name="seed_finished_torrents">Seeda i Torrent completati</string>
     <string name="seed_finished_torrents_summary">Condividi parti di download con chiunque su internet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Seeda solo su Wi-fi</string>

@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Max Odeslano</string>
     <string name="torrent_max_total_connections_summary">Max Celkem pro Připojení</string>
     <string name="torrent_max_total_connections">Max Celkem pro Připojení</string>
-    <string name="torrent_max_torrent_connection_summary">Max Torrent Připojení</string>
-    <string name="torrent_max_torrent_connection">Max Torrent Připojení</string>
     <string name="seed_finished_torrents">Seed Hotových Torrentů</string>
     <string name="seed_finished_torrents_summary">Sdílet kusy stahování torrentů s kýmkoli na internetu přes BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Seed jen na WiFi</string>

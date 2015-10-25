@@ -20,7 +20,6 @@
 
 -->
 <resources>
-
     <string name="application_label">FrostWire</string>
     <string name="activity_preferences_name">Paramètres</string>
     <string name="activity_browse_peer_name">Navigateur d\'accueil</string>
@@ -239,13 +238,6 @@
     <string name="ringtone_set">Sonnerie définie </string>
     <string name="search">Rechercher </string>
     <string name="transfers">Transfert</string>
-    
-    
-    
-    
-    
-    
-    
     <string name="view_transfer_item_list_item_icon">Icône pour le type de fichier </string>
     <string name="nickname_sharing_count_files">%1$s – Partage %2$d fichiers</string>
     <string name="play_image_description">Lecture </string>
@@ -297,8 +289,6 @@
     <string name="clear_complete">Effacé </string>
     <string name="downloading_promotion">Téléchargement %s</string>
     <string name="activity_about_droidwire_description">FrostWire pour Androïde</string>
-    
-    
     <string name="download_type_not_supported">Type de téléchargement non prise en charge</string>
     <string name="im_on_it">Je suis partant…</string>
     <string name="hint_transfers">Utilisez le “menu” pour les différentes actions </string>
@@ -313,14 +303,10 @@
     <string name="torrent_max_uploads">Transferts max </string>
     <string name="torrent_max_total_connections_summary">Connexions totale maximums</string>
     <string name="torrent_max_total_connections">Connexions totales maximums </string>
-    <string name="torrent_max_torrent_connection_summary">Connexions torrent maximums </string>
-    <string name="torrent_max_torrent_connection">Connexions torrent maximums </string>
     <string name="seed_finished_torrents">Semence torrents terminée </string>
     <string name="seed_finished_torrents_summary">Partager une partie du téléchargement torrent avec tout le monde par Internet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Ensemencement en WiFi uniquement</string>
     <string name="seed_finished_torrents_wifi_only_summary">Ensemencez seulement avec la connexion WiFi pour économiser les bandes passantes de votre forfait de données</string>
-    
-    
     <string name="seeding_has_been_turned_off">L\'ensemencement a été arrêté </string>
     <string name="nickname_hint">Pseudo </string>
     <string name="show_transfers_on_download_start">Afficher les transferts au démarrage de téléchargement </string>
@@ -328,7 +314,6 @@
     <string name="dialog_new_transfer_text_text">Voulez-vous vraiment télécharger %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Afficher ceci la prochaine fois </string>
     <string name="show_new_transfer_dialog">Afficher la boite de dialogue du nouveau transfert </string>
-    
     <string name="clear_torrent_index">Effacer l\'indexe du torrent </string>
     <string name="clear_torrent_index_summary">Effacer l\'indexe du torrent </string>
     <string name="clear">Effacer</string>
@@ -337,7 +322,6 @@
     <string name="wizard_previous">Précédent </string>
     <string name="wizard_next">Suivant </string>
     <string name="wizard_finish">Terminer </string>
-    
     <string name="welcome_to_frostwire">Bienvenue sur FrostWire</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">On va tout configurer avant de commencer.</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">Comment les autres vous voient sur le réseau interne (WiFi)</string>
@@ -358,9 +342,7 @@
     <string name="are_you_sure">Êtes-vous sûr?</string>
     <string name="stop_all_transfers">Ceci arrêtera tous les transferts </string>
     <string name="clear_complete_transfers">Ceci effacera tous les transferts terminés </string>
-    
     <string name="playing_song_name">Lecture %s</string>
-    
     <string name="invalid_torrent_file">Fichier torrent invalide </string>
     <string name="type_here_to_filter">Tapez ici pour filtrer </string>
     <string name="type_here_to_search">Tapez ici pour faire une recherche </string>
@@ -381,7 +363,6 @@
     <string name="support_frostwire_summary">Voir toutes les publicités pour soutenir le développement de ce logiciel.</string>
     <string name="storage_preference_title">Sélectionnez l\' emplacement de stockage</string>
     <string name="storage_preference_summary">L\'emplacement de stockage par défaut où les fichiers seront sauvegardés.</string>
-    <string name="connectivity">Connectivité</string>
     <string name="loading">Chargement</string>
     <string name="wifi_sharing">Réseau Wi-Fi</string>
     <string name="activity_mediaplayer_name">Lecteur</string>
@@ -433,14 +414,11 @@
     <string name="drawer_open">Ouvrir le tiroir de navigation</string>
     <string name="use_torlock">Utilisez TorLock</string>
     <string name="use_monova">Utilisez Monova</string>
-    <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="transfer_status_demuxing">Demuxing</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android va effacer les fichiers téléchargés si FrostWire est désinstallé.</string>
-    <string name="use_torrentsfm_summary">Torrents.fm est magnet base, ne fonctionne que sur le Wi-Fi</string>
     <string name="use_eztv">Utilisez Eztv</string>
     <string name="device_memory">Mémoire de l\'appareil</string>
     <string name="please_check_connection_status_before_resuming_download">S\'il vous plaît vérifier l\'état de votre connexion Internet avant de reprendre.</string>
-    <string name="durationformatshort">%2$d:%3$02d</string>
     <string name="cloud_downloads_coming">Désolé: à partir de téléchargements de nuages ​​à partir d\'ici sera disponible sur d\'autres mises à jour.</string>
     <string name="menu_space_shortcut_label">Espace</string>
     <string name="confirm_download">Confirmez Télécharger</string>
@@ -485,7 +463,6 @@
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Le transfert a été interrompu parce que vous êtes déconnecté. (Vérifiez votre connexion BitTorrent dans les Préférences)</string>
     <string name="saving_to_internal_memory">Sauvegarde sur la mémoire interne</string>
     <string name="storage_setting_confirm_dialog_text">Je comprends que tous les fichiers téléchargés dans la carte SD par FrostWire seront supprimés par Android pour le moment l\'application FrostWire est désinstallé de cet appareil et je ne vais pas tenir FrostWire LLC responsable des fichiers perdus.</string>
-    <string name="use_torrentsfm">Utilisez Torrents.fm</string>
     <string name="saving_to_sd_card">Enregistrement sur ​​carte SD.</string>
     <string name="transfers_context_menu_stop_delete_data">Arrêter et supprimer des données</string>
     <string name="use_tpb_summary">TPB est magnet base, ne fonctionne que sur le Wi-Fi</string>

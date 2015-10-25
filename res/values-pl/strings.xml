@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Maksymalna Ilość Wysyłań</string>
     <string name="torrent_max_total_connections_summary">Maksymalna Łączna Liczba Połączeń</string>
     <string name="torrent_max_total_connections">Maksymalna Łączna Liczba Połączeń</string>
-    <string name="torrent_max_torrent_connection_summary">Maksymalna Liczba Połączeń z Torrentami</string>
-    <string name="torrent_max_torrent_connection">Maksymalna Liczba Połączeń z Torrentami</string>
     <string name="seed_finished_torrents">Seeduj pobrane Torrenty</string>
     <string name="seed_finished_torrents_summary">Udostępniaj fragmenty pobranych torrentów z każdym w internecie poprzez BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Seeduj tylko przez Wi-Fi</string>
@@ -364,7 +362,6 @@
     <string name="support_frostwire_summary">Pokazuj reklamy aby wspierać rozwój tej aplikacji.</string>
     <string name="storage_preference_title">Wybierz Miejsce Zapisywania</string>
     <string name="storage_preference_summary">Miejsce domyślnie gdzie twoje pliki będą zapisywane.</string>
-    <string name="connectivity">Łączność</string>
     <string name="loading">Ładuję...</string>
     <string name="wifi_sharing">Udostępnianie przez Wi-Fi</string>
     <string name="activity_mediaplayer_name">Odtwarzacz Multimedialny</string>
@@ -414,7 +411,6 @@
     <string name="use_torlock">Używaj TorLock</string>
     <string name="use_monova">Używaj Monova</string>
     <string name="transfer_status_demuxing">Demuxing</string>
-    <string name="use_torrentsfm_summary">Torrents.fm jest oparty na magnetach, działa tylko na Wi-Fi</string>
     <string name="use_eztv">Używaj Eztv</string>
     <string name="please_check_connection_status_before_resuming_download">Proszę sprawdź status swojego połączenia internetowego zanim wznowisz pobieranie.</string>
     <string name="cloud_downloads_coming">Przepraszam: Pobieranie plików z tego źródła będzie dostępne w przyszłych wersjach.</string>
@@ -436,15 +432,11 @@
     <string name="use_bitsnoop">Używaj BitSnoop</string>
     <string name="use_yify_summary">Yify jest oparty na magnetach, działa tylko na Wi-Fi</string>
     <string name="donate_in_btc">Podaruj bitcoin</string>
-    <string name="use_torrentsfm">Używaj Torrents.fm</string>
     <string name="transfers_context_menu_stop_delete_data">Zatrzymaj i Usuń Dane</string>
     <string name="use_tpb_summary">TPB jest oparty na magnetach, działa tylko na Wi-Fi</string>
     <string name="saving_to_internal_memory_description">Masz również kartę SD (%1$s dostępną)</string>
-    <string name="bittorrent">BitTorrent</string>
-    <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android usunie pobrane pliki jeżeli FrostWire zostanie odinstalowany.</string>
     <string name="device_memory">Pamięć urządzenia</string>
-    <string name="durationformatshort">%2$d:%3$02d</string>
     <string name="menu_space_shortcut_label">Pojemność</string>
     <string name="confirm_download">Potwierdź pobranie</string>
     <string name="sdcard_storage">Karta SD</string>

@@ -230,8 +230,6 @@
     <string name="use_clearbits">ClearBits.netを使用する</string>
     <string name="use_tpb">ThePirateBay.orgを使用する</string>
     <string name="use_tpb_summary">TPBはマグネットベースで、Wi-Fi上のみ動作します</string>
-    <string name="use_torrentsfm">Torrents.fmを使用する</string>
-    <string name="use_torrentsfm_summary">Torrents.fmはマグネットベースでWi-Fi上のみ動作します</string>
     <string name="use_monova">Monovaを使用する</string>
     <string name="use_monova_summary">MonovaはマグネットベースでWi-Fi上のみ動作します</string>
     <string name="use_extratorrent">ExtraTorrent.comを使用する</string>
@@ -309,8 +307,6 @@
     <string name="torrent_max_uploads">最大アップロード</string>
     <string name="torrent_max_total_connections_summary">最大の総訂正</string>
     <string name="torrent_max_total_connections">最大の総訂正</string>
-    <string name="torrent_max_torrent_connection_summary">最大のトレント訂正</string>
-    <string name="torrent_max_torrent_connection">最大のトレント訂正</string>
     <string name="seed_finished_torrents">終了したトレントをシード処理する</string>
     <string name="seed_finished_torrents_summary">BitTorrent経由でインターネット上の人とトレントダウンロードの一部を共有する</string>
     <string name="seed_finished_torrents_wifi_only">WiFiでのみシード処理する</string>

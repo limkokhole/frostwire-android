@@ -302,8 +302,6 @@
     <string name="torrent_max_uploads">Max Uploads</string>
     <string name="torrent_max_total_connections_summary">Max Totale Verbindingen</string>
     <string name="torrent_max_total_connections">Max Totale Verbindingen</string>
-    <string name="torrent_max_torrent_connection_summary">Max Torrent Verbindingen</string>
-    <string name="torrent_max_torrent_connection">Max Torrent Verbindingen</string>
     <string name="seed_finished_torrents">Seed Voltooide Torrents</string>
     <string name="seed_finished_torrents_summary">Deel onderdelen van torrent downloads met iedereen op internet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Seed alleen op WiFi</string>

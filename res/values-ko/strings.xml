@@ -307,8 +307,6 @@
     <string name="torrent_max_uploads">최대 업로드</string>
     <string name="torrent_max_total_connections_summary">최대 총 연결 수 요약</string>
     <string name="torrent_max_total_connections">최대 총 연결 수</string>
-    <string name="torrent_max_torrent_connection_summary">최대 토렌트 연결 요약</string>
-    <string name="torrent_max_torrent_connection">최대 토렌트 연결</string>
     <string name="seed_finished_torrents">완료된 토렌트 시드</string>
     <string name="seed_finished_torrents_summary">BitTorrent 를 통해 인터넷상에서 토렌트 다운로드 공유하기</string>
     <string name="seed_finished_torrents_wifi_only">무선인터넷 사용시에만 시드</string>
