@@ -237,13 +237,6 @@
     <string name="ringtone_set">مجموعة نغمات</string>
     <string name="search">بحث</string>
     <string name="transfers">ملفات منقولة</string>
-    <string name="dummy_title">[العنوان]</string>
-    <string name="dummy_status">[الحالة]</string>
-    <string name="dummy_speed">[السرعة]</string>
-    <string name="dummy_size">[الحجم]</string>
-    <string name="dummy_extra">[زيادات]</string>
-    <string name="dummy_seeds">[مشاركات]</string>
-    <string name="dummy_peers">[أقران]</string>
     <string name="view_transfer_item_list_item_icon">أيقونة نوع الملف</string>
     <string name="nickname_sharing_count_files">%1$s - مشاركة %2$d ملفات</string>
     <string name="play_image_description">تشغيل</string>
@@ -295,8 +288,6 @@
     <string name="clear_complete">اكتمل الحذف</string>
     <string name="downloading_promotion">تنزيل %s</string>
     <string name="activity_about_droidwire_description">فروست واير للأندرويد</string>
-    <string name="dummy_hint">[تلميح]</string>
-    <string name="dummy_peer_file_count">[ عداد قرين/ ملف]</string>
     <string name="download_type_not_supported">نوع التنزيل غير مرغوب</string>
     <string name="im_on_it">...أنا\فيه</string>
     <string name="hint_transfers">استخدم "القائمة" للأوامر الكثيرة</string>
@@ -313,17 +304,10 @@
     <string name="torrent_max_total_connections">أقصى اجمالي للاتصالات</string>
     <string name="torrent_max_torrent_connection_summary">الحد الأقصى لاتصالات تورينت</string>
     <string name="torrent_max_torrent_connection">الحد الأقصى لاتصالات تورينت</string>
-    <string name="dummy_summary">[ملخص]</string>
-    <string name="dummy_version">[نسخة]</string>
-    <string name="dummy_engine">[محرك]</string>
-    <string name="dummy_sources">[مصادر]</string>
-    <string name="empty_string"></string>
     <string name="seed_finished_torrents">عدد ملفات التورينت المشاركة</string>
     <string name="seed_finished_torrents_summary">Bittorrent شارك أجزاء من ملفات التورينت مع أي شخص على الإنترنت عبر </string>
     <string name="seed_finished_torrents_wifi_only">شارك فقط على الواي فاي</string>
     <string name="seed_finished_torrents_wifi_only_summary">شارك فقط عند اتصالك من واي فاي حتى توفر في حزم بيانات خطتك</string>
-    <string name="dummy_downloads_indicator">0 @ 0 ك.ب/ث</string>
-    <string name="dummy_uploads_indicator">0 @ 0 ك.ب/ث</string>
     <string name="seeding_has_been_turned_off">تم إغلاق المشاركة</string>
     <string name="nickname_hint">الكنية</string>
     <string name="show_transfers_on_download_start">عرض الملفات المنقولة في بداية التنزيل</string>
@@ -331,7 +315,6 @@
     <string name="dialog_new_transfer_text_text">هل أنت متأكد انك تريد تنزيل %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">عرض في المرة القادمة</string>
     <string name="show_new_transfer_dialog">عرض رسالة النقل الجديدة</string>
-    <string name="dummy_action">[إجراء]</string>
     <string name="clear_torrent_index">مسح فهرس التورينت</string>
     <string name="clear_torrent_index_summary">مسح فهرس التورينت</string>
     <string name="clear">مسح</string>
@@ -340,7 +323,6 @@
     <string name="wizard_previous">السابق</string>
     <string name="wizard_next">التالي</string>
     <string name="wizard_finish">انهاء</string>
-    <string name="dummy_content_description"></string>
     <string name="welcome_to_frostwire">FrostWire مرحباً بك في </string>
     <string name="let_apos_s_set_you_up_before_we_begin_">دعنا\نجهزك قبل البدء</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">(كيف يراك الأخرون على الشبكة المحلية (واي فاي</string>
@@ -361,9 +343,7 @@
     <string name="are_you_sure">هل أنت متأكد</string>
     <string name="stop_all_transfers">هذا سوف يوقف جميع الملفات المنقولة</string>
     <string name="clear_complete_transfers">هذا سوف يمسح جميع الملفات المستكمل نقلها</string>
-    <string name="dummy_media_controller_time">00:00</string>
     <string name="playing_song_name">تشغيل %s</string>
-    <string name="dummy_nickname">[الكنية]</string>
     <string name="invalid_torrent_file">ملف تورينت غير صالح</string>
     <string name="type_here_to_filter">اكتب هنا للترشيح</string>
     <string name="type_here_to_search">اكتب هنا للبحث</string>

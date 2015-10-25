@@ -19,7 +19,6 @@
  */ 
 -->
 <resources>
-
     <string name="application_label">FrostWire</string>
     <string name="activity_preferences_name">Configuración</string>
     <string name="activity_browse_peer_name">Explorar</string>
@@ -238,13 +237,6 @@
     <string name="ringtone_set">Establecer Ringtone</string>
     <string name="search">Buscar</string>
     <string name="transfers">Transferencias</string>
-    <string name="dummy_title">[Título]</string>
-    <string name="dummy_status">[Estado]</string>
-    <string name="dummy_speed">[Velocidad]</string>
-    <string name="dummy_size">[Tamaño]</string>
-    <string name="dummy_extra">[Extra]</string>
-    <string name="dummy_seeds">[Semilla]</string>
-    <string name="dummy_peers">[Usuarios]</string>
     <string name="view_transfer_item_list_item_icon">Icono para el tipo de archivo</string>
     <string name="nickname_sharing_count_files">%1$s - Compartiendo %2$d archivos</string>
     <string name="play_image_description">Reproducir</string>
@@ -296,8 +288,6 @@
     <string name="clear_complete">Borrar Descargas Terminadas</string>
     <string name="downloading_promotion">Descargando %s</string>
     <string name="activity_about_droidwire_description">FrostWire para Android</string>
-    <string name="dummy_hint">[Consejo]</string>
-    <string name="dummy_peer_file_count">[Contado de Usuarios/Archivos]</string>
     <string name="download_type_not_supported">Este Tipo de Descarga no es Compatible</string>
     <string name="im_on_it">Estoy en ello…</string>
     <string name="hint_transfers">Usa el "menú" para acciones en grupo</string>
@@ -314,17 +304,10 @@
     <string name="torrent_max_total_connections"> Conexiones Totales Máximas </string>
     <string name="torrent_max_torrent_connection_summary"> Conexiones Máximas de Torrente </string>
     <string name="torrent_max_torrent_connection">Conexiones Máximas de Torrente</string>
-    <string name="dummy_summary">[Sumario]</string>
-    <string name="dummy_version">[Versión]</string>
-    <string name="dummy_engine">[Motor]</string>
-    <string name="dummy_sources">[Fuentes]</string>
-    <string name="empty_string" />
     <string name="seed_finished_torrents">Compartir los Torrentes Terminados</string>
     <string name="seed_finished_torrents_summary">Compartir partes de los torrentes descargados con cualquier persona en internet a través de BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Compartir solo en Wi-Fi</string>
     <string name="seed_finished_torrents_wifi_only_summary">Compartir solo cuando se conecte a Wi-Fi y así ahorrar ancho de banda en tu plan de datos</string>
-    <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
-    <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Compartir está apagado</string>
     <string name="wifi_seeding_has_been_turned_off">No hay Wi-Fi, Compartir está apagado</string>
     <string name="nickname_hint">Nombre</string>
@@ -333,7 +316,6 @@
     <string name="dialog_new_transfer_text_text">¿Estás seguro de que quieres descargar %1$s (%2$s)?</string>
     <string name="dialog_new_transfer_check_text">Mostrar esto la próxima vez</string>
     <string name="show_new_transfer_dialog">Mostrar el Diálogo de Nueva Transferencia</string>
-    <string name="dummy_action">[Acción]</string>
     <string name="clear_torrent_index">Borrar el Índice del Torrente</string>
     <string name="clear_torrent_index_summary"> Borrar el Índice del Torrente </string>
     <string name="clear">Borrar</string>
@@ -342,7 +324,6 @@
     <string name="wizard_previous">Anterior</string>
     <string name="wizard_next">Siguiente</string>
     <string name="wizard_finish">Terminar</string>
-    <string name="dummy_content_description" />
     <string name="welcome_to_frostwire">Bienvenido a FrostWire</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">Vamos a configurar antes de comenzar.</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">Cómo te ven los demás en la red local. (Wi-Fi)</string>
@@ -363,9 +344,7 @@
     <string name="are_you_sure">¿Estás Seguro?</string>
     <string name="stop_all_transfers">Esto parará todas las transferencias</string>
     <string name="clear_complete_transfers">Esto borrará todas las transferencias terminadas</string>
-    <string name="dummy_media_controller_time">00:00</string>
     <string name="playing_song_name">Reproduciendo %s</string>
-    <string name="dummy_nickname">[Nombre]</string>
     <string name="invalid_torrent_file">Archivo de Torrente Inválido</string>
     <string name="type_here_to_filter">Escribe aquí para filtrar</string>
     <string name="type_here_to_search">Escribe aquí para Buscar</string>
@@ -465,7 +444,6 @@
     <string name="cant_open_file_does_not_exist">No puedo abrir %1$s, el archivo no existe.</string>
     <string name="saving_to_internal_memory_description">También tienes un SD Card (%1$s disp.)</string>
     <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
-    <string name="dummy_author">[Autor]</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android borrará archivos descargados si FrostWire es desinstalado.</string>
     <string name="device_memory">Memoria del dispositivo</string>
     <string name="please_check_connection_status_before_resuming_download">Por favor revise el estado de su conexión a internet antes de resumir.</string>
@@ -519,7 +497,6 @@
     <string name="free_sponsored_app">App Gratis Patrocinada</string>
     <string name="support">Soporte</string>
     <string name="torrent_max_peers_summary">Max Usuarios</string>
-    <string name="dummy_build">[build number]</string>
     <string name="enable_dht_summary">Use Hash Table distribuidas para anunciar/buscar distribuidores de torrent</string>
     <string name="send_bitcoin_tip">Envíe propina Bitcoin</string>
     <string name="basic">Básico</string>
@@ -553,4 +530,5 @@
     <string name="transfers_context_menu_copy_infohash">Copiar InfoHash</string>
     <string name="help">Ayuda</string>
     <string name="request_again">Intenta Nuevamente</string>
+    <string name="ringtone_no_set">El Ringtone no pudo ser cambiado</string>
 </resources>

@@ -190,13 +190,13 @@
     <string name="ringtone_set">Zvonjava postavljena</string>
     <string name="search">Traži</string>
     <string name="transfers">Prijenosi</string>
-    <string name="dummy_title">[Naslov]</string>
-    <string name="dummy_status">[Status]</string>
-    <string name="dummy_speed">[Brzina]</string>
-    <string name="dummy_size">[Veličina]</string>
-    <string name="dummy_extra">[Ekstra]</string>
-    <string name="dummy_seeds">[Dijeljitelji]</string>
-    <string name="dummy_peers">[Preuzimatelji]</string>
+    
+    
+    
+    
+    
+    
+    
     <string name="view_transfer_item_list_item_icon">Ikona za vrstu datoteke</string>
     <string name="play_image_description">Svirati</string>
     <string name="view_transfer_list_item_button_action_description">Akcija</string>
@@ -238,23 +238,23 @@
     <string name="download_finished">Preuzimanje gotovo</string>
     <string name="clear_complete">Pročiščavanje gotovo</string>
     <string name="downloading_promotion">Preuzimam %s</string>
-    <string name="dummy_hint">[Savjet]</string>
-    <string name="dummy_peer_file_count">[Peer/brojanje datoteka]</string>
+    
+    
     <string name="torrent_settings">Torrent postavke</string>
-    <string name="dummy_summary">[Sažetak]</string>
-    <string name="dummy_version">[Inačica]</string>
-    <string name="dummy_engine">[Motor]</string>
-    <string name="dummy_sources">[Izvori]</string>
+    
+    
+    
+    
     <string name="empty_string"></string>
-    <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
-    <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
+    
+    
     <string name="nickname_hint">Nadimak</string>
-    <string name="dummy_action">[Akcija]</string>
+    
     <string name="clear">Pročistiti</string>
     <string name="wizard_previous">Prijašnje</string>
     <string name="wizard_next">Sljedeće</string>
     <string name="wizard_finish">Završi</string>
-    <string name="dummy_content_description">[imitacija opisa]</string>
+    
     <string name="seeding_settings">Postavke djeljenja</string>
     <string name="seeds_n">Seedovi: %s</string>
     <string name="peers_n">Peerovi: %s</string>
@@ -262,8 +262,8 @@
     <string name="playing">Sviram</string>
     <string name="back">Natrag</string>
     <string name="are_you_sure">Jeste li sigurni?</string>
-    <string name="dummy_media_controller_time">00:00</string>
-    <string name="dummy_nickname">[Nadimak]</string>
+    
+    
     <string name="accept">Potvrdi</string>
     <string name="reject">Odbaci</string>
     <string name="block">Blokiraj</string>
@@ -303,7 +303,6 @@
     <string name="drawer_open">Otvori navigacijsku ladicu</string>
     <string name="remove_from_recent">Makni iz nedavno</string>
     <string name="now_playing">Trenutno svira</string>
-    <string name="dummy_author">[Autor]</string>
     <string name="confirm_download">Potvrdi preuzimanje</string>
     <string name="track">traka</string>
     <string name="playlist">Lista za sviranje</string>
@@ -411,7 +410,6 @@
     <string name="yes_no_cancel_transfer_question">Jeste li sigurni da želite zaustaviti i obrisati ovo preuzimanje sa liste (podatci neće biti obrisani)?</string>
     <string name="activity_about_droidwire_description">FrostWire za Android</string>
     <string name="dialog_new_transfer_check_text">Pokaži ovo sljedeći put</string>
-    <string name="prepend_shortcut_label"></string>
     <string name="azureus_manager_not_created">Preuzimanje ne može biti stvoreno sa mountanom SD karticom</string>
     <string name="anonymous_usage_statistics_summary">Šalji anonimne statistike korištenja. Informacije o traženim, djeljenim ili sviranim sadržajima i infomacije koje vas mogu osobno identificirati neće biti spremljene na disk ili poslane kroz mrežu.</string>
     <string name="my_music">Moja glazba</string>
@@ -521,7 +519,6 @@
     <string name="remove_torrent_and_data">Ukloni torrent i podatke</string>
     <string name="love_frostwire">Volim FrostWire</string>
     <string name="shutting_down">Gasim…</string>
-    <string name="why_we_need_settings_access">Zašto trebamo pristup sistemskim postavkama</string>
     <string name="send_bitcoin_tip">Pošalji Bitcoin napojnicu</string>
     <string name="transfers_context_menu_copy_infohash">Kopiraj InfoHash</string>
     <string name="basic">Osnovno</string>
@@ -543,10 +540,7 @@
     <string name="wifi_seeding_has_been_turned_off">Wi-Fi nije dostupan, dijeljenje je ugašeno</string>
     <string name="frostwire_shutting_down_no_permissions">Oprostite, FrostWire ne može nastaviti bez vaše dozvole za pristup disku.</string>
     <string name="use_kat_summary">KAT je baziran na magnet linkovima, radi samo putem Wi-Fia</string>
-    <string name="ringtone_not_set">Nije moguće promijeniti zvuk zvonjave, nemamo dovoljno ovlasti.</string>
     <string name="enable_dht_summary">Koristi DHT za najavu/traženje torrent peerova</string>
-    <string name="deny">Odbij</string>
-    <string name="why_we_need_settings_access_summary">Promjena zvuka zvonjave zahtijeva pristup sistemskim postavkama.\n\nŽelite li pokušati ponovno?</string>
     <string name="transfers_context_menu_copy_infohash_copied">Infohash je kopiran u međuspremnik</string>
     <string name="issue_with_tip_donation_uri">Nešto nije u redu s vašom adresom za napojnice/donacije</string>
     <string name="torrent_transfer_aborted_on_mobile_data">Torrent prijenosi se neće pokrenuti prije nego što se spojite na Wi-Fi mrežu. (provjerite vaše mrežne postavke u vezi 3G/4G potrošnje podataka)</string>

@@ -237,13 +237,13 @@
     <string name="ringtone_set">Установка рингтона</string>
     <string name="search">Поиск</string>
     <string name="transfers">Загрузки</string>
-    <string name="dummy_title">[Название]</string>
-    <string name="dummy_status">[Статус]</string>
-    <string name="dummy_speed">[Скорость]</string>
-    <string name="dummy_size">[Размер]</string>
-    <string name="dummy_extra">[Дополнительно]</string>
-    <string name="dummy_seeds">[Сиды]</string>
-    <string name="dummy_peers">[Пиры]</string>
+    
+    
+    
+    
+    
+    
+    
     <string name="view_transfer_item_list_item_icon">Иконка для типа файла</string>
     <string name="nickname_sharing_count_files">%1$s - Раздаёт %2$d файлы</string>
     <string name="play_image_description">Включить</string>
@@ -295,8 +295,8 @@
     <string name="clear_complete">Удалить завершенные</string>
     <string name="downloading_promotion">Скачивается %s</string>
     <string name="activity_about_droidwire_description">FrostWire для Android</string>
-    <string name="dummy_hint">[Подсказка]</string>
-    <string name="dummy_peer_file_count">[Пир/Всего файлов]</string>
+    
+    
     <string name="download_type_not_supported">Скачиваемый тип не поддерживается</string>
     <string name="im_on_it">Я в...</string>
     <string name="hint_transfers">Используйте "Меню" для большинства действий</string>
@@ -312,16 +312,16 @@
     <string name="torrent_max_total_connections_summary">Максимальное количество подключений</string>
     <string name="torrent_max_total_connections">Максимальное количество подключений</string>
     <string name="torrent_max_torrent_connection">Максимум торрент соединений</string>
-    <string name="dummy_summary">[Сводка]</string>
-    <string name="dummy_version">[Версия]</string>
-    <string name="dummy_engine">[Устройство]</string>
-    <string name="dummy_sources">[Источники]</string>
+    
+    
+    
+    
     <string name="seed_finished_torrents">Раздавать завершенные торренты</string>
     <string name="seed_finished_torrents_summary">Раздавать части скаченных торрентов кому-либо в Интернете с помощью BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Раздавать только по Wi-Fi</string>
     <string name="seed_finished_torrents_wifi_only_summary">Раздавать только когда подключено через Wi-Fi, для того, чтобы сэкономить трафик через мобильные сети</string>
-    <string name="dummy_downloads_indicator">0 @ 0 КБ/c</string>
-    <string name="dummy_uploads_indicator">0 @ 0 КБ/c</string>
+    
+    
     <string name="seeding_has_been_turned_off">Раздача была отключена</string>
     <string name="nickname_hint">Псевдоним</string>
     <string name="show_transfers_on_download_start">Показывать передачи данных при старте скачивания</string>
@@ -329,7 +329,7 @@
     <string name="dialog_new_transfer_text_text">Вы уверены, что хотите скачать %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Спрашивать каждый раз</string>
     <string name="show_new_transfer_dialog">Показывать окно новой передачи данных</string>
-    <string name="dummy_action">[Действие]</string>
+    
     <string name="clear_torrent_index">Очистить индекс торрента</string>
     <string name="clear_torrent_index_summary">Очистить индекс торрента</string>
     <string name="clear">Очистить</string>
@@ -338,7 +338,7 @@
     <string name="wizard_previous">Вернуться</string>
     <string name="wizard_next">Продолжить</string>
     <string name="wizard_finish">Завершить</string>
-    <string name="dummy_content_description"></string>
+    
     <string name="welcome_to_frostwire">Добро пожаловать в FrostWire</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">Давайте сделаем настройку прежде, чем начнем.</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">Как другие видят Вас в локальной сети (Wi-Fi)</string>
@@ -359,9 +359,9 @@
     <string name="are_you_sure">Вы уверены?</string>
     <string name="stop_all_transfers">Это остановит все передачи</string>
     <string name="clear_complete_transfers">Это очистит все завершенные передачи</string>
-    <string name="dummy_media_controller_time">00:00</string>
+    
     <string name="playing_song_name">Проигрывается %s</string>
-    <string name="dummy_nickname">[Псевдоним]</string>
+    
     <string name="invalid_torrent_file">Недействительный торрент</string>
     <string name="type_here_to_filter">Печатайте здесь, чтобы установить фильтр</string>
     <string name="type_here_to_search">Печатайте слова здесь для поиска</string>
@@ -449,7 +449,6 @@
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Передача была приостановлена, потому что нет соединения с сетью. (Проверьте ваше BitTorrent-соединение в настройках)</string>
     <string name="remove_from_recent">Удалить из истории</string>
     <string name="now_playing">Сейчас проигрывается</string>
-    <string name="dummy_author">[Автор]</string>
     <string name="install_bitcoin_wallet">Установить Bitcoin кошелёк</string>
     <string name="cant_resume_torrent_transfers">Не удается возобновить торрент-передачу, проверьте статус сети в "Настройки" > "Связь"</string>
     <string name="confirm_download">Подтвердите загрузку</string>
@@ -507,7 +506,6 @@
     <string name="issue_with_tip_donation_uri">Что-то не так с веб-адресом для Чаевых/Пожертвований</string>
     <string name="enable_dht">Включить DHT</string>
     <string name="enable_dht_summary">Включите использование "распределённой хеш-таблицы" для объявления/поиска торрент-пиров</string>
-    <string name="dummy_build">[номер сборки]</string>
     <string name="basic">Базовый</string>
     <string name="plus">Плюс</string>
     <string name="try_other_keywords">Попробуйте другие ключевые слова</string>

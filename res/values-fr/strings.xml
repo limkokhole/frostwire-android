@@ -239,13 +239,13 @@
     <string name="ringtone_set">Sonnerie définie </string>
     <string name="search">Rechercher </string>
     <string name="transfers">Transfert</string>
-    <string name="dummy_title">[Titre]</string>
-    <string name="dummy_status">[Etat]</string>
-    <string name="dummy_speed">[Vitesse]</string>
-    <string name="dummy_size">[Dimension]</string>
-    <string name="dummy_extra">[Extra]</string>
-    <string name="dummy_seeds">[Semences]</string>
-    <string name="dummy_peers">[Pairs]</string>
+    
+    
+    
+    
+    
+    
+    
     <string name="view_transfer_item_list_item_icon">Icône pour le type de fichier </string>
     <string name="nickname_sharing_count_files">%1$s – Partage %2$d fichiers</string>
     <string name="play_image_description">Lecture </string>
@@ -297,8 +297,8 @@
     <string name="clear_complete">Effacé </string>
     <string name="downloading_promotion">Téléchargement %s</string>
     <string name="activity_about_droidwire_description">FrostWire pour Androïde</string>
-    <string name="dummy_hint">[Astuce]</string>
-    <string name="dummy_peer_file_count">[Décompte de pair/fichier]</string>
+    
+    
     <string name="download_type_not_supported">Type de téléchargement non prise en charge</string>
     <string name="im_on_it">Je suis partant…</string>
     <string name="hint_transfers">Utilisez le “menu” pour les différentes actions </string>
@@ -315,17 +315,12 @@
     <string name="torrent_max_total_connections">Connexions totales maximums </string>
     <string name="torrent_max_torrent_connection_summary">Connexions torrent maximums </string>
     <string name="torrent_max_torrent_connection">Connexions torrent maximums </string>
-    <string name="dummy_summary">[Résumé]</string>
-    <string name="dummy_version">[Version]</string>
-    <string name="dummy_engine">[Moteur]</string>
-    <string name="dummy_sources">[Sources]</string>
-    <string name="empty_string"></string>
     <string name="seed_finished_torrents">Semence torrents terminée </string>
     <string name="seed_finished_torrents_summary">Partager une partie du téléchargement torrent avec tout le monde par Internet via BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Ensemencement en WiFi uniquement</string>
     <string name="seed_finished_torrents_wifi_only_summary">Ensemencez seulement avec la connexion WiFi pour économiser les bandes passantes de votre forfait de données</string>
-    <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
-    <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
+    
+    
     <string name="seeding_has_been_turned_off">L\'ensemencement a été arrêté </string>
     <string name="nickname_hint">Pseudo </string>
     <string name="show_transfers_on_download_start">Afficher les transferts au démarrage de téléchargement </string>
@@ -333,7 +328,7 @@
     <string name="dialog_new_transfer_text_text">Voulez-vous vraiment télécharger %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Afficher ceci la prochaine fois </string>
     <string name="show_new_transfer_dialog">Afficher la boite de dialogue du nouveau transfert </string>
-    <string name="dummy_action">[Action]</string>
+    
     <string name="clear_torrent_index">Effacer l\'indexe du torrent </string>
     <string name="clear_torrent_index_summary">Effacer l\'indexe du torrent </string>
     <string name="clear">Effacer</string>
@@ -342,7 +337,7 @@
     <string name="wizard_previous">Précédent </string>
     <string name="wizard_next">Suivant </string>
     <string name="wizard_finish">Terminer </string>
-    <string name="dummy_content_description"></string>
+    
     <string name="welcome_to_frostwire">Bienvenue sur FrostWire</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">On va tout configurer avant de commencer.</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">Comment les autres vous voient sur le réseau interne (WiFi)</string>
@@ -363,9 +358,9 @@
     <string name="are_you_sure">Êtes-vous sûr?</string>
     <string name="stop_all_transfers">Ceci arrêtera tous les transferts </string>
     <string name="clear_complete_transfers">Ceci effacera tous les transferts terminés </string>
-    <string name="dummy_media_controller_time">00:00</string>
+    
     <string name="playing_song_name">Lecture %s</string>
-    <string name="dummy_nickname">[Pseudo]</string>
+    
     <string name="invalid_torrent_file">Fichier torrent invalide </string>
     <string name="type_here_to_filter">Tapez ici pour filtrer </string>
     <string name="type_here_to_search">Tapez ici pour faire une recherche </string>
@@ -440,7 +435,6 @@
     <string name="use_monova">Utilisez Monova</string>
     <string name="durationformatlong">%1$d:%2$02d:%3$02d</string>
     <string name="transfer_status_demuxing">Demuxing</string>
-    <string name="dummy_author">[Author]</string>
     <string name="android_will_erase_files_if_frostwire_is_uninstalled">Android va effacer les fichiers téléchargés si FrostWire est désinstallé.</string>
     <string name="use_torrentsfm_summary">Torrents.fm est magnet base, ne fonctionne que sur le Wi-Fi</string>
     <string name="use_eztv">Utilisez Eztv</string>
@@ -468,7 +462,6 @@
     <string name="seed">Semence</string>
     <string name="you_need_a_bitcoin_wallet_app">Vous avez besoin d\'un porte-monnaie Bitcoin installé sur votre appareil de soumettre un don de la CTB.</string>
     <string name="transfers_select_all">tous</string>
-    <string name="prepend_shortcut_label"></string>
     <string name="torrent_url_added">Torrent URL ajouté aux transferts.</string>
     <string name="please_enter_valid_url">S\'il vous plaît entrer une URL valide</string>
     <string name="available">disponible</string>

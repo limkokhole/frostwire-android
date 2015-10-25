@@ -244,13 +244,6 @@
     <string name="ringtone_set">呼び出し音設定</string>
     <string name="search">検索</string>
     <string name="transfers">転送</string>
-    <string name="dummy_title">[タイトル]</string>
-    <string name="dummy_status">[ステータス]</string>
-    <string name="dummy_speed">[スピード]</string>
-    <string name="dummy_size">[サイズ]</string>
-    <string name="dummy_extra">[エクストラ]</string>
-    <string name="dummy_seeds">[スピード]</string>
-    <string name="dummy_peers">[仲間]</string>
     <string name="view_transfer_item_list_item_icon">ファイルタイプのアイコン</string>
     <string name="nickname_sharing_count_files">%1$s - %2$d個のファイルを共有中</string>
     <string name="play_image_description">再生</string>
@@ -302,8 +295,6 @@
     <string name="clear_complete">クリア完了</string>
     <string name="downloading_promotion">%sをダウンロード中</string>
     <string name="activity_about_droidwire_description">Android用のFrostWire</string>
-    <string name="dummy_hint">[ヒント]</string>
-    <string name="dummy_peer_file_count">[仲間/ファイルの数]</string>
     <string name="download_type_not_supported">ダウンロードのタイプがサポートされていません</string>
     <string name="im_on_it">わたしはそれにいません…</string>
     <string name="hint_transfers">「メニュー」をバルクアクションに使用する</string>
@@ -320,17 +311,10 @@
     <string name="torrent_max_total_connections">最大の総訂正</string>
     <string name="torrent_max_torrent_connection_summary">最大のトレント訂正</string>
     <string name="torrent_max_torrent_connection">最大のトレント訂正</string>
-    <string name="dummy_summary">[一覧]</string>
-    <string name="dummy_version">[バージョン]</string>
-    <string name="dummy_engine">[エンジン]</string>
-    <string name="dummy_sources">[ソース]</string>
-    <string name="empty_string"></string>
     <string name="seed_finished_torrents">終了したトレントをシード処理する</string>
     <string name="seed_finished_torrents_summary">BitTorrent経由でインターネット上の人とトレントダウンロードの一部を共有する</string>
     <string name="seed_finished_torrents_wifi_only">WiFiでのみシード処理する</string>
     <string name="seed_finished_torrents_wifi_only_summary">データプランの帯域幅を抑えるために、WiFi経由で接続時のみシード処理する</string>
-    <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
-    <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">シード処理がオフになりました</string>
     <string name="nickname_hint">ニックネーム</string>
     <string name="show_transfers_on_download_start">ダウンロードスタート時に転送を表示する</string>
@@ -338,7 +322,6 @@
     <string name="dialog_new_transfer_text_text">%1$s (%2$s)をダウンロードしますか？</string>
     <string name="dialog_new_transfer_check_text">これを次回表示する</string>
     <string name="show_new_transfer_dialog">次の転送ダイアログを表示する</string>
-    <string name="dummy_action">[アクション]</string>
     <string name="clear_torrent_index">トレントインデックスをクリアする</string>
     <string name="clear_torrent_index_summary">トレントインデックスをクリアする</string>
     <string name="clear">クリア</string>
@@ -347,7 +330,6 @@
     <string name="wizard_previous">前へ</string>
     <string name="wizard_next">次へ</string>
     <string name="wizard_finish">終了</string>
-    <string name="dummy_content_description"></string>
     <string name="welcome_to_frostwire">FrostWireへようこそ</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">はじめる前に設定をしましょう。</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">ローカルネットワーク(WiFi)でのあなたの他の人からの見え方</string>
@@ -368,9 +350,7 @@
     <string name="are_you_sure">よろしいですか？</string>
     <string name="stop_all_transfers">これによってすべての送信が中断されます。</string>
     <string name="clear_complete_transfers">これによってすべての送信済み物をクリアされます。</string>
-    <string name="dummy_media_controller_time">00:00</string>
     <string name="playing_song_name">%sを再生中</string>
-    <string name="dummy_nickname">[ニックネーム]</string>
     <string name="invalid_torrent_file">無効なトレントファイル</string>
     <string name="type_here_to_filter">フィルターするためにここにタイプする</string>
     <string name="type_here_to_search">検索するためにここにタイプする</string>
@@ -465,7 +445,6 @@
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">切断されたため転送は一時停止されました。 (設定でBitTorrent接続をチェックしてください)</string>
     <string name="remove_from_recent">最近から削除</string>
     <string name="now_playing">現在プレイ中</string>
-    <string name="dummy_author">[作者]</string>
     <string name="install_bitcoin_wallet">Bitcoinウォレットをインストールする</string>
     <string name="cant_resume_torrent_transfers">トレント転送を再開できません。"設定" > "接続" の状態をチェックしてください</string>
     <string name="or_enter_url">URLを入力</string>
@@ -473,7 +452,6 @@
     <string name="track">トラック</string>
     <string name="playlist">プレイリスト</string>
     <string name="are_you_sure_you_want_to_download_the_following">次をダウンロードしてよろしいですか %1$s (%2$s)?</string>
-    <string name="prepend_shortcut_label"></string>
     <string name="menu_enter_shortcut_label">入力</string>
     <string name="menu_delete_shortcut_label">削除</string>
     <string name="menu_space_shortcut_label">ｽﾍﾟｰｽ</string>

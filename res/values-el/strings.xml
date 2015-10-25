@@ -244,13 +244,6 @@
     <string name="ringtone_set">Ringtone Ορίσθηκε</string>
     <string name="search">Αναζήτηση</string>
     <string name="transfers">Μεταφορές</string>
-    <string name="dummy_title">[Τίτλος]</string>
-    <string name="dummy_status">[Κατάσταση]</string>
-    <string name="dummy_speed">[Ταχύτητα]</string>
-    <string name="dummy_size">[Μέγεθος]</string>
-    <string name="dummy_extra">[Περισσότερα]</string>
-    <string name="dummy_seeds">[Seeds]</string>
-    <string name="dummy_peers">[Χρήστες]</string>
     <string name="view_transfer_item_list_item_icon">Εικονίδιο για τύπο αρχείου</string>
     <string name="nickname_sharing_count_files">%1$s - Μοιράζεται %2$d αρχεία</string>
     <string name="play_image_description">Αναπαραγωγή</string>
@@ -302,8 +295,6 @@
     <string name="clear_complete">Καθάρισε</string>
     <string name="downloading_promotion">Κατεβαίνει %s</string>
     <string name="activity_about_droidwire_description">FrostWire για Android</string>
-    <string name="dummy_hint">[Hint]</string>
-    <string name="dummy_peer_file_count">[Πλήθος Χρηστών/Αρχείων]</string>
     <string name="download_type_not_supported">Ο τύπος download δεν υποστηρίζεται</string>
     <string name="im_on_it">Ένα λεπτό…</string>
     <string name="hint_transfers">Χρήση "menu" για μαζικές ενέργειες</string>
@@ -320,17 +311,10 @@
     <string name="torrent_max_total_connections">Μέγιστο Πλήθος Συνδέσεων</string>
     <string name="torrent_max_torrent_connection_summary">Μέγιστο Πλήθος Συνδέσεων</string>
     <string name="torrent_max_torrent_connection">Μέγιστες Torrent Συνδέσεις</string>
-    <string name="dummy_summary">[Περίληψη]</string>
-    <string name="dummy_version">[Έκδοση]</string>
-    <string name="dummy_engine">[Μηχανή]</string>
-    <string name="dummy_sources">[Πηγές]</string>
-    <string name="empty_string"></string>
     <string name="seed_finished_torrents">Μοιράσου τα ολοκληρωμένα Torrents</string>
     <string name="seed_finished_torrents_summary">Μοιράσου κομμάτια των torrent downloads με οποιονδήποτε στο internet μέσω BitTorrent</string>
     <string name="seed_finished_torrents_wifi_only">Μοιράσου μόνο στο ασύρματο δίκτυο</string>
     <string name="seed_finished_torrents_wifi_only_summary">Μοιράσου μόνο μέσω ασύρματου δικτύου για να γλυτώσεις bandwidth στο δίκτυο δεδομένων</string>
-    <string name="dummy_downloads_indicator">0 @ 0 KB/s</string>
-    <string name="dummy_uploads_indicator">0 @ 0 KB/s</string>
     <string name="seeding_has_been_turned_off">Το μοίρασμα απενεργοποιήθηκε</string>
     <string name="nickname_hint">Ψευδώνυμο</string>
     <string name="show_transfers_on_download_start">Δείξε τις μεταφορές όταν ξεκινάει το Download</string>
@@ -338,7 +322,6 @@
     <string name="dialog_new_transfer_text_text">Θέλεις σίγουρα να κατεβάσεις το %1$s (%2$s)</string>
     <string name="dialog_new_transfer_check_text">Εμφάνιση την επόμενη φορά</string>
     <string name="show_new_transfer_dialog">Δείξε το παράθυρο Νέας Μεταφοράς</string>
-    <string name="dummy_action">[Ενέργεια]</string>
     <string name="clear_torrent_index">Καθαρισμός Ευρετηρίου Torrent</string>
     <string name="clear_torrent_index_summary">Καθαρισμος Ευρετηρίου Torrent</string>
     <string name="clear">Καθαρισμός</string>
@@ -347,7 +330,6 @@
     <string name="wizard_previous">Προηγούμενο</string>
     <string name="wizard_next">Επόμενο</string>
     <string name="wizard_finish">Ολοκλήρωση</string>
-    <string name="dummy_content_description">[κάποια περιγραφή]</string>
     <string name="welcome_to_frostwire">Καλώς ήρθες στο FrostWire</string>
     <string name="let_apos_s_set_you_up_before_we_begin_">Ας σε βοηθήσουμε με τις ρυθμίσεις πριν ξεκινήσουμε.</string>
     <string name="how_others_see_you_on_the_local_network_wifi_">Πώς σε βλέπουν οι άλλοι στο τοπικό ασύρματο δίκτυο</string>
@@ -368,9 +350,7 @@
     <string name="are_you_sure">Είσαι σίγουρος;</string>
     <string name="stop_all_transfers">Αυτό θα σταματήσει όλες τις μεταφορές</string>
     <string name="clear_complete_transfers">Αυτό θα καθαρίσει όλες τις ολοκληρωμένες μεταφορές</string>
-    <string name="dummy_media_controller_time">00:00</string>
     <string name="playing_song_name">Αναπαραγωγή %s</string>
-    <string name="dummy_nickname">[Ψευδώνυμο]</string>
     <string name="invalid_torrent_file">Μη έγκυρο όνομα Torrent</string>
     <string name="type_here_to_filter">Πληκτρολόγησε για να φιλτράρεις</string>
     <string name="type_here_to_search">Πληκτρολόγησε για να ψάξεις</string>
@@ -465,7 +445,6 @@
     <string name="torrent_transfer_paused_disconnected_from_bittorrent">Έγινε παύση της μεταφοράς επειδή έχεις αποσυνδεθεί. (Έλεγξε τη BitTorrent σύνδεσή σου από τις Ρυθμίσεις)</string>
     <string name="remove_from_recent">Αφαίρεση από τα πρόσφατα</string>
     <string name="now_playing">Παίζει τώρα</string>
-    <string name="dummy_author">[Καλλιτέχνης]</string>
     <string name="install_bitcoin_wallet">Εγκατάσταση Πορτοφολιού Bitcoin</string>
     <string name="cant_resume_torrent_transfers">Δεν μπορεί να γίνει επαναφορά μεταφορών torrent, έλεγξε την κατάσταση του "Προτιμήσεις" > "Συνδεσιμότητα"</string>
     <string name="or_enter_url">ή γράψε μία διεύθυνση</string>
@@ -473,7 +452,6 @@
     <string name="track">τραγούδι</string>
     <string name="playlist">λίστα</string>
     <string name="are_you_sure_you_want_to_download_the_following">Σίγουρα θέλεις να κατεβάσεις το ακόλουθο %1$s (%2$s);</string>
-    <string name="prepend_shortcut_label"></string>
     <string name="menu_enter_shortcut_label">Enter</string>
     <string name="menu_delete_shortcut_label">Del</string>
     <string name="menu_space_shortcut_label">Space</string>
