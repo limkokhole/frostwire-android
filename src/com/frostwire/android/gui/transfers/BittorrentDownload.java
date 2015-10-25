@@ -41,6 +41,8 @@ public interface BittorrentDownload extends DownloadTransfer {
 
     boolean isSeeding();
 
+    boolean isPaused();
+
     void pause();
 
     void resume();

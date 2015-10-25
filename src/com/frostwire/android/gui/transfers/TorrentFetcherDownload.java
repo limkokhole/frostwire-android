@@ -150,6 +150,11 @@ public class TorrentFetcherDownload implements BittorrentDownload {
     }
 
     @Override
+    public boolean isPaused() {
+        return false;
+    }
+
+    @Override
     public void cancel() {
         cancel(false);
     }

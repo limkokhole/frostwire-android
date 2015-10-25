@@ -33,6 +33,7 @@ import com.frostwire.android.core.Constants;
 import com.frostwire.android.core.MediaType;
 import com.frostwire.android.gui.NetworkManager;
 import com.frostwire.android.gui.adapters.menu.*;
+import com.frostwire.android.gui.services.Engine;
 import com.frostwire.android.gui.transfers.*;
 import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.android.gui.views.ClickAdapter;
@@ -272,14 +273,16 @@ public class TransferListAdapter extends BaseExpandableListAdapter {
             }
 
             if (!download.isComplete() || ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_TORRENT_SEED_FINISHED_TORRENTS)) {
-                if (download.isPausable()) {
+
+                if (download.isPausable() && !download.isPaused()) {
                     items.add(new PauseDownloadMenuAction(context.get(), download));
                 } else if (download.isResumable()) {
                     boolean wifiIsUp = NetworkManager.instance().isDataWIFIUp();
                     boolean bittorrentOnMobileData = ConfigurationManager.instance().getBoolean(Constants.PREF_KEY_NETWORK_USE_MOBILE_DATA);
+                    boolean bittorrentOff = Engine.instance().isStopped() || Engine.instance().isDisconnected();
 
                     if (wifiIsUp || bittorrentOnMobileData) {
-                        if (!download.isComplete()) {
+                        if (!download.isComplete() || bittorrentOff) {
                             items.add(new ResumeDownloadMenuAction(context.get(), download, R.string.resume_torrent_menu_action));
                         } else {
                             //let's see if we can seed...

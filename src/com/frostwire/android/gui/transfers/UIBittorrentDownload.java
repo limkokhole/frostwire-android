@@ -142,6 +142,11 @@ public final class UIBittorrentDownload implements BittorrentDownload {
         return dl.isSeeding();
     }
 
+    @Override
+    public boolean isPaused() {
+        return dl.isPaused();
+    }
+
     public boolean hasPaymentOptions() {
         return this.dl.getPaymentOptions() != null && !this.dl.getPaymentOptions().isEmpty();
     }
