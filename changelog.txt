@@ -1,4 +1,4 @@
-FrostWire 1.6.5 - OCTOBER/23/2015
+FrostWire 1.6.5 - OCTOBER/24/2015
  - Fixes bug where search results that have finished didn't refresh
    user interface and users would think FrostWire was searching forever.
  - Compatible with Android 6 (Marshmallow) new permissions framework.
@@ -11,6 +11,7 @@ FrostWire 1.6.5 - OCTOBER/23/2015
  - New Copy Infohash action on transfers.
  - New "Help" menu entry.
  - Updated Spanish, Polish, Croatian translations.
+ - Fixes bug where it wouldn't open finished .apk files from transfers screens.
 
 FrostWire 1.6.4 - SEPTEMBER/24/2015
  - New http engine based on okhttp, uses pooled connections, less threads, less memory.
