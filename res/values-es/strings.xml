@@ -552,4 +552,5 @@
     <string name="transfers_context_menu_copy_magnet">Copiar Magnet</string>
     <string name="transfers_context_menu_copy_infohash">Copiar InfoHash</string>
     <string name="help">Ayuda</string>
+    <string name="request_again">Intenta Nuevamente</string>
 </resources>
