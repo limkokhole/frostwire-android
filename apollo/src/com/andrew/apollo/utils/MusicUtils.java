@@ -22,7 +22,6 @@ import android.provider.BaseColumns;
 import android.provider.MediaStore;
 import android.provider.MediaStore.Audio.*;
 import android.provider.MediaStore.MediaColumns;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.Menu;
 import android.view.SubMenu;
