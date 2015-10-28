@@ -25,6 +25,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import com.frostwire.android.BuildConfig;
 import com.frostwire.android.R;
 import com.frostwire.android.core.ConfigurationManager;
 import com.frostwire.android.core.Constants;
@@ -118,16 +119,22 @@ public final class SoftwareUpdater {
 
                     if (jsonBytes != null) {
                         update = JsonUtils.toObject(new String(jsonBytes), Update.class);
-                        latestVersion = update.v;
-                        String[] latestVersionArr = latestVersion.split("\\.");
 
-                        // lv = latest version
-                        byte[] lv = new byte[]{Byte.valueOf(latestVersionArr[0]), Byte.valueOf(latestVersionArr[1]), Byte.valueOf(latestVersionArr[2])};
+                        if (update.vc != null) {
+                            oldVersion = isFrostWireOld(BuildConfig.VERSION_CODE, update.vc);
+                        } else {
+                            latestVersion = update.v;
+                            String[] latestVersionArr = latestVersion.split("\\.");
 
-                        // mv = my version
-                        byte[] mv = buildVersion(Constants.FROSTWIRE_VERSION_STRING);
+                            // lv = latest version
+                            byte[] lv = new byte[]{Byte.valueOf(latestVersionArr[0]), Byte.valueOf(latestVersionArr[1]), Byte.valueOf(latestVersionArr[2])};
 
-                        oldVersion = isFrostWireOld(mv, lv);
+                            // mv = my version
+                            byte[] mv = buildVersion(Constants.FROSTWIRE_VERSION_STRING);
+
+                            oldVersion = isFrostWireOld(mv, lv);
+                        }
+
                         updateConfiguration(update);
                     }
 
@@ -279,6 +286,17 @@ public final class SoftwareUpdater {
         return a || b || c;
     }
 
+    private boolean isFrostWireOld(int myBuild, String latestBuild) {
+        boolean result;
+        try {
+            int latestBuildNum = Integer.parseInt(latestBuild);
+            result = myBuild < latestBuildNum;
+        } catch(Throwable ignored) {
+            result = false;
+        }
+        return result;
+    }
+
     private static String getMD5(File f) {
         try {
             MessageDigest m = MessageDigest.getInstance("MD5");
@@ -375,13 +393,19 @@ public final class SoftwareUpdater {
     }
 
     private static class Update {
+        /** version X.Y.Z */
         public String v;
+
+        /** version code: Plus = 9000000 + manifest:versionCode; Basic = 8000000 + manifest:versionCode */
+        public String vc;
+
+        /** .apk download URL */
         public String u;
+
+        /** .apk md5 */
         public String md5;
 
-        /**
-         * Address from the market
-         */
+        /** Address from the market */
         public String m;
 
         /**

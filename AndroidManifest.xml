@@ -20,9 +20,9 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.frostwire.android" android:installLocation="auto"
-	android:versionCode="207" android:versionName="1.6.5">
+	android:versionCode="208" android:versionName="1.6.5">
 	<!-- IMPORTANT!! Ignore these, just use as a reference, now it's handled with gradle -->
-	<!-- Plus android:versionCode=" 9000xyz" (always commit like this, plus!)-->
+	<!-- Plus  android:versionCode="9000xyz" (always commit like this, plus!)-->
 	<!-- Basic android:versionCode="8100xyz" (don't commit like this) -->
 	<!-- Plus version example  for 1.5.8 build 194  -> 9000194 -->
 	<!-- Basic version example for 1.5.8 build 194  -> 8100195 -->
