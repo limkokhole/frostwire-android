@@ -3247,6 +3247,7 @@ public class MusicPlaybackService extends Service {
             if (Ref.alive(mService)) {
                 return mService.get().getAudioSessionId();
             }
+            return -1;
         }
 
         @Override
