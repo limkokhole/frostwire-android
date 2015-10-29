@@ -2094,8 +2094,10 @@ public class MusicPlaybackService extends Service {
     public void pause() {
         if (D) Log.d(TAG, "Pausing playback");
         synchronized (this) {
-            mPlayerHandler.removeMessages(FADEUP);
-            if (mIsSupposedToBePlaying) {
+            if (mPlayerHandler != null) {
+                mPlayerHandler.removeMessages(FADEUP);
+            }
+            if (mIsSupposedToBePlaying && mPlayer != null) {
                 mPlayer.pause();
                 scheduleDelayedShutdown();
                 mIsSupposedToBePlaying = false;
@@ -2395,7 +2397,9 @@ public class MusicPlaybackService extends Service {
          */
         @Override
         public void onAudioFocusChange(final int focusChange) {
-            mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
+            if (mPlayerHandler != null) {
+                mPlayerHandler.obtainMessage(FOCUSCHANGE, focusChange, 0).sendToTarget();
+            }
         }
     };
 
