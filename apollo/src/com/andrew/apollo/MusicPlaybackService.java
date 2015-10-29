@@ -2073,8 +2073,11 @@ public class MusicPlaybackService extends Service {
             }
 
             mPlayer.start();
-            mPlayerHandler.removeMessages(FADEDOWN);
-            mPlayerHandler.sendEmptyMessage(FADEUP);
+
+            if (mPlayerHandler != null) {
+                mPlayerHandler.removeMessages(FADEDOWN);
+                mPlayerHandler.sendEmptyMessage(FADEUP);
+            }
 
             if (!mIsSupposedToBePlaying) {
                 mIsSupposedToBePlaying = true;
