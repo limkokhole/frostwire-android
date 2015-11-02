@@ -40,6 +40,7 @@ import com.andrew.apollo.provider.FavoritesStore.FavoriteColumns;
 import com.andrew.apollo.provider.RecentStore;
 import com.devspark.appmsg.AppMsg;
 import com.frostwire.android.R;
+import com.frostwire.android.gui.util.UIUtils;
 import com.frostwire.logging.Logger;
 
 import java.io.File;
@@ -1022,7 +1023,10 @@ public final class MusicUtils {
                         cursor.getString(2));
                 AppMsg.makeText(context, message, AppMsg.STYLE_CONFIRM).show();
             }
-        } finally {
+        } catch (Throwable ignored) {
+            UIUtils.showLongMessage(context, R.string.ringtone_not_set);
+        }
+        finally {
             if (cursor != null) {
                 cursor.close();
             }
