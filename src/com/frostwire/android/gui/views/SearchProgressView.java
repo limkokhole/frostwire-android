@@ -114,6 +114,7 @@ public class SearchProgressView extends LinearLayout {
         textTryFrostWirePlus = (TextView) findViewById(R.id.view_search_progress_try_frostwire_plus);
 
         if (Constants.IS_GOOGLE_PLAY_DISTRIBUTION && textTryFrostWirePlus != null) {
+            textTryFrostWirePlus.setText("<u>"+ getResources().getString(R.string.try_frostwire_plus_for_more_results) +"</u>");
             initTryFrostWirePlusListener();
         }
 
